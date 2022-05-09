@@ -30,7 +30,7 @@ export default function LoginPage() {
                   <label htmlFor="password" className="sr-only">
                     Password
                   </label>
-                  <Field
+                  <input
                     id="password"
                     name="password"
                     type="password"

@@ -30,7 +30,7 @@ export default function Home() {
 
               <a href="#" className="font-medium text-gray-500 hover:text-gray-900">Company</a>
 
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
+              <a href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
             </div>
           </nav>
         </div>
@@ -55,7 +55,7 @@ export default function Home() {
 
               <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Company</a>
             </div>
-            <a href="#" className="block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"> Log in </a>
+            <a href="/login" className="block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"> Log in </a>
           </div>
         </div>
       </div>

@@ -9,13 +9,13 @@
               "pages/*"
           ],
           "@common/*": [
-              "pages/common/*"
+              "common/*"
           ],
           "@components/*": [
-              "pages/components/*"
+              "components/*"
           ],
           "@layout/*": [
-              "pages/layout/*"
+              "layout/*"
           ],
           "@assets/*": [
               "assets/*"

@@ -1,38 +1,39 @@
-import React, { useState, useContext, createContext } from "react";
-import Cookie from "js-cookie";
-import Axios from "axios";
+import React, { useState, useContext, createContext } from 'react';
+import Cookie from 'js-cookie';
+import axios from 'axios';
+import endPoints from '@services/api/';
 
 const AuthContext = createContext();
 
 export function ProviderAuth({ children }) {
-    const auth = useProviderAuth();
-    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  const auth = useProvideAuth();
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {
-    return useContext(AuthContext);
+  return useContext(AuthContext);
 };
 
-function useProviderAuth() {
-    const [user, setUser] = useState(null);
+function useProvideAuth() {
+  const [user, setUser] = useState(null);
 
-    const signIn = async (email, password) => {
-        setUser('Login');
-/*         const response = await Axios.post(
-            "http://localhost:5000/api/auth/signin",
-            {
-                email,
-                password,
-            }
-        );
-        const { user } = response.data;
-        setUser(user);
-        Cookie.set("token", user.token); */
+  const signIn = async (email, password) => {
+    const options = {
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
     };
+    const { data: access_token } = await axios.post(endPoints.auth.login, { email, password }, options);
+    console.log(access_token);
+    if (access_token) {
+        const diasDisponiblesAntesDeCaducar = 3;
+        Cookie.set('token', access_token.access_token, { expires: diasDisponiblesAntesDeCaducar });
+    }
+  };
 
-    return {
-        user,
-        signIn,
-    };
-}   
-
+  return {
+    user,
+    signIn,
+  };
+}

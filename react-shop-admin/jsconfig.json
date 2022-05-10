@@ -20,6 +20,15 @@
           "@assets/*": [
               "assets/*"
           ],
+            "@utils/*": [
+                "utils/*"
+            ],
+            "@hooks/*": [
+                "hooks/*"
+            ],
+            "@services/*": [
+                "services/*"
+            ],
       }
   }
 }

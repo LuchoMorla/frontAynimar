@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useAuth } from '@hooks/useAuth';
-import Router from 'next/router';
 
 export default function LoginPage() {
   const emailRef = useRef(null);
@@ -27,7 +26,7 @@ export default function LoginPage() {
         if (error.response?.status === 401) {
           alert('Usuario o contraseña incorrectos');
         } else if (error.response) {
-          console.log('Algo salio mal' + error.response.status);
+          console.log('Algo salio mal: ' + error.response.status);
         }
       });
   };

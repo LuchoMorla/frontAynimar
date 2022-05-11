@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useRouter } from 'next/router';
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useAuth } from '@hooks/useAuth';
 
@@ -7,6 +8,7 @@ export default function LoginPage() {
   const passwordRef = useRef(null);
 
   const auth = useAuth();
+  const router = useRouter();
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -17,16 +19,11 @@ export default function LoginPage() {
     auth
       .signIn(email, password)
       .then(() => {
-        console.log('Login sucess');
-        let actualUrl = window.location.origin;
-        let redireccion = actualUrl + '/dashboard';
-        window.location.assign(redireccion, 'dashboard');
+        router.push('/dashboard');
       })
       .catch((error) => {
         if (error.response?.status === 401) {
           alert('Usuario o contraseña incorrectos');
-        } else if (error.response) {
-          console.log('Algo salio mal: ' + error.response.status);
         }
       });
   };

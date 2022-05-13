@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import endPoints from '@services/api'
 import useFetch from '@hooks/useFetch';
 import Pagination from '@components/Pagination';
+import { Chart } from '@common/Chart';
 
   export default function Dashboard() {
+
+    /* trabajamos lo que es el paginado de la impresion de productos */
 
     const PRODUCT_LIMIT = 10;
 
@@ -12,8 +15,25 @@ import Pagination from '@components/Pagination';
     const products = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts), offsetProducts);
     const totalProducts = useFetch(endPoints.products.getProducts(0, 0)).length;
 
+    /* vamos a extraer la información que tenemos de nuestros productos para crear una grafica con chart */
+
+    const categoryName = products?.map((product) => product.category);
+    const categoryCount = categoryName?.map((category) => category.name);
+
+    const countOcurrences = (arr) => arr.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev),{});
+
+    const data = {
+      datasets: [{
+        label: 'Categories',
+        data: countOcurrences(categoryCount),
+        borderWindth: 2,
+        backgroundColor: ['#ffbb11', '#ff0000', '#c0c0c0', '#50AF95', '#f3ba', '#61d1ed', '#2a71d0'],
+      }]
+    }
+
     return (
       <>
+      <Chart className="mb-8 mt-2" chartData={data} />
       {totalProducts > 0 && <Pagination totalItems={totalProducts} itemsPerPage={PRODUCT_LIMIT} setOffset={setOffsetProducts} neighbours={3}></Pagination>}
         <div className="flex flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

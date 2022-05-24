@@ -1,8 +1,11 @@
 import { useRef } from 'react';
-import { addProduct } from '@services/api/products';
+import { addProduct, updateProduct } from '@services/api/products';
+import { useRouter } from 'next/router';
 
 export default function FormProduct({ setOpen, setAlert, product }) {
   const formRef = useRef(null);
+
+  const router = useRouter();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -14,24 +17,40 @@ export default function FormProduct({ setOpen, setAlert, product }) {
       categoryId: parseInt(formData.get('category')),
       images: [formData.get('images').name],
     };
-    addProduct(data).then(() => {
-      setAlert({
-        active: true,
-        message: 'Producto agregado correctamente',
-        type: 'success',
-        autoClose: true,
-      });
-      setOpen(false);
-    }).catch((error) => {
-      setAlert({
-        active: true,
-        message: error.message,
-        type: 'error',
-        autoClose: true,
-      });
-    });
+    /* logica para editar un producto */
+    if (product) {
+      updateProduct(product.id, data)
+        .then(() => {
+          /* console.log(response); cambiamos el console.log del cambio para que nos redireccione a la pagina de dashboard donde presentamos todos nuestros productos */
+          router.push('/dashboard/products');
+        })
+        .catch((error) => {
+          console.log(error);
+          setAlert('Hubo un error al actualizar el producto ' + error.message, 'danger');
+        });
+    } else {
+      /* logica para agregar un producto */
+      addProduct(data)
+        .then(() => {
+          setAlert({
+            active: true,
+            message: 'Producto agregado correctamente',
+            type: 'success',
+            autoClose: true,
+          });
+          setOpen(false);
+        })
+        .catch((error) => {
+          setAlert({
+            active: true,
+            message: error.message,
+            type: 'error',
+            autoClose: true,
+          });
+        });
+    }
   };
-  
+
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
       <div className="overflow-hidden">
@@ -41,19 +60,31 @@ export default function FormProduct({ setOpen, setAlert, product }) {
               <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                 Title
               </label>
-              <input defaultValue={product?.title} type="text" name="title" id="title" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+              <input
+                defaultValue={product?.title}
+                type="text"
+                name="title"
+                id="title"
+                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
             <div className="col-span-6 sm:col-span-3">
               <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                 Price
               </label>
-              <input defaultValue={product?.price} type="number" name="price" id="price" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+              <input
+                defaultValue={product?.price}
+                type="number"
+                name="price"
+                id="price"
+                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
             <div className="col-span-6">
               <label htmlFor="category" className="block text-sm font-medium text-gray-700">
                 Category
               </label>
-              {product?.category?.id &&
+              {product?.category?.id && (
                 <select
                   defaultValue={product?.category?.id}
                   id="category"
@@ -68,7 +99,7 @@ export default function FormProduct({ setOpen, setAlert, product }) {
                   <option value="5">Shoes</option>
                   <option value="6">Others</option>
                 </select>
-              }
+              )}
             </div>
 
             <div className="col-span-6">

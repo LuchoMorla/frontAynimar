@@ -14,10 +14,9 @@ export default function LoginPage() {
     event.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    console.log(email, password);
+/*     console.log(email, password); */
 
-    auth
-      .signIn(email, password)
+    auth.signIn(email, password)
       .then(() => {
         router.push('/dashboard');
       })

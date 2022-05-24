@@ -25,15 +25,29 @@ function useProvideAuth() {
       },
     };
     const { data: access_token } = await axios.post(endPoints.auth.login, { email, password }, options);
-    console.log(access_token);
+/*     console.log(access_token); */
     if (access_token) {
-        const diasDisponiblesAntesDeCaducar = 3;
-        Cookie.set('token', access_token.access_token, { expires: diasDisponiblesAntesDeCaducar });
+/*         const diasDisponiblesAntesDeCaducar = 3;
+        Cookie.set('token', access_token.access_token, { expires: diasDisponiblesAntesDeCaducar }); */
+      const token = access_token.access_token;
+      Cookie.set('token', token, { expires: 5 });
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+      const { data: user } = await axios.get(endPoints.auth.profile);
+      setUser(user);
     }
   };
+  
+    /* Implementación del Logout */
+    const logout = async () => {
+      Cookie.remove('token');
+      setUser(null);
+      delete axios.defaults.headers.Autorization;
+      window.location.href = '/login';
+    }
 
   return {
     user,
     signIn,
+    logout,
   };
 }

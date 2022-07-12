@@ -1,12 +1,12 @@
 {
-    "theme_color": "#0acfa1",
-    "background_color": "#fa9b3e",
-    "display": "standalone",
+    "theme_color": "#a2ce92",
+    "background_color": "#a2ce92",
+    "display": "browser",
     "scope": "/",
     "start_url": "/",
-    "name": "nextReact e-shop",
-    "short_name": "next reshop",
-    "description": "Ecommerce Next React Shop",
+    "name": "Aynimar",
+    "short_name": "Aynimar",
+    "description": "generating circular economy and recycling that benefits families",
     "icons": [
         {
             "src": "/icon-192x192.png",

@@ -7,7 +7,7 @@ const Checkout = () => {
   return (
     <>
       <Head>
-        <title>Checkout</title>
+        <title>Checkout | Aynimar</title>
       </Head>
       <div className={styles.Checkout}>
         <div className={styles['Checkout-container']}>

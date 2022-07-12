@@ -7,13 +7,16 @@ const Menu = () => {
 		<div className={styles.Menu}>
 			<ul>
 				<li>
-					<Link href="/" className="title">My orders</Link>
+					<Link href="/" className="title">Mis Ordenes</Link>
 				</li>
 				<li>
-					<Link href="/">My account</Link>
+					<Link href="/">Mi Cuenta</Link>
 				</li>
 				<li>
-					<Link href="/">Sign out</Link>
+					<Link href=''>Iniciar Sesión</Link>
+				</li>
+				<li>
+					<Link href="/">Cerrar Sesión</Link>
 				</li>
 			</ul>
 		</div>

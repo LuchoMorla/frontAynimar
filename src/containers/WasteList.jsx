@@ -1,22 +1,22 @@
-import React from 'react';
+/* import React from 'react';
 import ProductItem from '@components/ProductItem';
 import useGetProducts from '@hooks/useGetProducts';
 import styles from '@styles/ProductList.module.scss';
 
-/* const API = 'https://api.escuelajs.co/api/v1/products'; */
+const API = 'http://localhost:8080/api/v1/wastes';
 
-const ProductList = () => {
-/* 	const products = useGetProducts(API);
+const WasteList = () => {
+	const wastes = useGetProducts(API);
 
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>
-				{products.map(product => (
-					<ProductItem product={product} key={product.id} />
+				{wastes.map(waste => (
+					<ProductItem Product={waste} key={waste.id} />
 				))}
 			</div>
 		</section>
-	); */
+	);
 }
 
-export default ProductList;
+export default WasteList; */

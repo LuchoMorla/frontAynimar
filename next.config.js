@@ -8,9 +8,9 @@ const nextConfig = withPWA({
     //indicamos si vamos a registrar o no un worker
     register: true,
     //modo que vamos a trabajar
-    mode: 'production',
+    mode: 'development'/* 'production' */,
     //para habilitarlo segun sea el caso.
-    disable: false,
+    disable: true/* false */,
   },
   reactStrictMode: true,
   images: {

@@ -6,27 +6,31 @@ const endPoints = {
     getProducts: `${API}/api/${VERSION}/products/`,
     postProducts: `${API}/api/${VERSION}/products/`,
     getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
-    putProducts: (id) => `${API}/api/${VERSION}/products/${id}`,
-    deleteProducts: (id) => `${API}/api/${VERSION}/products/${id}`
+    putProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
+    deleteProduct: (id) => `${API}/api/${VERSION}/products/${id}`
   },
   wastes:{
     getProducts: `${API}/api/${VERSION}/wastes/`,
     postProducts: `${API}/api/${VERSION}/wastes/`,
     getProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,
-    putProducts: (id) => `${API}/api/${VERSION}/wastes/${id}`,
-    deleteProducts: (id) => `${API}/api/${VERSION}/wastes/${id}`
+    putProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,
+    deleteProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`
   },
   users: {
-    getUsers: `${API}/api/${VERSION}/users`,
+    getUser: (id) => `${API}/api/${VERSION}/users/${id}`,
     postUsers: `${API}/api/${VERSION}/users`,
   },
   recyclers: {
-    getUsers: `${API}/api/${VERSION}/users`,
-    postUsers: `${API}/api/${VERSION}/users`,
+    getRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`,
+    postRecyclers: `${API}/api/${VERSION}/recyclers`,
+    updateRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`,
+    deleteRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`
   },
   customers: {
-    getUsers: `${API}/api/${VERSION}/users`,
-    postUsers: `${API}/api/${VERSION}/users`,
+    getCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`,
+    postCustomers: `${API}/api/${VERSION}/customers`,
+    updateCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`,
+    deleteCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`
   },
   payments: {
     getPayment: (id) => `${API}/api/${VERSION}/payment/${id}`,

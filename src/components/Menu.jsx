@@ -13,7 +13,7 @@ const Menu = () => {
 					<Link href="/">Mi Cuenta</Link>
 				</li>
 				<li>
-					<Link href=''>Iniciar Sesión</Link>
+					<Link href='/login'>Iniciar Sesión</Link>
 				</li>
 				<li>
 					<Link href="/">Cerrar Sesión</Link>

@@ -1,11 +1,16 @@
 import React, { useRef } from 'react';
-import styles from '@styles/Login.module.scss';
+import { useAuth } from '@hooks/useAuth' 
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import logo from '@logos/logo-Aynimar.svg'
+import styles from '@styles/Login.module.scss';
 
 export default function LoginPage() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+
+  const auth = useAuth();
+  const router = useRouter(); 
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -15,6 +20,20 @@ export default function LoginPage() {
     //podriamos pasar validaciones(de seguridad) para ver si cumple con el estandar de un correo etc
     //para este punto solo vamos a mostrar los datos por consola:
     console.log(email, password);
+
+    auth
+    .signIn(email, password)
+    .then(() => {
+      console.log('Login sucess');
+        router.push('/');
+    })
+    .catch((error) => {
+      if (error.response?.status === 401) {
+        alert('Usuario o contraseña incorrectos');
+      } else if (error.response) {
+        console.log('Algo salio mal :' + error.response.status);
+      }
+    });
   };
 
   return (
@@ -25,11 +44,6 @@ export default function LoginPage() {
 
         <form action="/" className={styles.form} onSubmit={submitHandler}>
           <div className={styles.form} >
-            <label htmlFor="name" className={styles.label}>Nombre</label>
-            <input type="text" 
-            id="name" placeholder="Nombre" className={(styles.input, styles['input-name'])} 
-            />
-            {'\n'}
             <label htmlFor="email-address" className={styles.label}>Email</label>
             <input type="email" 
             id="email-address"
@@ -51,8 +65,10 @@ export default function LoginPage() {
             {'\n'}
           </div>
 
-          <input type="submit" value="Iniciar Sesión" 
-          className={styles['primary-button'], styles['login-button']} />
+          <button type="submit" 
+          className={styles['primary-button'], styles['login-button']}>
+          Iniciar Sesión
+          </button>
         </form>
       </div>
     </div>

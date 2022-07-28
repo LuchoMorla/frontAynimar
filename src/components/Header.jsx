@@ -7,6 +7,7 @@ import menu from '@icons/icon_menu.svg';
 import logo from '@logos/logo-Aynimar.svg';
 import AppContext from '../context/AppContext';
 import shoppingCart from '@icons/icon_shopping_cart.svg';
+import userIcon from '@icons/user-icon-ecologist.svg'
 import styles from '@styles/Header.module.scss';
 
 const Header = () => {
@@ -57,7 +58,7 @@ const Header = () => {
 						onClick={() => toggleMenu()}
 						aria-hidden="true"
 					>
-						user@example.com
+						<Image src={userIcon} width={50} height={40}/>
 					</li>
 					<li
 						className={styles['navbar-shopping-cart']}

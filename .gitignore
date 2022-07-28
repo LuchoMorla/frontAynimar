@@ -36,3 +36,7 @@ yarn-error.log*
 
 # enviromental variables
 .env
+
+Dockerfile
+usr/src/app
+

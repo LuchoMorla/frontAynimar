@@ -1,5 +1,5 @@
-const API = process.env.AYNIMAR_API_URL;
-const VERSION = process.env.AYNIMAR_API_VERSION;
+const API = process.env.NEXT_PUBLIC_API_URL;
+const VERSION = process.env.NEXT_PUBLIC_API_VERSION;
 
 const endPoints = {
   products:{
@@ -16,16 +16,24 @@ const endPoints = {
     putProducts: (id) => `${API}/api/${VERSION}/wastes/${id}`,
     deleteProducts: (id) => `${API}/api/${VERSION}/wastes/${id}`
   },
-  users:{
+  users: {
+    getUsers: `${API}/api/${VERSION}/users`,
+    postUsers: `${API}/api/${VERSION}/users`,
+  },
+  recyclers: {
+    getUsers: `${API}/api/${VERSION}/users`,
+    postUsers: `${API}/api/${VERSION}/users`,
+  },
+  customers: {
     getUsers: `${API}/api/${VERSION}/users`,
     postUsers: `${API}/api/${VERSION}/users`,
   },
   payments: {
-    getPayment: `${API}/api/${VERSION}/payment/${id}`,
+    getPayment: (id) => `${API}/api/${VERSION}/payment/${id}`,
     postPayment: `${API}/api/${VERSION}/payments`,
   },
   orders: {
-    getorder: `${API}/api/${VERSION}/order/${id}`,
+    getorder: (id) => `${API}/api/${VERSION}/order/${id}`,
     postorder: `${API}/api/${VERSION}/orders`,
   },
   auth: {

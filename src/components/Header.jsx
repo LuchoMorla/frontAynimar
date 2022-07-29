@@ -52,9 +52,9 @@ const Header = () => {
 			</div>
 			<div className={styles['navbar-right']}>
 				<ul>
-					<li className={styles['more-clickeable-area'],
+					<li className={(styles['more-clickeable-area'],
 					styles['navbar-email'],
-					styles.pointer}
+					styles.pointer)}
 						onClick={() => toggleMenu()}
 						aria-hidden="true"
 					>
@@ -65,8 +65,8 @@ const Header = () => {
 						onClick={() => toggleOrder()}
 						aria-hidden="true"
 					>
-						<Image className={styles['more-clickable-area'],
-						styles.pointer}
+						<Image className={(styles['more-clickable-area'],
+						styles.pointer)}
 						src={shoppingCart}
 						alt="shopping cart" />
 						{state.cart.length > 0 ? <div>

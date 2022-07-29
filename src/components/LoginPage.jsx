@@ -42,7 +42,7 @@ export default function LoginPage() {
         <Image src={logo} width={100} height={100} className={styles.logo}/>
         <h1 className={styles.title}>Mi cuenta</h1>
 
-        <form action="/" className={styles.form} onSubmit={submitHandler}>
+        <form action="/" className={styles.form} onSubmit={submitHandler} autoComplete="on">
           <div className={styles.form} >
             <label htmlFor="email-address" className={styles.label}>Email</label>
             <input type="email" 
@@ -51,7 +51,7 @@ export default function LoginPage() {
             autoComplete="email"
             required
             placeholder="nombre@mail.com" 
-            className={(styles.input, styles['input-email'])} 
+            className={styles.input} 
             ref={emailRef} />
            {'\n'}
             <label htmlFor="password" className={styles.label}>Contraseña</label>
@@ -59,14 +59,14 @@ export default function LoginPage() {
             id="password" 
             autoComplete="current-password" 
             required
-            className={(styles.input, styles['input-password'])} 
+            className={styles.input} 
             placeholder="***Contraseña***"
             ref={passwordRef} />
             {'\n'}
           </div>
 
           <button type="submit" 
-          className={styles['primary-button'], styles['login-button']}>
+          className={(styles['primary-button'], styles['login-button'])}>
           Iniciar Sesión
           </button>
         </form>

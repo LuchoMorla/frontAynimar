@@ -1,5 +1,6 @@
 /* import ProductList from '@containers/ProductList'; */
 import Head from 'next/head';
+import UserSegmentation from '@containers/userSegmentation'
 
 export default function Home() {
   return (
@@ -7,7 +8,8 @@ export default function Home() {
       <Head>
         <title>Aynimar | Home</title>
       </Head>
-{/*       <ProductList /> */}
+      <UserSegmentation />
+      {/*       <ProductList /> */}
     </>
   );
 }

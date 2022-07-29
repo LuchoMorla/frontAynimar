@@ -16,6 +16,6 @@ a {
   box-sizing: border-box;
 }
 
-p {
+p, h1 {
   color: white;
 }

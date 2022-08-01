@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import Image from 'next/image';
-import logo from '@logos/logo-Aynimar.svg'
+import logo from '@logos/logo-Aynimar.svg';
+import { addRecyclers } from '@services/api/entities';
 import styles from '@styles/Login.module.scss';
 
 const SignUp = () => {
@@ -31,6 +32,9 @@ const SignUp = () => {
     }
 
     console.log(data);
+    addRecyclers(data).then(() => {
+      console.log(response);
+    });
   };
 
     return (

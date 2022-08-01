@@ -6,21 +6,25 @@ import logo from '@logos/logo-Aynimar.svg'
 import styles from '@styles/Login.module.scss';
 
 export default function LoginPage() {
+  const formRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
   const auth = useAuth();
   const router = useRouter(); 
 
-  const submitHandler = () => {
-/*     event.preventDefault(); */
-    //tipamos la informacion de forma interna:
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
+  const submitHandler = (event) => {
+    event.preventDefault();
+    //tipamos la informacion de forma interna: y ahora la vamos a recibir con formData
+    const formData = new FormData(formRef.current);
+    const data = {
+      email: formData.get('email-address'),
+      password: formData.get('password')
+    }
     //podriamos pasar validaciones(de seguridad) para ver si cumple con el estandar de un correo etc.
 
     auth
-    .signIn(email, password)
+    .signIn(data.email, data.password)
     .then(() => {
       console.log('Login sucess');
         router.push('/');
@@ -40,12 +44,12 @@ export default function LoginPage() {
         <Image src={logo} width={100} height={100} className={styles.logo}/>
         <h1 className={styles.title}>Mi cuenta</h1>
 
-        <form action="/" className={styles.form} onSubmit={submitHandler} autoComplete="on">
+        <form action="/" ref={formRef} className={styles.form} onSubmit={submitHandler} autoComplete="on">
           <div className={styles.form} >
             <label htmlFor="email-address" className={styles.label}>Email</label>
             <input type="email" 
             id="email-address"
-            name="email"
+            name="email-address"
             autoComplete="email"
             required
             placeholder="nombre@mail.com" 
@@ -55,6 +59,7 @@ export default function LoginPage() {
             <label htmlFor="password" className={styles.label}>Contraseña</label>
             <input type="password" 
             id="password" 
+            name="password" 
             autoComplete="current-password" 
             required
             className={styles.input} 

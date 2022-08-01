@@ -68,5 +68,8 @@ function useProviderAuth() {
   return {
     user,
     signIn,
+    autoSignIn,
+    recovery,
+    changePassword
   };
 }

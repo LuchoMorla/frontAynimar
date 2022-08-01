@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useRef } from "react";
 import Image from 'next/image';
 import logo from '@logos/logo-Aynimar.svg'
 import styles from '@styles/Login.module.scss';
 
 const SignUp = () => {
+  const nameReff = useRef(null);
+  const lastNameReff = useRef(null);
+  const ciReff = useRef(null);
+  const phoneReff = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const submitHandler = (event) => {
     event.preventDefault();
 
-    const name = userName.current.value;
-    const apellido = lastName.current.value;
+    const name = nameReff.current.value;
+    const lastName = lastNameReff.current.value;
+    const identityNumber = ciReff.current.value;
+    const phone = phoneReff.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
     const data = {
       name,
-      apellido,
+      lastName,
+      identityNumber,
+      phone,
       email,
       password
     }
@@ -38,7 +48,8 @@ const SignUp = () => {
             id="name"
             required
             placeholder="Inés"
-            className={styles.input} 
+            className={styles.input}
+            ref={nameReff}  
             />
             {'\n'}
             <label htmlFor="last-name" className={styles.label}>Apellido/s</label>
@@ -49,6 +60,7 @@ const SignUp = () => {
             required
             placeholder="Esario Lopez Khe"
             className={styles.input} 
+            ref={lastNameReff}
             />
             {'\n'}
             <label htmlFor="identity-number" className={styles.label}>Numero de cedula, identidad o CI</label>
@@ -58,6 +70,7 @@ const SignUp = () => {
             required
             placeholder="073176549-1"
             className={styles.input} 
+            ref={ciReff}
             />
             {'\n'}
             <label htmlFor="phone" className={styles.label}>Numero de contacto, Celular o Whatsapp</label>
@@ -68,6 +81,7 @@ const SignUp = () => {
             required
             placeholder="0947698212"
             className={styles.input} 
+            ref={phoneReff}
             />
             {'\n'}
             <label htmlFor="email-address" className={styles.label}>Email</label>

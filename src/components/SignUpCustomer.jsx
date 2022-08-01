@@ -4,22 +4,22 @@ import logo from '@logos/logo-Aynimar.svg'
 import styles from '@styles/Login.module.scss';
 
 const SignUp = () => {
-  const userName = useRef(null);
-  const lastName = useRef(null);
+  const nameReff = useRef(null);
+  const lastNameReff = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
   const submitHandler = (event) => {
     event.preventDefault();
 
-    const name = userName.current.value;
-    const apellido = lastName.current.value;
+    const name = nameReff.current.value;
+    const lastName = lastNameReff.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
     const data = {
       name,
-      apellido,
+      lastName,
       email,
       password
     }
@@ -43,7 +43,7 @@ const SignUp = () => {
             required
             placeholder="Inés"
             className={styles.input}
-            ref={userName} 
+            ref={nameReff} 
             />
             {'\n'}
             <label htmlFor="last-name" className={styles.label} >Apellido/s</label>
@@ -54,7 +54,7 @@ const SignUp = () => {
             required
             placeholder="Esario Lopez Khe"
             className={styles.input}
-            ref={lastName} 
+            ref={lastNameReff} 
             />
             {'\n'}
             <label htmlFor="email-address" className={styles.label}>Email</label>

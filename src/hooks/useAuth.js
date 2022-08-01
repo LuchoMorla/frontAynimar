@@ -46,6 +46,25 @@ function useProviderAuth() {
     }
   };
 
+  const recovery = async (email) => {
+    //
+  };
+
+  const changePassword = async (token, newPassword) => {
+    const options = {
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+    };
+    const { data: access_token } = await axios.post(endPoints.auth.changePassword, { token, newPassword }, options);
+    if (access_token) {
+      const diasDisponiblesAntesDeCaducar = 3;
+      Cookie.set('token', access_token.token, { expires: diasDisponiblesAntesDeCaducar });
+    }
+  };
+
+
   return {
     user,
     signIn,

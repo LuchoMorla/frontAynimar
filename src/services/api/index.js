@@ -42,6 +42,7 @@ const endPoints = {
   },
   auth: {
     login: `${API}/api/${VERSION}/auth/login`,
+    autoLogin: `${API}/api/${VERSION}/auth/auto-login`,
     profile: `${API}/api/${VERSION}/auth/profile`
   },
   categories:{

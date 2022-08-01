@@ -12,14 +12,12 @@ export default function LoginPage() {
   const auth = useAuth();
   const router = useRouter(); 
 
-  const submitHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
+/*     event.preventDefault(); */
     //tipamos la informacion de forma interna:
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    //podriamos pasar validaciones(de seguridad) para ver si cumple con el estandar de un correo etc
-    //para este punto solo vamos a mostrar los datos por consola:
-    console.log(email, password);
+    //podriamos pasar validaciones(de seguridad) para ver si cumple con el estandar de un correo etc.
 
     auth
     .signIn(email, password)

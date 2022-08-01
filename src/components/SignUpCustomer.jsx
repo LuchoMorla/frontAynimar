@@ -1,11 +1,14 @@
 import React, { useRef } from "react";
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { addCustomer } from '@services/api/entities/customers';
 import logo from '@logos/logo-Aynimar.svg';
-import { addCustomers } from '@services/api/entities/customers';
 import styles from '@styles/Login.module.scss';
 
 const SignUp = () => {
   const formRef = useRef(null);
+/*   const addUser = addCustomers(); */
+  const router = useRouter(); 
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -15,13 +18,23 @@ const SignUp = () => {
     const data = {
       name: formData.get('name'),
       lastName: formData.get('apellido'),
-      email: formData.get('email-address'),
-      password:formData.get('password')
-    }
+      user: {
+        email: formData.get('email-address'),
+        password:formData.get('password')
+      }
+    };
 
     console.log(data);
-    addCustomers(data).then(() => {
-      console.log(response);
+      addCustomer(data)
+      .then(() => {
+        console.log(response);
+        console.log('registersucceds');
+          router.push('/recycling');
+      })
+      .catch((error)=> { if (error.response?.status === 401) {
+        alert('algo salio mal :(');
+       } else if (error.response) {
+        console.log('Algo salio mal: ' + error.response.status)}
     });
   };
 

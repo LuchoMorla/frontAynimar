@@ -24,7 +24,7 @@
 	text-align: center;
 }
 .subtitle {
-	color: var(--very-light-pink);
+	color: $--soft-green;
 	font-size: var(--md);
 	font-weight: 300;
 	margin-top: 0;
@@ -48,14 +48,14 @@
 	font-size: var(--sm);
 }
 .resend span {
-	color: var(--very-light-pink);
+	color: $--soft-green;
 }
 .resend a {
-	color: var(--hospital-green);
+	color: $--hospital-green;
 	text-decoration: none;
 }
 .primary-button {
-	background-color: var(--hospital-green);
+	background-color: $--hospital-green;
 	border-radius: 8px;
 	border: none;
 	color: var(--white);

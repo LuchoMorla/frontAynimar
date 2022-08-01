@@ -18,22 +18,22 @@ export default function LoginPage() {
     const data = {
       email: formData.get('email-address'),
       password: formData.get('password')
-    }
+    };
     //podriamos pasar validaciones(de seguridad) para ver si cumple con el estandar de un correo etc.
 
-    auth
-    .signIn(data.email, data.password)
-    .then(() => {
-      console.log('Login sucess');
-        router.push('/');
-    })
-    .catch((error) => {
+      auth
+      .signIn(data.email, data.password)
+      .then(() => {
+        console.log('Login sucess');
+          router.push('/');
+      })
+      .catch((error) => {
       if (error.response?.status === 401) {
         alert('Usuario o contraseña incorrectos');
       } else if (error.response) {
-        console.log('Algo salio mal :' + error.response.status);
-      }
-    });
+        console.log('Algo salio mal: ' + error.response.status);
+       }
+      });
   };
 
   return (

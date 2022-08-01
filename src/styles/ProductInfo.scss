@@ -10,19 +10,19 @@
 	margin-bottom: 4px;
 }
 .ProductInfo p:nth-child(2) {
-	color: var(--very-light-pink);
+	color: $--soft-green;
 	font-size: var(--md);
 	margin-top: 0;
 	margin-bottom: 36px;
 }
 .ProductInfo p:nth-child(3) {
-	color: var(--very-light-pink);
+	color: $--soft-green;
 	font-size: var(--sm);
 	margin-top: 0;
 	margin-bottom: 36px;
 }
 .primary-button {
-	background-color: var(--hospital-green);
+	background-color: $--soft-green;
 	border-radius: 8px;
 	border: none;
 	color: var(--white);

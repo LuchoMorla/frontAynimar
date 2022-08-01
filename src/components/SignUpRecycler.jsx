@@ -1,15 +1,18 @@
 import React, { useRef } from "react";
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { addRecycler } from '@services/api/entities/recyclers';
 import logo from '@logos/logo-Aynimar.svg';
-import { addRecyclers } from '@services/api/entities/recyclers';
 import styles from '@styles/Login.module.scss';
 
 const SignUp = () => {
+
   const formRef = useRef(null);
+/*   const addUser = addRecyclers(); */
+  const router = useRouter(); 
 
   const submitHandler = (event) => {
     event.preventDefault();
-
     const formData = new FormData(formRef.current);
 
     const data = {
@@ -17,15 +20,27 @@ const SignUp = () => {
       lastName: formData.get('apellido'),
       identityNumber: formData.get('ci'),
       phone: formData.get('tel'),
-      email: formData.get('email-address'),
-      password: formData.get('password')
-    }
+      user: {
+        email: formData.get('email-address'),
+        password: formData.get('password')
+      }
+    };
 
     console.log(data);
-    addRecyclers(data).then(() => {
-      console.log(response);
-    });
-  };
+      addRecycler(data)
+      .then(() => {
+        console.log(response);
+        console.log('registersucceds');
+        router.push('/recycling');
+      })    
+      .catch((error) => {
+        if (error.response?.status === 401) {
+          alert('algo salio mal');
+        } else if (error.response) {
+          console.log('Algo salio mal: ' + error.response.status);
+        }
+      });
+    };    
 
     return (
       <div className={styles.login}>
@@ -87,6 +102,7 @@ const SignUp = () => {
             <label htmlFor="password" className={styles.label}>Contraseña</label>
             <input type="password" 
             id="password" 
+            name="password"
             required
             autoComplete="current-password" 
             className={styles.input} 

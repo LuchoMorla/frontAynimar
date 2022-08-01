@@ -64,12 +64,21 @@ function useProviderAuth() {
     }
   };
 
+      /* Implementación del Logout */
+      const logout = async () => {
+        Cookie.remove('token');
+        setUser(null);
+        delete axios.defaults.headers.Autorization;
+        window.location.href = '/login';
+      }
+
 
   return {
     user,
     signIn,
     autoSignIn,
     recovery,
-    changePassword
+    changePassword,
+    logout
   };
 }

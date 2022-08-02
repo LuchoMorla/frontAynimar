@@ -8,8 +8,8 @@ import { useRouter } from 'next/router';
 export default function AutoLoginPage() {
   const auth = useAuth();
   const router = useRouter()
-  const query = router.query
-   const token = query.token;
+  const query = router.query;
+  const token = query.token;
   setTimeout(() => {
     if (token !== null) {
             auth

@@ -28,7 +28,7 @@
 }
 .form a {
 	color: $--hospital-green;
-	font-size: var(--sm);
+	font-size: $--sm;
 	text-align: center;
 	text-decoration: none;
 	margin-bottom: 52px;
@@ -37,6 +37,7 @@
 	font-size: $--sm;
 	font-weight: bold;
 	margin-bottom: 4px;
+	color: white;
 }
 .input {
 	background-color: $--text-input-field;
@@ -53,10 +54,10 @@
 	background-color: $--hospital-green;
 	border-radius: 8px;
 	border: none;
-	color: var(--white);
+	color: $--white;
 	width: 100%;
 	cursor: pointer;
-	font-size: var(--md);
+	font-size: $--md;
 	font-weight: bold;
 	height: 50px;
 }

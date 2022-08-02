@@ -27,9 +27,7 @@ const SignUp = () => {
     console.log(data);
       addCustomer(data)
       .then(() => {
-        console.log(response);
-        console.log('registersucceds');
-          router.push('/recycling');
+          router.push('/correo-enviado');
       })
       .catch((error)=> { if (error.response?.status === 401) {
         alert('algo salio mal :(');

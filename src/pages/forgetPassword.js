@@ -1,12 +1,11 @@
 import React, { useRef } from 'react';
 import { useAuth } from '@hooks/useAuth' 
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import Image from 'next/image';
 import logo from '@logos/logo-Aynimar.svg'
 import styles from '@styles/Login.module.scss';
 
-export default function LoginPage() {
+export default function ForgetPassword() {
   const formRef = useRef(null);
 
   const auth = useAuth();
@@ -18,15 +17,13 @@ export default function LoginPage() {
     const formData = new FormData(formRef.current);
     const data = {
       email: formData.get('email-address'),
-      password: formData.get('password')
     };
     //podriamos pasar validaciones(de seguridad) para ver si cumple con el estandar de un correo etc.
 
       auth
-      .signIn(data.email, data.password)
+      .recovery(data.email)
       .then(() => {
-        console.log('Login sucess');
-          router.push('/');
+          router.push('/correo-enviado');
       })
       .catch((error) => {
       if (error.response?.status === 401) {
@@ -41,7 +38,7 @@ export default function LoginPage() {
     <div className={styles.login}>
       <div className={styles['login-container']}>
         <Image src={logo} width={100} height={100} className={styles.logo}/>
-        <h1 className={styles.title}>Mi cuenta</h1>
+        <h1 className={styles.title}>Recuperar Contraseña</h1>
 
         <form action="/" ref={formRef} className={styles.form} onSubmit={submitHandler} autoComplete="on">
           <div className={styles.form} >
@@ -54,25 +51,13 @@ export default function LoginPage() {
             placeholder="nombre@mail.com" 
             className={styles.input} 
             />
-           {'\n'}
-            <label htmlFor="password" className={styles.label}>Contraseña</label>
-            <input type="password" 
-            id="password" 
-            name="password" 
-            autoComplete="current-password" 
-            required
-            className={styles.input} 
-            placeholder="***Contraseña***"
-            />
-            {'\n'}
           </div>
 
           <button type="submit" 
           className={(styles['primary-button'], styles['login-button'])}>
-          Iniciar Sesión
+          Confirmar Correo
           </button>
         </form>
-        <Link href="/forgetPassword">Olvide mi Contraseña</Link>
       </div>
     </div>
   );

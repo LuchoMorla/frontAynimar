@@ -1,5 +1,5 @@
 import AutoLoginPage from '@components/AutoLoginPage';
 
-export default function Login() {
+export default function autoLogin() {
     return <AutoLoginPage />
 }

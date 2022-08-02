@@ -46,7 +46,15 @@ function useProviderAuth() {
   };
 
   const recovery = async (email) => {
-    //
+    const options = {
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+    };
+    const recovering = await axios.post(endPoints.auth.recovery, { email }, options);
+    console.log(recovering);
+    return recovering;
   };
 
   const changePassword = async (token, newPassword) => {

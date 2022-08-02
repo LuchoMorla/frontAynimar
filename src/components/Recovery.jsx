@@ -11,12 +11,15 @@ export default function Recovery() {
     const auth = useAuth();
     const router = useRouter(); 
 
+    const query = router.query;
+    const queryToken = query.token;
+
     const submitHandler = (event) => {
         event.preventDefault();
         const formData = new FormData(formRef.current);
         const data = {
             password: formData.get('password'),
-            confirmPassword: formData.get('new-password')
+            confirmPassword: formData.get('new-password'),
         }
         let thePassword = data.password;
         let theConfirmPassword = data.confirmPassword;
@@ -24,7 +27,21 @@ export default function Recovery() {
             alert('Las contraseñas no son iguales');
         }
         if(thePassword === theConfirmPassword) {
-            console.log('ok the password is: ' + data.password);
+            const token = queryToken;
+            const newPassword= data.password;
+            auth
+            .changePassword(token, newPassword)
+            .then(() => {
+                alert('tu contraseña fue cambiada');
+                router.push('/login');
+            })
+            .catch((error) => {
+              if (error.response?.status === 401) {
+                alert('Usuario o contraseña incorrectos');
+              } else if (error.response) {
+                console.log('Algo salio mal :' + error.response.status);
+              }
+            });
         }
       };
 

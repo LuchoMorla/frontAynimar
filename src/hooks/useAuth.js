@@ -26,22 +26,21 @@ function useProviderAuth() {
     };
     const { data: access_token } = await axios.post(endPoints.auth.login, { email, password }, options);
     if (access_token) {
-      const diasDisponiblesAntesDeCaducar = 3;
+      const diasDisponiblesAntesDeCaducar = 15;
       Cookie.set('token', access_token.token, { expires: diasDisponiblesAntesDeCaducar });
     }
   };
 
-  const autoSignIn = async () => {
+  const autoSignIn = async (token) => {
     const options = {
       headers: {
         accept: '*/*',
         'Content-Type': 'application/json',
       },
     };
-    const { data: access_token } = await axios.post(endPoints.auth.autoLogin, options);
-    console.log(access_token);
+    const { data: access_token } = await axios.post(endPoints.auth.autoLogin, { token }, options);
     if (access_token) {
-      const diasDisponiblesAntesDeCaducar = 3;
+      const diasDisponiblesAntesDeCaducar = 15;
       Cookie.set('token', access_token.token, { expires: diasDisponiblesAntesDeCaducar });
     }
   };

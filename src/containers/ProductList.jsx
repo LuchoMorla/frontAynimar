@@ -1,13 +1,15 @@
 import React from 'react';
+import endPoints from '@services/api/index'
+import useFetchProducts from '@hooks/useGetProducts';
 import ProductItem from '@components/ProductItem';
-import useGetProducts from '@hooks/useGetProducts';
 import styles from '@styles/ProductList.module.scss';
 
-/* const API = 'https://api.escuelajs.co/api/v1/products'; */
 
 const ProductList = () => {
-/* 	const products = useGetProducts(API);
+	const PRODUCT_LIMIT = 10;
+	const PRODUCT_OFFSET = 0;
 
+	const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>
@@ -16,7 +18,7 @@ const ProductList = () => {
 				))}
 			</div>
 		</section>
-	); */
+	);
 }
 
 export default ProductList;

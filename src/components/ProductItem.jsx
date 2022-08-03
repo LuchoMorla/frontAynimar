@@ -7,7 +7,6 @@ import styles from '@styles/ProductItem.module.scss';
 
 const ProductItem = ({ product }) => {
 	const { state, addToCart } = useContext(AppContext);
-	console.log(product);
 
 	const handleClick = item => {
 		console.log('in cart: ', state.cart.includes(item));
@@ -19,8 +18,6 @@ const ProductItem = ({ product }) => {
 			<Image src={product.image} width={240} height={240} alt={product.description} />
 			<div className={styles['product-info']}>
 				<div>
-					{console.log('productItem '+ product)}
-					{/* {console.log('productItem[0] '+product[0])} */}
 					<p>${product.price}</p>
 					<p>{product.name}</p>
 				</div>

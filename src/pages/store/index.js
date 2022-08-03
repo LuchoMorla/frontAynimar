@@ -7,7 +7,7 @@ export default function Home() {
       <Head>
         <title>Aynimar | Tienda</title>
       </Head>
-{/*     <ProductList /> */}
+      <ProductList />
     </>
   );
 }

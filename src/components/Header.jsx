@@ -30,7 +30,9 @@ const Header = () => {
 				<Link href="/" passHref>
 					<Image src={logo} alt="logo" className={styles['nav-logo']} />
 				</Link>
-				<p className={styles['logo']}>Aynimar</p>
+				<Link href="/" passHref>
+					<p className={styles['logo']}>Aynimar</p>
+				</Link>
 			</div>
 			<div className={styles['navbar-left']}>
 				<ul>

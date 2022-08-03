@@ -1,22 +1,25 @@
-/* import React from 'react';
-import ProductItem from '@components/ProductItem';
-import useGetProducts from '@hooks/useGetProducts';
+import React from 'react';
+import endPoints from '@services/api/index'
+import useFetch from '@hooks/useGetProducts';
+import WasteItem from '@components/WasteItem';
 import styles from '@styles/ProductList.module.scss';
 
-const API = 'http://localhost:8080/api/v1/wastes';
 
 const WasteList = () => {
-	const wastes = useGetProducts(API);
+	const PRODUCT_LIMIT = 10;
+	const PRODUCT_OFFSET = 0;
 
+	const wastes = useFetch(endPoints.wastes.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));
+    console.log(wastes);
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>
-				{wastes.map(waste => (
-					<ProductItem Product={waste} key={waste.id} />
+				{wastes.map(product => (
+					<WasteItem product={product} key={product.id} />
 				))}
 			</div>
 		</section>
 	);
 }
 
-export default WasteList; */
+export default WasteList;

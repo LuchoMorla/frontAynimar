@@ -15,6 +15,7 @@
       "@services/*": ["services/*"],
       "@assets/*": ["assets/*"],
       "@layout/*": ["layout/*"],
+      "@entities/*": ["services/api/entities/*"],
     }
   }
 }

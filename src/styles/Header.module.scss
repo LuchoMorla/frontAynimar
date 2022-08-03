@@ -46,8 +46,11 @@
 .navbar-left ul {
   margin-left: 12px;
 }
-.navbar-right li:first-of-type {
-  margin: 0 1em 0 0;
+.navbar-right li/* :first-of-type */ {
+  margin: 0 0.75rem 0 0;
+}
+.navbar-right li:last-of-type {
+  margin: 0;
 }
 .navbar-left ul li a,
 .navbar-right ul li a {
@@ -71,6 +74,23 @@
   position: relative;
 }
 .navbar-shopping-cart div {
+  width: 16px;
+  height: 16px;
+  background-color: $--hospital-green;
+  border-radius: 50%;
+  font-size: $--sm;
+  font-weight: bold;
+  position: absolute;
+  top: -6px;
+  right: -3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.navbar-selling-cart {
+  position: relative;
+}
+.navbar-selling-cart div {
   width: 16px;
   height: 16px;
   background-color: $--hospital-green;

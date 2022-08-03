@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import Image from 'next/image';
 import AppContext from '@context/AppContext';
-import addToCartImage from '@icons/bt_add_to_cart.svg';
+import addToCartImage from '@icons/addreciclar.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
 import styles from '@styles/ProductItem.module.scss';
 
-const ProductItem = ({ product }) => {
+const WasteItem = ({ product }) => {
 	const { state, addToCart } = useContext(AppContext);
 	console.log(product);
 
@@ -39,4 +39,4 @@ const ProductItem = ({ product }) => {
 	);
 };
 
-export default ProductItem;
+export default WasteItem;

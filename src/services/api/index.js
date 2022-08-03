@@ -5,12 +5,13 @@ const endPoints = {
   products:{
     getProducts: `${API}/api/${VERSION}/products/`,
     postProducts: `${API}/api/${VERSION}/products/`,
-    getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
+    getProducts: (limit, offset) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}`,
     putProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
     deleteProduct: (id) => `${API}/api/${VERSION}/products/${id}`
   },
   wastes:{
-    getProducts: `${API}/api/${VERSION}/wastes/`,
+    getProducts: (limit, offset) => `${API}/api/${VERSION}/wastes?limit=${limit}&offset=${offset}&price_min=0&price_max=1000000`,
+
     postProducts: `${API}/api/${VERSION}/wastes/`,
     getProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,
     putProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,
@@ -66,4 +67,4 @@ const endPoints = {
   
 }
 
-export default endPoints
+export default endPoints;

@@ -12,7 +12,7 @@ const Menu = () => {
 					<Link href="/" className="title">Mis Ordenes</Link>
 				</li>
 				<li>
-					<Link href="/">Mi Cuenta</Link>
+					<Link href="/mi_cuenta">Mi Cuenta</Link>
 				</li>
 				<li>
 					<Link href='/login' >Iniciar Sesión</Link>

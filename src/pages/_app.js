@@ -1,7 +1,7 @@
 import { ProviderAuth } from '@hooks/useAuth';
 import AppContext from '@context/AppContext';
 import useInitialState from '@hooks/useInitialState';
-import Header from '@components/Header';
+import Layout from '@containers/Layout';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
@@ -9,8 +9,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <ProviderAuth>
     <AppContext.Provider value={initialState}>
-      <Header />
-      <Component {...pageProps} />
+      <Layout >
+              <Component {...pageProps} />
+      </Layout>
     </AppContext.Provider>
     </ProviderAuth>
   );

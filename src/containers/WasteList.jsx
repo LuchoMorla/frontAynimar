@@ -13,8 +13,8 @@ const WasteList = () => {
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>
-				{wastes.map(product => (
-					<WasteItem product={product} key={product.id} />
+				{wastes.map(waste => (
+					<WasteItem waste={waste} key={waste.id} />
 				))}
 			</div>
 		</section>

@@ -5,30 +5,27 @@ import addToCartImage from '@icons/addreciclar.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
 import styles from '@styles/ProductItem.module.scss';
 
-const WasteItem = ({ product }) => {
-	const { state, addToCart } = useContext(AppContext);
-	console.log(product);
+const WasteItem = ({ waste }) => {
+	const { state, addToMetacircle } = useContext(AppContext);
 
-	const handleClick = item => {
-		console.log('in cart: ', state.cart.includes(item));
-		addToCart(item);
+	const handleClick = item => {/* 
+		console.log('in cart: ', state.metacircle.includes(item)); */
+		addToMetacircle(item);
 	};
 
 	return (
 		<div className={styles.ProductItem}>
-			<Image src={product.image} width={240} height={240} alt={product.description} />
+			<Image src={waste.image} width={240} height={240} alt={waste.description} />
 			<div className={styles['product-info']}>
 				<div>
-					{console.log('productItem '+ product)}
-					{/* {console.log('productItem[0] '+product[0])} */}
-					<p>${product.price}</p>
-					<p>{product.name}</p>
+					<p>${waste.price}</p>
+					<p>{waste.name}</p>
 				</div>
 				<figure className={styles['more-clickable-area']}
-					onClick={() => handleClick(product)}
+					onClick={() => handleClick(waste)}
 					aria-hidden="true"
 					>
-					{state.cart.includes(product) ? <Image
+					{state.metacircle.includes(waste) ? <Image
 						className={(styles.disabled, styles['add-to-cart-btn'])}
 						src={addedToCartImage}
 						alt="added to cart"

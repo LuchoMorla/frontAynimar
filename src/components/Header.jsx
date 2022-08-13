@@ -3,9 +3,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Menu from '@components/Menu';
 import MyOrder from '@containers/MyOrder';
+import MyPayment from '@containers/MyPayment'
 import menu from '@icons/icon_menu.svg';
 import logo from '@logos/logo-Aynimar.svg';
-import AppContext from '../context/AppContext';
+import AppContext from '@context/AppContext';
 import shoppingCart from '@icons/icon_shopping_cart.svg';
 import sellingCart from '@icons/reciclando.svg'
 import userIcon from '@icons/user-icon-ecologist.svg'
@@ -16,7 +17,7 @@ const Header = () => {
 /* 	const [toggleOrders, setToggleOrders] = useState(false); */
 /* 	const { state } = useContext(AppContext); */
 
-	const { state, toggleOrder, toggleMenu } = useContext(AppContext);
+	const { state, toggleOrder, toggleMenu, togglePayment } = useContext(AppContext);
 
 /* 	const handleToggle = () => {
 		setToggle(!toggle);
@@ -56,13 +57,16 @@ const Header = () => {
 			<div className={styles['navbar-right']}>
 				<ul>
 					<li className={styles['navbar-selling-cart']}
+					onClick={() => togglePayment()}
 					aria-hidden="true"
 					>
 						<Image className={(styles['more-clickable-area'],
 						styles.pointer)}
 						src={sellingCart}
 						alt="selling to recicler cart"
-						/>
+						/>						
+						{state.metacircle.length > 0 ? <div>
+							{state.metacircle.length}</div> : null}
 
 					</li>
 					<li className={(styles['more-clickeable-area'],
@@ -90,6 +94,7 @@ const Header = () => {
 			{state.menuIsOpen && <Menu />}
 		</nav>
 		{state.orderIsOpen && <MyOrder />}
+		{state.paymentIsOpen && <MyPayment />}
 	</>
 	);
 };

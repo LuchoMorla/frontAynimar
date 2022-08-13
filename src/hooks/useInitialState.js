@@ -4,6 +4,8 @@ const initialState = {
   cart: [],
   orderIsOpen: false,
   menuIsOpen: false,
+  metacircle: [],
+  paymentIsOpen: false,
 };
 
 const useInitialState = () => {
@@ -30,6 +32,27 @@ const useInitialState = () => {
     });
   };
 
+  const addToMetacircle = (payload) => {
+    setState({
+      ...state,
+      metacircle: state.metacircle.includes(payload) ? state.metacircle : [...state.metacircle, payload],
+    });
+  };
+
+  const removeFromMetacircle = (payload) => {
+    setState({
+      ...state,
+      metacircle: state.metacircle.filter((items) => items.id !== payload.id),
+    });
+  };
+
+  const togglePayment = () => {
+    setState({
+      ...state,
+      paymentIsOpen: !state.paymentIsOpen,
+    });
+  };
+
   const toggleMenu = () => {
     setState({
       ...state,
@@ -43,6 +66,9 @@ const useInitialState = () => {
     removeFromCart,
     toggleOrder,
     toggleMenu,
+    addToMetacircle,
+    removeFromMetacircle,
+    togglePayment,
   };
 };
 

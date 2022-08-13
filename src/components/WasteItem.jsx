@@ -3,6 +3,7 @@ import Image from 'next/image';
 import AppContext from '@context/AppContext';
 import addToCartImage from '@icons/addreciclar.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
+import Link from 'next/link';
 import styles from '@styles/ProductItem.module.scss';
 
 const WasteItem = ({ waste }) => {
@@ -15,11 +16,15 @@ const WasteItem = ({ waste }) => {
 
 	return (
 		<div className={styles.ProductItem}>
-			<Image src={waste.image} width={240} height={240} alt={waste.description} />
+			<Link href={`/recycling/${waste.id}`} className={styles['go_product']}>
+			<Image src={waste.image} width={240} height={240} alt={waste.description} className={styles['go_product']}/>
+			</Link>
 			<div className={styles['product-info']}>
 				<div>
 					<p>${waste.price}</p>
+					<Link href={`/recycling/${waste.id}`}>
 					<p>{waste.name}</p>
+					</Link>
 				</div>
 				<figure className={styles['more-clickable-area']}
 					onClick={() => handleClick(waste)}

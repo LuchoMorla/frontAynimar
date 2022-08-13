@@ -10,7 +10,7 @@ const recycling = () => {
         <title>recycling | Aynimar</title>
       </Head>
       <div className={styles.Recycling}>
-        <p>Gana dinero reciclando, vendenos tu residuo para que convertirlos en productos utiles.</p>
+        <p>Gana dinero vendiendonos tu residuo para que convertirlos en productos utiles.</p>
       </div>
       <WasteList /> 
     </>

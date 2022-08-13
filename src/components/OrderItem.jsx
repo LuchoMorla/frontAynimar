@@ -14,9 +14,9 @@ const OrderItem = ({ product }) => {
 	return (
 		<div className={styles.OrderItem}>
 			<figure>
-				<img src={product?.image} width={10} height={10} alt={product?.title} />
+				<img src={product?.image} width={10} height={10} alt={product?.name} />
 			</figure>
-			<p>{product?.title}</p>
+			<p>{product?.name}</p>
 			<p>${product?.price}</p>
 			<Image className={(styles.pointer, styles['more-clickable-area'])}
 			src={close}

@@ -34,6 +34,9 @@
 	margin-bottom: 0;
 	color: $--soft-green;
 }
+.go_product {
+	cursor: pointer;
+}
 @media (max-width: 640px) {
 	.cards-container {
 		grid-template-columns: repeat(auto-fill, 140px);

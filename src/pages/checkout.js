@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import AppContext from '@context/AppContext';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import styles from '@styles/Checkout.module.scss';
@@ -12,7 +12,6 @@ const Checkout = () => {
 		const sum = state.cart.reduce(reducer, 0);
 		return sum.toFixed(2);
 	}
-  useEffect((state, sumTotal))
 
   return (
     <>

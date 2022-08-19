@@ -1,7 +1,7 @@
 import React from "react";
-import Recycler from "@components/Recycler";
+import RecyclerProfile from "@containers/RecyclerProfile";
 
 const recycler = () => {
-    return <Recycler />
+    return <RecyclerProfile />
 }
 export default recycler;

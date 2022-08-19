@@ -1,7 +1,7 @@
 import React from "react";
-import Client from "@components/Client";
+import CustomerProfile from "@containers/CustomerProfile";
 
 const recycler = () => {
-    return <Client />
+    return <CustomerProfile />
 }
 export default recycler;

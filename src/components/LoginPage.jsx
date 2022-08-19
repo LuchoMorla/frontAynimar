@@ -7,10 +7,10 @@ import logo from '@logos/logo-Aynimar.svg'
 import styles from '@styles/Login.module.scss';
 
 export default function LoginPage() {
-  const formRef = useRef(null);
-
   const auth = useAuth();
   const router = useRouter(); 
+
+  const formRef = useRef(null);
 
   const submitHandler = (event) => {
     event.preventDefault();

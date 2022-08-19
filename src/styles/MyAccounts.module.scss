@@ -1,0 +1,22 @@
+@import 'vars';
+.accounts-container {
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+}
+.title {
+    margin: 104px 24px 24px 24px;
+    align-self: center;
+}
+.accounts {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+.accounts a {
+    margin: 5px;
+    padding: 10px;
+    border: solid $--morado-centro;
+    border-radius: 25px;
+}

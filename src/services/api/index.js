@@ -16,11 +16,11 @@ const endPoints = {
     putProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,
     deleteProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`
   },
-  users: {
+/*   users: {
     getUser: (id) => `${API}/api/${VERSION}/users/${id}`,
     postUsers: `${API}/api/${VERSION}/users`,
-  },
-  recyclers: {
+  }, */
+/*   recyclers: {
     getRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`,
     postRecyclers: `${API}/api/${VERSION}/recyclers`,
     updateRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`,
@@ -31,23 +31,23 @@ const endPoints = {
     postCustomers: `${API}/api/${VERSION}/customers`,
     updateCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`,
     deleteCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`
-  },
-  payments: {
+  }, */
+/*   payments: {
     getPayment: (id) => `${API}/api/${VERSION}/payment/${id}`,
     postPayment: `${API}/api/${VERSION}/payments`,
   },
   orders: {
     getorder: (id) => `${API}/api/${VERSION}/order/${id}`,
     postorder: `${API}/api/${VERSION}/orders`,
-  },
+  }, */
   auth: {
     login: `${API}/api/${VERSION}/auth/login`,
     autoLogin: `${API}/api/${VERSION}/auth/auto-login`,
     recovery: `${API}/api/${VERSION}/auth/recovery`,
-    changePassword: `${API}/api/${VERSION}/auth/change-password`,
-    profile: `${API}/api/${VERSION}/auth/profile`
+    changePassword: `${API}/api/${VERSION}/auth/change-password`/* ,
+    profile: `${API}/api/${VERSION}/auth/profile` */
   },
-  categories:{
+/*   categories:{
     getCategories: `${API}/api/${VERSION}/categories`,
     postCategories: `${API}/api/${VERSION}/categories`,
     getCategoriesProduct: (id) => `${API}/api/${VERSION}/categories/${id}/products`,
@@ -62,8 +62,14 @@ const endPoints = {
   files:{
     postFiles: `${API}/api/${VERSION}/files/upload`,
     getFiles: (fileName) => `${API}/api/${VERSION}/${fileName}`
+  } */
+  profile: {
+    orders: '',
+    credits: '',
+    reciclajes: '',
+    clientData: `${API}/api/${VERSION}/profile/my-customer-data`,
+    recyclerData: `${API}/api/${VERSION}/profile/my-recycler-data`,
   }
-  
 }
 
 export default endPoints;

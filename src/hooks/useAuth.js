@@ -17,6 +17,11 @@ export const useAuth = () => {
 function useProviderAuth() {
   const [user, setUser] = useState(null);
 
+  const getAuth = async () => {
+      const token = Cookie.get('token');
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+  };
+
   const signIn = async (email, password) => {
     const options = {
       headers: {
@@ -26,8 +31,13 @@ function useProviderAuth() {
     };
     const { data: access_token } = await axios.post(endPoints.auth.login, { email, password }, options);
     if (access_token) {
-      const diasDisponiblesAntesDeCaducar = 15;
-      Cookie.set('token', access_token.token, { expires: diasDisponiblesAntesDeCaducar });
+      const diasDisponiblesAntesDeCaducar = 30;
+      const token = access_token.token;
+      Cookie.set('token', token, { expires: diasDisponiblesAntesDeCaducar });
+      // ya guardada la información en la cookie vamos a guardar la información en la aplicacion con su autorizacion
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+      const user = access_token.user;
+      setUser(user);
     }
   };
 
@@ -40,8 +50,13 @@ function useProviderAuth() {
     };
     const { data: access_token } = await axios.post(endPoints.auth.autoLogin, { token }, options);
     if (access_token) {
-      const diasDisponiblesAntesDeCaducar = 15;
-      Cookie.set('token', access_token.token, { expires: diasDisponiblesAntesDeCaducar });
+      const diasDisponiblesAntesDeCaducar = 30;
+      const token = access_token.token;
+      Cookie.set('token', token, { expires: diasDisponiblesAntesDeCaducar });
+      // ya guardada la información en la cookie vamos a guardar la información en la aplicacion con su autorizacion
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+      const user = access_token.user;
+      setUser(user);
     }
   };
 
@@ -53,7 +68,6 @@ function useProviderAuth() {
       },
     };
     const recovering = await axios.post(endPoints.auth.recovery, { email }, options);
-    console.log(recovering);
     return recovering;
   };
 
@@ -66,8 +80,13 @@ function useProviderAuth() {
     };
     const { data: access_token } = await axios.post(endPoints.auth.changePassword, { token, newPassword }, options);
     if (access_token) {
-      const diasDisponiblesAntesDeCaducar = 3;
-      Cookie.set('token', access_token.token, { expires: diasDisponiblesAntesDeCaducar });
+      const diasDisponiblesAntesDeCaducar = 30;
+      const token = access_token.token;
+      Cookie.set('token', token, { expires: diasDisponiblesAntesDeCaducar });
+      // ya guardada la información en la cookie vamos a guardar la información en la aplicacion con su autorizacion
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+      const user = access_token.user;
+      setUser(user);
     }
   };
 
@@ -86,6 +105,7 @@ function useProviderAuth() {
     autoSignIn,
     recovery,
     changePassword,
-    logout
+    logout,
+    getAuth
   };
 }

@@ -1,4 +1,5 @@
-import React, { /* useState, */ useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import { useAuth } from '@hooks/useAuth';
 import Link from 'next/link';
 import Image from 'next/image';
 import Menu from '@components/Menu';
@@ -8,20 +9,32 @@ import menu from '@icons/icon_menu.svg';
 import logo from '@logos/logo-Aynimar.svg';
 import AppContext from '@context/AppContext';
 import shoppingCart from '@icons/icon_shopping_cart.svg';
-import sellingCart from '@icons/reciclando.svg'
-import userIcon from '@icons/user-icon-ecologist.svg'
+import sellingCart from '@icons/reciclando.svg';
+import userIcon from '@icons/user-icon-ecologist.svg';
 import styles from '@styles/Header.module.scss';
 
 const Header = () => {
 /* 	const [toggle, setToggle] = useState(false); */
 /* 	const [toggleOrders, setToggleOrders] = useState(false); */
 /* 	const { state } = useContext(AppContext); */
+const [token, setToken] = useState(null);
+	const hola = useAuth();
+	if(!token) {
+		hola.getAuth();
+		setToken('haveToken');
+	}
 
 	const { state, toggleOrder, toggleMenu, togglePayment } = useContext(AppContext);
 
 /* 	const handleToggle = () => {
 		setToggle(!toggle);
 	}; */
+/* 	const auth = useAuth();
+	const userData = {
+		id: auth?.user?.id,
+		email: auth?.user?.email,
+		role: auth?.user?.role
+	} */
 
 	return (
 		<>

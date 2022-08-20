@@ -12,4 +12,15 @@ const addRecycler = async (body) => {
   return response.data;
 };
 
-export { addRecycler };
+const updateRecycler = async (id, body) => {
+  const config = {
+    headers: {
+      accept: '*/*',
+      'Content-Type': 'application/json',
+    },
+  };
+  const response = await axios.patch(endPoints.recyclers.updateRecycler(id), body, config);
+  return response.data;
+};
+
+export { addRecycler, updateRecycler };

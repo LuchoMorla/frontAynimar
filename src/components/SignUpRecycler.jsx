@@ -26,7 +26,6 @@ const SignUp = () => {
       }
     };
 
-    console.log(data);
       addRecycler(data)
       .then(() => {
         router.push('/correo-enviado');
@@ -35,10 +34,11 @@ const SignUp = () => {
         if (error.response?.status === 401) {
           alert('algo salio mal');
         } else if (error.response) {
+          alert('Algo salio mal: ' + error.response.status);
           console.log('Algo salio mal: ' + error.response.status);
           if (error.response.status == 409) {
             alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
-            router.push('/forgetPassword');
+            router.push('/forgotPassword');
           }
         }
       });

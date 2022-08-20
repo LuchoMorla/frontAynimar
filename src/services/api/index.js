@@ -20,7 +20,7 @@ const endPoints = {
     getUser: (id) => `${API}/api/${VERSION}/users/${id}`,
     postUsers: `${API}/api/${VERSION}/users`,
   }, */
-/*   recyclers: {
+  recyclers: {
     getRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`,
     postRecyclers: `${API}/api/${VERSION}/recyclers`,
     updateRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`,
@@ -31,7 +31,7 @@ const endPoints = {
     postCustomers: `${API}/api/${VERSION}/customers`,
     updateCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`,
     deleteCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`
-  }, */
+  },
 /*   payments: {
     getPayment: (id) => `${API}/api/${VERSION}/payment/${id}`,
     postPayment: `${API}/api/${VERSION}/payments`,

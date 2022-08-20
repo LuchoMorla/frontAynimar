@@ -12,4 +12,15 @@ const addCustomer = async (body) => {
   return response.data;
 };
 
-export { addCustomer };
+const updateCustomer = async (id, body) => {
+  const config = {
+    headers: {
+      accept: '*/*',
+      'Content-Type': 'application/json',
+    },
+  };
+  const response = await axios.patch(endPoints.customers.updateCustomer(id), body, config);
+  return response.data;
+};
+
+export { addCustomer, updateCustomer };

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import endPoints from '@services/api';
+import { useRouter } from "next/router";
+import { createCustomerByRecycler } from '@services/api/entities/customers';
 import Client from '@components/Client';
 
 const clientProfile = () => {
   const [client, setClient] = useState('vacio');
+  const router = useRouter(); 
 
   const clientData = async () => {
     const { data: fetch } = await axios.get(endPoints.profile.clientData);
@@ -19,6 +22,20 @@ const clientProfile = () => {
         console.log('Algo salio mal: ' + error.response.status);
       }
     });
+  }
+  if(client == null) {
+    const ejecutar = async () => {
+      await createCustomerByRecycler()
+    }
+    ejecutar()
+      .then(() => {
+        router.push('/mi_cuenta/cliente');
+      })
+      .catch((error) => {
+        if (error.response) {
+          alert('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona recuerda que puedes contactarnos ;).');
+        }
+      });
   }
 
   return <Client client={client} />;

@@ -23,4 +23,15 @@ const updateCustomer = async (id, body) => {
   return response.data;
 };
 
-export { addCustomer, updateCustomer };
+const createCustomerByRecycler = async () => {
+  const config = {
+    headers: {
+      accept: '*/*',
+      'Content-Type': 'application/json',
+    },
+  };
+  const response = await axios.post(endPoints.profile.createClientBR, config);
+  return response.data;
+}
+
+export { addCustomer, updateCustomer, createCustomerByRecycler };

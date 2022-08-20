@@ -1,10 +1,13 @@
   import React, { useState } from "react";
   import axios from "axios";
   import endPoints from "@services/api";
+  import { useRouter } from "next/router";
+  import { createRecyclerByCustomer } from '@services/api/entities/recyclers';
   import Recycler from "@components/Recycler";
 
   const recyclerProfile = () => {
       const [recycler, setRecycler] = useState('vacio');
+      const router = useRouter(); 
       
       const recyclerData = async () => {
         const { data: fetch } = await axios.get(endPoints.profile.recyclerData);
@@ -20,6 +23,20 @@
             console.log('Algo salio mal: ' + error.response.status);
           }
           })
+      }
+      if(recycler == null) {
+        const ejecutar = async () => {
+          await createRecyclerByCustomer()
+        }
+        ejecutar()
+          .then(() => {
+            router.push('/mi_cuenta/recycler');
+          })
+          .catch((error) => {
+            if (error.response) {
+              alert('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona recuerda que puedes contactarnos.');
+            }
+          });
       }
       
       return <Recycler recycler={recycler} />

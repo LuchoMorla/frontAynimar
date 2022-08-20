@@ -69,6 +69,8 @@ const endPoints = {
     reciclajes: '',
     clientData: `${API}/api/${VERSION}/profile/my-customer-data`,
     recyclerData: `${API}/api/${VERSION}/profile/my-recycler-data`,
+    createClientBR: `${API}/api/${VERSION}/profile/my-customer-data`,
+    createRecyclerBC: `${API}/api/${VERSION}/profile/my-recycler-data`,
   }
 }
 

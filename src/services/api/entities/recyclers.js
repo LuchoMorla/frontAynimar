@@ -23,4 +23,15 @@ const updateRecycler = async (id, body) => {
   return response.data;
 };
 
-export { addRecycler, updateRecycler };
+const createRecyclerByCustomer = async () => {
+  const config = {
+    headers: {
+      accept: '*/*',
+      'Content-Type': 'application/json',
+    },
+  };
+  const response = await axios.post(endPoints.profile.createRecyclerBC, config);
+  return response.data;
+}
+
+export { addRecycler, updateRecycler, createRecyclerByCustomer };

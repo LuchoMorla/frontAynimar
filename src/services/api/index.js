@@ -32,14 +32,16 @@ const endPoints = {
     updateCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`,
     deleteCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`
   },
-/*   payments: {
+  payments: {
     getPayment: (id) => `${API}/api/${VERSION}/payment/${id}`,
     postPayment: `${API}/api/${VERSION}/payments`,
+    postCommodity: `${API}/api/${VERSION}/payments/add-commodity`
   },
   orders: {
     getorder: (id) => `${API}/api/${VERSION}/order/${id}`,
     postorder: `${API}/api/${VERSION}/orders`,
-  }, */
+    postItem: `${API}/api/${VERSION}/orders/add-item`
+  },
   auth: {
     login: `${API}/api/${VERSION}/auth/login`,
     autoLogin: `${API}/api/${VERSION}/auth/auto-login`,

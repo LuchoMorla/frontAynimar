@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { addCustomer } from '@services/api/entities/customers';
+import { addCustomer } from '@entities/customers';
 import logo from '@logos/logo-Aynimar.svg';
 import styles from '@styles/Login.module.scss';
 

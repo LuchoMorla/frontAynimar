@@ -1,25 +1,43 @@
-import React/* , { useContext, useRef } */ from 'react';
+import React, { /* useContext, */ useRef } from 'react';
 /* import AppContext from '@context/AppContext'; */
+import axios from 'axios';
+import endPoints from '@services/api';
 import Image from 'next/image';
 import addToCart from '@icons/bt_add_to_cart.svg';
 import styles from '@styles/ProductInfo.module.scss';
 
 const WasteInfo = ({ product }) => {
-/* 	const { state, addToMetacircle } = useContext(AppContext);
+/* 	const { state, addToMetacircle } = useContext(AppContext); */
 	const formRef = useRef(null);
+	const waste = product;
 
-	const submitHandler = (product) => {
+	const createPayment = async () => {
+		const post = await axios.post(endPoints.payments.postPayment);
+		return post.data;
+	}
+
+	const submitHandler = async (event) => {
+		event.preventDefault();
+		const getPayment = await createPayment();
+		// perfecto esta funcionando está logica, pero hay que separarla y guardar el payment id para que con el uso de este
+		//podamos hacer multiples adicciones de productos a las ordenes o los pagos
+
 		const formData = new FormData(formRef.current);
-		console.log(formData);
-		addToMetacircle(product);
-	} */
+		const packet = {
+			paymentId: getPayment.id,
+			wasteId: waste.id,
+			amount: parseInt(formData.get('amount'))
+		}
+		console.log(packet);
+/* 		addToMetacircle(product); */
+	}
 
 	return (
 		<>
 		<div className={styles['stand_container']}>
 		<img src={product?.image} width={300} height={300} alt={product?.name} className={styles.image}/>
 			<div className={styles.ProductInfo}>
-{/* 				<form action="#" ref={formRef} onSubmit={submitHandler} > */}
+				<form ref={formRef} onSubmit={submitHandler} >
 					<p>${product?.price / 100}</p>
 					<p>{product?.name}</p>
 					<p>{product?.description}</p>
@@ -27,9 +45,9 @@ const WasteInfo = ({ product }) => {
 					<input type="number" id="amount" name='amount' min={1}/>
 					<button type='submit' className={(styles['primary-button'], styles['add-to-cart-button'])}>
 					<Image src={addToCart} width={24} height={24} alt="add to cart" />
-					Add to cart
+					Agrega al carrito
 					</button>
-{/* 				</form> */}
+				</form>
 			</div>
 		</div>
 		</>

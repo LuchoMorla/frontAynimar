@@ -1,5 +1,5 @@
-import React, { /* useContext, */ useRef } from 'react';
-/* import AppContext from '@context/AppContext'; */
+import React, { useContext, useRef } from 'react';
+import AppContext from '@context/AppContext';
 import axios from 'axios';
 import endPoints from '@services/api';
 import Image from 'next/image';
@@ -7,7 +7,7 @@ import addToCart from '@icons/bt_add_to_cart.svg';
 import styles from '@styles/ProductInfo.module.scss';
 
 const WasteInfo = ({ product }) => {
-/* 	const { state, addToMetacircle } = useContext(AppContext); */
+	const { state,/*  addToMetacircle, */ usePaymentId } = useContext(AppContext);
 	const formRef = useRef(null);
 	const waste = product;
 
@@ -18,18 +18,39 @@ const WasteInfo = ({ product }) => {
 
 	const submitHandler = async (event) => {
 		event.preventDefault();
-		const getPayment = await createPayment();
-		// perfecto esta funcionando está logica, pero hay que separarla y guardar el payment id para que con el uso de este
-		//podamos hacer multiples adicciones de productos a las ordenes o los pagos
-
-		const formData = new FormData(formRef.current);
-		const packet = {
-			paymentId: getPayment.id,
-			wasteId: waste.id,
-			amount: parseInt(formData.get('amount'))
+		const addToPacket = async (paymentId) => {
+			const config = {
+				headers: {
+				  accept: '*/*',
+				  'Content-Type': 'application/json',
+				},
+			  };
+			const formData = new FormData(formRef.current);
+			const packet = {
+				paymentId: paymentId,
+				wasteId: waste.id,
+				amount: parseInt(formData.get('amount'))
+			}
+			console.log('packet: ', packet);
+			const addProductToThePacked = await axios.post(endPoints.payments.postCommodity, packet, config);
+			return addProductToThePacked;
 		}
-		console.log(packet);
-/* 		addToMetacircle(product); */
+		const savedPaymentId = window.localStorage.getItem('paymentId');
+
+		if(savedPaymentId == null){
+			console.log('no se ah guardado un paymentId');
+			const getPayment = await createPayment();
+			window.localStorage.setItem('paymentId', `${getPayment.id}`);
+			const bornedPaymentId = getPayment.id;
+			addToPacket(bornedPaymentId)
+		} else {
+			console.log('tenemos guardado un PaymentId');
+			const numberPaymentId = parseInt(savedPaymentId);
+			usePaymentId(numberPaymentId)
+			addToPacket(numberPaymentId)
+			console.log('reutilizamos un  paquete para guardar otro producto');
+		}
+		// ya funciona como queremos, ahora solo hay que agregar el customHook para información guardada en el localStorage
 	}
 
 	return (

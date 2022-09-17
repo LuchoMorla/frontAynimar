@@ -6,6 +6,8 @@ const initialState = {
   menuIsOpen: false,
   metacircle: [],
   paymentIsOpen: false,
+  havePaymentId: null,
+  haveOrderId: null,
 };
 
 const useInitialState = () => {
@@ -60,6 +62,20 @@ const useInitialState = () => {
     });
   };
 
+  const usePaymentId = () => {
+    setState({
+      ...state,
+      havePaymentId: state.havePaymentId
+    });
+  }
+
+  const useOrderId = () => {
+    setState({
+      ...state,
+      haveOrderId: state.haveOrderId
+    });
+  }
+
   return {
     state,
     addToCart,
@@ -69,6 +85,8 @@ const useInitialState = () => {
     addToMetacircle,
     removeFromMetacircle,
     togglePayment,
+    usePaymentId,
+    useOrderId
   };
 };
 

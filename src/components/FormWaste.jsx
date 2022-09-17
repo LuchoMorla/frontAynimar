@@ -9,7 +9,6 @@ import styles from '@styles/ProductInfo.module.scss';
 const WasteInfo = ({ product }) => {
 	const { state,/*  addToMetacircle, */ usePaymentId } = useContext(AppContext);
 	const formRef = useRef(null);
-	const waste = product;
 
 	const createPayment = async () => {
 		const post = await axios.post(endPoints.payments.postPayment);
@@ -28,29 +27,24 @@ const WasteInfo = ({ product }) => {
 			const formData = new FormData(formRef.current);
 			const packet = {
 				paymentId: paymentId,
-				wasteId: waste.id,
+				wasteId: product.id,
 				amount: parseInt(formData.get('amount'))
 			}
-			console.log('packet: ', packet);
 			const addProductToThePacked = await axios.post(endPoints.payments.postCommodity, packet, config);
 			return addProductToThePacked;
 		}
 		const savedPaymentId = window.localStorage.getItem('paymentId');
 
 		if(savedPaymentId == null){
-			console.log('no se ah guardado un paymentId');
 			const getPayment = await createPayment();
 			window.localStorage.setItem('paymentId', `${getPayment.id}`);
 			const bornedPaymentId = getPayment.id;
 			addToPacket(bornedPaymentId)
 		} else {
-			console.log('tenemos guardado un PaymentId');
 			const numberPaymentId = parseInt(savedPaymentId);
-			usePaymentId(numberPaymentId)
-			addToPacket(numberPaymentId)
-			console.log('reutilizamos un  paquete para guardar otro producto');
+			usePaymentId(numberPaymentId);
+			addToPacket(numberPaymentId);
 		}
-		// ya funciona como queremos, ahora solo hay que agregar el customHook para información guardada en el localStorage
 	}
 
 	return (

@@ -39,7 +39,7 @@ const endPoints = {
   },
   orders: {
     getorder: (id) => `${API}/api/${VERSION}/order/${id}`,
-    postorder: `${API}/api/${VERSION}/orders`,
+    postOrder: `${API}/api/${VERSION}/orders`,
     postItem: `${API}/api/${VERSION}/orders/add-item`
   },
   auth: {

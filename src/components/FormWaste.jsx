@@ -33,11 +33,11 @@ const WasteInfo = ({ product }) => {
 			const addProductToThePacked = await axios.post(endPoints.payments.postCommodity, packet, config);
 			return addProductToThePacked;
 		}
-		const savedPaymentId = window.localStorage.getItem('paymentId');
+		const savedPaymentId = window.localStorage.getItem('pi');
 
 		if(savedPaymentId == null){
 			const getPayment = await createPayment();
-			window.localStorage.setItem('paymentId', `${getPayment.id}`);
+			window.localStorage.setItem('pi', `${getPayment.id}`);
 			const bornedPaymentId = getPayment.id;
 			addToPacket(bornedPaymentId)
 		} else {

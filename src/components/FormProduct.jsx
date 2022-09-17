@@ -35,11 +35,11 @@ const ProductInfo = ({ product }) => {
 			const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
 			return addProductToThePacked;
 		}
-		const savedOrderId = window.localStorage.getItem('orderId');
+		const savedOrderId = window.localStorage.getItem('oi');
 
 		if(savedOrderId == null){
 			const getOrder = await createOrder();
-			window.localStorage.setItem('orderId', `${getOrder.id}`);
+			window.localStorage.setItem('oi', `${getOrder.id}`);
 			const bornedOrderId = getOrder.id;
 			addToPacket(bornedOrderId)
 		} else {

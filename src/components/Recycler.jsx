@@ -7,6 +7,31 @@ const Recycler = ({ recycler }) => {
    const formRef = useRef(null);
    const router = useRouter(); 
 
+   const getLocation = () => {
+    const clientGeoLocationInput = document.getElementById('geolocation');
+    let options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    function success(pos) {
+      let crd = pos.coords;
+    
+      console.log('Your current position is:');
+      console.log('Latitude : ' + crd.latitude);
+      console.log('Longitude: ' + crd.longitude);
+/*       console.log('More or less ' + crd.accuracy + ' meters.'); */
+      clientGeoLocationInput.value = `${crd.latitude}, ${crd.longitude}`
+    };
+
+    function error(err) {
+      alert('ERROR(' + err.code + '): ' + err.message);
+      console.warn('ERROR(' + err.code + '): ' + err.message);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+   }
+
    const submitHandler = (event) => {
     event.preventDefault();
 
@@ -24,6 +49,7 @@ const Recycler = ({ recycler }) => {
 	    city: formData.get('ciudad'),
 	    postalCode: formData.get('postal-code'),
 	    streetAddress: formData.get('direccion'),
+      geolocation: formData.get('geolocation'),
 	    paymentType: formData.get('payment-type'),
 	    bank: formData.get('banco'),
 	    typeCount: formData.get('type-count'),
@@ -111,10 +137,18 @@ const Recycler = ({ recycler }) => {
               </label>
               <input type="text" name="direccion" id="direccion" autoComplete="street-address" 
               defaultValue={recycler?.streetAddress} required className="value" />
+
+              <label htmlFor="geolocation" className={styles.label}>
+              Ubicación de Google maps
+              </label>
+              <input type="text" name="geolocation" id="geolocation"
+              defaultValue={recycler?.geolocation ? recycler.geolocation : 'sin ubicacion'} required className="value" />
+
+              <button onClick={getLocation}>Obtener Ubicación Actual</button>
                             
               <label htmlFor="payment-type" className={styles.label}>¿Como te gustaria recibir los pagos?</label>
               <input type='text' name="payment-type"  required
-              id="payment-type" placeholder="Cheque | Deposito bancario | Efectivo"
+              id="payment-type" placeholder="Cheque | Deposito Bancario | Efectivo"
               defaultValue={recycler?.paymentType} className="value" />
               
               <label htmlFor="banco" className={styles.label}>Banco</label>
@@ -124,7 +158,7 @@ const Recycler = ({ recycler }) => {
 
               <label htmlFor="type-count" className={styles.label}>Tipo de cuenta</label>
               <input type='text'  name="type-count" 
-              id="type-count" placeholder="ahorros/corriente"
+              id="type-count" placeholder="C.Ahorros | C.Corriente"
               defaultValue={recycler?.typeCount} className="value" />
 
               <label htmlFor="count" className={styles.label}>Numero de cuenta</label>

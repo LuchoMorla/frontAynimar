@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import Image from 'next/image';
-import AppContext from '@context/AppContext';
+import AppContext from '@context/AppContext';/* 
 import addToCartImage from '@icons/addreciclar.svg';
-import addedToCartImage from '@icons/bt_added_to_cart.svg';
+import addedToCartImage from '@icons/bt_added_to_cart.svg'; */
 import Link from 'next/link';
 import styles from '@styles/ProductItem.module.scss';
 
@@ -26,7 +26,7 @@ const WasteItem = ({ waste }) => {
 					<p>{waste.name}</p>
 					</Link>
 				</div>
-				<figure className={styles['more-clickable-area']}
+{/* 				<figure className={styles['more-clickable-area']}
 					onClick={() => handleClick(waste)}
 					aria-hidden="true"
 					>
@@ -34,8 +34,8 @@ const WasteItem = ({ waste }) => {
 						className={(styles.disabled, styles['add-to-cart-btn'])}
 						src={addedToCartImage}
 						alt="added to cart"
-					/> : <Image className={(styles['add-to-cart-btn'], styles.pointer)} src={addToCartImage} alt="add to cart" />}
-				</figure>
+					/> : <Image className={(styles['add-to-cart-btn'], styles.pointer)} src={addToCartImage} alt="add to cart" />} 
+				</figure>*/}
 			</div>
 		</div>
 	);

@@ -42,20 +42,25 @@
 	font-size: $--md;
 	margin: 8px 0 32px 0;
 }
-.secondary-button {
-	background-color: $--white;
-	border-radius: 8px;
-	border: 1px solid $--hospital-green;
-	color: $--hospital-green;
-	width: 100%;
-	cursor: pointer;
-	font-size: $--md;
-	font-weight: bold;
-	height: 50px;
-}
 .login-button {
 	margin-top: 14px;
 	margin-bottom: 30px;
+	display: flex;
+    background: $--morado-centro;
+    padding: 5px;
+    border-radius: 18px;
+    color: white;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.login-button:hover {
+    background: $--app-green;
+}
+
+.login-button:active {
+    background: $--soft-green;
+    color: $--black;
 }
 @media (max-width: 640px) {
 	.form-container {

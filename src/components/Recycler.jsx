@@ -7,7 +7,8 @@ const Recycler = ({ recycler }) => {
    const formRef = useRef(null);
    const router = useRouter(); 
 
-   const getLocation = () => {
+   const getLocation = (event) => {
+    event.preventDefault()
     const clientGeoLocationInput = document.getElementById('geolocation');
     let options = {
       enableHighAccuracy: true,
@@ -62,7 +63,7 @@ const Recycler = ({ recycler }) => {
 
     updateRecycler(recyclerId, data)
       .then(() => {
-          alert('^^ Actualizaste tus datos correctamente ^^');
+          alert('^^ Actualizaste tus datos correctamente ^^, si viniste aquí por 1ra primera vez, te contactaremos muy pronto...');
           router.push('/mi_cuenta/recycler');
       })
       .catch((error)=> { if (error.response?.status === 401) {
@@ -83,8 +84,8 @@ const Recycler = ({ recycler }) => {
         <div className={styles.MyAccount}>
         <div className={styles["MyAccount-container"]}>
           <h1 className={styles.title}>Mi Cuenta de cooperación con el Reciclaje</h1>
-
-            <form action="/" className={styles.form} ref={formRef}  onSubmit={submitHandler} autoComplete="on">
+            <p>Edita tus datos para contactarte, poder realizar el pago que le corresponde y para poder recoger el producto.</p>
+            <form action="/" className={styles.form} ref={formRef} autoComplete="on">
             <div>
               <label htmlFor="name" className={styles.label}>Nombre/s</label>
               <input type='text' name="name"
@@ -165,10 +166,9 @@ const Recycler = ({ recycler }) => {
               <input type='text' name="count" 
               id="count" required
               defaultValue={recycler?.countNumber} className="value" />
-              
             </div>
     
-            <input type="submit" value="Editar" className={(styles["secondary-button"], styles["login-button"])} />
+            <button className={styles["login-button"]} onClick={submitHandler}>Editar</button>
           </form>
         </div>
       </div>

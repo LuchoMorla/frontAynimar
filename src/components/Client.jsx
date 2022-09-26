@@ -7,8 +7,8 @@ const Client = ({ client }) => {
   const formRef = useRef(null);
   const router = useRouter();
 
-  const getLocation = () => {
-
+  const getLocation = (event) => {
+    event.preventDefault();
     let options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -77,7 +77,7 @@ const Client = ({ client }) => {
       <div className={styles['MyAccount-container']}>
         <h1 className={styles.title}>Mi Cuenta de Compras</h1>
 
-        <form action="/" className={styles.form} ref={formRef} onSubmit={submitHandler} autoComplete="on">
+        <form action="/" className={styles.form} ref={formRef} autoComplete="on">
           <div>
             <label htmlFor="name" className={styles.label}>
               Nombre/s
@@ -136,7 +136,7 @@ const Client = ({ client }) => {
             <button onClick={getLocation}>Obtener Ubicación</button>
           </div>
 
-          <input type="submit" value="Editar" className={(styles['secondary-button'], styles['login-button'])} />
+          <button className={styles["login-button"]} onClick={submitHandler}>Editar</button>
         </form>
       </div>
     </div>

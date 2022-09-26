@@ -33,7 +33,8 @@ const clientProfile = () => {
       })
       .catch((error) => {
         if (error.response) {
-          alert('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona recuerda que puedes contactarnos ;).');
+          alert('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona despues de refrescar la pagina recuerda que puedes contactarnos ;).');
+          router.reload(window.location.pathname);
         }
       });
   }

@@ -33,17 +33,6 @@
 .ProductInfo label {
 	color: $--white;
 }
-.primary-button {
-	background-color: $--soft-green;
-	border-radius: 8px;
-	border: none;
-	color: $--white;
-	width: 100%;
-	cursor: pointer;
-	font-size: $--md;
-	font-weight: bold;
-	height: 50px;
-}
 .add-to-cart-button {
 	display: flex;
 	align-items: center;
@@ -52,6 +41,16 @@
 	border-radius: 25px;
 	height: 45px;
 	width: 125px;
+	background: $--morado-centro;
+	color: white;
+}
+.add-to-cart-button:hover {
+    background: $--app-green;
+}
+
+.add-to-cart-button:active {
+    background: $--soft-green;
+    color: $--black;
 }
 @media (max-width: 640px) {
 	.stand_container {

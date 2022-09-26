@@ -3,12 +3,23 @@ import AppContext from '@context/AppContext';
 import axios from 'axios';
 import endPoints from '@services/api';
 import Image from 'next/image';
-import addToCart from '@icons/bt_add_to_cart.svg';
+import addToCartButton from '@icons/bt_add_to_cart.svg';
+import { useRouter } from 'next/router';
 import styles from '@styles/ProductInfo.module.scss';
 
 const WasteInfo = ({ product }) => {
-	const { state,/*  addToMetacircle, */ usePaymentId } = useContext(AppContext);
+	const { state, addToMetacircle, usePaymentId, } = useContext(AppContext);
 	const formRef = useRef(null);
+	const router = useRouter(); 
+
+	const handleClick = item => {
+		addToMetacircle(item);
+	}
+
+	const handleRedirect = () => {
+		alert('hemos registrado tú pedido, nos comunicaremos con tigo para pasar a recolectar el producto, te redigiremos a una nueva pagina para confirmar tús datos de contacto')
+		router.push('/mi_cuenta/recycler');
+	}
 
 	const createPayment = async () => {
 		const post = await axios.post(endPoints.payments.postPayment);
@@ -40,10 +51,42 @@ const WasteInfo = ({ product }) => {
 			window.localStorage.setItem('pi', `${getPayment.id}`);
 			const bornedPaymentId = getPayment.id;
 			addToPacket(bornedPaymentId)
+			.then(() => {
+				handleClick(product);
+				handleRedirect();
+			})
+			.catch((error) => {
+				if (error.response?.status === 401) {
+				  alert('algo salio mal');
+				} else if (error.response) {
+				  alert('Algo salio mal: ' + error.response.status);
+				  console.log('Algo salio mal: ' + error.response.status);
+				  if (error.response.status == 409) {
+					alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+					router.push('/forgotPassword');
+				  }
+				}
+			  });
 		} else {
 			const numberPaymentId = parseInt(savedPaymentId);
 			usePaymentId(numberPaymentId);
-			addToPacket(numberPaymentId);
+			addToPacket(numberPaymentId)
+			.then(() => {
+				handleClick(product);
+				handleRedirect();
+			})
+			.catch((error) => {
+				if (error.response?.status === 401) {
+				  alert('algo salio mal');
+				} else if (error.response) {
+				  alert('Algo salio mal: ' + error.response.status);
+				  console.log('Algo salio mal: ' + error.response.status);
+				  if (error.response.status == 409) {
+					alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+					router.push('/forgotPassword');
+				  }
+				}
+			  });
 		}
 	}
 
@@ -57,10 +100,10 @@ const WasteInfo = ({ product }) => {
 					<p>{product?.name}</p>
 					<p>{product?.description}</p>
 					<label htmlFor="amount">cantidad: </label>
-					<input type="number" id="amount" name='amount' min={1}/>
-					<button type='submit' className={(styles['primary-button'], styles['add-to-cart-button'])}>
-					<Image src={addToCart} width={24} height={24} alt="add to cart" />
-					Agrega al carrito
+					<input type="number" required id="amount" name='amount' min={1}/>
+					<button type='submit' className={styles['add-to-cart-button']}>
+					<Image src={addToCartButton} width={24} height={24} alt="add to cart" />
+					Vender producto
 					</button>
 				</form>
 			</div>

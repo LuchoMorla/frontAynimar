@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { useAuth } from '@hooks/useAuth' 
+import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import logo from '@logos/logo-Aynimar.svg'
+import logo from '@logos/logo-Aynimar.svg';
 import styles from '@styles/Login.module.scss';
 
 export default function ForgetPassword() {
@@ -37,7 +37,7 @@ export default function ForgetPassword() {
   return (
     <div className={styles.login}>
       <div className={styles['login-container']}>
-        <Image src={logo} width={100} height={100} className={styles.logo}/>
+        <Image src={logo} width={100} height={100} className={styles.logo} alt='logo Aynimar' />
         <h1 className={styles.title}>Recuperar Contraseña</h1>
 
         <form action="/" ref={formRef} className={styles.form} onSubmit={submitHandler} autoComplete="on">

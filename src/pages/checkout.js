@@ -11,7 +11,7 @@ const Checkout = () => {
 		const reducer = (accumalator, currentValue) => accumalator + currentValue.price;
 		const sum = state.cart.reduce(reducer, 0);
 		return sum.toFixed(2);
-	}
+	};
 
   return (
     <>

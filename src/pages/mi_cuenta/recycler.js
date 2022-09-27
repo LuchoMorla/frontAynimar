@@ -2,6 +2,6 @@ import React from "react";
 import RecyclerProfile from "@containers/RecyclerProfile";
 
 const recycler = () => {
-    return <RecyclerProfile />
-}
+    return <RecyclerProfile />;
+};
 export default recycler;

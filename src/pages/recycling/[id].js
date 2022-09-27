@@ -5,13 +5,14 @@ import axios from 'axios';
 import endPoints from '@services/api';
 
 export default function WasteStand() {
-  const [product, setProduct] = useState({});
   const router = useRouter();
+  const route = [];
+  const [product, setProduct] = useState({});
 
   useEffect(() => {
     const { id } = router.query;
     // hacemos una validacion que devuelva un return vacio en caso de que la ruta no esté disponible, así nos evitamos un error 400
-    if (!router.isReady) return;
+    if (!router.isReady) return route;
 
     async function getWaste() {
       const response = await axios.get(endPoints.wastes.getProduct(id));

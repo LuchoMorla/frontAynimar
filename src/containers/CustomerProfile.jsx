@@ -15,7 +15,8 @@ const clientProfile = () => {
     return fetch;
   };
   if (client == 'vacio') {
-    clientData().catch((error) => {
+    clientData()
+    .catch((error) => {
       if (error.response?.status === 401) {
         alert('Probablemente necesites iniciar sesion de nuevo');
       } else if (error.response) {

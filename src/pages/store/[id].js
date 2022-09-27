@@ -5,20 +5,20 @@ import axios from 'axios';
 import endPoints from '@services/api';
 
 export default function ProductStand() {
-    const [product, setProduct] = useState({});
-    const router = useRouter();
+  const [product, setProduct] = useState({});
+  const router = useRouter();
 
-    useEffect(() => {
-        const { id } = router.query;
-        // hacemos una validacion que devuelva un return vacio en caso de que la ruta no esté disponible, así nos evitamos un error 400
-        if (!router.isReady) return;
+  useEffect(() => {
+    const { id } = router.query;
+    // hacemos una validacion que devuelva un return vacio en caso de que la ruta no esté disponible, así nos evitamos un error 400
+    if (!router.isReady) return;
 
-        async function getProduct() {
-            const response = await axios.get(endPoints.products.getProduct(id));
-            setProduct(response.data);
-        }
-        getProduct();
-    }, [router?.isReady]);
+    async function getProduct() {
+      const response = await axios.get(endPoints.products.getProduct(id));
+      setProduct(response.data);
+    }
+    getProduct();
+  }, [router?.isReady]);
 
-    return <FormProduct product={product} />;
-};
+  return <FormProduct product={product} />;
+}

@@ -72,7 +72,7 @@ export default function LoginPage() {
           Iniciar Sesión
           </button>
         </form>
-        <Link href="/forgetPassword">Olvide mi Contraseña</Link>
+        <Link href="/forgotPassword">Olvide mi Contraseña</Link>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import Image from 'next/image';
+import Link from "next/link";
 import { useRouter } from 'next/router';
 import { addRecycler } from '@entities/recyclers';
 import logo from '@logos/logo-Aynimar.svg';
@@ -118,6 +119,7 @@ const SignUp = () => {
           Registrarse
           </button>
         </form>
+        <Link href='/login'>ya tengo una cuenta, Iniciar Sesion</Link>
       </div>
     </div>
     );

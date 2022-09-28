@@ -67,14 +67,14 @@ const useInitialState = () => {
       ...state,
       havePaymentId: state.havePaymentId
     });
-  }
+  };
 
   const useOrderId = () => {
     setState({
       ...state,
       haveOrderId: state.haveOrderId
     });
-  }
+  };
 
   return {
     state,

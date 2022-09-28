@@ -1,0 +1,13 @@
+@import 'vars';
+
+.contact {
+    padding: 100px;
+    display: flex;
+    flex-flow: column wrap;
+    text-align: center;
+}
+.title {
+    text-align: center;
+    color: $--white;
+    margin: $--sm 0 0 0;
+}

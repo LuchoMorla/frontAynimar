@@ -1,5 +1,5 @@
-import ProductList from '@containers/ProductList';
 import Head from 'next/head';
+import ProductList from '@containers/ProductList';
 import styles from '@styles/Recycling.module.scss';
 
 export default function Home() {

@@ -60,7 +60,7 @@ const [token, setToken] = useState(null);
 						<Link href="/store">Tienda</Link>
 					</li>
 					<li>
-						<Link href="/">Contactanos</Link>
+						<Link href="/contact">Contactanos</Link>
 					</li>
 					<li>
 						<Link href="/">Blog</Link>

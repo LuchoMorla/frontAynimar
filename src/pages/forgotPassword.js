@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useRef } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
@@ -36,6 +37,9 @@ export default function ForgetPassword() {
 
   return (
     <div className={styles.login}>
+      <Head>
+        <title>Aynimar | contraseña olvidada</title>
+      </Head>
       <div className={styles['login-container']}>
         <Image src={logo} width={100} height={100} className={styles.logo} alt='logo Aynimar' />
         <h1 className={styles.title}>Recuperar Contraseña</h1>

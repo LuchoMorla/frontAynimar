@@ -8,7 +8,7 @@ const myAccount = () => {
       <Head>
         <title>Aynimar | Mi Cuenta</title>
       </Head>
-    <MyAccount />
+      <MyAccount />
     </>
   );
 };

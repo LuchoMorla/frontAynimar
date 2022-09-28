@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import FormProduct from '@components/FormProduct';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -18,7 +19,16 @@ export default function ProductStand() {
       setProduct(response.data);
     }
     getProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router?.isReady]);
 
-  return <FormProduct product={product} />;
+  return (
+  <>
+    <Head>
+      <title>Aynimar | {product.name}</title>
+    </Head>
+    <FormProduct product={product} />
+  </>
+
+  );
 }

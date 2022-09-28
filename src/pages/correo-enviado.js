@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React from 'react';
 import Image from 'next/image';
 import logo from '@logos/logo-Aynimar.svg';
@@ -7,6 +8,9 @@ import styles from '@styles/SendEmail.module.scss';
 export default function emailHasBeenSent() {
   return (
     <div className={styles.SendEmail}>
+      <Head>
+        <title>Aynimar | Correo Enviado</title>
+      </Head>
     <div className={styles["form-container"]}>
       <Image src={logo} alt="logo" className={styles.logo} />
       <h1 className={styles.title}>Te enviamos un mensaje a tu correo electronico!</h1>

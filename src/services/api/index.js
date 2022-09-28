@@ -73,7 +73,10 @@ const endPoints = {
     recyclerData: `${API}/api/${VERSION}/profile/my-recycler-data`,
     createClientBR: `${API}/api/${VERSION}/profile/my-customer-data`,
     createRecyclerBC: `${API}/api/${VERSION}/profile/my-recycler-data`,
+  },
+  mail: {
+    contact: `${API}/api/${VERSION}/mail/contact`
   }
-}
+};
 
 export default endPoints;

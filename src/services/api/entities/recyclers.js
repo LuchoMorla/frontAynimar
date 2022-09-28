@@ -32,6 +32,6 @@ const createRecyclerByCustomer = async () => {
   };
   const response = await axios.post(endPoints.profile.createRecyclerBC, config);
   return response.data;
-}
+};
 
 export { addRecycler, updateRecycler, createRecyclerByCustomer };

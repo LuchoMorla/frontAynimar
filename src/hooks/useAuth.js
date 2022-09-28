@@ -92,11 +92,13 @@ function useProviderAuth() {
 
       /* Implementación del Logout */
       const logout = async () => {
+        window.localStorage.removeItem('pi');
+        window.localStorage.removeItem('oi');
         Cookie.remove('token');
         setUser(null);
         delete axios.defaults.headers.Autorization;
         window.location.href = '/login';
-      }
+      };
 
 
   return {

@@ -14,7 +14,7 @@ const PaymentItem = ({ waste }) => {
 	return (
 		<div className={styles.OrderItem}>
 			<figure>
-				<img src={waste?.image} width={10} height={10} alt={waste?.name} />
+				<Image src={waste?.image} width={10} height={10} alt={waste?.name} />
 			</figure>
 			<p>{waste?.name}</p>
 			<p>${waste?.price}</p>

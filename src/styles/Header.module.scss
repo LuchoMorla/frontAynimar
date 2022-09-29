@@ -14,6 +14,9 @@
   align-items: center;
   opacity: 0.93;
 }
+.hamburger {
+  display: none;
+}
 .menu {
   display: none;
 }
@@ -30,6 +33,8 @@
 .logo {
   color: $--app-green;
   font-size: 1rem;
+  display: flex;
+  align-items: center;
 }
 .navbar-left ul,
 .navbar-right ul {
@@ -105,8 +110,11 @@
   align-items: center;
 }
 @media (max-width: 700px) {
-  .menu {
+   .menu {
     display: block;
+  }
+  .hamburger {
+    display: flex;
   }
   .navbar-left ul {
     display: none;
@@ -116,5 +124,5 @@
   }
   .logo-container {
     display: none;
-  }
+  } 
 }

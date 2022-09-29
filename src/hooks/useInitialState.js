@@ -8,6 +8,7 @@ const initialState = {
   paymentIsOpen: false,
   havePaymentId: null,
   haveOrderId: null,
+  navMenuIsOpen: false
 };
 
 const useInitialState = () => {
@@ -62,6 +63,13 @@ const useInitialState = () => {
     });
   };
 
+  const toggleNavMenu = () => {
+    setState({
+      ...state,
+      navMenuIsOpen: !state.navMenuIsOpen,
+    });
+  };
+
   const usePaymentId = () => {
     setState({
       ...state,
@@ -86,7 +94,8 @@ const useInitialState = () => {
     removeFromMetacircle,
     togglePayment,
     usePaymentId,
-    useOrderId
+    useOrderId,
+    toggleNavMenu
   };
 };
 

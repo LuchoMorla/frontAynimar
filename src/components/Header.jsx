@@ -3,8 +3,9 @@ import { useAuth } from '@hooks/useAuth';
 import Link from 'next/link';
 import Image from 'next/image';
 import Menu from '@components/Menu';
+import NavMenu from '@components/NavMenu';
 import MyOrder from '@containers/MyOrder';
-import MyPayment from '@containers/MyPayment'
+import MyPayment from '@containers/MyPayment';
 import menu from '@icons/icon_menu.svg';
 import logo from '@logos/logo-Aynimar.svg';
 import AppContext from '@context/AppContext';
@@ -24,7 +25,7 @@ const [token, setToken] = useState(null);
 		setToken('haveToken');
 	}
 
-	const { state, toggleOrder, toggleMenu, togglePayment } = useContext(AppContext);
+	const { state, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
 
 /* 	const handleToggle = () => {
 		setToggle(!toggle);
@@ -39,7 +40,12 @@ const [token, setToken] = useState(null);
 	return (
 		<>
 		<nav className={styles.Nav}>
-			<img src={menu.src} alt="menu" className={styles.menu} />
+		{state.navMenuIsOpen && <NavMenu />}
+			<div className={styles.hamburger}
+			onClick={() => toggleNavMenu()}
+			aria-hidden="true" >
+				<Image src={menu} alt="menu" className={styles.menu} />
+			</div>
 			<div className={styles['logo-container']}>
 				<Link href="/" passHref>
 					<Image src={logo} alt="logo" className={styles['nav-logo']} />
@@ -88,7 +94,7 @@ const [token, setToken] = useState(null);
 						onClick={() => toggleMenu()}
 						aria-hidden="true"
 					>
-						<Image src={userIcon} width={50} height={40}/>
+						<Image src={userIcon} width={50} height={40} alt='user icon menu'/>
 					</li>
 					<li
 						className={styles['navbar-shopping-cart']}

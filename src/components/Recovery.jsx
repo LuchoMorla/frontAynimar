@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { useAuth } from '@hooks/useAuth' 
+import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import logo from '@logos/logo-Aynimar.svg'
+import logo from '@logos/logo-Aynimar.svg';
 import styles from '@styles/PasswordRecovery.module.scss';
 
 export default function Recovery() {
@@ -20,29 +20,29 @@ export default function Recovery() {
         const data = {
             password: formData.get('password'),
             confirmPassword: formData.get('new-password'),
-        }
+        };
         let thePassword = data.password;
         let theConfirmPassword = data.confirmPassword;
         if(thePassword !== theConfirmPassword) {
-            alert('Las contraseñas no son iguales');
-        }
+          window.alert('Las contraseñas no son iguales');
+        };
         if(thePassword === theConfirmPassword) {
             const token = queryToken;
             const newPassword= data.password;
             auth
             .changePassword(token, newPassword)
             .then(() => {
-                alert('tu contraseña fue cambiada');
+              window.alert('tu contraseña fue cambiada');
                 router.push('/login');
             })
             .catch((error) => {
               if (error.response?.status === 401) {
-                alert('Usuario o contraseña incorrectos');
+                window.alert('Usuario o contraseña incorrectos');
               } else if (error.response) {
                 console.log('Algo salio mal :' + error.response.status);
               }
             });
-        }
+        };
       };
 
   return (

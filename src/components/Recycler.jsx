@@ -8,7 +8,7 @@ const Recycler = ({ recycler }) => {
    const router = useRouter(); 
 
    const getLocation = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const clientGeoLocationInput = document.getElementById('geolocation');
     let options = {
       enableHighAccuracy: true,
@@ -17,21 +17,20 @@ const Recycler = ({ recycler }) => {
     };
     function success(pos) {
       let crd = pos.coords;
-    
       console.log('Your current position is:');
       console.log('Latitude : ' + crd.latitude);
       console.log('Longitude: ' + crd.longitude);
 /*       console.log('More or less ' + crd.accuracy + ' meters.'); */
-      clientGeoLocationInput.value = `${crd.latitude}, ${crd.longitude}`
+      clientGeoLocationInput.value = `${crd.latitude}, ${crd.longitude}`;
     };
 
     function error(err) {
-      alert('ERROR(' + err.code + '): ' + err.message);
+      window.alert('ERROR(' + err.code + '): ' + err.message);
       console.warn('ERROR(' + err.code + '): ' + err.message);
     };
 
     navigator.geolocation.getCurrentPosition(success, error, options);
-   }
+   };
 
    const submitHandler = (event) => {
     event.preventDefault();
@@ -63,20 +62,20 @@ const Recycler = ({ recycler }) => {
 
     updateRecycler(recyclerId, data)
       .then(() => {
-          alert('^^ Actualizaste tus datos correctamente ^^, si viniste aquí por 1ra primera vez, te contactaremos muy pronto...');
+        window.alert('^^ Actualizaste tus datos correctamente ^^, si viniste aquí por 1ra primera vez, te contactaremos muy pronto...');
           router.push('/mi_cuenta/recycler');
       })
       .catch((error)=> { if (error.response?.status === 401) {
-        alert('algo salio mal :(');
+        window.alert('algo salio mal :(');
        } else if (error.response?.status === 400) {
-        alert(':O error por mal envio de actualización de datos, para actualizar una recomendación es que no dejes datos vacios, pon na en caso de que no tengas la información, y si te continua saliendo error, lo mejor es que pruebes con infrmación real y confiable');
+        window.alert(':O error por mal envio de actualización de datos, para actualizar una recomendación es que no dejes datos vacios, pon na en caso de que no tengas la información, y si te continua saliendo error, lo mejor es que pruebes con infrmación real y confiable');
        } else if (error.response) {
-        alert('Algo salio mal: ' + error.response.status);
+        window.alert('Algo salio mal: ' + error.response.status);
         if (error.response.status == 409) {
-          alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+          window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
           router.push('/forgotPassword');
-        }
-      }
+        };
+      };
     });
   };
 
@@ -173,5 +172,5 @@ const Recycler = ({ recycler }) => {
         </div>
       </div>
     );
-}
+};
 export default Recycler;

@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { useAuth } from '@hooks/useAuth'
+import React from 'react';
+import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 /* import Image from 'next/image';
  import logo from '@logos/logo-Aynimar.svg' */
@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 export default function AutoLoginPage() {
   const auth = useAuth();
-  const router = useRouter()
+  const router = useRouter();
   const query = router.query;
   const token = query.token;
   setTimeout(() => {
@@ -20,7 +20,7 @@ export default function AutoLoginPage() {
             })
             .catch((error) => {
               if (error.response?.status === 401) {
-                alert('Usuario o contraseña incorrectos');
+                window.alert('Usuario o contraseña incorrectos');
               } else if (error.response) {
                 console.log('Algo salio mal :' + error.response.status);
               }
@@ -28,8 +28,5 @@ export default function AutoLoginPage() {
         }
       }, 3000);
 
-  return (
-    <>
-    </>
-  );
-}
+  return <></>;
+};

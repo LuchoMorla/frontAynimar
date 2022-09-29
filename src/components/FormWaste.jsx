@@ -8,23 +8,23 @@ import { useRouter } from 'next/router';
 import styles from '@styles/ProductInfo.module.scss';
 
 const WasteInfo = ({ product }) => {
-	const { state, addToMetacircle, usePaymentId, } = useContext(AppContext);
+	const { addToMetacircle, PaymentId, } = useContext(AppContext);
 	const formRef = useRef(null);
-	const router = useRouter(); 
+	const router = useRouter();
 
 	const handleClick = item => {
 		addToMetacircle(item);
-	}
+	};
 
 	const handleRedirect = () => {
-		alert('hemos registrado tú pedido, nos comunicaremos con tigo para pasar a recolectar el producto, te redigiremos a una nueva pagina para confirmar tús datos de contacto')
+		window.alert('hemos registrado tú pedido, nos comunicaremos con tigo para pasar a recolectar el producto, te redigiremos a una nueva pagina para confirmar tús datos de contacto');
 		router.push('/mi_cuenta/recycler');
-	}
+	};
 
 	const createPayment = async () => {
 		const post = await axios.post(endPoints.payments.postPayment);
 		return post.data;
-	}
+	};
 
 	const submitHandler = async (event) => {
 		event.preventDefault();
@@ -40,10 +40,10 @@ const WasteInfo = ({ product }) => {
 				paymentId: paymentId,
 				wasteId: product.id,
 				amount: parseInt(formData.get('amount'))
-			}
+			};
 			const addProductToThePacked = await axios.post(endPoints.payments.postCommodity, packet, config);
 			return addProductToThePacked;
-		}
+		};
 		const savedPaymentId = window.localStorage.getItem('pi');
 
 		if(savedPaymentId == null){
@@ -57,19 +57,19 @@ const WasteInfo = ({ product }) => {
 			})
 			.catch((error) => {
 				if (error.response?.status === 401) {
-				  alert('algo salio mal');
+					window.alert('algo salio mal');
 				} else if (error.response) {
-				  alert('Algo salio mal: ' + error.response.status);
+					window.alert('Algo salio mal: ' + error.response.status);
 				  console.log('Algo salio mal: ' + error.response.status);
 				  if (error.response.status == 409) {
-					alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+					window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
 					router.push('/forgotPassword');
 				  }
 				}
 			  });
 		} else {
 			const numberPaymentId = parseInt(savedPaymentId);
-			usePaymentId(numberPaymentId);
+			PaymentId(numberPaymentId);
 			addToPacket(numberPaymentId)
 			.then(() => {
 				handleClick(product);
@@ -77,23 +77,25 @@ const WasteInfo = ({ product }) => {
 			})
 			.catch((error) => {
 				if (error.response?.status === 401) {
-				  alert('algo salio mal');
+					window.alert('algo salio mal');
 				} else if (error.response) {
-				  alert('Algo salio mal: ' + error.response.status);
+					window.alert('Algo salio mal: ' + error.response.status);
 				  console.log('Algo salio mal: ' + error.response.status);
 				  if (error.response.status == 409) {
-					alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+					window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
 					router.push('/forgotPassword');
-				  }
-				}
+				  };
+				};
 			  });
-		}
-	}
+		};
+	};
 
 	return (
 		<>
 		<div className={styles['stand_container']}>
-		<img src={product?.image} width={300} height={300} alt={product?.name} className={styles.image}/>
+		{ product?.image &&
+		<Image src={product?.image} width={300} height={300} alt={product?.name} className={styles.image}/>
+		}
 			<div className={styles.ProductInfo}>
 				<form ref={formRef} onSubmit={submitHandler} >
 					<p>${product?.price / 100}</p>

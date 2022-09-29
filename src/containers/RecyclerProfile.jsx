@@ -18,7 +18,7 @@
         recyclerData()
         .catch((error) => {
           if (error.response?.status === 401) {
-            alert('Probablemente necesites iniciar sesion de nuevo');
+            window.alert('Probablemente necesites iniciar sesion de nuevo');
           } else if (error.response) {
             console.log('Algo salio mal: ' + error.response.status);
           }
@@ -34,7 +34,7 @@
           })
           .catch((error) => {
             if (error.response) {
-              alert('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona despues de refrescar la pagina recuerda que puedes contactarnos.');
+              window.alert('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona despues de refrescar la pagina recuerda que puedes contactarnos.');
               router.reload(window.location.pathname);
             }
           });

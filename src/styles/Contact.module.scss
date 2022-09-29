@@ -11,3 +11,8 @@
     color: $--white;
     margin: $--sm 0 0 0;
 }
+@media (max-width: 700px) {
+    .contact {
+        padding: 70px 0;
+    }
+ }

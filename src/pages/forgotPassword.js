@@ -28,7 +28,7 @@ export default function ForgetPassword() {
       })
       .catch((error) => {
       if (error.response?.status === 401) {
-        alert('Usuario o contraseña incorrectos');
+        window.alert('Usuario o contraseña incorrectos');
       } else if (error.response) {
         console.log('Algo salio mal: ' + error.response.status);
        }

@@ -1,0 +1,39 @@
+@import 'vars';
+
+.form {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+.form_inputs-container {
+    display: flex;
+    flex-flow: column wrap;
+    width: 250px;
+    color: white;
+    align-items: center;
+}
+.form_inputs-container label {
+    margin: 10px;
+}
+.form_inputs-container input {
+    width: 100%;
+}
+.form_inputs-container .button {
+    display: flex;
+    background: $--morado-centro;
+    padding: 5px;
+    border-radius: $--lg;
+    color: white;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin: $--sm 0;
+    border: none;
+}
+.form_inputs-container .button:hover {
+    background: $--app-green;
+}
+.form_inputs-container .button:active {
+    background: $--soft-green;
+    color: $--black;
+}

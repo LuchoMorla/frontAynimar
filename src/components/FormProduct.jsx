@@ -8,13 +8,13 @@ import styles from '@styles/ProductInfo.module.scss';
 
 const ProductInfo = ({ product }) => {
 
-	const { state,  useOrderId } = useContext(AppContext);
+	const { OrderId } = useContext(AppContext);
 	const formRef = useRef(null);
 
 	const createOrder = async () => {
 		const post = await axios.post(endPoints.orders.postOrder);
 		return post.data;
-	}
+	};
 
 	const submitHandler = async (event) => {
 		event.preventDefault();
@@ -31,27 +31,29 @@ const ProductInfo = ({ product }) => {
 				orderId: orderId,
 				productId: product.id,
 				amount: parseInt(formData.get('amount'))
-			}
+			};
 			const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
 			return addProductToThePacked;
-		}
+		};
 		const savedOrderId = window.localStorage.getItem('oi');
 
 		if(savedOrderId == null){
 			const getOrder = await createOrder();
 			window.localStorage.setItem('oi', `${getOrder.id}`);
 			const bornedOrderId = getOrder.id;
-			addToPacket(bornedOrderId)
+			addToPacket(bornedOrderId);
 		} else {
 			const numberOrderId = parseInt(savedOrderId);
-			useOrderId(numberOrderId);
+			OrderId(numberOrderId);
 			addToPacket(numberOrderId);
-		}
-	}
+		};
+	};
 	return (
 		<>
 		<div className={styles['stand_container']}>
-		<img src={product?.image} width={300} height={300} alt={product?.name} className={styles.image}/>
+		{ product?.image &&
+		<Image src={product?.image} width={300} height={300} alt={product?.name} className={styles.image}/>
+		}
 			<div className={styles.ProductInfo}>
 			<form ref={formRef} onSubmit={submitHandler} >
 				<p>${product?.price / 100}</p>

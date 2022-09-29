@@ -14,7 +14,7 @@ const OrderItem = ({ product }) => {
 	return (
 		<div className={styles.OrderItem}>
 			<figure>
-				<img src={product?.image} width={10} height={10} alt={product?.name} />
+				<Image src={product?.image} width={10} height={10} alt={product?.name} />
 			</figure>
 			<p>{product?.name}</p>
 			<p>${product?.price}</p>

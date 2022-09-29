@@ -15,7 +15,6 @@ const useFetchWastes = (endPoint) => {
     } catch (error) {
       console.log(error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endPoint]);
 
   return data;

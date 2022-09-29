@@ -1,12 +1,6 @@
 {
-    "theme_color": "#a2ce92",
-    "background_color": "#a2ce92",
-    "display": "browser",
-    "scope": "/",
-    "start_url": "/",
     "name": "Aynimar",
     "short_name": "Aynimar",
-    "description": "generating circular economy and recycling that benefits families",
     "icons": [
         {
             "src": "/icon-192x192.png",
@@ -28,5 +22,12 @@
             "sizes": "512x512",
             "type": "image/png"
         }
-    ]
+    ],
+    "theme_color": "#a2ce92",
+    "background_color": "#a2ce92",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "description": "generating a circular economy and recycling to benefits families",
+    "orientation": "portrait"    
 }

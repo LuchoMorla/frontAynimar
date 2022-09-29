@@ -25,10 +25,10 @@ const FormContact = () => {
             };
     
             const response = await axios.post(endPoints.mail.contact, data, config);
-            alert('mensaje enviado');
+            window.alert('mensaje enviado');
             return response.data;
         } catch (error) {
-            alert('no pudimos enviar el mensaje');
+            window.alert('no pudimos enviar el mensaje');
         };
     };
 

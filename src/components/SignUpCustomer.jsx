@@ -30,12 +30,12 @@ const SignUp = () => {
           router.push('/correo-enviado');
       })
       .catch((error)=> { if (error.response?.status === 401) {
-        alert('algo salio mal :(');
+        window.alert('algo salio mal :(');
        } else if (error.response) {
-        alert('Algo salio mal: ' + error.response.status);
+        window.alert('Algo salio mal: ' + error.response.status);
         console.log('Algo salio mal: ' + error.response.status);
         if (error.response.status == 409) {
-          alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+          window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
           router.push('/forgetPassword');
         }
       }
@@ -45,7 +45,7 @@ const SignUp = () => {
     return (
       <div className={styles.login}>
       <div className={styles['login-container']}>
-        <Image src={logo} width={100} height={100} className={styles.logo}/>
+        <Image src={logo} width={100} height={100} className={styles.logo} alt='logo Aynimar' />
         <h1 className={styles.title}>Registro de cliente</h1>
 
         <form action="/" ref={formRef} className={styles.form} onSubmit={submitHandler} autoComplete="on">

@@ -1,12 +1,14 @@
 @import 'vars';
 
 .Segment-Container {
-    margin-top: 40px;
-    display: inline-flex;
+    margin-top: 60px;
+    display: flex;
+    flex-flow: row wrap;
 }
 
 .Segment-Container p {
     width: 50%;
+    margin: $--lg 0;
 }
 
 .buttonr {
@@ -30,11 +32,26 @@
 }
 
 .Recycler_segment-container {
-    width: 50%;
+    width: 45%;
     margin: 2%;
 }
 
 .Customer_segment-container {
-    width: 50%;
+    width: 45%;
     margin: 2%;
 }
+@media (max-width: 700px) {
+    .Segment-Container {
+        margin-top: 60px;
+        display: flex;
+        flex-flow: column wrap;
+    }
+   .Segment-Container p {
+    width: 100%;
+    margin: $--lg 0;
+	text-align: center;
+   }
+   .Segment-Container h1 {
+    width: 200%;
+   }
+ }

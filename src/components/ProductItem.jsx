@@ -16,13 +16,13 @@ const ProductItem = ({ product }) => {
 
 	return (
 		<div className={styles.ProductItem}>
-			<Link href={`/store/${product.id}`} className={styles['go_product']}>
-			<Image src={product.image} width={240} height={240} alt={product.description} />
+			<Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
+				<Image src={product.image} width={240} height={240} alt={product.description} />
 			</Link>
 			<div className={styles['product-info']}>
 				<div>
 					<p>${product.price}</p>
-					<Link href={`/store/${product.id}`} className={styles['go_product']}>
+					<Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
 					<p>{product.name}</p>
 					</Link>
 				</div>

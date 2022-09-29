@@ -1,16 +1,16 @@
 @import 'vars';
 
 .Menu {
-	width: 170px;
-	height: auto;
-	border: 1px solid $--soft-green;
-	border-radius: 6px;
-	padding: 20px 20px 0 20px;
-	position: absolute;
-	top: 60px;
-	right: 50px;
-	z-index: 1;
-	background-color: white;
+    width: 100%;
+    height: auto;
+    border: 1px solid #DBFFCF;
+    border-radius: 6px;
+    padding: 20px 20px 0 20px;
+    position: fixed;
+    top: 60px;
+    left: 0px;
+    z-index: 1;
+    background-color: white;
 }
 .Menu ul {
 	list-style: none;
@@ -18,7 +18,7 @@
 	margin: 0;
 }
 .Menu ul li {
-	text-align: end;
+	text-align: center;
 }
 .Menu ul li:nth-child(1),
 .Menu ul li:nth-child(2) {
@@ -52,13 +52,3 @@
 	color: $--plomo-cafe;
 	background: $--very-very-light-pink;
 }
-@media (max-width: 700px) {
-	.Menu {
-	position: fixed;
-	width: 100%;
-	right: 0;
-   }
-   .Menu ul li {
-	text-align: center;
-	}
- }

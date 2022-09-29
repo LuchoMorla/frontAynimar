@@ -11,15 +11,13 @@ export default function ProductStand() {
 
   useEffect(() => {
     const { id } = router.query;
-    // hacemos una validacion que devuelva un return vacio en caso de que la ruta no esté disponible, así nos evitamos un error 400
+      // hacemos una validacion que devuelva un return vacio en caso de que la ruta no esté disponible, así nos evitamos un error 400
     if (!router.isReady) return;
-
     async function getProduct() {
       const response = await axios.get(endPoints.products.getProduct(id));
       setProduct(response.data);
     }
     getProduct();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router?.isReady]);
 
   return (

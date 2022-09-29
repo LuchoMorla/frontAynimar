@@ -1,28 +1,18 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa');
 
-const nextConfig = withPWA({
-  pwa: {
-    //indicamos el destino donde se van a encontrar nuestros archivos publicos
-    dest: 'public',
-    //indicamos si vamos a registrar o no un worker
-    register: true,
-    //modo que vamos a trabajar
-    mode: 'development'/* 'production' */,
-    //para habilitarlo segun sea el caso.
-    disable: true/* false */,
-  },
+const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
   images: {
-    domains: ['placeimg.com', 'api.lorem.space'],
-  },
+    domains: ['api.lorem.space', 'placeimg.com'],
+  }
+};
+
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  disable: false,
+  register: true,
+  sw: 'service-worker.js'
 });
 
-/* const nextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ['placeimg.com', 'api.lorem.space'],
-  },
-} */
-
-module.exports = nextConfig
+module.exports = withPWA(nextConfig);

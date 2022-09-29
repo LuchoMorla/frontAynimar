@@ -2,7 +2,7 @@ import React from 'react';
 import endPoints from '@services/api/index';
 import useFetchProducts from '@hooks/useGetProducts';
 import ProductItem from '@components/ProductItem';
-import deepClone from '../middleware/deepClone';
+import deepClone from '@middleware/deepClone';
 import styles from '@styles/ProductList.module.scss';
 
 const ProductList = () => {

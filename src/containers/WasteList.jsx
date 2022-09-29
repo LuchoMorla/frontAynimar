@@ -2,7 +2,7 @@ import React from 'react';
 import endPoints from '@services/api/index';
 import useFetchWastes from '@hooks/useGetWastes';
 import WasteItem from '@components/WasteItem';
-import deepCopy from '@middleware/deepClone';
+import deepCopy from '../middleware/deepClone';
 import styles from '@styles/ProductList.module.scss';
 
 

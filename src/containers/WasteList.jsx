@@ -1,8 +1,7 @@
 import React from 'react';
-import endPoints from '@services/api/index';
+import endPoints from '@services/api/index'
 import useFetchWastes from '@hooks/useGetWastes';
 import WasteItem from '@components/WasteItem';
-import deepCopy from '../middleware/deepClone';
 import styles from '@styles/ProductList.module.scss';
 
 
@@ -11,12 +10,12 @@ const WasteList = () => {
 	const PRODUCT_OFFSET = 0;
 
 	const wastes = useFetchWastes(endPoints.wastes.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));
-	const wastesToFix = deepCopy(wastes);
-	wastesToFix.forEach((o) => o.price = o.price / 100);
+	/* const wastesCopy = structuredClone(wastes); */
+	wastes.forEach((o) => o.price = o.price / 100);
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>
-				{wastesToFix.map(waste => (
+				{wastes.map(waste => (
 					<WasteItem waste={waste} key={waste.id} />
 				))}
 			</div>

@@ -10,12 +10,16 @@ const WasteList = () => {
 	const PRODUCT_OFFSET = 0;
 
 	const wastes = useFetchWastes(endPoints.wastes.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));
-	/* const wastesToFix = structuredClone(wastes); */
-	wastes.forEach((o) => o.price = o.price / 100);
+	const deepCopy = (arr) => {
+		return structuredClone(arr);
+	};
+	const wastesToFix = deepCopy(wastes); 
+	
+	wastesToFix.forEach((o) => o.price = o.price / 100);
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>
-				{wastes.map(waste => (
+				{wastesToFix.map(waste => (
 					<WasteItem waste={waste} key={waste.id} />
 				))}
 			</div>

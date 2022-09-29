@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import endPoints from '@services/api'
 import useFetch from '@hooks/useFetch';
-import Pagination from '@components/Pagination.jsx';
+import Pagination from '../../components/Paginacion.jsx';
 import { Chart } from '@common/Chart';
 
   export default function Dashboard() {

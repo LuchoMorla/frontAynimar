@@ -22,3 +22,26 @@ p, h1 {
 p {
   font-size: 1.2rem;
 }
+/* styles scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 12.5px;
+}
+/* Carril */
+::-webkit-scrollbar-track {
+  background: #ACD9B2;
+  border-radius: 50px;
+  margin: 10px;
+}
+/* Manejador */
+::-webkit-scrollbar-thumb {
+  background: #82427b;
+  border-radius: 50px;
+  margin: 4px;
+}
+/* Manejador hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ACD9B2;
+}
+::-webkit-scrollbar-track:hover {
+  background: #82427b;
+}

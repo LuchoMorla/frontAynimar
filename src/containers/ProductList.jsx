@@ -9,11 +9,7 @@ const ProductList = () => {
 	const PRODUCT_OFFSET = 0;
 
 	const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));
-	const deepCopy = (arr) => {
-		return structuredClone(arr);
-	};
-	const productsToFix = deepCopy(products); 
-
+	const productsToFix = structuredClone(products);
 	productsToFix.forEach((o) => o.price = o.price / 100);
 	return (
 		<section className={styles["main-container"]}>

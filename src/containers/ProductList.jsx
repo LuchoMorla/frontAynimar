@@ -9,12 +9,12 @@ const ProductList = () => {
 	const PRODUCT_OFFSET = 0;
 
 	const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));
-	const productsToFix = structuredClone(products);
-	productsToFix.forEach((o) => o.price = o.price / 100);
+/* 	const productsToFix = structuredClone(products); */
+	products.forEach((o) => o.price = o.price / 100);
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>
-				{productsToFix.map(product => (
+				{products.map(product => (
 					<ProductItem product={product} key={product.id} />
 				))}
 			</div>

@@ -10,8 +10,7 @@ const WasteList = () => {
 	const PRODUCT_OFFSET = 0;
 
 	const wastes = useFetchWastes(endPoints.wastes.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));
-	/* const wastesCopy = structuredClone(wastes); */
-	wastes.forEach((o) => o.price = o.price / 100);
+
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>

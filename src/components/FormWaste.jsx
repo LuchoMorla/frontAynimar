@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import styles from '@styles/ProductInfo.module.scss';
 
 const WasteInfo = ({ product }) => {
-	const { addToMetacircle, PaymentId, } = useContext(AppContext);
+	const { addToMetacircle, /* PaymentId,*/} = useContext(AppContext);
 	const formRef = useRef(null);
 	const router = useRouter();
 
@@ -48,8 +48,9 @@ const WasteInfo = ({ product }) => {
 
 		if(savedPaymentId == null){
 			const getPayment = await createPayment();
-			window.localStorage.setItem('pi', `${getPayment.id}`);
 			const bornedPaymentId = getPayment.id;
+			window.localStorage.setItem('pi', `${bornedPaymentId}`);
+
 			addToPacket(bornedPaymentId)
 			.then(() => {
 				handleClick(product);
@@ -69,7 +70,8 @@ const WasteInfo = ({ product }) => {
 			  });
 		} else {
 			const numberPaymentId = parseInt(savedPaymentId);
-			PaymentId(numberPaymentId);
+			//no sé que queria yo hacer en PaymentId(numero del payment id) creo que guardarlo en localStorage y me arrepenti
+/* 			PaymentId(numberPaymentId); */
 			addToPacket(numberPaymentId)
 			.then(() => {
 				handleClick(product);
@@ -98,6 +100,7 @@ const WasteInfo = ({ product }) => {
 		}
 			<div className={styles.ProductInfo}>
 				<form ref={formRef} onSubmit={submitHandler} >
+					{/* <p>${product?.price / 100}</p> */}
 					<p>${product?.price / 100}</p>
 					<p>{product?.name}</p>
 					<p>{product?.description}</p>

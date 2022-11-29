@@ -9,19 +9,19 @@ const Client = ({ client }) => {
 
   const getLocation = (event) => {
     event.preventDefault();
+    const clientGeoLocationInput = document.getElementById('geolocation');
     let options = {
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0
     };
     function success(pos) {
-     let crd = pos.coords;
-    
+      let crd = pos.coords;
       console.log('Your current position is:');
       console.log('Latitude : ' + crd.latitude);
       console.log('Longitude: ' + crd.longitude);
 /*       console.log('More or less ' + crd.accuracy + ' meters.'); */
-
+      clientGeoLocationInput.value = `${crd.latitude}, ${crd.longitude}`;
     };
 
     function error(err) {
@@ -129,12 +129,14 @@ const Client = ({ client }) => {
             </label>
             <input type="text" name="direccion" id="direccion" autoComplete="street-address" defaultValue={client?.streetAddress} required className="value" />
 
-            <label htmlFor="location" className={styles.label}>
-              Ubicaciión de Google maps
-            </label>
-            <input type="text" name="location" id="location" defaultValue={client ? client.geolocation : 'sin ubicacion'} required className="value" />
-            <button onClick={getLocation}>Obtener Ubicación</button>
-          </div>
+            <label htmlFor="geolocation" className={styles.label}>
+              Ubicación de Google maps
+              </label>
+              <input type="text" name="geolocation" id="geolocation"
+              defaultValue={client?.geolocation ? client.geolocation : 'sin ubicacion'} required className="value" />
+              <button onClick={getLocation}>Obtener Ubicación Actual</button>
+
+            </div>
 
           <button className={styles["login-button"]} onClick={submitHandler}>Editar</button>
         </form>

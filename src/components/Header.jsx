@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -12,6 +12,8 @@ import AppContext from '@context/AppContext';
 import shoppingCart from '@icons/icon_shopping_cart.svg';
 import sellingCart from '@icons/reciclando.svg';
 import userIcon from '@icons/user-icon-ecologist.svg';
+import endPoints from '@services/api/index';
+import axios from 'axios';
 import styles from '@styles/Header.module.scss';
 
 const Header = () => {
@@ -25,8 +27,7 @@ const [token, setToken] = useState(null);
 		setToken('haveToken');
 	}
 
-	const { state, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
-
+	const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
 /* 	const handleToggle = () => {
 		setToggle(!toggle);
 	}; */
@@ -36,6 +37,29 @@ const [token, setToken] = useState(null);
 		email: auth?.user?.email,
 		role: auth?.user?.role
 	} */
+	const fetchOrders = async () => {
+		if(state.cart.length <= 0)	{
+			const { data: getOrder } = await axios.get(endPoints.orders.getOrderByState, {  params: { state: 'carrito' } });
+			const items = getOrder.items;/* 
+			items.forEach((item) => item.price = item.price / 100); */
+/* 			
+			items.forEach((item) => item.price = item.price); */
+			if (items.length > 0) {
+				getCart(items);
+				const getStorageOrderId = window.localStorage.getItem('oi');
+				if (!getStorageOrderId) {
+					window.localStorage.setItem('oi', `${getOrder.id}`);
+				}
+			}
+		}
+	}
+	useEffect(async () => {
+		try {
+			fetchOrders();
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
 
 	return (
 		<>

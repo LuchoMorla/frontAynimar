@@ -17,7 +17,7 @@ const WasteItem = ({ waste }) => {
 	return (
 		<div className={styles.ProductItem}>
 			<Link href={`/recycling/${waste.id}`} className={styles['go_product']} passHref>
-			<Image src={waste.image} width={240} height={240} alt={waste.description} className={styles['go_product']}/>
+			<Image src={waste.image} width={240} height={240} alt={waste.description} /* className={styles['go_product']} *//>
 			</Link>
 			<div className={styles['product-info']}>
 				<div>

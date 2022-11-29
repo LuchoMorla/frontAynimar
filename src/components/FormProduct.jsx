@@ -3,12 +3,13 @@ import AppContext from '@context/AppContext';
 import axios from 'axios';
 import endPoints from '@services/api';
 import Image from 'next/image';
-import addToCart from '@icons/bt_add_to_cart.svg';
+import addToCartImage from '@icons/bt_add_to_cart.svg';
+/* import addToPacket from '@hooks/useItems'; */
 import styles from '@styles/ProductInfo.module.scss';
 
 const ProductInfo = ({ product }) => {
 
-	const { OrderId } = useContext(AppContext);
+	const { addToCart, /* OrderId */ } = useContext(AppContext);
 	const formRef = useRef(null);
 
 	const createOrder = async () => {
@@ -16,9 +17,12 @@ const ProductInfo = ({ product }) => {
 		return post.data;
 	};
 
+	const handleClick = item => {
+		addToCart(item);
+	};
+
 	const submitHandler = async (event) => {
 		event.preventDefault();
-
 		const addToPacket = async (orderId) => {
 			const config = {
 				headers: {
@@ -32,20 +36,43 @@ const ProductInfo = ({ product }) => {
 				productId: product.id,
 				amount: parseInt(formData.get('amount'))
 			};
+
+			console.log(packet.orderId);
+			console.log(packet.productId);
+			console.log(packet.amount);
+
 			const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
+			console.log(addProductToThePacked);
 			return addProductToThePacked;
 		};
+		
 		const savedOrderId = window.localStorage.getItem('oi');
 
 		if(savedOrderId == null){
 			const getOrder = await createOrder();
-			window.localStorage.setItem('oi', `${getOrder.id}`);
 			const bornedOrderId = getOrder.id;
-			addToPacket(bornedOrderId);
+			window.localStorage.setItem('oi', `${bornedOrderId}`);
+			handleClick(product);
+			addToPacket(bornedOrderId)
+			.catch((err) => {
+				if (err.response?.status === 401) {
+					window.alert('Probablemente necesites iniciar sesion de nuevo');
+				  } else if (err.response) {
+					console.log('Algo salio mal: ' + err.response.status);
+				  }
+			});
 		} else {
+			handleClick(product);
 			const numberOrderId = parseInt(savedOrderId);
-			OrderId(numberOrderId);
-			addToPacket(numberOrderId);
+			/* Creo que queria guardar el numero de order id en el local storage OrderId(numberOrderId); */
+			addToPacket(numberOrderId)
+			.catch((err) => {
+				if (err.response?.status === 401) {
+					window.alert('Probablemente necesites iniciar sesion de nuevo');
+				  } else if (err.response) {
+					console.log('Algo salio mal: ' + err.response.status);
+				  }
+			});
 		};
 	};
 	return (
@@ -60,9 +87,9 @@ const ProductInfo = ({ product }) => {
 				<p>{product?.name}</p>
 				<p>{product?.description}</p>
 				<label htmlFor="amount">cantidad: </label>
-				<input type="number" id="amount" name='amount' min={1}/>
+				<input type="number" id="amount" name='amount' min={1} required />
 				<button type='submit' className={(styles['primary-button'], styles['add-to-cart-button'])}>
-					<Image src={addToCart} width={24} height={24} alt="add to cart" />
+					<Image src={addToCartImage} width={24} height={24} alt="add to cart" />
 					Agrega al carrito
 					</button>
 			</form>

@@ -38,9 +38,12 @@ const endPoints = {
     postCommodity: `${API}/api/${VERSION}/payments/add-commodity`
   },
   orders: {
-    getorder: (id) => `${API}/api/${VERSION}/order/${id}`,
+    getorder: (id) => `${API}/api/${VERSION}/orders/${id}`,
+    getOrderByState: `${API}/api/${VERSION}/orders/user/state`,
     postOrder: `${API}/api/${VERSION}/orders`,
-    postItem: `${API}/api/${VERSION}/orders/add-item`
+    postItem: `${API}/api/${VERSION}/orders/add-item`,
+    editItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
+    deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`
   },
   auth: {
     login: `${API}/api/${VERSION}/auth/login`,

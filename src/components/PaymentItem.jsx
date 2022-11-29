@@ -14,10 +14,11 @@ const PaymentItem = ({ waste }) => {
 	return (
 		<div className={styles.OrderItem}>
 			<figure>
-				<Image src={waste?.image} width={10} height={10} alt={waste?.name} />
+				<Image src={waste?.image} width={40} height={40} alt={waste?.name} />
 			</figure>
-			<p>{waste?.name}</p>
-			<p>${waste?.price}</p>
+			<p>{waste?.name}</p>{/* 
+			<p>${waste?.price / 100}</p> */}
+			<p>${product?.price / 100}</p>
 			<Image className={(styles.pointer, styles['more-clickable-area'])}
 			src={close}
 			alt="close"

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import OrderItem from '@components/OrderItem';
@@ -14,7 +14,7 @@ const MyOrder = () => {
 		const sum = state.cart.reduce(reducer, 0);
 		return sum.toFixed(2);
 	}
-
+	
 	return (
 		<aside className={styles.MyOrder}>
 			<div className={styles['MyOrder-container']}>

@@ -38,12 +38,13 @@ const [token, setToken] = useState(null);
 		role: auth?.user?.role
 	} */
 	const fetchOrders = async () => {
+		/* Funccion en la que agregamos los productos que estan en el carrito */
 		if(state.cart.length <= 0)	{
 			const { data: getOrder } = await axios.get(endPoints.orders.getOrderByState, {  params: { state: 'carrito' } });
-			const items = getOrder.items;/* 
-			items.forEach((item) => item.price = item.price / 100); */
-/* 			
-			items.forEach((item) => item.price = item.price); */
+			const items = getOrder.items;
+			items.forEach(el => {
+				el.price = el.price / 100;
+			}); 
 			if (items.length > 0) {
 				getCart(items);
 				const getStorageOrderId = window.localStorage.getItem('oi');
@@ -52,14 +53,14 @@ const [token, setToken] = useState(null);
 				}
 			}
 		}
-	}
+	};
 	useEffect(async () => {
 		try {
-			fetchOrders();
+			await fetchOrders();
 		} catch (error) {
 			console.log(error);
 		}
-	}, []);
+	}, [endPoints.orders.getOrderByState]);
 
 	return (
 		<>

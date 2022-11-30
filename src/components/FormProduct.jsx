@@ -1,16 +1,21 @@
-import React, { useContext, useRef }  from 'react';
+import React, { useContext, /* useEffect, */ useRef }  from 'react';
 import AppContext from '@context/AppContext';
 import axios from 'axios';
 import endPoints from '@services/api';
 import Image from 'next/image';
 import addToCartImage from '@icons/bt_add_to_cart.svg';
+import addedToCartImage from '@icons/bt_added_to_cart.svg';
 /* import addToPacket from '@hooks/useItems'; */
 import styles from '@styles/ProductInfo.module.scss';
 
 const ProductInfo = ({ product }) => {
 
-	const { addToCart, /* OrderId */ } = useContext(AppContext);
+	const { state, addToCart, /* OrderId */ } = useContext(AppContext);
 	const formRef = useRef(null);
+
+/* 	useEffect({
+
+	}, [state.cart]); */
 
 	const createOrder = async () => {
 		const post = await axios.post(endPoints.orders.postOrder);
@@ -18,7 +23,9 @@ const ProductInfo = ({ product }) => {
 	};
 
 	const handleClick = item => {
+		item.price = item.price / 100;
 		addToCart(item);
+		item.price = item.price * 100;
 	};
 
 	const submitHandler = async (event) => {
@@ -37,12 +44,7 @@ const ProductInfo = ({ product }) => {
 				amount: parseInt(formData.get('amount'))
 			};
 
-			console.log(packet.orderId);
-			console.log(packet.productId);
-			console.log(packet.amount);
-
 			const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
-			console.log(addProductToThePacked);
 			return addProductToThePacked;
 		};
 		
@@ -83,13 +85,25 @@ const ProductInfo = ({ product }) => {
 		}
 			<div className={styles.ProductInfo}>
 			<form ref={formRef} onSubmit={submitHandler} >
-				<p>${product?.price / 100}</p>
+				<p>${product?.price}</p>
 				<p>{product?.name}</p>
 				<p>{product?.description}</p>
 				<label htmlFor="amount">cantidad: </label>
 				<input type="number" id="amount" name='amount' min={1} required />
 				<button type='submit' className={(styles['primary-button'], styles['add-to-cart-button'])}>
-					<Image src={addToCartImage} width={24} height={24} alt="add to cart" />
+					{/*
+					parece que es valida si fue true
+					 */}
+					{ state.cart.includes(product)? <Image
+					  className={(styles.disabled, styles['add-to-cart-btn'])}
+					  src={addedToCartImage}
+					  alt="added to cart" 
+					  /> : <Image
+					  src={addToCartImage} width={24} height={24}
+					   alt="add to cart" 
+					   />
+					}
+					
 					Agrega al carrito
 					</button>
 			</form>

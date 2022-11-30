@@ -46,10 +46,10 @@ const ProductInfo = ({ product }) => {
 			};
 
 			const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
-			if (addProductToThePacked.status = 401) {
+/* 			if (addProductToThePacked.status = 401) {
 				alert('necesitas iniciar sesion');
 				router.push('/login');
-			}
+			} */
 			return addProductToThePacked;
 		};
 		

@@ -42,6 +42,10 @@ const WasteInfo = ({ product }) => {
 				amount: parseInt(formData.get('amount'))
 			};
 			const addProductToThePacked = await axios.post(endPoints.payments.postCommodity, packet, config);
+			if (addProductToThePacked.status = 401) {
+				alert('necesitas iniciar sesion');
+				router.push('/login');
+			}
 			return addProductToThePacked;
 		};
 		const savedPaymentId = window.localStorage.getItem('pi');

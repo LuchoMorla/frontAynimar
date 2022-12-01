@@ -20,4 +20,4 @@ const useGetOrder = (endPoint) => {
   return data;
 };
 
-export default useFetchProducts;
+export default useGetOrder;

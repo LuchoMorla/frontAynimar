@@ -6,7 +6,7 @@ import Image from 'next/image';
 import addToCartImage from '@icons/bt_add_to_cart.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
 /* import addToPacket from '@hooks/useItems'; */
-import { useRouter } from 'next/router';
+/* import { useRouter } from 'next/router'; */
 import styles from '@styles/ProductInfo.module.scss';
 
 const ProductInfo = ({ product }) => {
@@ -17,7 +17,7 @@ const ProductInfo = ({ product }) => {
 /* 	useEffect({
 
 	}, [state.cart]); */
-	const router = useRouter();
+/* 	const router = useRouter(); */
 	const createOrder = async () => {
 		const post = await axios.post(endPoints.orders.postOrder);
 		return post.data;

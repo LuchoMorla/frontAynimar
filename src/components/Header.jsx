@@ -24,7 +24,7 @@ const [token, setToken] = useState(null)/* ,
 		[logged, setLogged] = useState(false) */;
 	const hola = useAuth();
 	if(!token) {
-		const cookie = hola.getAuth();
+		hola.getAuth();
 		setToken('haveToken');
 /* 		if(!cookie) {
 			throw error;

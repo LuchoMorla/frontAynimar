@@ -37,8 +37,8 @@ const endPoints = {
     postPayment: `${API}/api/${VERSION}/payments`,
     postCommodity: `${API}/api/${VERSION}/payments/add-commodity`
   },
-  orders: {
-    getOrderByUI: (id) => `${API}/api/${VERSION}/orders/${id}`,
+  orders: {/* 
+    getOrderByUI: (id) => `${API}/api/${VERSION}/orders/${id}`, */
     getOrderByState: `${API}/api/${VERSION}/orders/user/state`,
     postOrder: `${API}/api/${VERSION}/orders`,
     postItem: `${API}/api/${VERSION}/orders/add-item`,

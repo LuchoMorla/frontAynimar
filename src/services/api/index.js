@@ -38,7 +38,7 @@ const endPoints = {
     postCommodity: `${API}/api/${VERSION}/payments/add-commodity`
   },
   orders: {
-    getorder: (id) => `${API}/api/${VERSION}/orders/${id}`,
+    getOrderByUI: (id) => `${API}/api/${VERSION}/orders/${id}`,
     getOrderByState: `${API}/api/${VERSION}/orders/user/state`,
     postOrder: `${API}/api/${VERSION}/orders`,
     postItem: `${API}/api/${VERSION}/orders/add-item`,
@@ -69,7 +69,7 @@ const endPoints = {
     getFiles: (fileName) => `${API}/api/${VERSION}/${fileName}`
   } */
   profile: {
-    orders: '',
+    orders: `${API}/api/${VERSION}/orders/user/order`,
     credits: '',
     reciclajes: '',
     clientData: `${API}/api/${VERSION}/profile/my-customer-data`,

@@ -10,7 +10,7 @@ const nextConfig = {
 
 const withPWA = require('next-pwa')({
   dest: 'public',
-  disable: false,
+  disable: true,/* false, */
   register: true,
   sw: 'service-worker.js'
 });

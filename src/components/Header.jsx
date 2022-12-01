@@ -20,11 +20,19 @@ const Header = () => {
 /* 	const [toggle, setToggle] = useState(false); */
 /* 	const [toggleOrders, setToggleOrders] = useState(false); */
 /* 	const { state } = useContext(AppContext); */
-const [token, setToken] = useState(null);
+const [token, setToken] = useState(null)/* ,
+		[logged, setLogged] = useState(false) */;
 	const hola = useAuth();
 	if(!token) {
-		hola.getAuth();
+		const cookie = hola.getAuth();
 		setToken('haveToken');
+/* 		if(!cookie) {
+			throw error;
+		}
+		if (cookie == true) {
+
+			setLogged(true);
+		} */
 	}
 
 	const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
@@ -98,6 +106,13 @@ const [token, setToken] = useState(null);
 					</li>
 				</ul>
 			</div>
+{/* 			<div>
+				{
+				 logged == true ? <p>
+					iniciar session
+					</p> : null
+				}
+			</div> */}
 			<div className={styles['navbar-right']}>
 				<ul>
 					<li className={styles['navbar-selling-cart']}

@@ -8,11 +8,19 @@ const initialState = {
   paymentIsOpen: false,
   havePaymentId: null,
   haveOrderId: null,
-  navMenuIsOpen: false
+  navMenuIsOpen: false,
+  showingPassword: true
 };
 
 const useInitialState = () => {
   const [state, setState] = useState(initialState);
+
+  const showPassword = () => {
+    setState({
+      ...state,
+      showingPassword: !state.showingPassword,
+    });
+  };
 
   const getCart = (payload) => {
     setState({
@@ -103,7 +111,8 @@ const useInitialState = () => {
     togglePayment,
     usePaymentId,
     useOrderId,
-    toggleNavMenu
+    toggleNavMenu,
+    showPassword
   };
 };
 

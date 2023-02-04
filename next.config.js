@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
+  reactStrictMode: false,
+  swcMinify: false,
   images: {
     domains: ['api.lorem.space', 'placeimg.com', 'i.pinimg.com'],
   }
@@ -10,7 +10,7 @@ const nextConfig = {
 
 const withPWA = require('next-pwa')({
   dest: 'public',
-  disable: false,
+  disable: true,
   register: true,
   sw: 'service-worker.js'
 });

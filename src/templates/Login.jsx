@@ -12,7 +12,6 @@ const Login = () => {
 			usename: formData.get('email'),
 			password: formData.get('password')
 		}
-		console.log(data);
 	}
 
 	return (

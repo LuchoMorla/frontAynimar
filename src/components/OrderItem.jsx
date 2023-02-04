@@ -17,7 +17,6 @@ const OrderItem = ({ product }) => {
 			},
 		  };
 		const deleteItem = await axios.delete(endPoints.orders.deleteItem(item), config);
-		console.log(deleteItem.data);
 		return deleteItem.data;
 	};
 

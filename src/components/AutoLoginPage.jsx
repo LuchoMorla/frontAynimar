@@ -15,7 +15,6 @@ export default function AutoLoginPage() {
             auth
             .autoSignIn(token)
             .then(() => {
-              console.log('Login sucess');
                 router.push('/');
             })
             .catch((error) => {

@@ -1,4 +1,5 @@
 import React, { useContext, /* useEffect, */ useRef }  from 'react';
+/* import { useRouter } from 'next/router'; */
 import AppContext from '@context/AppContext';
 import axios from 'axios';
 import endPoints from '@services/api';
@@ -13,7 +14,8 @@ const ProductInfo = ({ product }) => {
 
 	const { state, addToCart, /* OrderId */ } = useContext(AppContext);
 	const formRef = useRef(null);
-
+	
+/* 	const router = useRouter(); */
 /* 	useEffect({
 
 	}, [state.cart]); */
@@ -45,12 +47,30 @@ const ProductInfo = ({ product }) => {
 				amount: parseInt(formData.get('amount'))
 			};
 
-			const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
+/* 			try { */
+				const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
+/* 				if (addProductToThePacked.response?.error.status === 401) {
+					window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
+					router.push('/login');
+				  } else if (addProductToThePacked.response?.error) {
+					console.log('Algo salio mal: ' + error.response.status);
+				  }*/
+				return addProductToThePacked; 
+/* 			} catch (error) {
+					if (err.response?.status === 401) {
+						window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
+						router.push('/login');
+					  } else if (err.response) {
+						console.log('Algo salio mal: ' + err.response.status);
+					  }
+			} */
+
+/* 			window.localStorage.setItem('item_id', `${addProductToThePacked.data.id}`); */
 /* 			if (addProductToThePacked.status = 401) {
 				alert('necesitas iniciar sesion');
 				router.push('/login');
 			} */
-			return addProductToThePacked;
+
 		};
 		
 		const savedOrderId = window.localStorage.getItem('oi');
@@ -82,6 +102,7 @@ const ProductInfo = ({ product }) => {
 			});
 		};
 	};
+
 	return (
 		<>
 		<div className={styles['stand_container']}>

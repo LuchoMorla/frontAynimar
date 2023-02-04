@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ProviderAuth>
     <AppContext.Provider value={initialState}>
+    <Script async src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" charset="UTF-8" />
     <Script async src="https://www.googletagmanager.com/gtag/js?id=G-6S5D2T7858" />
     <Script id="google-analytics" strategy="afterInteractive" >
       {`

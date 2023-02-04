@@ -1,11 +1,15 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
+import AppContext from '@context/AppContext';
 import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import logo from '@logos/logo-Aynimar.svg';
+import imgCloseImage from '@assets/icons/close-eye.png';
+import imgOpenImage from '@assets/icons/open-eye.png';
 import styles from '@styles/PasswordRecovery.module.scss';
 
 export default function Recovery() {
+  const { state, showPassword } = useContext(AppContext);
     const formRef = useRef(null);
 
     const auth = useAuth();
@@ -23,7 +27,7 @@ export default function Recovery() {
         };
         let thePassword = data.password;
         let theConfirmPassword = data.confirmPassword;
-        if(thePassword !== theConfirmPassword) {
+        if(thePassword.valueOf() != theConfirmPassword.valueOf()) {
           window.alert('Las contraseñas no son iguales');
         };
         if(thePassword === theConfirmPassword) {
@@ -52,32 +56,36 @@ export default function Recovery() {
 
         <h1 className={styles.title}>Crea tu nueva contraseña</h1>
         <p className={styles.subtitle}>Ingresa una nueva contraseña para tu cuenta</p>
-
-        <form action="/" ref={formRef} className={styles.form}  onSubmit={submitHandler}  >
-            <label htmlFor="password" className={styles.label}>Contraseña</label>
-            <input
-            type="password" 
-            id="password" 
-            name="password" 
-            autoComplete="current-password" 
-            required
-            className={styles.input} 
-            placeholder="**********"
-            />
-
-            <label htmlFor="new-password" className={styles.label}>Confirma tu Contraseña</label>
-            <input 
-            type="password" 
-            id="new-password" 
-            name="new-password" 
-            autoComplete="current-password" 
-            required
-            className={styles.input} 
-            placeholder="**********"
-            />
-
-            <input type="submit" value="Confirm" className={(styles['primary-button'], styles['login-button'])} />
-        </form>
+        <div className={styles.formAndbuttonPasswordContainer}>
+          <form action="/" ref={formRef} className={styles.form}  onSubmit={submitHandler}  >
+              <label htmlFor="password" className={styles.label}>Contraseña</label>
+              <input
+              type={state.showingPassword == true ? "password" : "text"}
+              id="password" 
+              name="password" 
+              autoComplete="current-password" 
+              required
+              className={styles.input} 
+              placeholder="**********"
+              />
+              
+              <label htmlFor="new-password" className={styles.label}>Confirma tu Contraseña</label>
+              <input 
+              type={state.showingPassword == true ? "password" : "text"}
+              id="new-password" 
+              name="new-password" 
+              autoComplete="current-password" 
+              required
+              className={styles.input} 
+              placeholder="**********"
+              />
+              <input type="submit" value="Confirm" className={(styles['primary-button'], styles['login-button'])} />
+          </form>
+          <button onClick={() => showPassword()} className={styles.buttonOpenAndCloseEye}>
+            {state.showingPassword == true ? <div><Image src={imgOpenImage} />mostrar contraseña</div> : <div><Image src={imgCloseImage} />ocultar contraseña</div>}
+          </button>
+        </div>
+        
         </div>
     </div>
   );

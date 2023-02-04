@@ -37,10 +37,12 @@ const endPoints = {
     postPayment: `${API}/api/${VERSION}/payments`,
     postCommodity: `${API}/api/${VERSION}/payments/add-commodity`
   },
-  orders: {/* 
-    getOrderByUI: (id) => `${API}/api/${VERSION}/orders/${id}`, */
+  orders: {
+    getOrder: (id) => `${API}/api/${VERSION}/orders/${id}`,
+    getOrderByUI: (id) => `${API}/api/${VERSION}/orders/userId/${id}`,
     getOrderByState: `${API}/api/${VERSION}/orders/user/state`,
     postOrder: `${API}/api/${VERSION}/orders`,
+    getItem: (id) =>`${API}/api/${VERSION}/orders/add-item/${id}`,
     postItem: `${API}/api/${VERSION}/orders/add-item`,
     editItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
     deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`
@@ -69,7 +71,7 @@ const endPoints = {
     getFiles: (fileName) => `${API}/api/${VERSION}/${fileName}`
   } */
   profile: {
-    orders: `${API}/api/${VERSION}/orders/user/order`,
+    orders: '',
     credits: '',
     reciclajes: '',
     clientData: `${API}/api/${VERSION}/profile/my-customer-data`,

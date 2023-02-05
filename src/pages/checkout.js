@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React, { useContext, useRef, useState } from 'react';
 import AppContext from '@context/AppContext';
 import Image from 'next/image';
+import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import actualizarImg from '@icons/button_refresh_15001.png';
 /* import endPoints from '@services/api'; */
@@ -106,7 +107,7 @@ const Checkout = () => {
               <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
                 <div className={styles['terminosyCondiciones-container']}>
                   <input type="checkbox" name="termsAndConds" id="termsAndConds" />
-                  <p>he leído y acepto los terminos y condiciones</p>
+                  <p className={styles.termsAndCondsTextContent}>he leído y acepto los <Link href='/terminosYCondiciones' className={styles.termsAndCondLink}><p className={styles.termsAndCondLink}>terminos y condiciones</p></Link></p>
                 </div>
                 <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
                 <button className={styles['pay-Button']} type="submit">Pagar con tarjeta de credito o debito (Visa o Mastercard).</button>

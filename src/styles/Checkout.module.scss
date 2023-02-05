@@ -170,6 +170,15 @@
   align-items: center;
   justify-content: center;
 }
+
+.termsAndCondsTextContent {
+ display: flex;
+}
+
+.termsAndCondLink {
+  color: $--morado-centro;
+  margin: 0 8px;
+}
 @media (max-width: 640px) {
   .MyOrder {
     width: 100%;

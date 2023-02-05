@@ -1,0 +1,21 @@
+@import 'vars';
+
+.doContainer {
+    margin: 80px 8px 8px 8px;
+    display: flex;
+    justify-content: center;
+    flex-flow: column wrap;
+    align-items: center;
+}
+
+.termAndCondsContainer {
+    margin: 8%;
+}
+
+.list {
+    color: $--white;
+}
+
+.list ol li {
+    margin: 8px;
+}

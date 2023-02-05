@@ -107,7 +107,7 @@ const Checkout = () => {
               <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
                 <div className={styles['terminosyCondiciones-container']}>
                   <input type="checkbox" name="termsAndConds" id="termsAndConds" />
-                  <p className={styles.termsAndCondsTextContent}>he leído y acepto los <Link href='/terminosYCondiciones' className={styles.termsAndCondLink}><p className={styles.termsAndCondLink}>terminos y condiciones</p></Link></p>
+                  <p className={styles.termsAndCondsTextContent}>he leído y acepto los <Link href='/terminosYCondiciones' className={styles.termsAndCondLink}><p className={styles.termsAndCondLink}>términos y condiciones</p></Link></p>
                 </div>
                 <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
                 <button className={styles['pay-Button']} type="submit">Pagar con tarjeta de credito o debito (Visa o Mastercard).</button>

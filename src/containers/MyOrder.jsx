@@ -9,11 +9,11 @@ import styles from '@styles/MyOrder.module.scss';
 const MyOrder = () => {
 	const { state, toggleOrder } = useContext(AppContext);
 
-	const sumTotal = () => {
+/* 	const sumTotal = () => {
 		const reducer = (accumalator, currentValue) => accumalator + currentValue.price;
 		const sum = state.cart.reduce(reducer, 0);
 		return sum.toFixed(2);
-	}
+	} */
 	
 	return (
 		<aside className={styles.MyOrder}>
@@ -30,14 +30,14 @@ const MyOrder = () => {
 							<OrderItem product={product} key={`orderItem-${product.id}`} />
 						))}
 					</div>
-					<div className={styles.order}>
+{/* 					<div className={styles.order}>
 						<p>
 							<span>Total</span>
 						</p>
 						<p>${sumTotal()}</p>
-					</div>
+					</div> */}
 					<Link href="/checkout">
-						<button className={styles['primary-button']} >Checkout</button>
+						<button className={styles['primary-button']} >Verificacion | Checkout</button>
 					</Link>
 				</div>
 			</div>

@@ -13,9 +13,9 @@ const CheckoutOrderItem = ({ product }) => {/*
 	const [buttonOpen, setUpdateButton] = useState(false);
 	const [dataAmount, setChangeDataAmount] = useState({});
 	const { removeFromCart } = useContext(AppContext);
-	const handleRemove = product => {
+/* 	const handleRemove = product => {
 		removeFromCart(product);
-	};
+	}; */
 	const inputRef = useRef(null),
 	divRef = useRef(null);
 
@@ -52,6 +52,26 @@ const CheckoutOrderItem = ({ product }) => {/*
 		product.OrderProduct.amount = amountInt;		
 		setChangeDataAmount(data);
 		setUpdateButton(true);
+	};
+
+	const removeItemProduct = async (item) => {
+		const config = {
+			headers: {
+			  accept: '*/*',
+			  'Content-Type': 'application/json',
+			},
+		  };
+		const deleteItem = await axios.delete(endPoints.orders.deleteItem(item), config);
+		return deleteItem.data;
+	};
+
+	const handleRemove = product => {
+		removeFromCart(product);
+		const orderProductId = product.OrderProduct.id;
+		if(!orderProductId) {
+			console.log('se cago, no accedi');
+		}
+		removeItemProduct(orderProductId);
 	};
 
 	return (

@@ -1,13 +1,21 @@
 import Head from 'next/head';
 import React, { useContext, useRef, useState } from 'react';
 import AppContext from '@context/AppContext';
+import Image from 'next/image';
 import CheckOrderItem from '@components/CheckoutOrderItem';
+import actualizarImg from '@icons/button_refresh_15001.png';
+/* import endPoints from '@services/api'; */
+import { useRouter } from 'next/router';
 import Modal from '@common/Modal';/* 
 import tPaymentez from '../paymentez/paymentez'; */
 import styles from '@styles/Checkout.module.scss';
 
 const Checkout = () => {
+  const router = useRouter(); 
+
   const { state/* , toggleOrder */ } = useContext(AppContext);
+
+/* 	const actualizarSumTotal = useRef(null); */
 
   const [open, setOpen] = useState(false);
 
@@ -46,7 +54,7 @@ const Checkout = () => {
 
   // checkout
   const sumTotal = () => {
-    const reducer = (accumalator, currentValue) => accumalator + currentValue.price;
+    const reducer = (accumalator, currentValue) => accumalator + (currentValue.price * currentValue.OrderProduct['amount']);
     const sum = state.cart.reduce(reducer, 0);
     return sum.toFixed(2);
   };
@@ -81,7 +89,7 @@ const Checkout = () => {
           <div className={styles['Checkout-container']}>
             <h1 className={styles.title}>Verificacion | Checkout</h1>
             <div className={styles['Checkout-content']}>
-              <div className={styles['my-orders']}>
+              <div /* ref={actualizarSumTotal} onChange={() => sumTotal()} */ className={styles['my-orders']}>
                 {state.cart.map((product) => (
                   <CheckOrderItem product={product} key={`orderItem-${product.id}`} />
                 ))}
@@ -90,17 +98,18 @@ const Checkout = () => {
                 <p>
                   <span>Total</span>
                 </p>
-                <p>${sumTotal()}</p>
+                <p>${sumTotal()} <button onClick={() => router.reload()} ><Image src={actualizarImg} width={20} height={20} /></button></p>
+               
               </div>
             </div>
             <div>
-              <form ref={refValidation} onSubmit={openModalHandler}>
+              <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
                 <div className={styles['terminosyCondiciones-container']}>
                   <input type="checkbox" name="termsAndConds" id="termsAndConds" />
                   <p>he leído y acepto los terminos y condiciones</p>
                 </div>
-                <h3>Proceder a pagar</h3>
-                <button type="submit">Pagar con cualquier tarjeta de credito o debito (Visa o Mastercard).</button>
+                <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
+                <button className={styles['pay-Button']} type="submit">Pagar con tarjeta de credito o debito (Visa o Mastercard).</button>
               </form>
             </div>
           </div>

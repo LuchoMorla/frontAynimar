@@ -12,9 +12,9 @@
 	width: ;
 } */
 .Checkout-container {
-	display: grid;
-	grid-template-rows: auto 1fr auto;
-	width: 300px;
+	display: flex;
+  flex-flow: column nowrap;
+	width: 95%;
 }
 .Checkout-content {
 	display: flex;
@@ -29,6 +29,7 @@
 	margin-bottom: 24px;
 	border-radius: 8px;
 	padding: 0 24px;
+  margin: 10px 0;
 }
 .order p:nth-child(1) {
 	display: flex;
@@ -80,6 +81,34 @@
   font-size: $--lg;
   font-weight: bold;
   color: $--white;
+  align-self: center;
+  margin: 8px;
+}
+
+.paySubmitForm {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pay-Button {
+  width: 100%;
+  border-radius: 25px;
+  border: 1px solid $--morado-centro;
+  height: 50px;
+  background: $--morado-centro;
+  color: $--app-green;
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+.pagoTitle {
+  color: $--white;
+}
+
+.paySubmitForm h3 {
+  align-self: center;
 }
 
 .my-order-content {
@@ -90,7 +119,7 @@
 }
 
 .my-orders {
-  overflow: scroll;
+ /*  overflow: scroll; */
   max-height: 65%;
 }
 

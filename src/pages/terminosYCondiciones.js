@@ -118,7 +118,7 @@ const terminosYCondiciones = () => {
               accesible, los pasos que deberá seguir el Cliente para completarlos.
             </li>
             <li>
-              Formación del consentimiento y validación de los contratos celebrados en este sitio 12.1 Aynimar a través de su plataforma www.aynimar.com; ofertará, específicamente bebidas alcohólicas,
+              Formación del consentimiento y validación de los contratos celebrados en este sitio 12.1 Aynimar a través de su plataforma www.aynimar.com; ofertará, productos de todo tipo e indole que se encuentre dentro de los marcos de la ley, se prevee comercializar con productos provenientes de las fabricas, a la vez se comercializara con negocios productos que puedan ser reutilizados o usados para crear nuevos productos,
               que podrán ser adquiridas por el Cliente vía electrónica, utilizando los mecanismos que la misma Plataforma ofrece para ello. 12.2 Toda aceptación de oferta y/o promoción quedará sujeta
               a la condición suspensiva de que Aynimar valide la transacción. En consecuencia, para toda operación que se efectúe en este sitio, la confirmación, validación y/o verificación por parte
               de Aynimar, será requisito para la formación del consentimiento. 12.3 Para validar la transacción Aynimar deberá verificar: (a) Que dispone, en el momento de la aceptación de oferta, de
@@ -229,8 +229,7 @@ const terminosYCondiciones = () => {
               cualquiera de los materiales que conforman el envase que contiene el líquido 1. c) Con la garantía de calidad, Aynimar se compromete: a) En primer lugar reponer el producto motivo de
               reclamo una vez que el departamento de control de Calidad lo apruebe dentro de los siguientes 15 días laborables después de haber recibido el producto en la fábrica. 1. d) Para poder
               hacer efectiva la Garantía esta debe cumplir a cabalidad con todas las condiciones como lo son vigencia de la garantía, factura de compra, cartera del cliente con respaldos y sin
-              encontrare en morosidad; el daño del producto debe ser por un defecto de fabricación y ninguna de las anteriores aplicará en caso de evidenciarse un mal uso por parte del 21.3.2 COLEMUN
-              S.A se reserva el derecho de REPONER EL PRODUCTO. 21.3.3 El producto DE REPOSICION deberá enviarse a la dirección registrada por el cliente. La REPOSICION se realizará dentro de los 30
+              encontrare en morosidad; el daño del producto debe ser por un defecto de fabricación y ninguna de las anteriores aplicará en caso de evidenciarse un mal uso por parte del 21.3.2 Aynimar se reserva el derecho de REPONER EL PRODUCTO. 21.3.3 El producto DE REPOSICION deberá enviarse a la dirección registrada por el cliente. La REPOSICION se realizará dentro de los 30
               días hábiles siguientes. Para solicitar una garantía, el cliente debe ingresar su reclamo en nuestra sección “contáctanos” o enviar un correo a baynimar@gmail.com, y comunicar al asesor
               que maneja su cuenta adjuntando la información de compra y de contacto (# factura, fecha de compra, teléfono de contacto) explicando el inconveniente con el producto y adjuntando mínimo
               3 fotos tanto evidenciando el defecto del mismo como mostrando el estado general del mismo. Por medio de correo electrónico se dará aprobación o no de la garantía 21.4 El Cliente se

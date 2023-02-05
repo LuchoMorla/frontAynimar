@@ -7,16 +7,16 @@ import CheckOrderItem from '@components/CheckoutOrderItem';
 import actualizarImg from '@icons/button_refresh_15001.png';
 /* import endPoints from '@services/api'; */
 import { useRouter } from 'next/router';
-import Modal from '@common/Modal';/* 
+import Modal from '@common/Modal'; /* 
 import tPaymentez from '../paymentez/paymentez'; */
 import styles from '@styles/Checkout.module.scss';
 
 const Checkout = () => {
-  const router = useRouter(); 
+  const router = useRouter();
 
-  const { state/* , toggleOrder */ } = useContext(AppContext);
+  const { state /* , toggleOrder */ } = useContext(AppContext);
 
-/* 	const actualizarSumTotal = useRef(null); */
+  /* 	const actualizarSumTotal = useRef(null); */
 
   const [open, setOpen] = useState(false);
 
@@ -55,7 +55,7 @@ const Checkout = () => {
 
   // checkout
   const sumTotal = () => {
-    const reducer = (accumalator, currentValue) => accumalator + (currentValue.price * currentValue.OrderProduct['amount']);
+    const reducer = (accumalator, currentValue) => accumalator + currentValue.price * currentValue.OrderProduct['amount'];
     const sum = state.cart.reduce(reducer, 0);
     return sum.toFixed(2);
   };
@@ -72,13 +72,17 @@ const Checkout = () => {
     if (open == true) {
       setOpen(true);
       //Paymentez
-/*       paymentCheckout.open({
+      /*       paymentCheckout.open({
         reference: '8REV4qMyQP3w4xGmANU', // reference received for Payment Gateway
       }); */
     } else {
       alert('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, haz click en el checkbox');
     }
   };
+
+  let valorTotalSinIva = sumTotal();
+
+  let valorTotalConIva = valorTotalSinIva * 1.12;
 
   return (
     <>
@@ -96,21 +100,45 @@ const Checkout = () => {
                 ))}
               </div>
               <div className={styles.order}>
-                <p>
-                  <span>Total</span>
-                </p>
-                <p>${sumTotal()} <button onClick={() => router.reload()} ><Image src={actualizarImg} width={20} height={20} /></button></p>
-               
+                <div className={styles.totalContainer}>
+                  <p>
+                    <span>Total sin IVA</span>
+                  </p>
+                  <p>
+                    ${valorTotalSinIva}{' '}
+                    <button onClick={() => router.reload()}>
+                      <Image src={actualizarImg} width={20} height={20} />
+                    </button>
+                  </p>
+                </div>
+                <div className={styles.totalContainer}>
+                  <p>
+                    <span>Total con IVA</span>
+                  </p>
+                  <p>
+                    ${valorTotalConIva.toFixed(2)}{' '}
+                    <button onClick={() => router.reload()}>
+                      <Image src={actualizarImg} width={20} height={20} />
+                    </button>
+                  </p>
+                </div>
               </div>
             </div>
             <div>
               <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
                 <div className={styles['terminosyCondiciones-container']}>
                   <input type="checkbox" name="termsAndConds" id="termsAndConds" />
-                  <p className={styles.termsAndCondsTextContent}>he leído y acepto los <Link href='/terminosYCondiciones' className={styles.termsAndCondLink}><p className={styles.termsAndCondLink}>términos y condiciones</p></Link></p>
+                  <p className={styles.termsAndCondsTextContent}>
+                    he leído y acepto los{' '}
+                    <Link href="/terminosYCondiciones" className={styles.termsAndCondLink}>
+                      <p className={styles.termsAndCondLink}>términos y condiciones</p>
+                    </Link>
+                  </p>
                 </div>
                 <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
-                <button className={styles['pay-Button']} type="submit">Pagar con tarjeta de credito o debito (Visa o Mastercard).</button>
+                <button className={styles['pay-Button']} type="submit">
+                  Pagar con tarjeta de credito o debito (Visa o Mastercard).
+                </button>
               </form>
             </div>
           </div>

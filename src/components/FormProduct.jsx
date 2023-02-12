@@ -2,15 +2,18 @@ import React, { useContext, /* useEffect, */ useRef }  from 'react';
 /* import { useRouter } from 'next/router'; */
 import AppContext from '@context/AppContext';
 import axios from 'axios';
+import Cookie from 'js-cookie';
 import endPoints from '@services/api';
 import Image from 'next/image';
 import addToCartImage from '@icons/bt_add_to_cart.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
+import { createOrderFetch, useOrders } from '@hooks/useOrders';
 /* import addToPacket from '@hooks/useItems'; */
-/* import { useRouter } from 'next/router'; */
+import { useRouter } from 'next/router';
 import styles from '@styles/ProductInfo.module.scss';
 
 const ProductInfo = ({ product }) => {
+	const router = useRouter();
 
 	const { state, addToCart, /* OrderId */ } = useContext(AppContext);
 	const formRef = useRef(null);
@@ -21,7 +24,7 @@ const ProductInfo = ({ product }) => {
 	}, [state.cart]); */
 /* 	const router = useRouter(); */
 	const createOrder = async () => {
-		const post = await axios.post(endPoints.orders.postOrder);
+		const post = await createOrderFetch(endPoints.orders.postOrder);
 		return post.data;
 	};
 
@@ -32,14 +35,13 @@ const ProductInfo = ({ product }) => {
 	};
 
 	const submitHandler = async (event) => {
+		const userHaveToken = Cookie.get('token');
+		if(!userHaveToken) {
+			alert('para realizar esta accion necesitas iniciar sesion');
+			router.push('/login');
+		};
 		event.preventDefault();
 		const addToPacket = async (orderId) => {
-			const config = {
-				headers: {
-				  accept: '*/*',
-				  'Content-Type': 'application/json',
-				},
-			  };
 			const formData = new FormData(formRef.current);
 			const packet = {
 				orderId: orderId,
@@ -48,7 +50,7 @@ const ProductInfo = ({ product }) => {
 			};
 
 /* 			try { */
-				const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
+				const addProductToThePacked = await useOrders(endPoints.orders.postItem, packet, config);
 				console.log(addProductToThePacked);
 /* 				if (addProductToThePacked.response?.error.status === 401) {
 					window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');

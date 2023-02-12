@@ -13,6 +13,9 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
           <div id="rootModal"></div>
+{/*                                   <div id="widgets"></div>
+                        <script src='https://www.hazvaca.com/project/widgets_code/s/red/3408'
+                                type='text/javascript'></script> */}
         </body>
       </Html>
     );

@@ -16,10 +16,10 @@ const endPoints = {
     putProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,
     deleteProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`
   },
-/*   users: {
+  users: {
     getUser: (id) => `${API}/api/${VERSION}/users/${id}`,
-    postUsers: `${API}/api/${VERSION}/users`,
-  }, */
+    /* postUsers: `${API}/api/${VERSION}/users`, */
+  }, 
   recyclers: {
     getRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`,
     postRecyclers: `${API}/api/${VERSION}/recyclers`,

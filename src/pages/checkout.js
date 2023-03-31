@@ -1,16 +1,24 @@
 import Head from 'next/head';
-import React, { useContext, /* useEffect, */ useRef, useState } from 'react';
+import React, { useContext, useEffect, /* useEffect, */ useRef, useState } from 'react';
 import AppContext from '@context/AppContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import actualizarImg from '@icons/button_refresh_15001.png';
-import Paymentez from '@common/Paymentez'
+import Paymentez from '@common/Paymentez';/* 
+import Tarjetas from '@common/Paymentez/tarjetas/Tarjetas'; */
 /* import axios from 'axios'; */
 /* import endPoints from '@services/api'; */
 import { useRouter } from 'next/router';
 import Modal from '@common/Modal'; /* 
 import TPaymentez from '../paymentez/paymentez'; */
+
+import Cookie from 'js-cookie';
+import jwt from 'jsonwebtoken';
+import axios from 'axios';
+import endPoints from '@services/api'; /* 
+import getAllCardsMetod from './paymentez/getAllCards(2)'; */
+
 import styles from '@styles/Checkout.module.scss';
 
 const Checkout = () => {
@@ -19,12 +27,49 @@ const Checkout = () => {
   const { state /* , toggleOrder */ } = useContext(AppContext);
 
   /* 	const actualizarSumTotal = useRef(null); */
-
+  const [email, setEmail] = useState('mail@vacio.com');
   const [open, setOpen] = useState(false);
 
   const refValidation = useRef(null);
 
   // Paymentez
+/*   let tarjetas = []; */
+ const [uId, setuId] = useState(0);
+
+  const getCookieUser = () => {
+    const token = Cookie.get('token');
+    if(!token){
+      alert('necesitas iniciar session');
+      router.push('/login');
+    }
+    setuId(token);
+    return token;
+ };
+
+  useEffect(() => {
+  const hiToken = getCookieUser();
+  const decodificado = jwt.decode(hiToken, { complete: true });
+  const userId = decodificado.payload.sub;
+ 
+  const getUserEmail = async (id) => {
+   const { data: fetch } = await axios.get(endPoints.users.getUser(id));
+   const email = fetch.email;
+   console.log(email);
+   setEmail(email);
+ }
+ getUserEmail(userId);
+ }, []);
+/*  const hiToken = getCookieUser();
+ const decodificado = jwt.decode(hiToken, { complete: true });
+ const userId = decodificado.payload.sub;
+
+ const getUserEmail = async (id) => {
+  const { data: fetch } = await axios.get(endPoints.users.getUser(id));
+  const email = fetch.email;
+  
+  return email;
+}
+const userEmail = getUserEmail(userId); */
   /* useEffect(() =>
 // Execute immediately
 (function () {
@@ -275,7 +320,11 @@ const Checkout = () => {
             Save new card
           </button>
         </div> */}
-        <Paymentez />
+
+        <Paymentez userEmail={email} />
+        
+        {/* 
+        <Tarjetas /> */}
       </Modal>
     </>
   );

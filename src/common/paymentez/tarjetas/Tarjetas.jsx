@@ -12,7 +12,7 @@ const Tarjetas = () => {/*
     const keyPaymentezNuvei = process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_KEY;
     let tarjetas = [];
     const [email, setEmail] = useState('vacio'); */
-    const [uId, setuId] = useState(0);
+   
     const router = useRouter(); 
   
     const getCookieUser = () => {

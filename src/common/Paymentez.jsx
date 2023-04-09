@@ -50,9 +50,9 @@ const Paymentez = ({ userEmail }) => {
       let retryButton = retry_btn;
       let submitInitialText = submitButton.textContent;      */
 
-      const hiToken = getCookieUser();
-      const decodificado = jwt.decode(hiToken, { complete: true });
-      const userId = decodificado.payload.sub;
+      // const hiToken = getCookieUser();
+      // const decodificado = jwt.decode(hiToken, { complete: true });
+      // const userId = decodificado.payload.sub;
       // === Variable to use ===
       let environment = 'stg';
       let application_code = codePaymentezNuvei;  // Provided by Payment Gateway

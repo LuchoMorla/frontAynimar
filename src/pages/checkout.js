@@ -1,24 +1,18 @@
 import Head from 'next/head';
-import React, { useContext, useEffect, /* useEffect, */ useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import AppContext from '@context/AppContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import actualizarImg from '@icons/button_refresh_15001.png';
-import Paymentez from '@common/Paymentez';/* 
-import Tarjetas from '@common/Paymentez/tarjetas/Tarjetas'; */
-/* import axios from 'axios'; */
-/* import endPoints from '@services/api'; */
+import Tarjetas from '@common/Paymentez/tarjetas/Tarjetas';
 import { useRouter } from 'next/router';
-import Modal from '@common/Modal'; /* 
-import TPaymentez from '../paymentez/paymentez'; */
-
+import Modal from '@common/Modal';
 import Cookie from 'js-cookie';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
-import endPoints from '@services/api'; /* 
-import getAllCardsMetod from './paymentez/getAllCards(2)'; */
-
+import endPoints from '@services/api';
+import PaymentezDos from '@common/PaymentezDos';
 import styles from '@styles/Checkout.module.scss';
 
 const Checkout = () => {
@@ -33,137 +27,33 @@ const Checkout = () => {
   const refValidation = useRef(null);
 
   // Paymentez
-/*   let tarjetas = []; */
- const [uId, setuId] = useState(0);
+  /*   let tarjetas = []; */
+  const [uId, setuId] = useState(0);
 
   const getCookieUser = () => {
     const token = Cookie.get('token');
-    if(!token){
+    if (!token) {
       alert('necesitas iniciar session');
       router.push('/login');
     }
-    setuId(token);
     return token;
- };
+  };
 
   useEffect(() => {
-  const hiToken = getCookieUser();
-  const decodificado = jwt.decode(hiToken, { complete: true });
-  const userId = decodificado.payload.sub;
- 
-  const getUserEmail = async (id) => {
-   const { data: fetch } = await axios.get(endPoints.users.getUser(id));
-   const email = fetch.email;
-   console.log(email);
-   setEmail(email);
- }
- getUserEmail(userId);
- }, []);
-/*  const hiToken = getCookieUser();
- const decodificado = jwt.decode(hiToken, { complete: true });
- const userId = decodificado.payload.sub;
+    const hiToken = getCookieUser();
+    const decodificado = jwt.decode(hiToken, { complete: true });
+    const userId = decodificado.payload.sub;
 
- const getUserEmail = async (id) => {
-  const { data: fetch } = await axios.get(endPoints.users.getUser(id));
-  const email = fetch.email;
-  
-  return email;
-}
-const userEmail = getUserEmail(userId); */
-  /* useEffect(() =>
-// Execute immediately
-(function () {
-  // === Variable to use ===
-  let environment = 'stg';
-  let application_code = 'APP-CODE-CLIENT';  // Provided by Payment Gateway
-  let application_key = 'app_key_client';  // Provided by Payment Gateway
-  let submitButton = document.querySelector('#tokenize_btn');
-  let retryButton = document.querySelector('#retry_btn');
-  let submitInitialText = submitButton.textContent;
-
-  // Get the required additional data to tokenize card
-  let get_tokenize_data = () => {
-    let data = {
-      locale: 'en',
-      user: {
-        id: String(Math.floor((new Date).getTime() / 1000)),
-        email: 'jhon@doe.com',
-      },
-      configuration: {
-        default_country: 'COL'
-      },
+    setuId(userId)
+    const getUserEmail = async (id) => {
+      const { data: fetch } = await axios.get(endPoints.users.getUser(id));
+      const email = fetch.email;
+      console.log(email);
+      setEmail(email);
     }
-    return data
-  }
+    getUserEmail(userId);
+  }, []);
 
-  // === Required callbacks ===
-  // Executed when was called 'tokenize' function but the form was not completed.
-  let notCompletedFormCallback = message => {
-    document.getElementById('response').innerHTML = `Not completed form: ${message}, Please fill required data`;
-    submitButton.innerText = submitInitialText;
-    submitButton.removeAttribute('disabled');
-  }
-
-  // Executed when was called 'tokenize' and the services response successfully.
-  let responseCallback = response => {
-    // Example of success tokenization.
-    //   {
-    //    "card": {
-    //     "bin": "411111",
-    //     "status": "valid",
-    //     "token": "2508629432271853872",
-    //     "message": "",
-    //     "expiry_year": "2033",
-    //     "expiry_month": "12",
-    //     "transaction_reference": "RB-143809",
-    //     "type": "vi",
-    //     "number": "1111"
-    //   }
-    // }
-
-    // Example of failed tokenization. The error format is always the same, only the value of type, help, description changes.
-    // {
-    //    "error": {
-    //       "type": "Card already added: 2508629432271853872",
-    //       "help": "If you want to update the card, first delete it",
-    //       "description": "{}"
-    //    }
-    // }
-    document.getElementById('response').innerHTML = JSON.stringify(response);
-    retryButton.style.display = 'block';
-    submitButton.style.display = 'none';
-  }
-
-  // 2. Instance the [PaymentGateway](#PaymentGateway-class) with the required parameters.
-  let pg_sdk = new PaymentGateway(environment, application_code, application_key);
-
-  // 3. Generate the tokenization form with the required data. [generate_tokenize](#generate_tokenize-function)
-  // At this point it's when the form is rendered on page.
-  pg_sdk.generate_tokenize(get_tokenize_data(), '#tokenize_example', responseCallback, notCompletedFormCallback);
-
-  // 4. Define the event to execute the [tokenize](#tokenize-function) action.
-  submitButton.addEventListener('click', event => {
-    document.getElementById('response').innerHTML = '';
-    submitButton.innerText = 'Card Processing...';
-    submitButton.setAttribute('disabled', 'disabled');
-    pg_sdk.tokenize();
-    event.preventDefault();
-  });
-  // };
-
-  // You can define a button to create a new form and save new card
-  retryButton.addEventListener('click', event => {
-    // re call function
-    submitButton.innerText = submitInitialText;
-    submitButton.removeAttribute('disabled');
-    retryButton.style.display = 'none';
-    submitButton.style.display = 'block';
-    pg_sdk.generate_tokenize(get_tokenize_data(), '#tokenize_example', responseCallback, notCompletedFormCallback);
-  });
-
-})(), []
-)
- */
   // checkout
   const sumTotal = () => {
     const reducer = (accumalator, currentValue) => accumalator + currentValue.price * currentValue.OrderProduct['amount'];
@@ -201,29 +91,6 @@ const userEmail = getUserEmail(userId); */
         review_url: 'https://url-to-review.com',
       },
     };
-/* 
-    let sha256 = require('js-sha256');
-    let paymentez_server_application_code = 'LINKTOPAY01-EC-SERVER';
-    let paymentez_server_app_key = 'G8vwvaASAZHQgoVuF2eKZyZF5hJmvx';
-    let unix_timestamp = String(Math.floor(new Date().getTime() / 1000));
-    // unix_timestamp = String("1546543146");
-    console.log('UNIX TIMESTAMP:', unix_timestamp);
-    let uniq_token_string = paymentez_server_app_key + unix_timestamp;
-    console.log('UNIQ STRING:', uniq_token_string);
-    let uniq_token_hash = sha256(uniq_token_string);
-    console.log('UNIQ STRING:', uniq_token_hash);
-    let string_auth_token = btoa(paymentez_server_application_code + ';' + unix_timestamp + ';' + uniq_token_hash);
-    console.log('AUTH TOKEN:', string_auth_token);
-
-    axios.defaults.headers.uniq_token_string = uniq_token_string;
-    axios.defaults.headers.unix_timestamp = unix_timestamp;
-    axios.defaults.headers.uniq_token_hash = uniq_token_hash;
-    axios.defaults.headers.string_auth_token = string_auth_token;
-
-    const peticionApiPaymentez = await axios.post('https://noccapi-stg.paymentez.com/linktopay/init_order/', contenido);
-    // respuesta paymentez
-    console.log('peticionApiPaymentez ',peticionApiPaymentez); */
-
     const formData = new FormData(refValidation.current);
     const data = {
       terminosYCondiciones: formData.get('termsAndConds'),
@@ -309,22 +176,8 @@ const userEmail = getUserEmail(userId); */
       </div>
       <Modal open={open} onClose={() => setOpen(false)}>
         <h1>Form payment</h1>
-        {/* <TPaymentez /> */}
-{/*         <div id="payment_example_div">
-          <div id="tokenize_example"></div>
-          <div id="response"></div>
-          <button id="tokenize_btn" className={styles["tok_btn"]}>
-            Save card
-          </button>
-          <button id="retry_btn" className={styles["tok_btn"]} display="none">
-            Save new card
-          </button>
-        </div> */}
-
-        <Paymentez userEmail={email} />
-        
-        {/* 
-        <Tarjetas /> */}
+        <PaymentezDos userEmail={email} uId={uId} />
+        <Tarjetas userEmail={email} uId={uId} />
       </Modal>
     </>
   );

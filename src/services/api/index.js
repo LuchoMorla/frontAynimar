@@ -1,6 +1,6 @@
 const API = process.env.NEXT_PUBLIC_API_URL;
 const VERSION = process.env.NEXT_PUBLIC_API_VERSION;
-
+ console.log(API)
 const endPoints = {
   products:{
     getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
@@ -28,7 +28,7 @@ const endPoints = {
   },
   customers: {
     getCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`,
-    postCustomers: `${API}/api/${VERSION}/customers`,
+    postCustomers: `${process.env.NEXT_PUBLIC_API_URL}/api/${VERSION}/customers`,
     updateCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`,
     deleteCustomer: (id) => `${API}/api/${VERSION}/customers/${id}`
   },

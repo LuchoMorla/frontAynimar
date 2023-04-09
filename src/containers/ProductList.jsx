@@ -5,7 +5,7 @@ import ProductItem from '@components/ProductItem';
 import styles from '@styles/ProductList.module.scss';
 
 const ProductList = () => {
-	const PRODUCT_LIMIT = 10;
+	const PRODUCT_LIMIT = 100;
 	const PRODUCT_OFFSET = 0;
 
 	const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));

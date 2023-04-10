@@ -1,6 +1,7 @@
 const API = process.env.NEXT_PUBLIC_API_URL;
 const VERSION = process.env.NEXT_PUBLIC_API_VERSION;
- console.log(API)
+ console.log("BAckedeeend", API)
+ console.log("BAckedeeend", VERSION)
 const endPoints = {
   products:{
     getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,

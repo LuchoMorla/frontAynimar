@@ -32,15 +32,19 @@ const Checkout = () => {
 
   const getCookieUser = () => {
     const token = Cookie.get('token');
+    console.log(token)
     if (!token) {
       alert('necesitas iniciar session');
       router.push('/login');
+      return false
     }
     return token;
   };
 
   useEffect(() => {
+
     const hiToken = getCookieUser();
+    if(!hiToken) return;
     const decodificado = jwt.decode(hiToken, { complete: true });
     const userId = decodificado.payload.sub;
 

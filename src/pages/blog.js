@@ -1,6 +1,6 @@
 import React from 'react';
 import Script from 'next/script';
-import styles from '@styles/Blog.module.scss'
+import styles from '@styles/Blog.module.scss';
 
 const blog = () => {
     
@@ -12,5 +12,5 @@ const blog = () => {
                                 type='text/javascript'></Script>
         </div>
     );
-}
+};
 export default blog;

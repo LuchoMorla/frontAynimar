@@ -44,13 +44,13 @@ const Checkout = () => {
     const decodificado = jwt.decode(hiToken, { complete: true });
     const userId = decodificado.payload.sub;
 
-    setuId(userId)
+    setuId(userId);
     const getUserEmail = async (id) => {
       const { data: fetch } = await axios.get(endPoints.users.getUser(id));
       const email = fetch.email;
       console.log(email);
       setEmail(email);
-    }
+    };
     getUserEmail(userId);
   }, []);
 
@@ -64,7 +64,7 @@ const Checkout = () => {
   const openModalHandler = async (event) => {
     event.preventDefault();
 
-    const contenido = {
+/*     const contenido = {
       user: {
         id: '117',
         email: 'info@dbdturismo.com',
@@ -90,7 +90,7 @@ const Checkout = () => {
         pending_url: 'https://url-to-pending.com',
         review_url: 'https://url-to-review.com',
       },
-    };
+    }; */
     const formData = new FormData(refValidation.current);
     const data = {
       terminosYCondiciones: formData.get('termsAndConds'),
@@ -136,7 +136,7 @@ const Checkout = () => {
                   <p>
                     ${valorTotalSinIva}{' '}
                     <button onClick={() => router.reload()}>
-                      <Image src={actualizarImg} width={20} height={20} />
+                      <Image src={actualizarImg} alt='paymentImage' width={20} height={20} />
                     </button>
                   </p>
                 </div>
@@ -147,7 +147,7 @@ const Checkout = () => {
                   <p>
                     ${valorTotalConIva.toFixed(2)}{' '}
                     <button onClick={() => router.reload()}>
-                      <Image src={actualizarImg} width={20} height={20} />
+                      <Image src={actualizarImg} alt='paymentImage' width={20} height={20} />
                     </button>
                   </p>
                 </div>
@@ -159,7 +159,7 @@ const Checkout = () => {
                   <input type="checkbox" name="termsAndConds" id="termsAndConds" />
                   <p className={styles.termsAndCondsTextContent}>
                     he leído y acepto los{' '}
-                    <Link href="/terminosYCondiciones" className={styles.termsAndCondLink}>
+                    <Link href="/terminosYCondiciones" className={styles.termsAndCondLink} passHref>
                       <p className={styles.termsAndCondLink}>términos y condiciones</p>
                     </Link>
                   </p>

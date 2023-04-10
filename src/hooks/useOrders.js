@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useOrders = (endPoint, body) => {
+const uOrders = (endPoint, body) => {
   const [data, setData] = useState([]);
 
   async function fetchData() {
@@ -112,4 +112,4 @@ const createOrderFetch = () => {
     return data;
 };
 
-export default { useOrders, createOrderFetch };
+export default { uOrders, createOrderFetch };

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import actualizarImg from '@icons/button_refresh_15001.png';
-import Tarjetas from '@common/Paymentez/tarjetas/Tarjetas';
+import Tarjetas from '@tarjetas/Tarjetas.jsx';
 import { useRouter } from 'next/router';
 import Modal from '@common/Modal';
 import Cookie from 'js-cookie';

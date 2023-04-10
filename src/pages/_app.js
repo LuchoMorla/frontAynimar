@@ -3,7 +3,6 @@ import Script from 'next/script';
 import AppContext from '@context/AppContext';
 import useInitialState from '@hooks/useInitialState';
 import Layout from '@containers/Layout';
-import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/globals.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css'; 
 import 'primereact/resources/primereact.min.css';

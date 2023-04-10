@@ -12,8 +12,7 @@ export default function AutoLoginPage() {
   const token = query.token;
   setTimeout(() => {
     if (token !== null) {
-            auth
-            .autoSignIn(token)
+            auth.autoSignIn(token)
             .then(() => {
                 router.push('/');
             })

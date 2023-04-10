@@ -1,0 +1,40 @@
+
+// >Css Paymentez
+#payment_example_div {
+    max-width: 600px;
+    min-width: 400px;
+    margin: 10 auto;
+  }
+  
+  #payment_example_div > * {
+    margin: 10 auto;
+  }
+  
+  .tok_btn:hover {
+    cursor: pointer;
+  }
+  
+  .tok_btn:disabled, #tok_btn[disabled] {
+    opacity: .65;
+    cursor: not-allowed;
+  }
+  
+  .tok_btn {
+    background: linear-gradient(to bottom, rgba(140, 197, 65, 1) 0%, rgba(20, 167, 81, 1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    color: #fff;
+    width: 100% /* 80% */;
+    border: 1px solid rgba(46, 86, 153, 0.0980392);
+    border-bottom-color: rgba(46, 86, 153, 0.4);
+    border-top: 0;
+    border-radius: 4px;
+    font-size: 17px;
+    text-shadow: rgba(46, 86, 153, 0.298039) 0px -1px 0px;
+    line-height: 34px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    display: block;
+  }
+  
+  #retry_btn {
+    display: none;
+  }

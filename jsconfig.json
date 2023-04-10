@@ -15,7 +15,9 @@
       "@services/*": ["services/*"],
       "@assets/*": ["assets/*"],
       "@layout/*": ["layout/*"],
-      "@entities/*": ["services/api/entities/*"]
+      "@entities/*": ["services/api/entities/*"],
+      "@nuvei": ["common/paymentez/*"],
+      "@tarjetas": ["common/paymentez/tarjetas/*"]
     }
   }
 }

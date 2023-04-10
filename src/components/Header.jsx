@@ -67,6 +67,9 @@ const [token, setToken] = useState(null)/* ,
 			await fetchOrders();
 		} catch (error) {
 			console.log(error);
+			if(error.status == 401) {
+				console.log('funciono doble CATCH Luis, campuramos el error 401 mira-> ' + error.status + ` y  tambien el mensaje es ${error.message}`);
+			  }
 		}
 	}, [endPoints.orders.getOrderByState]);
 
@@ -102,7 +105,7 @@ const [token, setToken] = useState(null)/* ,
 						<Link href="/contact">Contactanos</Link>
 					</li>
 					<li>
-						<Link href="/">Blog</Link>
+						<Link href="/blog">Blog</Link>
 					</li>
 				</ul>
 			</div>

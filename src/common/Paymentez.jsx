@@ -8,8 +8,8 @@ import endPoints from '@services/api';
 import getAllCardsMetod from './paymentez/getAllCards(2)'; */
 import styles from '@styles/Paymentez.module.scss';
 
-const Paymentez = ({ userEmail }) => {
-  console.log('entramos a paymentes y el userEmail es: ', userEmail);
+const Paymentez = ({ userEmail }) => {/* 
+  console.log('entramos a paymentes y el userEmail es: ', userEmail); */
   const codePaymentezNuvei = process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_CODE;
   const keyPaymentezNuvei = process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_KEY;
 /*   let tarjetas = []; */
@@ -76,8 +76,8 @@ const Paymentez = ({ userEmail }) => {
           configuration: {
             default_country: 'USD', //tipo de moneda: 'COL'
           },
-        }
-        console.log('console.log del corregido mio', data);
+        }/* 
+        console.log('console.log del corregido mio', data); */
         /* 
         const diasDisponiblesAntesDeCaducar = 1;
         Cookie.set('NuveiP', data, { expires: diasDisponiblesAntesDeCaducar }); */

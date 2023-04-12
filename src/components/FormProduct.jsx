@@ -6,7 +6,6 @@ import endPoints from '@services/api';
 import Image from 'next/image';
 import addToCartImage from '@icons/bt_add_to_cart.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
-/* import { createOrderFetch } from '@hooks/useOrders'; */
 import { useRouter } from 'next/router';
 import styles from '@styles/ProductInfo.module.scss';
 

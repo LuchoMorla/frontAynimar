@@ -32,15 +32,19 @@ const Checkout = () => {
 
   const getCookieUser = () => {
     const token = Cookie.get('token');
+
     if (!token) {
       alert('necesitas iniciar session');
       router.push('/login');
+      return false;
     }
     return token;
   };
 
   useEffect(() => {
+
     const hiToken = getCookieUser();
+    if(!hiToken) return;
     const decodificado = jwt.decode(hiToken, { complete: true });
     const userId = decodificado.payload.sub;
 
@@ -106,7 +110,7 @@ const Checkout = () => {
       }); */
     } else {
       alert('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, haz click en el checkbox');
-    }
+    };
   };
 
   let valorTotalSinIva = sumTotal();

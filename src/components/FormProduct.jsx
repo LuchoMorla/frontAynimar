@@ -1,14 +1,14 @@
 import React, { useContext, /* useEffect, */ useRef }  from 'react';
 /* import { useRouter } from 'next/router'; */
 import AppContext from '@context/AppContext';
-/* import axios from 'axios'; */
+import axios from 'axios';
 import Cookie from 'js-cookie';
 import endPoints from '@services/api';
 import Image from 'next/image';
 import addToCartImage from '@icons/bt_add_to_cart.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
-import { createOrderFetch, uOrders } from '@hooks/useOrders';
-/* import addToPacket from '@hooks/useItems'; */
+import { createOrderFetch/* , uOrders */ } from '@hooks/useOrders';
+/* import { addToPacket } from '@hooks/useItems'; */
 import { useRouter } from 'next/router';
 import styles from '@styles/ProductInfo.module.scss';
 
@@ -55,10 +55,16 @@ const ProductInfo = ({ product }) => {
 				  'Content-Type': 'application/json',
 				},
 			  };
-
 /* 			try { */
-				const addProductToThePacked = await uOrders(endPoints.orders.postItem, packet, config);
-				console.log(addProductToThePacked);
+
+				/* ALGO SE CRASHEO O ESTOY ARREGLANDO ANTES DE SALIDA A PRODUCCION
+				 const addProductToThePacked = await uOrders(endPoints.orders.postItem, packet, config);
+				console.log(addProductToThePacked); 
+				
+				*/
+				console.log('mierda estamos haciendo la peticion');
+				const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
+				console.log('la peticion dijo esto: ', addProductToThePacked);
 /* 				if (addProductToThePacked.response?.error.status === 401) {
 					window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
 					router.push('/login');
@@ -89,6 +95,7 @@ const ProductInfo = ({ product }) => {
 			const getOrder = await createOrder();
 			const bornedOrderId = getOrder.id;
 			window.localStorage.setItem('oi', `${bornedOrderId}`);
+			
 			handleClick(product);
 			addToPacket(bornedOrderId)
 			.catch((err) => {

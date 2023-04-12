@@ -1,5 +1,4 @@
-import React, { useContext, /* useEffect, */ useRef }  from 'react';
-/* import { useRouter } from 'next/router'; */
+import React, { useContext, useRef }  from 'react';
 import AppContext from '@context/AppContext';
 import axios from 'axios';
 import Cookie from 'js-cookie';
@@ -7,24 +6,18 @@ import endPoints from '@services/api';
 import Image from 'next/image';
 import addToCartImage from '@icons/bt_add_to_cart.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
-import { createOrderFetch/* , uOrders */ } from '@hooks/useOrders';
-/* import { addToPacket } from '@hooks/useItems'; */
+/* import { createOrderFetch } from '@hooks/useOrders'; */
 import { useRouter } from 'next/router';
 import styles from '@styles/ProductInfo.module.scss';
 
 const ProductInfo = ({ product }) => {
 	const router = useRouter();
 
-	const { state, addToCart, /* OrderId */ } = useContext(AppContext);
+	const { state, addToCart } = useContext(AppContext);
 	const formRef = useRef(null);
-	
-/* 	const router = useRouter(); */
-/* 	useEffect({
 
-	}, [state.cart]); */
-/* 	const router = useRouter(); */
 	const createOrder = async () => {
-		const post = await createOrderFetch(endPoints.orders.postOrder);
+		const post = await axios.post(endPoints.orders.postOrder);
 		return post.data;
 	};
 
@@ -41,6 +34,7 @@ const ProductInfo = ({ product }) => {
 			router.push('/login');
 		};
 		event.preventDefault();
+
 		const addToPacket = async (orderId) => {
 			const formData = new FormData(formRef.current);
 			const packet = {
@@ -55,35 +49,10 @@ const ProductInfo = ({ product }) => {
 				  'Content-Type': 'application/json',
 				},
 			  };
-/* 			try { */
 
-				/* ALGO SE CRASHEO O ESTOY ARREGLANDO ANTES DE SALIDA A PRODUCCION
-				 const addProductToThePacked = await uOrders(endPoints.orders.postItem, packet, config);
-				console.log(addProductToThePacked); 
-				
-				*/
 				const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
-/* 				if (addProductToThePacked.response?.error.status === 401) {
-					window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
-					router.push('/login');
-				  } else if (addProductToThePacked.response?.error) {
-					console.log('Algo salio mal: ' + error.response.status);
-				  }*/
-				return addProductToThePacked; 
-/* 			} catch (error) {
-					if (err.response?.status === 401) {
-						window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
-						router.push('/login');
-					  } else if (err.response) {
-						console.log('Algo salio mal: ' + err.response.status);
-					  }
-			} */
 
-/* 			window.localStorage.setItem('item_id', `${addProductToThePacked.data.id}`); */
-/* 			if (addProductToThePacked.status = 401) {
-				alert('necesitas iniciar sesion');
-				router.push('/login');
-			} */
+				return addProductToThePacked; 
 
 		};
 		
@@ -106,7 +75,6 @@ const ProductInfo = ({ product }) => {
 		} else {
 			handleClick(product);
 			const numberOrderId = parseInt(savedOrderId);
-			/* Creo que queria guardar el numero de order id en el local storage OrderId(numberOrderId); */
 			addToPacket(numberOrderId)
 			.catch((err) => {
 				if (err.response?.status === 401) {

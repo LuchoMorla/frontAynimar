@@ -62,9 +62,7 @@ const ProductInfo = ({ product }) => {
 				console.log(addProductToThePacked); 
 				
 				*/
-				console.log('mierda estamos haciendo la peticion');
 				const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
-				console.log('la peticion dijo esto: ', addProductToThePacked);
 /* 				if (addProductToThePacked.response?.error.status === 401) {
 					window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
 					router.push('/login');

@@ -180,8 +180,8 @@ const Checkout = () => {
       </div>
       <Modal open={open} onClose={() => setOpen(false)}>
         <h1>Billetera de tarjetas de credito</h1>
-        <PaymentezDos userEmail={email} uId={uId} />
         <Tarjetas userEmail={email} uId={uId} />
+        <PaymentezDos userEmail={email} uId={uId} />
       </Modal>
     </>
   );

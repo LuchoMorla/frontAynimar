@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import getAllCards from '../getAllCards';
+import React, { useState } from 'react';/* 
+import getAllCards from '../getAllCards'; */
 import TablaCards from './tablaCards';
+import { getAllCards } from '@entities/cards';
 import { Button } from 'primereact/button';
 import Refund from '../refund';
 const Tarjetas = ({ userEmail, uId }) => {
@@ -9,11 +10,12 @@ const Tarjetas = ({ userEmail, uId }) => {
 
   const lookTarjetasHandler = async () => {
     try {
-      console.log('Ver todas las tarjetas guardadas');
+      console.log('Ver todas las tarjetas guardadas, comprobemos el userId: ');
+      console.log(uId);
       const cardsResponse = await getAllCards(uId);
-      console.log(cardsResponse)
-      setCards(cardsResponse)
-      setEstado(true)
+      console.log(cardsResponse);
+      setCards(cardsResponse);
+      setEstado(true);
     } catch (error) {
       console.log('Error: ', error.message);
     }

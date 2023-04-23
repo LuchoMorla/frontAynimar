@@ -44,7 +44,7 @@ const Checkout = () => {
   useEffect(() => {
 
     const hiToken = getCookieUser();
-    if(!hiToken) return;
+    if (!hiToken) return;
     const decodificado = jwt.decode(hiToken, { complete: true });
     const userId = decodificado.payload.sub;
 
@@ -68,33 +68,33 @@ const Checkout = () => {
   const openModalHandler = async (event) => {
     event.preventDefault();
 
-/*     const contenido = {
-      user: {
-        id: '117',
-        email: 'info@dbdturismo.com',
-        name: 'Erick',
-        last_name: 'Guillen',
-      },
-      order: {
-        dev_reference: '1',
-        description: 'Product test',
-        amount: 1,
-        taxable_amount: 0,
-        tax_percentage: 0,
-        vat: 0,
-        installments_type: 0,
-        currency: 'USD',
-      },
-      configuration: {
-        partial_payment: true,
-        expiration_days: 1,
-        allowed_payment_methods: ['Card'],
-        success_url: 'https://url-to-success.com',
-        failure_url: 'https://url-to-failure.com',
-        pending_url: 'https://url-to-pending.com',
-        review_url: 'https://url-to-review.com',
-      },
-    }; */
+    /*     const contenido = {
+          user: {
+            id: '117',
+            email: 'info@dbdturismo.com',
+            name: 'Erick',
+            last_name: 'Guillen',
+          },
+          order: {
+            dev_reference: '1',
+            description: 'Product test',
+            amount: 1,
+            taxable_amount: 0,
+            tax_percentage: 0,
+            vat: 0,
+            installments_type: 0,
+            currency: 'USD',
+          },
+          configuration: {
+            partial_payment: true,
+            expiration_days: 1,
+            allowed_payment_methods: ['Card'],
+            success_url: 'https://url-to-success.com',
+            failure_url: 'https://url-to-failure.com',
+            pending_url: 'https://url-to-pending.com',
+            review_url: 'https://url-to-review.com',
+          },
+        }; */
     const formData = new FormData(refValidation.current);
     const data = {
       terminosYCondiciones: formData.get('termsAndConds'),
@@ -179,7 +179,7 @@ const Checkout = () => {
         {/* <p id="response"></p> */}
       </div>
       <Modal open={open} onClose={() => setOpen(false)}>
-        <h1>Billetera de tarjetas de credito</h1>
+        <h1 className={styles.modaltitle} >Billetera de tarjetas de credito</h1>
         <Tarjetas userEmail={email} uId={uId} />
         <PaymentezDos userEmail={email} uId={uId} />
       </Modal>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const initialState = {
   cart: [],
@@ -9,10 +9,12 @@ const initialState = {
   havePaymentId: null,
   haveOrderId: null,
   navMenuIsOpen: false,
-  showingPassword: true
+  showingPassword: true,
+  orderData: null
 };
 
 const useInitialState = () => {
+
   const [state, setState] = useState(initialState);
 
   const showPassword = () => {
@@ -99,6 +101,13 @@ const useInitialState = () => {
     });
   };
 
+  const setOrderData = (payload) => {
+    setState({
+      ...state,
+      orderData: payload
+    });
+  };
+
   return {
     state,
     addToCart,
@@ -112,8 +121,11 @@ const useInitialState = () => {
     usePaymentId,
     useOrderId,
     toggleNavMenu,
-    showPassword
+    showPassword,
+    setOrderData
   };
 };
+
+export const AppContext = React.createContext({});
 
 export default useInitialState;

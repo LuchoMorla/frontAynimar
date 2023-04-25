@@ -1,106 +1,120 @@
 @import 'vars';
 
 .Checkout {
-	width: 100%;
-	height: 100vh;
-	display: grid;
-	place-items: center;
+  width      : 100%;
+  height     : 100vh;
+  display    : grid;
+  place-items: center;
 }
+
 /* .title {
 	font-size: var(--lg);
 	margin-bottom: 40px;
 	width: ;
 } */
 .Checkout-container {
-	display: flex;
+  display  : flex;
   flex-flow: column nowrap;
-	width: 95%;
+  width    : 70%;
+  row-gap  : 20px;
 }
+
 .Checkout-content {
-	display: flex;
-	flex-direction: column;
+  display       : flex;
+  flex-direction: column;
 }
+
 .order {
-	display: grid;
-/* 	grid-template-columns: auto 1fr;
-	gap: 16px; */
-	align-items: center;
-	background-color: $--text-input-field;
-	margin-bottom: 24px;
-	border-radius: 8px;
-	padding: 0 24px;
-  margin: 10px 0;
+  display                  : grid;
+  /* 	grid-template-columns: auto 1fr;
+	gap                       : 16px; */
+  align-items              : center;
+  background-color         : $--text-input-field;
+  margin-bottom            : 24px;
+  border-radius            : 8px;
+  padding                  : 0 24px;
+  margin                   : 10px 0;
 }
+
 .order p:nth-child(1) {
-	display: flex;
-	flex-direction: column;
-	color: red;
+  display       : flex;
+  flex-direction: column;
+  color         : red;
 }
+
 .order p span:nth-child(1) {
-	font-size: var(--md);
-	font-weight: bold;
-	color: $--white;
+  font-size  : var(--md);
+  font-weight: bold;
+  color      : $--white;
 }
+
 .order p span:nth-child(2) {
-	font-size: var(--sm);
-	color: $--morado-centro;
+  font-size: var(--sm);
+  color    : $--morado-centro;
 }
+
 .order p:nth-child(2) {
-	text-align: end;
-	font-weight: bold;
-	color: $--white;
+  text-align : end;
+  font-weight: bold;
+  color      : $--white;
 }
+
 .MyOrder {
-  width: 360px;
-  padding: 24px;
-  box-sizing: border-box;
-  position: fixed;
-  right: 0;
+  width           : 360px;
+  padding         : 24px;
+  box-sizing      : border-box;
+  position        : fixed;
+  right           : 0;
   background-color: white;
-  top: 60px;
-  bottom: 0;
-  border-radius: 6px;
-  border: 1px solid $--soft-green;
-  overflow-y: auto;
-  z-index: 1;
-  opacity: 0.99;
+  top             : 60px;
+  bottom          : 0;
+  border-radius   : 6px;
+  border          : 1px solid $--soft-green;
+  overflow-y      : auto;
+  z-index         : 1;
+  opacity         : 0.99;
 }
+
 .title-container {
   display: flex;
 }
+
 .MyOrder-container {
   position: sticky;
-  bottom: 0;
-  right: 0;
+  bottom  : 0;
+  right   : 0;
 }
+
 .title-container img {
-  transform: rotate(180deg);
+  transform   : rotate(180deg);
   margin-right: 14px;
 }
+
 .title {
-  font-size: $--lg;
+  font-size  : $--lg;
   font-weight: bold;
-  color: $--white;
-  align-self: center;
-  margin: 8px;
+  color      : $--white;
+  align-self : center;
+  margin     : 8px;
 }
 
 .paySubmitForm {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
+  display        : flex;
+  flex-flow      : column;
+  align-items    : center;
   justify-content: center;
+  row-gap        : 20px;
 }
 
 .pay-Button {
-  width: 100%;
+  width        : 60%;
   border-radius: 25px;
-  border: 1px solid $--morado-centro;
-  height: 50px;
-  background: $--morado-centro;
-  color: $--app-green;
-  font-size: 1.35rem;
-  cursor: pointer;
+  border       : 1px solid $--morado-centro;
+  height       : 50px;
+  background   : $--morado-centro;
+  color        : $--app-green;
+  font-size    : 1.35rem;
+  cursor       : pointer;
 }
 
 .pagoTitle {
@@ -112,14 +126,14 @@
 }
 
 .my-order-content {
-  height: 100%;
-  max-height: 100%;
-  display: flex;
+  height        : 100%;
+  max-height    : 100%;
+  display       : flex;
   flex-direction: column;
 }
 
 .my-orders {
- /*  overflow: scroll; */
+  /*  overflow: scroll; */
   max-height: 65%;
 }
 
@@ -128,64 +142,74 @@
 }
 
 .order {
-  display: flex;
-/*   grid-template-columns: auto 1fr;
-  gap: 16px; */
-  flex-flow: column;
-  align-items: center;
-  background-color: $--text-input-field;
-  margin-bottom: 24px;
-  border-radius: 8px;
-  padding: 0 24px;
+  display                   : flex;
+  /*   grid-template-columns: auto 1fr;
+  gap                       : 16px; */
+  flex-flow                 : column;
+  align-items               : center;
+  background-color          : $--text-input-field;
+  margin-bottom             : 24px;
+  border-radius             : 8px;
+  padding                   : 0 24px;
 }
+
 .order p:nth-child(1) {
-  display: flex;
+  display       : flex;
   flex-direction: column;
-  color: $--black;
+  color         : $--black;
 }
+
 .order p span:nth-child(1) {
-  font-size: $--md;
+  font-size  : $--md;
   font-weight: bold;
-  color: $--black;
+  color      : $--black;
 }
+
 .order p:nth-child(2) {
-  text-align: end;
+  text-align : end;
   font-weight: bold;
-  color: $--app-green;
+  color      : $--app-green;
 }
 
 .totalContainer {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    width: 100%;
+  display        : flex;
+  flex-flow      : row nowrap;
+  justify-content: space-between;
+  width          : 100%;
 }
 
 .primary-button {
-  background: $--hospital-green;
+  background   : $--hospital-green;
   border-radius: 8px;
-  border: none;
-  color: $--white;
-  width: 100%;
-  cursor: pointer;
-  font-size: $--md;
-  font-weight: bold;
-  height: 50px;
+  border       : none;
+  color        : $--white;
+  width        : 100%;
+  cursor       : pointer;
+  font-size    : $--md;
+  font-weight  : bold;
+  height       : 50px;
 }
+
 .terminosyCondiciones-container {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
+  display        : flex;
+  flex-flow      : row wrap;
+  align-items    : center;
   justify-content: center;
+  column-gap     : 10px;
 }
 
 .termsAndCondsTextContent {
- display: flex;
+  display: flex;
 }
 
 .termsAndCondLink {
-  color: $--morado-centro;
+  color : $--morado-centro;
   margin: 0 8px;
+  cursor: pointer;
+}
+
+.modaltitle {
+  margin-bottom: 20px;
 }
 
 @media (max-width: 640px) {

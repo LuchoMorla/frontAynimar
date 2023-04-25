@@ -1,17 +1,102 @@
-import '@styles/prueba.module.css'
 import { Button } from 'primereact/button';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+
+import '@styles/prueba.module.scss';
 
 export default function PaymentezDos({ userEmail, uId }) {
-
-  const [credencial, setCredencial] = React.useState({
+  const credencial = {
     environment: 'stg',
     application_code: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_CODE,
     application_key: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_KEY,
+  };
+  console.log({ credencial });
 
-  }
-  )
-  const RefButtonSubmit = React.useRef()
+  const [saveCardText, setSaveCardText] = useState('Save Card');
+  const [saveProcessing, setSaveProcessing] = useState(false);
+
+  let pg_sdk = null;
+
+  const get_tokenize_data = () => {
+    return {
+      locale: 'en',
+      user: {
+        id: uId,
+        email: userEmail,
+      },
+      configuration: {
+        default_country: 'COL',
+      },
+    };
+  };
+
+  const paymentForm = async () => {
+    try {
+      pg_sdk = new PaymentGateway(credencial.environment, credencial.application_code, credencial.application_key);
+      await pg_sdk.generate_tokenize(get_tokenize_data(), '#tokenize_example', onSuccess, onError);
+    } catch (err) {
+      console.log('PaymentForm Error: ', err);
+    }
+  };
+
+  useEffect(() => {
+    !saveProcessing && paymentForm();
+  }, [saveProcessing]);
+
+  const onSuccess = (response) => {
+    if (response?.error) {
+      toast.error(response.error?.type + '. \n' + response.error?.help);
+    } else if (response?.card) {
+      switch (response.card?.status) {
+        case 'valid':
+          toast.success('Charge succeeds');
+          break;
+        case 'pending':
+          toast.warning('Pending');
+          break;
+        case 'rejected':
+          toast.warning('Not Authorized or Rejected by Fraud System or Card in black list');
+          break;
+        case 'review':
+          toast.warning('Charge is under Review');
+      }
+    }
+    setSaveProcessing(false);
+    setSaveCardText('Save Card');
+  };
+
+  const onError = (message) => {
+    toast.error(`Not completed form: ${message}, Please fill required data`);
+    setSaveProcessing(false);
+    setSaveCardText('Save Card');
+  };
+
+  const handleSaveCard = async (event) => {
+    event?.preventDefault();
+    //toast.clear();
+    setSaveCardText('Processing...');
+    setSaveProcessing(true);
+    (await pg_sdk) && (await pg_sdk.tokenize());
+  };
+
+  return (
+    <main className="container mb-5 d-flex justify-content-center">
+      <div id="payment_example_div container">
+        <div id="tokenize_example" className="Card" style={{ margin: 'auto', width: 'fit-content', padding: '20px 0px' }}>
+          {' '}
+        </div>
+        <div className="w-fit mx-auto" style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+          <Button id="tokenize_btn" className="w-[100%]" onClick={handleSaveCard} disabled={saveProcessing}>
+            {saveCardText}
+          </Button>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+/*
+const RefButtonSubmit = React.useRef()
   const RefButtonRetry = React.useRef()
   const RefResponse = React.useRef()
   const [context, setContext] = React.useState()
@@ -76,17 +161,4 @@ export default function PaymentezDos({ userEmail, uId }) {
     }, 1900)
   }
 
-
-  return (
-    <main className="container mb-5 d-flex justify-content-center">
-
-      <div id='payment_example_div container'>
-        <div id='tokenize_example'></div>
-        <div id="response" ref={RefResponse}></div>
-        <Button id='tokenize_btn' ref={RefButtonSubmit} class='tok_btn'>Save card</Button>
-        <Button id='retry_btn' ref={RefButtonRetry} class='tok_btn container' display='none'>Save new card</Button>
-      </div>
-
-    </main>
-  )
-}
+*/

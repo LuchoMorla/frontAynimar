@@ -1,15 +1,17 @@
 const API = process.env.NEXT_PUBLIC_API_URL;
 const VERSION = process.env.NEXT_PUBLIC_API_VERSION;
 
+console.log({ API, VERSION });
+
 const endPoints = {
-  products:{
+  products: {
     getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
     postProducts: `${API}/api/${VERSION}/products/`,
     getProducts: (limit, offset) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}&price_min=0&price_max=10000000`,
     putProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
     deleteProduct: (id) => `${API}/api/${VERSION}/products/${id}`
   },
-  wastes:{
+  wastes: {
     getProducts: (limit, offset) => `${API}/api/${VERSION}/wastes?limit=${limit}&offset=${offset}&price_min=0&price_max=10000000`,
     postProducts: `${API}/api/${VERSION}/wastes/`,
     getProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,
@@ -19,7 +21,7 @@ const endPoints = {
   users: {
     getUser: (id) => `${API}/api/${VERSION}/users/${id}`,
     /* postUsers: `${API}/api/${VERSION}/users`, */
-  }, 
+  },
   recyclers: {
     getRecycler: (id) => `${API}/api/${VERSION}/recyclers/${id}`,
     postRecyclers: `${API}/api/${VERSION}/recyclers`,
@@ -42,7 +44,7 @@ const endPoints = {
     getOrderByUI: (id) => `${API}/api/${VERSION}/orders/userId/${id}`,
     getOrderByState: `${API}/api/${VERSION}/orders/user/state`,
     postOrder: `${API}/api/${VERSION}/orders`,
-    getItem: (id) =>`${API}/api/${VERSION}/orders/add-item/${id}`,
+    getItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
     postItem: `${API}/api/${VERSION}/orders/add-item`,
     editItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
     deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`
@@ -54,22 +56,22 @@ const endPoints = {
     changePassword: `${API}/api/${VERSION}/auth/change-password`/* ,
     profile: `${API}/api/${VERSION}/auth/profile` */
   },
-/*   categories:{
-    getCategories: `${API}/api/${VERSION}/categories`,
-    postCategories: `${API}/api/${VERSION}/categories`,
-    getCategoriesProduct: (id) => `${API}/api/${VERSION}/categories/${id}/products`,
-    putCategories: (id) => `${API}/api/${VERSION}/categories/${id}`,
-  },
-  wasteCategories:{
-    getCategories: `${API}/api/${VERSION}/waste-categories`,
-    postCategories: `${API}/api/${VERSION}/waste-categories`,
-    getCategoriesProduct: (id) => `${API}/api/${VERSION}/waste-categories/${id}/wastes`,
-    putCategories: (id) => `${API}/api/${VERSION}/waste-categories/${id}`,
-  },
-  files:{
-    postFiles: `${API}/api/${VERSION}/files/upload`,
-    getFiles: (fileName) => `${API}/api/${VERSION}/${fileName}`
-  } */
+  /*   categories:{
+      getCategories: `${API}/api/${VERSION}/categories`,
+      postCategories: `${API}/api/${VERSION}/categories`,
+      getCategoriesProduct: (id) => `${API}/api/${VERSION}/categories/${id}/products`,
+      putCategories: (id) => `${API}/api/${VERSION}/categories/${id}`,
+    },
+    wasteCategories:{
+      getCategories: `${API}/api/${VERSION}/waste-categories`,
+      postCategories: `${API}/api/${VERSION}/waste-categories`,
+      getCategoriesProduct: (id) => `${API}/api/${VERSION}/waste-categories/${id}/wastes`,
+      putCategories: (id) => `${API}/api/${VERSION}/waste-categories/${id}`,
+    },
+    files:{
+      postFiles: `${API}/api/${VERSION}/files/upload`,
+      getFiles: (fileName) => `${API}/api/${VERSION}/${fileName}`
+    } */
   profile: {
     orders: '',
     credits: '',

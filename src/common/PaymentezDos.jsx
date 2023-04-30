@@ -10,7 +10,6 @@ export default function PaymentezDos({ userEmail, uId }) {
     application_code: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_CODE,
     application_key: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_KEY,
   };
-  console.log({ credencial });
 
   const [saveCardText, setSaveCardText] = useState('Save Card');
   const [saveProcessing, setSaveProcessing] = useState(false);

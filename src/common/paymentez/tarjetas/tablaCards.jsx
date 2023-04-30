@@ -58,8 +58,6 @@ export default function TablaCards({ cards, uId, email }) {
   };
 
   const InitDebito = async (e) => {
-    console.log('CARD:=', e);
-
     const _card = {
       number: e.nombre,
       holder_name: e.holder_name,
@@ -74,25 +72,26 @@ export default function TablaCards({ cards, uId, email }) {
     const initReferencia = await Referencia(uId, email, order);
 
     const _reference = initReferencia?.data?.reference;
+
     /**Opcional pago con una referencia */
     //window.location.href = initReferencia.data.checkout_url;
     /************* */
 
     console.log('debit:', { uId }, { _card }, { _reference }, { order }, e.token);
+
     /***Debito con tarjeta de credito */
     const _debito = await Debito(uId, email, _card, _reference, order, e.token);
+
     /*****corregir autentificacion, api devuelte error 403 */
     console.log(_debito);
     if (_debito) {
       transactionIdState.setTransactionID(_debito?.data?.transaction?.id);
       setTransaction(_debito?.data?.transaction);
-      toast.info('Successfully!');
+      toast.info('Muchas gracias, Tu compra ah sido realizada con exito');
+    } else {
+      toast.error('Rejected: Trate más luego o con otra tarjeta');
     }
   };
-
-  useEffect(() => {
-    console.log('transaction:=', transaction);
-  }, [transaction]);
 
   const Acciones = (e) => {
     return (

@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react'; /* 
-import getAllCards from '../getAllCards'; */
+import React, { useState, useContext } from 'react';
+import getAllCards from '../getAllCards';
 import TablaCards from './tablaCards';
-import { getAllCards } from '@entities/cards';
+//import { getAllCards } from '@entities/cards';
 import { Button } from 'primereact/button';
 import TestContext from '@context/TestContext';
 import Refund from '../refund';
@@ -31,8 +31,6 @@ const Tarjetas = ({ userEmail, uId }) => {
 
   const handleRefund = async () => {
     const result = await Refund(t_id);
-
-    console.log('result:=', result);
 
     if (result?.success) {
       toast.success(result?.message);

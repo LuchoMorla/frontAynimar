@@ -19,11 +19,11 @@ export default async function Debito(uid, email, card, referencia, order, tokenC
       },
       "order": {
         // "amount": order.total,
-        "amount": 100.00,
+        "amount": 112.00,
         "description": "pozole",
-        "dev_reference": referencia,
-        "vat": 0.00,
-        "tax_percentage": 0.00
+        "dev_reference": "referencia",
+        "vat": 12.00,
+        "tax_percentage": 12.00
       },
       "card": {
         "token": tokenCard

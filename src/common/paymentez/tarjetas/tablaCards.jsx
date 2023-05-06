@@ -46,14 +46,13 @@ export default function TablaCards({ cards, uId, email }) {
         console.log({ eliminar });
 
         if (eliminar?.data?.message === 'card deleted') {
-          toast.success('Deleted Card Successfully!');
+          toast.success('Su tarjeta se eliminó con éxito.');
         } else {
-          toast.error('Card Not Found.');
+          toast.error('Tarjeta no encontrada.');
         }
       })
       .catch((err) => {
         console.log({ err });
-        toast.error('Error deleting card');
       });
   };
 

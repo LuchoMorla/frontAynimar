@@ -48,16 +48,16 @@ export default function PaymentezDos({ userEmail, uId }) {
     } else if (response?.card) {
       switch (response.card?.status) {
         case 'valid':
-          toast.success('Charge succeeds');
+          toast.success('Tu tarjeta ha sido añadida con éxito');
           break;
         case 'pending':
-          toast.warning('Pending');
+          toast.warning('Tu tarjeta está pendiente ahora.');
           break;
         case 'rejected':
-          toast.warning('Not Authorized or Rejected by Fraud System or Card in black list');
+          toast.warning('No autorizado. Vuelva a intentarlo más tarde o con otra tarjeta');
           break;
         case 'review':
-          toast.warning('Charge is under Review');
+          toast.warning('El cargo está bajo revisión');
       }
     }
     setSaveProcessing(false);
@@ -65,7 +65,7 @@ export default function PaymentezDos({ userEmail, uId }) {
   };
 
   const onError = (message) => {
-    toast.error(`Not completed form: ${message}, Please fill required data`);
+    console.log(`Not completed form: ${message}, Please fill required data`);
     setSaveProcessing(false);
     setSaveCardText('Save Card');
   };
@@ -73,7 +73,7 @@ export default function PaymentezDos({ userEmail, uId }) {
   const handleSaveCard = async (event) => {
     event?.preventDefault();
     //toast.clear();
-    setSaveCardText('Processing...');
+    setSaveCardText('Proceso...');
     setSaveProcessing(true);
     (await pg_sdk) && (await pg_sdk.tokenize());
   };

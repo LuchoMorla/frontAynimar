@@ -52,7 +52,6 @@ const Checkout = () => {
     const getUserEmail = async (id) => {
       const { data: fetch } = await axios.get(endPoints.users.getUser(id));
       const email = fetch.email;
-      console.log(email);
       setEmail(email);
     };
     getUserEmail(userId);

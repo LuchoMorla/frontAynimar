@@ -60,7 +60,14 @@ const Checkout = () => {
 
   // checkout
   const sumTotal = () => {
-    const reducer = (accumalator, currentValue) => accumalator + currentValue.price * currentValue.OrderProduct['amount'];
+    //const reducer = (accumalator, currentValue) => accumalator + currentValue.price * currentValue.OrderProduct['amount'];
+    const reducer = (accumalator, currentValue) => {
+      if (currentValue.price && currentValue.OrderProduct && currentValue.OrderProduct.amount) {
+        return accumalator + currentValue.price * currentValue.OrderProduct.amount;
+      } else {
+        return accumalator;
+      }
+    };
     const sum = state.cart.reduce(reducer, 0);
     return sum.toFixed(2);
   };

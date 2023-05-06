@@ -87,7 +87,9 @@ const CheckoutOrderItem = ({ product }) => {
         <label htmlFor="amountChanged" className={styles.label}>
           cantidad:
         </label>
-        <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct.amount} />
+        {/* <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct.amount} /> */}
+        <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct?.amount || 0} />
+
         {buttonOpen == true ? (
           <button className={styles.updateButton} onClick={() => actualizarCantidad(dataAmount)}>
             <Image src={actualizarImg} width={25} height={25} alt="Actualizar cantidad | update amount" />
@@ -97,7 +99,7 @@ const CheckoutOrderItem = ({ product }) => {
 
       <p>{screen.width <= 660 ? `P/u $${product?.price}` : `Precio/unidad $${product?.price}`}</p>
 
-      <p>${(product?.price * product?.OrderProduct.amount).toFixed(2)}</p>
+      <p>${(product?.price * product?.OrderProduct?.amount).toFixed(2)}</p>
 
       <Image className={styles['more-clickable-area']} src={close} alt="close" width={20} height={20} onClick={() => handleRemove(product)} />
     </div>

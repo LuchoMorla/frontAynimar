@@ -116,7 +116,7 @@ export default function TablaCards({ cards, uId, email }) {
         <Column field="estado" header="Estado"></Column>
         <Column field="estado" body={Acciones} header="Acciones"></Column>
       </DataTable>
-      <TransactionList transaction={transaction} />
+      {/* <TransactionList transaction={transaction} /> */}
     </div>
   );
 }

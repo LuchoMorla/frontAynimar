@@ -7,13 +7,11 @@ import Referencia from '../reference';
 import Debito from '../debitCard';
 import { toast } from 'react-toastify';
 import TestContext from '@context/TestContext';
-import TransactionList from '@containers/TransactionList';
+import { sendTransaction } from '@services/api/entities/transaction';
 
 export default function TablaCards({ cards, uId, email }) {
   const orderState = useContext(TestContext);
   const transactionIdState = useContext(TestContext);
-
-  const [transaction, setTransaction] = useState(null);
 
   const [listCards, setList] = useState([
     {
@@ -85,7 +83,12 @@ export default function TablaCards({ cards, uId, email }) {
     console.log(_debito);
     if (_debito) {
       transactionIdState.setTransactionID(_debito?.data?.transaction?.id);
-      setTransaction(_debito?.data?.transaction);
+      const data = {
+        customerId: order?.customerId,
+        orderId: order?.id,
+        transactionId: _debito?.data?.transaction?.id,
+      };
+      sendTransaction(data);
       toast.info('Muchas gracias, Tu compra ah sido realizada con exito');
     } else {
       toast.error('Rejected: Trate más luego o con otra tarjeta');

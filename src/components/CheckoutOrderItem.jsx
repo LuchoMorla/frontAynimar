@@ -46,7 +46,7 @@ const CheckoutOrderItem = ({ product }) => {
     const itemId = orderProduct.id;
     const data = {
       itemId: itemId,
-      amount: parseInt(amountInt),
+      amount: amountInt ? parseInt(amountInt) : 0,
       productId: product.id,
       orderId: orderProduct.orderId,
     };

@@ -135,6 +135,15 @@
 .my-orders {
   /*  overflow: scroll; */
   max-height: 65%;
+  overflow-y: auto;
+
+  table {
+    width: 100%;
+
+    tr {
+      line-height: 3rem;
+    }
+  }
 }
 
 .my-orders::-webkit-scrollbar {

@@ -107,9 +107,14 @@ const Checkout = () => {
             <h1 className={styles.title}>Verificacion | Checkout</h1>
             <div className={styles['Checkout-content']}>
               <div /* ref={actualizarSumTotal} onChange={() => sumTotal()} */ className={styles['my-orders']}>
-                {state.cart.map((product) => (
-                  <CheckOrderItem product={product} key={`orderItem-${product.id}`} />
-                ))}
+                <table>
+                  <tbody>
+                    {state.cart.map((product) => (
+                      <CheckOrderItem product={product} key={`orderItem-${product.id}`} />
+                    ))}
+                  </tbody>
+                </table>
+
               </div>
               <div className={styles.order}>
                 <div className={styles.totalContainer}>

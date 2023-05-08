@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import '@styles/prueba.module.scss';
-let pg_sdk = null;
 
 export default function PaymentezDos({ userEmail, uId }) {
+  let pg_sdk = null;
+
   const credencial = {
     environment: 'stg',
     application_code: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_CODE,
@@ -17,13 +18,13 @@ export default function PaymentezDos({ userEmail, uId }) {
 
   const get_tokenize_data = () => {
     return {
-      locale: 'en',
+      locale: 'es',
       user: {
         id: uId,
         email: userEmail,
       },
       configuration: {
-        default_country: 'COL',
+        default_country: 'ECU',
       },
     };
   };

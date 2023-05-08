@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import '@styles/prueba.module.scss';
+let pg_sdk = null;
 
 export default function PaymentezDos({ userEmail, uId }) {
   const credencial = {
@@ -12,9 +13,7 @@ export default function PaymentezDos({ userEmail, uId }) {
   };
 
   const [saveCardText, setSaveCardText] = useState('Save Card');
-  const [saveProcessing, setSaveProcessing] = useState(false);
-
-  let pg_sdk = null;
+  const [saveProcessing, setProcessing] = useState(false);
 
   const get_tokenize_data = () => {
     return {
@@ -29,18 +28,28 @@ export default function PaymentezDos({ userEmail, uId }) {
     };
   };
 
+  useEffect(() => {
+    paymentForm();
+  }, []);
+
+  useEffect(() => {
+    !saveProcessing && retrySubmit();
+  }, [saveProcessing]);
+
   const paymentForm = async () => {
     try {
       pg_sdk = new PaymentGateway(credencial.environment, credencial.application_code, credencial.application_key);
       await pg_sdk.generate_tokenize(get_tokenize_data(), '#tokenize_example', onSuccess, onError);
     } catch (err) {
       console.log('PaymentForm Error: ', err);
+      setProcessing(false);
+      setSaveCardText('Save Card');
     }
   };
 
-  useEffect(() => {
-    !saveProcessing && paymentForm();
-  }, [saveProcessing]);
+  const retrySubmit = async () => {
+    pg_sdk && (await pg_sdk.generate_tokenize(get_tokenize_data(), '#tokenize_example', onSuccess, onError));
+  };
 
   const onSuccess = (response) => {
     if (response?.error) {
@@ -60,30 +69,32 @@ export default function PaymentezDos({ userEmail, uId }) {
           toast.warning('El cargo está bajo revisión');
       }
     }
-    setSaveProcessing(false);
+    setProcessing(false);
     setSaveCardText('Save Card');
   };
 
   const onError = (message) => {
     console.log(`Not completed form: ${message}, Please fill required data`);
-    setSaveProcessing(false);
+    setProcessing(false);
     setSaveCardText('Save Card');
   };
 
   const handleSaveCard = async (event) => {
     event?.preventDefault();
-    //toast.clear();
-    setSaveCardText('Proceso...');
-    setSaveProcessing(true);
-    (await pg_sdk) && (await pg_sdk.tokenize());
+
+    if (pg_sdk) {
+      pg_sdk?.tokenize();
+      setSaveCardText('Proceso...');
+      setProcessing(true);
+    } else {
+      retrySubmit();
+    }
   };
 
   return (
     <main className="container mb-5 d-flex justify-content-center">
-      <div id="payment_example_div container">
-        <div id="tokenize_example" className="Card" style={{ margin: 'auto', width: 'fit-content', padding: '20px 0px' }}>
-          {' '}
-        </div>
+      <div id="payment_example_div" className="container">
+        <div id="tokenize_example" className="Card" style={{ margin: 'auto', width: 'fit-content', padding: '20px 0px' }}></div>
         <div className="w-fit mx-auto" style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
           <Button id="tokenize_btn" className="w-[100%]" onClick={handleSaveCard} disabled={saveProcessing}>
             {saveCardText}

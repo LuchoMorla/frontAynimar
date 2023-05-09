@@ -83,12 +83,16 @@ export default function PaymentezDos({ userEmail, uId }) {
   const handleSaveCard = async (event) => {
     event?.preventDefault();
 
-    if (pg_sdk) {
-      pg_sdk?.tokenize();
-      setSaveCardText('Proceso...');
-      setProcessing(true);
-    } else {
-      retrySubmit();
+    try {
+      if (pg_sdk) {
+        pg_sdk?.tokenize();
+        setSaveCardText('Proceso...');
+        setProcessing(true);
+      } else {
+        retrySubmit();
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 

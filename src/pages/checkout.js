@@ -52,7 +52,6 @@ const Checkout = () => {
     const getUserEmail = async (id) => {
       const { data: fetch } = await axios.get(endPoints.users.getUser(id));
       const email = fetch.email;
-      console.log(email);
       setEmail(email);
     };
     getUserEmail(userId);
@@ -60,7 +59,14 @@ const Checkout = () => {
 
   // checkout
   const sumTotal = () => {
-    const reducer = (accumalator, currentValue) => accumalator + currentValue.price * currentValue.OrderProduct['amount'];
+    //const reducer = (accumalator, currentValue) => accumalator + currentValue.price * currentValue.OrderProduct['amount'];
+    const reducer = (accumalator, currentValue) => {
+      if (currentValue.price && currentValue.OrderProduct && currentValue.OrderProduct.amount) {
+        return accumalator + currentValue.price * currentValue.OrderProduct.amount;
+      } else {
+        return accumalator;
+      }
+    };
     const sum = state.cart.reduce(reducer, 0);
     return sum.toFixed(2);
   };
@@ -68,33 +74,6 @@ const Checkout = () => {
   const openModalHandler = async (event) => {
     event.preventDefault();
 
-    /*     const contenido = {
-          user: {
-            id: '117',
-            email: 'info@dbdturismo.com',
-            name: 'Erick',
-            last_name: 'Guillen',
-          },
-          order: {
-            dev_reference: '1',
-            description: 'Product test',
-            amount: 1,
-            taxable_amount: 0,
-            tax_percentage: 0,
-            vat: 0,
-            installments_type: 0,
-            currency: 'USD',
-          },
-          configuration: {
-            partial_payment: true,
-            expiration_days: 1,
-            allowed_payment_methods: ['Card'],
-            success_url: 'https://url-to-success.com',
-            failure_url: 'https://url-to-failure.com',
-            pending_url: 'https://url-to-pending.com',
-            review_url: 'https://url-to-review.com',
-          },
-        }; */
     const formData = new FormData(refValidation.current);
     const data = {
       terminosYCondiciones: formData.get('termsAndConds'),
@@ -128,9 +107,14 @@ const Checkout = () => {
             <h1 className={styles.title}>Verificacion | Checkout</h1>
             <div className={styles['Checkout-content']}>
               <div /* ref={actualizarSumTotal} onChange={() => sumTotal()} */ className={styles['my-orders']}>
-                {state.cart.map((product) => (
-                  <CheckOrderItem product={product} key={`orderItem-${product.id}`} />
-                ))}
+                <table>
+                  <tbody>
+                    {state.cart.map((product) => (
+                      <CheckOrderItem product={product} key={`orderItem-${product.id}`} />
+                    ))}
+                  </tbody>
+                </table>
+
               </div>
               <div className={styles.order}>
                 <div className={styles.totalContainer}>
@@ -162,11 +146,11 @@ const Checkout = () => {
                 <div className={styles['terminosyCondiciones-container']}>
                   <input type="checkbox" name="termsAndConds" id="termsAndConds" />
                   <p className={styles.termsAndCondsTextContent}>
-                    he leído y acepto los{' '}
-                    <Link href="/terminosYCondiciones" className={styles.termsAndCondLink} passHref>
-                      <p className={styles.termsAndCondLink}>términos y condiciones</p>
-                    </Link>
+                    he leído y acepto los
                   </p>
+                  <Link href="/terminosYCondiciones" className={styles.termsAndCondLink} passHref>
+                    <p className={styles.termsAndCondLink}>términos y condiciones</p>
+                  </Link>
                 </div>
                 <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
                 <button className={styles['pay-Button']} type="submit">
@@ -188,3 +172,33 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+
+
+/*     const contenido = {
+          user: {
+            id: '117',
+            email: 'info@dbdturismo.com',
+            name: 'Erick',
+            last_name: 'Guillen',
+          },
+          order: {
+            dev_reference: '1',
+            description: 'Product test',
+            amount: 1,
+            taxable_amount: 0,
+            tax_percentage: 0,
+            vat: 0,
+            installments_type: 0,
+            currency: 'USD',
+          },
+          configuration: {
+            partial_payment: true,
+            expiration_days: 1,
+            allowed_payment_methods: ['Card'],
+            success_url: 'https://url-to-success.com',
+            failure_url: 'https://url-to-failure.com',
+            pending_url: 'https://url-to-pending.com',
+            review_url: 'https://url-to-review.com',
+          },
+        }; */

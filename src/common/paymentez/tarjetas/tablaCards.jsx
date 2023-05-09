@@ -7,13 +7,11 @@ import Referencia from '../reference';
 import Debito from '../debitCard';
 import { toast } from 'react-toastify';
 import TestContext from '@context/TestContext';
-import TransactionList from '@containers/TransactionList';
+import { sendTransaction } from '@services/api/entities/transaction';
 
 export default function TablaCards({ cards, uId, email }) {
   const orderState = useContext(TestContext);
   const transactionIdState = useContext(TestContext);
-
-  const [transaction, setTransaction] = useState(null);
 
   const [listCards, setList] = useState([
     {
@@ -46,20 +44,17 @@ export default function TablaCards({ cards, uId, email }) {
         console.log({ eliminar });
 
         if (eliminar?.data?.message === 'card deleted') {
-          toast.success('Deleted Card Successfully!');
+          toast.success('Su tarjeta se eliminó con éxito.');
         } else {
-          toast.error('Card Not Found.');
+          toast.error('Tarjeta no encontrada.');
         }
       })
       .catch((err) => {
         console.log({ err });
-        toast.error('Error deleting card');
       });
   };
 
   const InitDebito = async (e) => {
-    console.log('CARD:=', e);
-
     const _card = {
       number: e.nombre,
       holder_name: e.holder_name,
@@ -74,25 +69,31 @@ export default function TablaCards({ cards, uId, email }) {
     const initReferencia = await Referencia(uId, email, order);
 
     const _reference = initReferencia?.data?.reference;
+
     /**Opcional pago con una referencia */
     //window.location.href = initReferencia.data.checkout_url;
     /************* */
 
     console.log('debit:', { uId }, { _card }, { _reference }, { order }, e.token);
+
     /***Debito con tarjeta de credito */
     const _debito = await Debito(uId, email, _card, _reference, order, e.token);
+
     /*****corregir autentificacion, api devuelte error 403 */
     console.log(_debito);
     if (_debito) {
       transactionIdState.setTransactionID(_debito?.data?.transaction?.id);
-      setTransaction(_debito?.data?.transaction);
-      toast.info('Successfully!');
+      const data = {
+        customerId: order?.customerId,
+        orderId: order?.id,
+        transactionId: _debito?.data?.transaction?.id,
+      };
+      sendTransaction(data);
+      toast.info('Muchas gracias, Tu compra ah sido realizada con exito');
+    } else {
+      toast.error('Rejected: Trate más luego o con otra tarjeta');
     }
   };
-
-  useEffect(() => {
-    console.log('transaction:=', transaction);
-  }, [transaction]);
 
   const Acciones = (e) => {
     return (
@@ -118,7 +119,7 @@ export default function TablaCards({ cards, uId, email }) {
         <Column field="estado" header="Estado"></Column>
         <Column field="estado" body={Acciones} header="Acciones"></Column>
       </DataTable>
-      <TransactionList transaction={transaction} />
+      {/* <TransactionList transaction={transaction} /> */}
     </div>
   );
 }

@@ -46,7 +46,7 @@ const CheckoutOrderItem = ({ product }) => {
     const itemId = orderProduct.id;
     const data = {
       itemId: itemId,
-      amount: parseInt(amountInt),
+      amount: amountInt ? parseInt(amountInt) : 0,
       productId: product.id,
       orderId: orderProduct.orderId,
     };
@@ -76,31 +76,42 @@ const CheckoutOrderItem = ({ product }) => {
   };
 
   return (
-    <div className={styles.OrderItem}>
-      <figure>
-        <Image src={product?.image} width={30} height={30} alt={product?.title} />
-      </figure>
+    <tr className={styles.OrderItem}>
+      <td>
+        <figure>
+          <Image src={product?.image} width={30} height={30} alt={product?.title} />
+        </figure>
+      </td>
+      <td>
+        <p>{product?.name}</p>
+      </td>
+      <td>
+        <div ref={divRef} onChange={() => changeAmountOfItem(product)}>
+          <label htmlFor="amountChanged" className={styles.label}>
+            cantidad:
+          </label>
+          {/* <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct.amount} /> */}
+          <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct?.amount || 0} />
 
-      <p>{product?.name}</p>
-
-      <div ref={divRef} onChange={() => changeAmountOfItem(product)}>
-        <label htmlFor="amountChanged" className={styles.label}>
-          cantidad:
-        </label>
-        <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct.amount} />
-        {buttonOpen == true ? (
-          <button className={styles.updateButton} onClick={() => actualizarCantidad(dataAmount)}>
-            <Image src={actualizarImg} width={25} height={25} alt="Actualizar cantidad | update amount" />
-          </button>
-        ) : null}
-      </div>
-
-      <p>{screen.width <= 660 ? `P/u $${product?.price}` : `Precio/unidad $${product?.price}`}</p>
-
-      <p>${(product?.price * product?.OrderProduct.amount).toFixed(2)}</p>
-
-      <Image className={styles['more-clickable-area']} src={close} alt="close" width={20} height={20} onClick={() => handleRemove(product)} />
-    </div>
+          {buttonOpen == true ? (
+            <button className={styles.updateButton} onClick={() => actualizarCantidad(dataAmount)}>
+              <Image src={actualizarImg} width={25} height={25} alt="Actualizar cantidad | update amount" />
+            </button>
+          ) : null}
+        </div>
+      </td>
+      <td>
+        <p>
+          {screen.width <= 660 ? `P/u ` : `Precio/unidad `}${product?.price.toFixed(2)}
+        </p>
+      </td>
+      <td>
+        <p>${(product?.price * (product?.OrderProduct?.amount ? product?.OrderProduct?.amount : 0)).toFixed(2)}</p>
+      </td>
+      <td>
+        <Image className={styles['more-clickable-area']} src={close} alt="close" width={20} height={20} onClick={() => handleRemove(product)} />
+      </td>
+    </tr>
   );
 };
 

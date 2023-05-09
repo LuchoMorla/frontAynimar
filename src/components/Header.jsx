@@ -18,39 +18,17 @@ import styles from '@styles/Header.module.scss';
 import TestContext from '@context/TestContext';
 
 const Header = () => {
-  /* 	const [toggle, setToggle] = useState(false); */
-  /* 	const [toggleOrders, setToggleOrders] = useState(false); */
-  /* 	const { state } = useContext(AppContext); */
-  const [token, setToken] = useState(null); /* ,
-		[logged, setLogged] = useState(false) */
-
+  const [token, setToken] = useState(null);
   const orderState = useContext(TestContext);
   const hola = useAuth();
   if (!token) {
     hola.getAuth();
     setToken('haveToken');
-    /* 		if(!cookie) {
-			throw error;
-		}
-		if (cookie == true) {
-
-			setLogged(true);
-		} */
   }
 
   const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
-  /* 	const handleToggle = () => {
-		setToggle(!toggle);
-	}; */
-  /* 	const auth = useAuth();
-	const userData = {
-		id: auth?.user?.id,
-		email: auth?.user?.email,
-		role: auth?.user?.role
-	} */
 
   const fetchOrders = async () => {
-    /* Funccion en la que agregamos los productos que estan en el carrito */
     if (state.cart.length <= 0) {
       const { data: getOrder } = await axios.get(endPoints.orders.getOrderByState, { params: { state: 'carrito' } });
       orderState.setOrder(getOrder);
@@ -67,15 +45,19 @@ const Header = () => {
       }
     }
   };
-  useEffect(async () => {
-    try {
-      await fetchOrders();
-    } catch (error) {
-      console.log(error);
-      if (error.status == 401) {
-        console.log('funciono doble CATCH Luis, campuramos el error 401 mira-> ' + error.status + ` y  tambien el mensaje es ${error.message}`);
+
+  useEffect(() => {
+    const fetchMyOrders = async () => {
+      try {
+        await fetchOrders();
+      } catch (error) {
+        console.log(error);
+        if (error.status == 401) {
+          console.log('funciono doble CATCH Luis, campuramos el error 401 mira-> ' + error.status + ` y  tambien el mensaje es ${error.message}`);
+        }
       }
-    }
+    };
+    fetchMyOrders();
   }, [endPoints.orders.getOrderByState]);
 
   return (
@@ -112,13 +94,7 @@ const Header = () => {
             </li>
           </ul>
         </div>
-        {/* 			<div>
-				{
-				 logged == true ? <p>
-					iniciar session
-					</p> : null
-				}
-			</div> */}
+
         <div className={styles['navbar-right']}>
           <ul>
             <li className={styles['navbar-selling-cart']} onClick={() => togglePayment()} aria-hidden="true">
@@ -136,6 +112,7 @@ const Header = () => {
         </div>
         {state.menuIsOpen && <Menu />}
       </nav>
+
       {state.orderIsOpen && <MyOrder />}
       {state.paymentIsOpen && <MyPayment />}
     </>

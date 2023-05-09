@@ -5,30 +5,37 @@ import { toast } from 'react-toastify';
 import '@styles/prueba.module.scss';
 
 export default function PaymentezDos({ userEmail, uId }) {
+  let pg_sdk = null;
+
   const credencial = {
     environment: 'stg',
     application_code: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_CODE,
     application_key: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_KEY,
   };
-  console.log({ credencial });
 
   const [saveCardText, setSaveCardText] = useState('Save Card');
-  const [saveProcessing, setSaveProcessing] = useState(false);
-
-  let pg_sdk = null;
+  const [saveProcessing, setProcessing] = useState(false);
 
   const get_tokenize_data = () => {
     return {
-      locale: 'en',
+      locale: 'es',
       user: {
         id: uId,
         email: userEmail,
       },
       configuration: {
-        default_country: 'COL',
+        default_country: 'ECU',
       },
     };
   };
+
+  useEffect(() => {
+    paymentForm();
+  }, []);
+
+  useEffect(() => {
+    !saveProcessing && retrySubmit();
+  }, [saveProcessing]);
 
   const paymentForm = async () => {
     try {
@@ -36,12 +43,14 @@ export default function PaymentezDos({ userEmail, uId }) {
       await pg_sdk.generate_tokenize(get_tokenize_data(), '#tokenize_example', onSuccess, onError);
     } catch (err) {
       console.log('PaymentForm Error: ', err);
+      setProcessing(false);
+      setSaveCardText('Save Card');
     }
   };
 
-  useEffect(() => {
-    !saveProcessing && paymentForm();
-  }, [saveProcessing]);
+  const retrySubmit = async () => {
+    pg_sdk && (await pg_sdk.generate_tokenize(get_tokenize_data(), '#tokenize_example', onSuccess, onError));
+  };
 
   const onSuccess = (response) => {
     if (response?.error) {
@@ -49,42 +58,48 @@ export default function PaymentezDos({ userEmail, uId }) {
     } else if (response?.card) {
       switch (response.card?.status) {
         case 'valid':
-          toast.success('Charge succeeds');
+          toast.success('Tu tarjeta ha sido añadida con éxito');
           break;
         case 'pending':
-          toast.warning('Pending');
+          toast.warning('Tu tarjeta está pendiente ahora.');
           break;
         case 'rejected':
-          toast.warning('Not Authorized or Rejected by Fraud System or Card in black list');
+          toast.warning('No autorizado. Vuelva a intentarlo más tarde o con otra tarjeta');
           break;
         case 'review':
-          toast.warning('Charge is under Review');
+          toast.warning('El cargo está bajo revisión');
       }
     }
-    setSaveProcessing(false);
+    setProcessing(false);
     setSaveCardText('Save Card');
   };
 
   const onError = (message) => {
-    toast.error(`Not completed form: ${message}, Please fill required data`);
-    setSaveProcessing(false);
+    console.log(`Not completed form: ${message}, Please fill required data`);
+    setProcessing(false);
     setSaveCardText('Save Card');
   };
 
   const handleSaveCard = async (event) => {
     event?.preventDefault();
-    //toast.clear();
-    setSaveCardText('Processing...');
-    setSaveProcessing(true);
-    (await pg_sdk) && (await pg_sdk.tokenize());
+
+    try {
+      if (pg_sdk) {
+        pg_sdk?.tokenize();
+        setSaveCardText('Proceso...');
+        setProcessing(true);
+      } else {
+        retrySubmit();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <main className="container mb-5 d-flex justify-content-center">
-      <div id="payment_example_div container">
-        <div id="tokenize_example" className="Card" style={{ margin: 'auto', width: 'fit-content', padding: '20px 0px' }}>
-          {' '}
-        </div>
+      <div id="payment_example_div" className="container">
+        <div id="tokenize_example" className="Card" style={{ margin: 'auto', width: 'fit-content', padding: '20px 0px' }}></div>
         <div className="w-fit mx-auto" style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
           <Button id="tokenize_btn" className="w-[100%]" onClick={handleSaveCard} disabled={saveProcessing}>
             {saveCardText}

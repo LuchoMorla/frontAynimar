@@ -8,6 +8,7 @@ import Debito from '../debitCard';
 import { toast } from 'react-toastify';
 import TestContext from '@context/TestContext';
 import { sendTransaction } from '@services/api/entities/transaction';
+import { updateOrder } from '@services/api/entities/updateOrder';
 
 export default function TablaCards({ cards, uId, email }) {
   const orderState = useContext(TestContext);
@@ -66,6 +67,11 @@ export default function TablaCards({ cards, uId, email }) {
 
     const order = orderState.order;
 
+    if (order === null) {
+      toast.warning('No hay lista de pedidos');
+      return;
+    }
+
     const initReferencia = await Referencia(uId, email, order);
 
     const _reference = initReferencia?.data?.reference;
@@ -95,7 +101,11 @@ export default function TablaCards({ cards, uId, email }) {
         paymentStatus: status,
         authorizationCode: authorization_code,
       };
-      sendTransaction(data);
+      const res = await sendTransaction(data);
+      if (res?.data?.paymentStatus === 'success') {
+        //update order  => pagada
+        updateOrder(order?.id, { state: 'pagada' });
+      }
       toast.info('Muchas gracias, Tu compra ah sido realizada con exito');
     } else {
       toast.error('Rejected: Trate más luego o con otra tarjeta');

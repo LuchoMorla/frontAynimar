@@ -45,7 +45,8 @@ const endPoints = {
     getItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
     postItem: `${API}/api/${VERSION}/orders/add-item`,
     editItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
-    deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`
+    deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
+    updateOrder: (id) => `${API}/api/${VERSION}/orders/${id}`
   },
   transaction: {
     debits: `${API}/api/${VERSION}/debits/`,

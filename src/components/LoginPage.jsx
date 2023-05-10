@@ -74,6 +74,7 @@ export default function LoginPage() {
           </button>
         </form>
         <Link href="/forgotPassword">Olvide mi Contraseña</Link>
+        <Link href="/signInCustomer">No tengo cuenta, ir a Registrarse</Link>
       </div>
     </div>
   );

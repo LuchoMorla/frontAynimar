@@ -9,9 +9,9 @@ const MostrarOrders = ({ order }) => {
 			<div className={styles['product-info']}>
 				<div>
 					<p>Orden-{order.id}</p>
-					<p>total de la orden: ${order.total / 100}</p>
+					<p>Total de la orden: ${order.total / 100}</p>
 					<p>Estado: {order.state == 'carrito' ? 'En caja' : 'Pagada'}</p>
-					<p>#Productos: {order.items ? order.items.length : order.items}</p>
+					<p>Productos: {order.items ? order.items.length : order.items}</p>
 				</div>
 			</div>
 		</div>

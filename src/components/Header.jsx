@@ -4,13 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Menu from '@components/Menu';
 import NavMenu from '@components/NavMenu';
-import MyOrder from '@containers/MyOrder';
-import MyPayment from '@containers/MyPayment';
+import MyOrder from '@containers/MyOrder';/* 
+import MyPayment from '@containers/MyPayment'; */
 import menu from '@icons/icon_menu.svg';
 import logo from '@logos/logo-Aynimar.svg';
 import AppContext from '@context/AppContext';
-import shoppingCart from '@icons/icon_shopping_cart.svg';
-import sellingCart from '@icons/reciclando.svg';
+import shoppingCart from '@icons/icon_shopping_cart.svg';/* 
+import sellingCart from '@icons/reciclando.svg'; */
 import userIcon from '@icons/user-icon-ecologist.svg';
 import endPoints from '@services/api/index';
 import axios from 'axios';
@@ -26,7 +26,7 @@ const Header = () => {
     setToken('haveToken');
   }
 
-  const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
+  const { state, getCart, toggleOrder, toggleMenu, /* togglePayment, */ toggleNavMenu } = useContext(AppContext);
 
   const fetchOrders = async () => {
     if (state.cart.length <= 0) {
@@ -80,9 +80,9 @@ const Header = () => {
             <li>
               <Link href="/">Home</Link>
             </li>
-            <li>
+{/*             <li>
               <Link href="/recycling">Reciclar</Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/store">Tienda</Link>
             </li>
@@ -97,10 +97,10 @@ const Header = () => {
 
         <div className={styles['navbar-right']}>
           <ul>
-            <li className={styles['navbar-selling-cart']} onClick={() => togglePayment()} aria-hidden="true">
+            {/* <li className={styles['navbar-selling-cart']} onClick={() => togglePayment()} aria-hidden="true">
               <Image className={(styles['more-clickable-area'], styles.pointer)} src={sellingCart} alt="selling to recicler cart" />
               {state.metacircle.length > 0 ? <div>{state.metacircle.length}</div> : null}
-            </li>
+            </li> */}
             <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
               <Image src={userIcon} width={50} height={40} alt="user icon menu" />
             </li>
@@ -112,9 +112,8 @@ const Header = () => {
         </div>
         {state.menuIsOpen && <Menu />}
       </nav>
-
-      {state.orderIsOpen && <MyOrder />}
-      {state.paymentIsOpen && <MyPayment />}
+      {state.orderIsOpen && <MyOrder />}{/* 
+      {state.paymentIsOpen && <MyPayment />} */}
     </>
   );
 };

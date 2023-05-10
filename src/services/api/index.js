@@ -47,6 +47,9 @@ const endPoints = {
     editItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
     deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`
   },
+  transaction: {
+    debits: `${API}/api/${VERSION}/debits/`,
+  },
   auth: {
     login: `${API}/api/${VERSION}/auth/login`,
     autoLogin: `${API}/api/${VERSION}/auth/auto-login`,

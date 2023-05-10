@@ -1,9 +1,19 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import endPoints from '@services/api/';
 
-const AuthContext = createContext();
+export const defaultValue = {
+  user: null,
+  signIn: () => { },
+  autoSignIn: () => { },
+  recovery: () => { },
+  changePassword: () => { },
+  logout: () => { },
+  getAuth: () => { }
+};
+
+const AuthContext = createContext(defaultValue);
 
 export function ProviderAuth({ children }) {
   const auth = useProviderAuth();
@@ -17,9 +27,13 @@ export const useAuth = () => {
 function useProviderAuth() {
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    console.log("==========", { user }, "================");
+  }, [user]);
+
   const getAuth = async () => {
-      const token = Cookie.get('token');
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
+    const token = Cookie.get('token');
+    axios.defaults.headers.Authorization = `Bearer ${token}`;
   };
 
   const signIn = async (email, password) => {
@@ -90,24 +104,24 @@ function useProviderAuth() {
     }
   };
 
-      /* Implementación del Logout */
-      const logout = async () => {
-        window.localStorage.removeItem('pi');
-        window.localStorage.removeItem('oi');
-        Cookie.remove('token');
-        setUser(null);
-        delete axios.defaults.headers.Autorization;
-        window.location.href = '/login';
-      };
+  /* Implementación del Logout */
+  const logout = async () => {
+    window.localStorage.removeItem('pi');
+    window.localStorage.removeItem('oi');
+    Cookie.remove('token');
+    setUser(null);
+    delete axios.defaults.headers.Autorization;
+    window.location.href = '/login';
+  };
 
 
   return {
-    user,
-    signIn,
-    autoSignIn,
-    recovery,
-    changePassword,
-    logout,
-    getAuth
+    user: user,
+    signIn: signIn,
+    autoSignIn: autoSignIn,
+    recovery: recovery,
+    changePassword: changePassword,
+    logout: logout,
+    getAuth: getAuth
   };
 }

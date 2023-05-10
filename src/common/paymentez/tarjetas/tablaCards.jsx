@@ -81,12 +81,19 @@ export default function TablaCards({ cards, uId, email }) {
 
     /*****corregir autentificacion, api devuelte error 403 */
     console.log(_debito);
+
+    const { id, amount, payment_date, status, authorization_code } = _debito?.data?.transaction;
+
     if (_debito) {
       transactionIdState.setTransactionID(_debito?.data?.transaction?.id);
       const data = {
         customerId: order?.customerId,
         orderId: order?.id,
-        transactionId: _debito?.data?.transaction?.id,
+        transactionId: id,
+        amount: amount,
+        paymentDate: payment_date,
+        paymentStatus: status,
+        authorizationCode: authorization_code,
       };
       sendTransaction(data);
       toast.info('Muchas gracias, Tu compra ah sido realizada con exito');

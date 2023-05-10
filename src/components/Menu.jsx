@@ -9,7 +9,7 @@ const Menu = () => {
 		<div className={styles.Menu}>
 			<ul>
 				<li>
-					<Link href="/" className="title">Mis Ordenes</Link>
+					<Link href="/mi_cuenta/orders" className="title">Mis Ordenes</Link>
 				</li>
 				<li>
 					<Link href="/mi_cuenta">Mi Cuenta</Link>

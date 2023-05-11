@@ -28,8 +28,8 @@ export default async function Referencia(uid, email, order) {
                 'Content-Type': 'application/json',
                 'Auth-Token': auth_token
             }
-        });
-        console.log("final fetch", referencia);
+        });/* 
+        console.log("final fetch", referencia); */
         return referencia;
 
     } catch (error) {

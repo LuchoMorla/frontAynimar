@@ -25,10 +25,10 @@ async function getAllCardsMetod (idP) {
     }
   };
   await axios.get(urlrefund, config)
-    .then(response => {
+/*     .then(response => {
       console.log(response.data);
       console.log(response.dataResponse);
-    })
+    }) */
     .catch(error => {
       console.error(error);
     });

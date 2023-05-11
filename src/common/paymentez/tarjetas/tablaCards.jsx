@@ -41,8 +41,8 @@ export default function TablaCards({ cards, uId, email }) {
 
   const eliminarCard = (token) => {
     deleteCard(token, uId)
-      .then((eliminar) => {
-        console.log({ eliminar });
+      .then((eliminar) => {/* 
+        console.log({ eliminar }); */
 
         if (eliminar?.data?.message === 'card deleted') {
           toast.success('Su tarjeta se eliminó con éxito.');
@@ -80,14 +80,14 @@ export default function TablaCards({ cards, uId, email }) {
     //window.location.href = initReferencia.data.checkout_url;
     /************* */
 
-    console.log('debit:', { uId }, { _card }, { _reference }, { order }, e.token);
+   /*  console.log('debit:', { uId }, { _card }, { _reference }, { order }, e.token); */
 
     /***Debito con tarjeta de credito */
     const _debito = await Debito(uId, email, _card, _reference, order, e.token);
 
     /*****corregir autentificacion, api devuelte error 403 */
-    console.log(_debito);
-
+   /*  console.log(_debito);
+ */
     const { id, amount, payment_date, status, authorization_code } = _debito?.data?.transaction;
 
     if (_debito) {

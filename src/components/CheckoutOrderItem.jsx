@@ -86,7 +86,7 @@ const CheckoutOrderItem = ({ product }) => {
         <p>{product?.name}</p>
       </td>
       <td>
-        <div ref={divRef} onChange={() => changeAmountOfItem(product)}>
+        <div ref={divRef} onChange={() => changeAmountOfItem(product)} className={styles.amountContainer} >
           <label htmlFor="amountChanged" className={styles.label}>
             cantidad:
           </label>
@@ -96,6 +96,7 @@ const CheckoutOrderItem = ({ product }) => {
           {buttonOpen == true ? (
             <button className={styles.updateButton} onClick={() => actualizarCantidad(dataAmount)}>
               <Image src={actualizarImg} width={25} height={25} alt="Actualizar cantidad | update amount" />
+              Aplicar Cambios
             </button>
           ) : null}
         </div>

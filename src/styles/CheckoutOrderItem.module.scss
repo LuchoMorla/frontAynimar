@@ -60,12 +60,27 @@
 }
 
 .inputAmount {
-	margin: 4px;
-	width : 33%;
+    border-radius: 8px;
+    margin: 2px 1px 8px 2px;
+    width: 54%;
+    padding: 2px;
+}
+
+.amountContainer{
+	display: flex;
 }
 
 .updateButton {
-	border-radius: 50%;
+	/* border-radius: 50%; */
+	border-radius: 25px;
+    cursor: pointer;
+    background: none;
+    color: white;
+    padding: 1px 8px 1px 0px;
+    margin: 0px 2px 16px 7px;
+	display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
 }
 
 @media (max-width: 700px) {

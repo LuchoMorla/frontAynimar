@@ -123,8 +123,8 @@ const Checkout = () => {
                   </p>
                   <p>
                     ${valorTotalSinIva}{' '}
-                    <button onClick={() => router.reload()}>
-                      <Image src={actualizarImg} alt='paymentImage' width={20} height={20} />
+                    <button onClick={() => router.reload()} className={styles.reloadButton}>
+                      <Image src={actualizarImg} alt='Actualizar | Update' width={20} height={20} />
                     </button>
                   </p>
                 </div>
@@ -134,8 +134,8 @@ const Checkout = () => {
                   </p>
                   <p>
                     ${valorTotalConIva.toFixed(2)}{' '}
-                    <button onClick={() => router.reload()}>
-                      <Image src={actualizarImg} alt='paymentImage' width={20} height={20} />
+                    <button onClick={() => router.reload()} className={styles.reloadButton}>
+                      <Image src={actualizarImg} alt='Actualizar | Update' width={20} height={20} />
                     </button>
                   </p>
                 </div>

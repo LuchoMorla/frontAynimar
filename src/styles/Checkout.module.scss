@@ -221,6 +221,12 @@
   margin-bottom: 20px;
 }
 
+.reloadButton {
+  border-radius: 50%;
+  cursor: pointer;
+  margin: 2px;
+}
+
 @media (max-width: 640px) {
   .MyOrder {
     width: 100%;

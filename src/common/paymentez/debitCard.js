@@ -56,8 +56,8 @@ Therefore, the VAT is 1.81 and the taxable amount is 15.05 based on the tax perc
       "description": description,             //  String        Y         Description of the order to be purchase. Format: (Maximum Length 250)
       "dev_reference": referencia,            //  String        Y         Merchant order reference. You will identify this purchase using this reference.
       "vat": VAT,                             //  Number        Y         Sales tax amount, included in product cost. Format: Decimal with two fraction digits.
-      "installments": 1,                      //  Number        N         The number of installments for the payment, only for COP, MXN, BRL, PEN, CLP and USD (Ecuador).
-      "installments_type": 2,                 //  Number        N         Only available for Ecuador and Mexico.
+      /* "installments": 0,                      //  Number        N         The number of installments for the payment, only for COP, MXN, BRL, PEN, CLP and USD (Ecuador).
+      "installments_type": 0,  */                //  Number        N         Only available for Ecuador and Mexico.
       "taxable_amount": taxable_amount,       //  Number        N         Only available for Ecuador and Colombia. The taxable amount is the total amount of all taxable items excluding tax. If not sent, it's calculated on the total. Format: Decimal with two fraction digits.
       "tax_percentage": tax_percentage,       //  Number        N         Only available for Ecuador and Colombia. The tax rate to be applied to this order. For Ecuador should be 0 or 12.
       "months_grace": 3                       //  Number        N         Only available for Mexico and Ecuador (Medianet), the number of months of grace for a deferred payment.

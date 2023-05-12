@@ -27,10 +27,6 @@ export const useAuth = () => {
 function useProviderAuth() {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    console.log("==========", { user }, "================");
-  }, [user]);
-
   const getAuth = async () => {
     const token = Cookie.get('token');
     axios.defaults.headers.Authorization = `Bearer ${token}`;

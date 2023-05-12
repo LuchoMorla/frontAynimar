@@ -17,7 +17,6 @@ export default async function getAllCards(id) {
         'Auth-Token': auth_token
       }
     });
-    console.log("final fetch", card);
     return card.data.cards;
 
   } catch (error) {

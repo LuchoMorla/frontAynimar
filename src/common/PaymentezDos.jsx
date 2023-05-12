@@ -41,8 +41,8 @@ export default function PaymentezDos({ userEmail, uId }) {
     try {
       pg_sdk = new PaymentGateway(credencial.environment, credencial.application_code, credencial.application_key);
       await pg_sdk.generate_tokenize(get_tokenize_data(), '#tokenize_example', onSuccess, onError);
-    } catch (err) {
-      console.log('PaymentForm Error: ', err);
+    } catch (err) {/* 
+      console.log('PaymentForm Error: ', err); */
       setProcessing(false);
       setSaveCardText('Save Card');
     }

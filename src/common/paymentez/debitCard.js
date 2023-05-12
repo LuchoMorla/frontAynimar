@@ -66,9 +66,9 @@ Therefore, the VAT is 1.81 and the taxable amount is 15.05 based on the tax perc
       "token": tokenCard
     }
   };
-
+/* 
   console.log({ payloadOption });
-
+ */
   try {
     const debito = await axios.post(`https://ccapi-stg.paymentez.com/v2/transaction/debit`,
       payloadOption,

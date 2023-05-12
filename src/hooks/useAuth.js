@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext, useEffect } from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import endPoints from '@services/api/';
@@ -26,10 +26,6 @@ export const useAuth = () => {
 
 function useProviderAuth() {
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    console.log("==========", { user }, "================");
-  }, [user]);
 
   const getAuth = async () => {
     const token = Cookie.get('token');

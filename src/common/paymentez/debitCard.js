@@ -25,24 +25,6 @@ export default async function Debito(uid, email, card, referencia, order, tokenC
   const VAT = parseFloat((total * tax_percentage / 100).toFixed(2));
   const taxable_amount = parseFloat((amount - VAT).toFixed(2));
 
-  /*              SUMMARY
-  
-  To calculate the values of VAT and taxable amount based on the tax percentage and amount provided, you can use the following formula:
-
-VAT = (amount * tax_percentage) / (1 + tax_percentage)
-taxable amount = amount - VAT
-
-Using the values you provided:
-
-tax_percentage = 0.12 amount = 16.86:
-
-VAT = (16.86 * 0.12) / (1 + 0.12) = 1.81
-taxable amount = 16.86 - 1.81 = 15.05
-
-Therefore, the VAT is 1.81 and the taxable amount is 15.05 based on the tax percentage of 0.12 and the amount of 16.86 provided.
- 
-  */
-
   const payloadOption = {
     "user": {                                 //  Type          Require   Description
       "id": user_id.toString(),               //  String        Y         Customer identifier. This is the identifier you use inside your application.
@@ -56,8 +38,6 @@ Therefore, the VAT is 1.81 and the taxable amount is 15.05 based on the tax perc
       "description": description,             //  String        Y         Description of the order to be purchase. Format: (Maximum Length 250)
       "dev_reference": referencia,            //  String        Y         Merchant order reference. You will identify this purchase using this reference.
       "vat": VAT,                             //  Number        Y         Sales tax amount, included in product cost. Format: Decimal with two fraction digits.
-      /* "installments": 0,                      //  Number        N         The number of installments for the payment, only for COP, MXN, BRL, PEN, CLP and USD (Ecuador).
-      "installments_type": 0,  */                //  Number        N         Only available for Ecuador and Mexico.
       "taxable_amount": taxable_amount,       //  Number        N         Only available for Ecuador and Colombia. The taxable amount is the total amount of all taxable items excluding tax. If not sent, it's calculated on the total. Format: Decimal with two fraction digits.
       "tax_percentage": tax_percentage,       //  Number        N         Only available for Ecuador and Colombia. The tax rate to be applied to this order. For Ecuador should be 0 or 12.
       "months_grace": 3                       //  Number        N         Only available for Mexico and Ecuador (Medianet), the number of months of grace for a deferred payment.
@@ -66,9 +46,7 @@ Therefore, the VAT is 1.81 and the taxable amount is 15.05 based on the tax perc
       "token": tokenCard
     }
   };
-/* 
-  console.log({ payloadOption });
- */
+
   try {
     const debito = await axios.post(`https://ccapi-stg.paymentez.com/v2/transaction/debit`,
       payloadOption,

@@ -17,9 +17,7 @@ export default async function getTransactions() {
           "Content-Type": "application/json",
           "auth-token": auth_token
         }
-      })/* .then(response => {
-        console.log("transactions:=", response);
-      }) */.catch(err => {
+      }).catch(err => {
         console.log(err);
       });
 

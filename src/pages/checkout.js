@@ -109,8 +109,8 @@ const Checkout = () => {
               <div /* ref={actualizarSumTotal} onChange={() => sumTotal()} */ className={styles['my-orders']}>
                 <table>
                   <tbody>
-                    {state.cart.map((product) => (
-                      <CheckOrderItem product={product} key={`orderItem-${product.id}`} />
+                    {state?.cart?.map((product) => (
+                      <CheckOrderItem product={product} key={`orderItem-${product?.id}`} />
                     ))}
                   </tbody>
                 </table>

@@ -25,7 +25,7 @@ export default function LoginPage() {
     auth
       .signIn(data.email, data.password)
       .then(() => {
-        router.push('/');
+        router.push('/store');
       })
       .catch((error) => {
         if (error.response?.status === 401) {

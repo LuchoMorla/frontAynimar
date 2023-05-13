@@ -14,9 +14,9 @@ const Menu = () => {
 				<li>
 					<Link href="/mi_cuenta">Mi Cuenta</Link>
 				</li>
-				<li>
+{/* 				<li>
 					<Link href='/login' >Iniciar Sesión</Link>
-				</li>
+				</li> */}
 				<li>
 					<button onClick={() => auth.logout()} >Cerrar Sesión</button>
 				</li>

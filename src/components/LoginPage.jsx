@@ -25,9 +25,6 @@ export default function LoginPage() {
     auth
       .signIn(data.email, data.password)
       .then(() => {
-        /* 
-        console.log('Login sucess'); */
-        router.reload();
         router.push('/');
       })
       .catch((error) => {

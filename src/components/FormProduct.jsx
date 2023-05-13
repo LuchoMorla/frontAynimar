@@ -64,6 +64,9 @@ const ProductInfo = ({ product }) => {
 			
 			handleClick(product);
 			addToPacket(bornedOrderId)
+			.then(() => {
+				router.reload();
+			})
 			.catch((err) => {
 				if (err.response?.status === 401) {
 					window.alert('Probablemente necesites iniciar sesion de nuevo');
@@ -75,6 +78,9 @@ const ProductInfo = ({ product }) => {
 			handleClick(product);
 			const numberOrderId = parseInt(savedOrderId);
 			addToPacket(numberOrderId)
+			.then(() => {
+				router.reload();
+			})
 			.catch((err) => {
 				if (err.response?.status === 401) {
 					window.alert('Probablemente necesites iniciar sesion de nuevo');
@@ -84,6 +90,8 @@ const ProductInfo = ({ product }) => {
 			});
 		};
 	};
+
+	//un useEfect conectado a state.cart, no estaria nada mál ;) o a la peticion para que cambie el loguito
 
 	return (
 		<>
@@ -102,7 +110,7 @@ const ProductInfo = ({ product }) => {
 					{/*
 					parece que es valida si fue true
 					 */}
-					{ state.cart.includes(product)? <Image
+					{ state.cart.includes(product) ? <Image
 					  className={(styles.disabled, styles['add-to-cart-btn'])}
 					  src={addedToCartImage}
 					  alt="added to cart" 

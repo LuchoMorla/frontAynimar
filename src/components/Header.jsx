@@ -60,6 +60,9 @@ const Header = () => {
   };
 
   useEffect(() => {
+    //log 
+    isTokenValid();
+    //fetch Orders
     const fetchMyOrders = async () => {
       try {
         await fetchOrders();
@@ -71,14 +74,14 @@ const Header = () => {
       }
     };
     fetchMyOrders();
-  }, [endPoints.orders.getOrderByState]);
+  }, [endPoints.orders.getOrderByState, token]);
 
-  useEffect(() => {
+/*   useEffect(() => {
     isTokenValid();
-    /* const tokenIsValid = isTokenValid(token); */
+    const tokenIsValid = isTokenValid(token); 
     // Realiza cualquier lógica adicional basada en la validez del token aquí
 
-  }, [token]);
+  }, [token]); */
 
   return (
     <>

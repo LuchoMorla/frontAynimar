@@ -6,6 +6,7 @@ import Menu from '@components/Menu';
 import NavMenu from '@components/NavMenu';
 import MyOrder from '@containers/MyOrder';/* 
 import MyPayment from '@containers/MyPayment'; */
+import Cookie from 'js-cookie';
 import menu from '@icons/icon_menu.svg';
 import logo from '@logos/logo-Aynimar.svg';
 import AppContext from '@context/AppContext';
@@ -25,6 +26,18 @@ const Header = () => {
     hola.getAuth();
     setToken('haveToken');
   }
+
+  const getCookieUserValidator = () => {
+    const token = Cookie.get('token');
+    if(!token){
+      return false;
+    } 
+    return true;
+ };
+
+ const isTokenValid = () => {
+  return getCookieUserValidator();
+};
 
   const { state, getCart, toggleOrder, toggleMenu, /* togglePayment, */ toggleNavMenu } = useContext(AppContext);
 
@@ -59,6 +72,13 @@ const Header = () => {
     };
     fetchMyOrders();
   }, [endPoints.orders.getOrderByState]);
+
+  useEffect(() => {
+    isTokenValid();
+    /* const tokenIsValid = isTokenValid(token); */
+    // Realiza cualquier lógica adicional basada en la validez del token aquí
+
+  }, [token]);
 
   return (
     <>
@@ -101,9 +121,23 @@ const Header = () => {
               <Image className={(styles['more-clickable-area'], styles.pointer)} src={sellingCart} alt="selling to recicler cart" />
               {state.metacircle.length > 0 ? <div>{state.metacircle.length}</div> : null}
             </li> */}
-            <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
+{/*             {
+              //Añadire logica para que esto aparezca cuando el usuario haya iniciado session
+              <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
               <Image src={userIcon} width={50} height={40} alt="user icon menu" />
             </li>
+            } */}
+            {
+              isTokenValid() ? ( // Verifica si el token existe
+              <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
+                <Image src={userIcon} width={50} height={40} alt="user icon menu" />
+              </li>
+            ) : (
+              <li>
+                <Link href="/login">Iniciar sesión</Link>
+              </li>
+            )
+            }
             <li className={styles['navbar-shopping-cart']} onClick={() => toggleOrder()} aria-hidden="true">
               <Image className={(styles['more-clickable-area'], styles.pointer)} src={shoppingCart} alt="shopping cart" />
               {state.cart.length > 0 ? <div>{state.cart.length}</div> : null}

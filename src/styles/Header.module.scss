@@ -29,6 +29,7 @@
   height: 30px;
   padding: 0;
   margin: 0;
+  cursor: pointer;
 }
 .logo {
   color: $--app-green;
@@ -77,6 +78,7 @@
 }
 .navbar-shopping-cart {
   position: relative;
+  cursor: pointer;
 }
 .navbar-shopping-cart div {
   width: 16px;

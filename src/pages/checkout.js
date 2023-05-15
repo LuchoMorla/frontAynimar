@@ -83,12 +83,8 @@ const Checkout = () => {
 
     if (open == true) {
       setOpen(true);
-      //Paymentez
-      /*       paymentCheckout.open({
-        reference: '8REV4qMyQP3w4xGmANU', // reference received for Payment Gateway
-      }); */
     } else {
-      alert('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, haz click en el checkbox');
+      alert('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, leelos y luego haz click en el checkbox');
     };
   };
 

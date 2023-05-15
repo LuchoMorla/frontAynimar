@@ -8,6 +8,9 @@ import axios from 'axios'; */
 
 const OrderItem = ({ product }) => {
 	console.log(product);
+	const orderProduct = product.OrderProduct;
+	console.log('orderProduct', orderProduct);
+	const amount = orderProduct.amount;
 /* 	const handleEdit = someID => {
 
 	}; */
@@ -18,6 +21,7 @@ const OrderItem = ({ product }) => {
 			</figure>
 			{/* <p onClick={() => {}}>Edit</p> */}
 			<p>{product?.name}</p>
+			<p>{amount != null ? amount : null}</p>
 			<p>${product?.price}</p>
 {/* 			<Image className={(styles.pointer, styles['more-clickable-area'])}
 			src={close}

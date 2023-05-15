@@ -8,23 +8,11 @@ const MostrarOrders = ({ order }) => {
 
 	const [open, setOpen] = useState(false);
 
-/* 	const transformedItems = order.items.map((item) => {
-		// Aquí puedes realizar la transformación deseada en 'item'
-		// Por ejemplo, puedes modificar una propiedad o agregar nuevas propiedades al objeto 'item'
-		// Retorna el objeto transformado
-		item.price = item.price / 100;
-		return {
-		  ...item, // Copia las propiedades originales del objeto 'item'
-		  // Realiza las modificaciones o agrega nuevas propiedades según tus necesidades
-		};
-	  }); */
 	  const transformedItems = order.items.map((item) => {
 		// Realiza una copia profunda del objeto 'item'
 		const newItem = { ...item };
-	  
 		// Realiza las modificaciones deseadas en 'newItem'
 		newItem.price = newItem.price / 100;
-	  
 		// Retorna el objeto transformado
 		return newItem;
 	  });
@@ -47,6 +35,7 @@ const MostrarOrders = ({ order }) => {
 			{transformedItems.map((product) => (
 					<OrderItem product={product} key={`orderItem-${product.id}`} />
 			))}
+			<p>Total: ${order.total / 100}</p>
 		</Modal>
 		</>
 	);

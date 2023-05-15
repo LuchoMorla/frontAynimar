@@ -3,8 +3,8 @@ import OrderItem from '@components/OrderItem';
 import Modal from '@common/Modal';
 import styles from '@styles/ProductItem.module.scss';
 
-const MostrarOrders = ({ order }) => {
-    console.log('llegamos a Mostrar Orders y las order is:', order);
+const MostrarOrders = ({ order }) => {/* 
+    console.log('llegamos a Mostrar Orders y las order is:', order); */
 
 	const [open, setOpen] = useState(false);
 

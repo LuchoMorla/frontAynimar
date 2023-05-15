@@ -7,7 +7,7 @@ import styles from '@styles/OrderItem.module.scss';
 import axios from 'axios'; */
 
 const OrderItem = ({ product }) => {
-
+	console.log(product);
 /* 	const handleEdit = someID => {
 
 	}; */

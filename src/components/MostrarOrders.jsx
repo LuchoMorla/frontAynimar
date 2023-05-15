@@ -12,10 +12,11 @@ const MostrarOrders = ({ order }) => {
 		// Aquí puedes realizar la transformación deseada en 'item'
 		// Por ejemplo, puedes modificar una propiedad o agregar nuevas propiedades al objeto 'item'
 		// Retorna el objeto transformado
-		item.price / 100;
+		const nuevoMostrar = item.price / 100;
 		return {
 		  ...item, // Copia las propiedades originales del objeto 'item'
 		  // Realiza las modificaciones o agrega nuevas propiedades según tus necesidades
+		  nuevoMostrar
 		};
 	  });
 

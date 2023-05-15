@@ -7,9 +7,7 @@ import styles from '@styles/OrderItem.module.scss';
 import axios from 'axios'; */
 
 const OrderItem = ({ product }) => {
-	console.log(product);
 	const orderProduct = product.OrderProduct;
-	console.log('orderProduct', orderProduct);
 	const amount = orderProduct.amount;
 /* 	const handleEdit = someID => {
 
@@ -21,14 +19,8 @@ const OrderItem = ({ product }) => {
 			</figure>
 			{/* <p onClick={() => {}}>Edit</p> */}
 			<p>{product?.name}</p>
-			<p>${product?.price}</p>
-			
-			{amount != null ? (
-			<>
-			<p>x</p>
-			<p>amount</p>
-			</>
-			) : null}
+			<p>${product?.price}</p>	
+			{amount != null ? <p>x {amount}</p> : null}
 {/* 			<Image className={(styles.pointer, styles['more-clickable-area'])}
 			src={close}
 			alt="close"

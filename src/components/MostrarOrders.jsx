@@ -28,7 +28,7 @@ const MostrarOrders = ({ order }) => {
 					<p>Total de la orden: ${order.total / 100}</p>
 					<p>Estado: {order.state == 'carrito' ? 'En caja' : 'Pagada'}</p>
 					<p>Productos: {order.items ? order.items.length : order.items}</p>
-					<button onClick={() => setOpen(true)}>Ver productos</button>
+					<button className={styles['pay-Button']} onClick={() => setOpen(true)}>Ver productos</button>
 				</div>
 			</div>
 		</div>

@@ -21,8 +21,14 @@ const OrderItem = ({ product }) => {
 			</figure>
 			{/* <p onClick={() => {}}>Edit</p> */}
 			<p>{product?.name}</p>
-			<p>{amount != null ? amount : null}</p>
 			<p>${product?.price}</p>
+			
+			{amount != null ? (
+			<>
+			<p>x</p>
+			<p>amount</p>
+			</>
+			) : null}
 {/* 			<Image className={(styles.pointer, styles['more-clickable-area'])}
 			src={close}
 			alt="close"

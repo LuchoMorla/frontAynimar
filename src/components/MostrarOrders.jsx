@@ -12,7 +12,7 @@ const MostrarOrders = ({ order }) => {
 		// Aquí puedes realizar la transformación deseada en 'item'
 		// Por ejemplo, puedes modificar una propiedad o agregar nuevas propiedades al objeto 'item'
 		// Retorna el objeto transformado
-		item.price = (item.price / 100).toFixed(2);
+		item.price = item.price / 100;
 		return {
 		  ...item, // Copia las propiedades originales del objeto 'item'
 		  // Realiza las modificaciones o agrega nuevas propiedades según tus necesidades
@@ -25,7 +25,7 @@ const MostrarOrders = ({ order }) => {
 			<div className={styles['product-info']}>
 				<div>
 					<p>Orden-{order.id}</p>
-					<p>Total de la orden: ${(order.total / 100).toFixed(2)}</p>
+					<p>Total de la orden: ${order.total / 100}</p>
 					<p>Estado: {order.state == 'carrito' ? 'En caja' : 'Pagada'}</p>
 					<p>Productos: {order.items ? order.items.length : order.items}</p>
 					<button onClick={() => setOpen(true)}>Ver productos</button>

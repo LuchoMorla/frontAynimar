@@ -22,7 +22,7 @@ export const deleteCard = (token, uid) => {
       };
 
       axios.post(
-        `https://ccapi-stg.paymentez.com/v2/card/delete`,
+        `https://ccapi.paymentez.com/v2/card/delete`,
         cardOption,
         {
           headers: {

@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@headlessui/react": "1.7.9",
-    "@heroicons/react": "1.0.6",
     "axios": "0.26.1",
     "bootstrap": "5.3.0-alpha3",
     "dotenv": "^16.0.3",

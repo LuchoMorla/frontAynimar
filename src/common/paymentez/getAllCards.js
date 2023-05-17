@@ -11,7 +11,7 @@ export default async function getAllCards(id) {
   const auth_token = Buffer.from(appcode + ';' + variableTimestamp + ';' + uniq_token_hash).toString('base64');
 
   try {
-    const card = await axios.get(`https://ccapi-stg.paymentez.com/v2/card/list?uid=${id}`, {
+    const card = await axios.get(`https://ccapi.paymentez.com/v2/card/list?uid=${id}`, {
       headers: {
         'Content-Type': 'application/json',
         'Auth-Token': auth_token

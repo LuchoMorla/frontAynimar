@@ -48,7 +48,7 @@ export default async function Debito(uid, email, card, referencia, order, tokenC
   };
 
   try {
-    const debito = await axios.post(`https://ccapi-stg.paymentez.com/v2/transaction/debit`,
+    const debito = await axios.post(`https://ccapi.paymentez.com/v2/transaction/debit`,
       payloadOption,
       {
         headers: {

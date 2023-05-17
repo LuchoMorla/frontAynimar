@@ -1,6 +1,5 @@
-import React, { useState } from 'react';/* 
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'; */
+import React, { useState } from 'react';
+import 'tailwindcss/tailwind.css';
 
 const Paginate = ({ totalItems, itemsPerPage, neighbours, setOffset }) => {
   const items = [];

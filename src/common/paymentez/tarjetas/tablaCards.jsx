@@ -9,10 +9,13 @@ import { toast } from 'react-toastify';
 import TestContext from '@context/TestContext';
 import { sendTransaction } from '@services/api/entities/transaction';
 import { updateOrder } from '@services/api/entities/updateOrder';
+import TransactionResp from '@containers/TransactionResp';
 
 export default function TablaCards({ cards, uId, email }) {
   const orderState = useContext(TestContext);
   const transactionIdState = useContext(TestContext);
+
+  const [transactionSuccess, setTransactionState] = useState(false);
 
   const [listCards, setList] = useState([
     {
@@ -100,6 +103,7 @@ export default function TablaCards({ cards, uId, email }) {
         //update order  => pagada
         updateOrder(order?.id, { state: 'pagada' });
       }
+      setTransactionState(true);
       toast.info('Muchas gracias, tú pago se ah realizado con exito y de forma segura');
     } else {
       toast.error('Rejected: Trate más luego o con otra tarjeta');
@@ -130,6 +134,7 @@ export default function TablaCards({ cards, uId, email }) {
         <Column field="estado" header="Estado"></Column>
         <Column field="estado" body={Acciones} header="Acciones"></Column>
       </DataTable>
+      <TransactionResp transaction={transactionSuccess} />
     </div>
   );
 }

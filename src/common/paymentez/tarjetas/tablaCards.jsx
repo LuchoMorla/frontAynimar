@@ -100,7 +100,7 @@ export default function TablaCards({ cards, uId, email }) {
         //update order  => pagada
         updateOrder(order?.id, { state: 'pagada' });
       }
-      toast.info('Muchas gracias, Tu compra ah sido realizada con exito');
+      toast.info('Muchas gracias, tú pago se ah realizado con exito y de forma segura');
     } else {
       toast.error('Rejected: Trate más luego o con otra tarjeta');
     }

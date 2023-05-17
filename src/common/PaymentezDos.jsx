@@ -8,7 +8,7 @@ export default function PaymentezDos({ userEmail, uId }) {
   let pg_sdk = null;
 
   const credencial = {
-    environment: 'stg',
+    environment: 'prod',
     application_code: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_CODE,
     application_key: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_KEY,
   };

@@ -11,12 +11,26 @@ import '../styles/globals.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import * as gtag from '../lib/gtag';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 function MyApp({ Component, pageProps }) {
   const initialState = useInitialState();
   const [order, setOrder] = useState(null);
   const [transactionID, setTransactionID] = useState(null);
+
+  const router = useRouter()
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
+
   return (
     <ProviderAuth>
       <AppContext.Provider value={initialState}>

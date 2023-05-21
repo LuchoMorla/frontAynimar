@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-/* import Script from 'next/script'; */
+import Script from 'next/script';
 import { GA_TRACKING_ID } from '../lib/gtag';
 
 class MyDocument extends Document {
@@ -11,14 +11,13 @@ class MyDocument extends Document {
           <link rel="manifest" href="/manifest.json" />
           <link rel="shortcut icon" href="/static/favicon.ico" />
                               {/* Google Adsense */}
-                              <script data-ad-client="<Your value here>" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                    
+                    {/* <script data-ad-client="<Your value here>" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
                     {/* Global Site Tag (gtag.js) - Google Analytics */}
-                    <script
+                    <Script
                         async
                         src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
                     />
-                    <script
+                    <Script
                         dangerouslySetInnerHTML={{
                             __html: `
             window.dataLayer = window.dataLayer || [];

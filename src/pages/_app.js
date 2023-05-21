@@ -11,7 +11,7 @@ import '../styles/globals.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import * as gtag from '../lib/gtag';
+import gtag from '../lib/gtag';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 

@@ -27,12 +27,12 @@ const ProductInfo = ({ product }) => {
 	};
 
 	const submitHandler = async (event) => {
+		event.preventDefault();
 		const userHaveToken = Cookie.get('token');
 		if(!userHaveToken) {
 			alert('para realizar esta accion necesitas iniciar sesion');
 			router.push('/login');
 		};
-		event.preventDefault();
 
 		const addToPacket = async (orderId) => {
 			const formData = new FormData(formRef.current);

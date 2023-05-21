@@ -28,7 +28,13 @@ function MyApp({ Component, pageProps }) {
         }
         }>
           <Script async src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" charset="UTF-8" />
-          <Script async src="https://www.googletagmanager.com/gtag/js?id=G-6S5D2T7858" />
+            <Script async src="https://www.googletagmanager.com/gtag/js?id=G-6S5D2T7858" />
+            <Script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments)}
+              gtag('js', new Date());
+              gtag('config', 'G-6S5D2T7858');
+            </Script>
           <Layout >
             <Component {...pageProps} />
           </Layout >

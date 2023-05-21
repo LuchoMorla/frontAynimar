@@ -6,7 +6,7 @@ import Layout from '@containers/Layout';
 import { ToastContainer } from 'react-toastify';
 import TestContext from '@context/TestContext';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useEffect } from 'react';
 import '../styles/globals.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -20,16 +20,16 @@ function MyApp({ Component, pageProps }) {
   const [order, setOrder] = useState(null);
   const [transactionID, setTransactionID] = useState(null);
 
-  const router = useRouter()
+  const router = useRouter();
   useEffect(() => {
     const handleRouteChange = (url) => {
-      gtag.pageview(url)
+      gtag.pageview(url);
     }
-    router.events.on('routeChangeComplete', handleRouteChange)
+    router.events.on('routeChangeComplete', handleRouteChange);
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange)
+      router.events.off('routeChangeComplete', handleRouteChange);
     }
-  }, [router.events])
+  }, [router.events]);
 
   return (
     <ProviderAuth>

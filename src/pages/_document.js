@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import Script from 'next/script';
+/* import Script from 'next/script'; */
 import { GA_TRACKING_ID } from '../lib/gtag';
 
 class MyDocument extends Document {
@@ -14,11 +14,11 @@ class MyDocument extends Document {
                               <script data-ad-client="<Your value here>" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                     
                     {/* Global Site Tag (gtag.js) - Google Analytics */}
-                    <Script
+                    <script
                         async
                         src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
                     />
-                    <Script
+                    <script
                         dangerouslySetInnerHTML={{
                             __html: `
             window.dataLayer = window.dataLayer || [];

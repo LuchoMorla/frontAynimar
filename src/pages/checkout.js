@@ -6,6 +6,7 @@ import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import actualizarImg from '@icons/button_refresh_15001.png';
 import Tarjetas from '@common/paymentez/tarjetas/Tarjetas';
+import CustomerProfile from "@containers/CustomerProfile";
 import { useRouter } from 'next/router';
 import Modal from '@common/Modal';
 import Cookie from 'js-cookie';
@@ -101,6 +102,9 @@ const Checkout = () => {
         <div className={styles.Checkout}>
           <div className={styles['Checkout-container']}>
             <h1 className={styles.title}>Verificacion | Checkout</h1>
+            {/* <div> */}
+              <CustomerProfile />   
+           {/*  </div> */}
             <div className={styles['Checkout-content']}>
               <div /* ref={actualizarSumTotal} onChange={() => sumTotal()} */ className={styles['my-orders']}>
                 <table>

@@ -5,12 +5,12 @@ import styles from '@styles/Layout.module.scss';
 
 const Layout = ({ children }) => {
 	return (
-		<div className="Layout">
+		<div className={styles.container}>
 			<Header />
-			<div className={styles.content}>
+			<main className={styles.content}>
 				{children}
-			</div>		
-			<Footer />
+			</main>		
+			<Footer className={styles.footer} />
 		</div>
 	);
 }

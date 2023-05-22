@@ -1,9 +1,9 @@
 @import 'vars';
 
-.MyAccount {
-	margin-top: 74px;
-	width: 100%;
-	height: 100vh;
+.MyAccount {/* 
+	margin-top: 74px; */
+	width: 100%;/* 
+	height: 100vh; */
 	display: grid;
 	place-items: center;
 }
@@ -22,6 +22,8 @@
 	font-size: $--lg;
 	margin-bottom: 36px;
 	text-align: start;
+	margin-top: 100px;
+    justify-content: center;
 }
 .form {
 	display: flex;

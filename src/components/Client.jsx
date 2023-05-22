@@ -75,8 +75,6 @@ const Client = ({ client }) => {
   return (
     <div className={styles.MyAccount}>
       <div className={styles['MyAccount-container']}>
-        <h1 className={styles.title}>Mi Cuenta de Compras</h1>
-
         <form action="/" className={styles.form} ref={formRef} autoComplete="on">
           <div>
             <label htmlFor="name" className={styles.label}>
@@ -138,7 +136,7 @@ const Client = ({ client }) => {
 
             </div>
 
-          <button className={styles["login-button"]} onClick={submitHandler}>Editar</button>
+          <button className={styles["login-button"]} onClick={submitHandler}>guardar</button>
         </form>
       </div>
     </div>

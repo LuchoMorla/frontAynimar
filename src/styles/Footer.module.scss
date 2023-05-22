@@ -3,6 +3,8 @@
 .Nav {
 /*   position: relative;
   bottom: 0; */
+  position: fixed;
+  bottom: 0;
   display: flex;
   flex-shrink: 0;
   justify-content: space-between;
@@ -12,10 +14,11 @@
   top: 0; */
   background: white;
   /* width: calc(100% - 1px); */
-  width: 100%;
-  z-index: 1;
+  width: 100%;/* 
+  z-index: 1; */
   align-items: center;
   opacity: 0.93;
+  height: 60px;
 }/* 
 .hamburger {
   display: none;

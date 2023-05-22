@@ -95,7 +95,7 @@
   font-weight: bold;
   color      : $--white;
   align-self : center;
-  margin     : 8px;
+  margin: 100px 0 0 0;
 }
 
 .paySubmitForm {
@@ -115,6 +115,7 @@
   color        : $--app-green;
   font-size    : 1.35rem;
   cursor       : pointer;
+  margin-bottom: 120px;
 }
 
 .pagoTitle {

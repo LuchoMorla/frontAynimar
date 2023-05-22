@@ -21,7 +21,7 @@ const userSegmentation = () => {
             {/* <p>Compra desde tu computadora o telefono productos que son responsables con el medio ambiente y contribuyen a la creación de una economia circular y verde.</p> */}
         </div>
         <div className={styles.buttonr}>
-            <Link href="/signInCustomer" >¡Regístrate!{/*  para hacer compras */}</Link>
+            <Link href="/signInCustomer" className={styles.linkPeudoButton} >¡Regístrate!{/*  para hacer compras */}</Link>
         </div>
     </section>
     {/* <section className={styles['Recycler_segment-container']}>

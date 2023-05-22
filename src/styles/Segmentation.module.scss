@@ -65,6 +65,13 @@ margin: 24px 0;
     background: $--soft-green;
     color: $--black;
 }
+.linkPeudoButton {
+display: flex;
+height: 100%;
+width: 100%;
+justify-content: center;
+align-items: center;
+}
 
 .Recycler_segment-container {
     width: 45%;

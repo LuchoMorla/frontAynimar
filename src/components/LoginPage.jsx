@@ -61,11 +61,11 @@ export default function LoginPage() {
           </button>
         </form>
         <ul className={styles.contenedorAuhtChange}>
-          <li>
-            <Link href="/forgotPassword">Olvide mi Contraseña</Link>
+        <li className={styles.sigInCustomer}>
+            <Link href="/signInCustomer" className={styles.linkAuthChange}>Registrate</Link>
           </li>
-          <li>
-            <Link href="/signInCustomer">No tengo cuenta, ir a Registrarse</Link>
+          <li className={styles.forgot}>
+            <Link href="/forgotPassword" className={styles.linkAuthChange}>Olvide mi Contraseña</Link>
           </li>
         </ul>
       </div>

@@ -81,6 +81,7 @@
 	color: $--white;
 	width: 100%;
 	height: 30px;
+	cursor: pointer;
 }
 .login-button:hover {
 	background: $--app-green;
@@ -91,8 +92,49 @@
 }
 .contenedorAuhtChange {
 	display: flex;
-	flex-flow: row wrap;
+	flex-flow: row nowrap;
+	align-items: center;
+    height: 60px;
 }
+
+/* .contenedorAuhtChange ul li a {
+text-decoration: none;
+color: $--morado-centro;
+border: 1px solid $--white;
+padding: 8px;
+border-radius: 8px;
+} */    
+
+.contenedorAuhtChange li {
+	list-style: none;
+	cursor: pointer;
+}
+
+.forgot {
+	border: 1px solid $--morado-centro;
+	color: $--hospital-green;
+    padding: 8px;
+    border-radius: 25px;
+	margin: 8px;
+}
+
+.sigInCustomer {
+	border: 1px solid $--hospital-green;
+	padding: 8px;
+    border-radius: 25px;
+	background: $--soft-green;
+	margin: 8px;
+}
+
+.sigInCustomer a {
+	color: black;
+}
+
+.linkAuthChange {
+	width: 100%;
+	height: 100%      ;
+}
+
 @media (max-width: 640px) {
 	.logo {
 		display: none;

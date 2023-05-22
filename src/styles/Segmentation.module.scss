@@ -88,27 +88,25 @@ align-items: center;
         margin-top: 10px;
         display: flex;
         flex-flow: column wrap;
+        height: 250px;
+        background-size: 100% 680px;
     }
    .Segment-Container p {
-    width: 100%;
-    margin: $--lg 0;
-	text-align: center;
-   }
-   .Segment-Container {
-    background-size: 100% 680px;
-    height: 680px;
+        width: 100%;
+        margin: $--lg 0;
+	    text-align: center;
    }
    .Customer_segment-container {
-    width: 62%;
-    margin: 2%;
-}
+        width: 62%;
+        margin: 2%;
+    }
 
-.linkPeudoButton {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
+    .linkPeudoButton {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
     }
 /*    .Segment-Container h1 {
     width: 200%;

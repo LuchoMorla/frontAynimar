@@ -11,7 +11,7 @@ export default function Home() {
         <title>Aynimar | Home</title>
       </Head>
       <UserSegmentation />
-      <h1 className={styles['recicler-title']}>Catalogo</h1>
+      <h2 className={styles['recicler-title']}>Catalogo</h2>
       {/*<h1 className={styles['recicler-title']}>Productos que compramos para el reciclaje</h1>
        <WasteList /> */}
       <ProductList />

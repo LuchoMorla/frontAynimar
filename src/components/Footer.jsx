@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Script from 'next/script';
 import { useRouter } from 'next/router';
 import styles from '@styles/Footer.module.scss';
 

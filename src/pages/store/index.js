@@ -11,7 +11,8 @@ export default function Home() {
       </Head>
       <div className={styles.Recycling}>
         <p>
-          Bienvenido, aquí podrás ver nuestros productos disponibles y agregarlos al carrito para posteriormente ir a caja para el checkout, queremos hacerte saber que nos complace servirte y abastecerte de los productos que necesites, en caso de requerir algún producto que no se encuentre en nuestro catalogo nos lo puedes pedir <Link href='/contact'>haciendo click aquí</Link> y con gusto podemos encontrarlos por ti.
+          ¿No encuentras lo que buscas? 
+          {/* Bienvenido, aquí podrás ver nuestros productos disponibles y agregarlos al carrito para posteriormente ir a caja para el checkout, queremos hacerte saber que nos complace servirte y abastecerte de los productos que necesites, en caso de requerir algún producto que no se encuentre en nuestro catalogo nos lo puedes pedir */} <Link href='/contact'>haz click aquí</Link> {/* y con gusto podemos encontrarlos por ti. */}
         </p>
       </div>
       <ProductList />

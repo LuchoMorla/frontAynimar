@@ -60,8 +60,14 @@ export default function LoginPage() {
             Iniciar Sesión
           </button>
         </form>
-        <Link href="/forgotPassword">Olvide mi Contraseña</Link>
-        <Link href="/signInCustomer">No tengo cuenta, ir a Registrarse</Link>
+        <ul className={styles.contenedorAuhtChange}>
+          <li>
+            <Link href="/forgotPassword">Olvide mi Contraseña</Link>
+          </li>
+          <li>
+            <Link href="/signInCustomer">No tengo cuenta, ir a Registrarse</Link>
+          </li>
+        </ul>
       </div>
     </div>
   );

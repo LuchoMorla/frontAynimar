@@ -89,6 +89,10 @@
 	background: $--soft-green;
 	color: black;
 }
+.contenedorAuhtChange {
+	display: flex;
+	flex-flow: row wrap;
+}
 @media (max-width: 640px) {
 	.logo {
 		display: none;

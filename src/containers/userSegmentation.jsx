@@ -15,7 +15,7 @@ const userSegmentation = () => {
         </div>
     </section> */}
     <section className={styles['Customer_segment-container']}>
-        <div>
+        <div className={styles.ContainerCallToAction}>
             <h1 className={styles.hiTitle}>Compra de forma segura Online</h1>
             <p>¡Bienvenido(a) a Aynimar! Explora nuestra amplia selección de productos. {'\n'} ¡Regístrate ahora y comienza a {/* disfrutar de la mejor experiencia de */} comprar en línea!</p>
             {/* <p>Compra desde tu computadora o telefono productos que son responsables con el medio ambiente y contribuyen a la creación de una economia circular y verde.</p> */}

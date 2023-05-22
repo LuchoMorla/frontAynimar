@@ -1,5 +1,5 @@
 @import 'vars';
-
+/* 
 body {
     padding: 0;
     margin: 0;
@@ -28,25 +28,29 @@ body {
     font-size: 1.2rem;
   }
   /* styles scrollbar personalizado */
-  ::-webkit-scrollbar {
+ /*  ::-webkit-scrollbar {
     width: 12.5px;
-  }
+  } */
   /* Carril */
-  ::-webkit-scrollbar-track {
+ /*  ::-webkit-scrollbar-track {
     background: #ACD9B2;
     border-radius: 50px;
     margin: 10px;
-  }
+  } */
   /* Manejador */
-  ::-webkit-scrollbar-thumb {
+/*   ::-webkit-scrollbar-thumb {
     background: #82427b;
     border-radius: 50px;
     margin: 4px;
-  }
+  } */
   /* Manejador hover */
-  ::-webkit-scrollbar-thumb:hover {
+/*  ::-webkit-scrollbar-thumb:hover {
     background: #ACD9B2;
   }
   ::-webkit-scrollbar-track:hover {
     background: #82427b;
-  }
+  } */
+.content {
+  min-height: calc(100vh - 60px);
+  flex-grow: 1;
+}

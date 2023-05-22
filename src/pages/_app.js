@@ -6,14 +6,13 @@ import Layout from '@containers/Layout';
 import { ToastContainer } from 'react-toastify';
 import TestContext from '@context/TestContext';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from 'react';
 import '../styles/globals.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import gtag from '../lib/gtag';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function MyApp({ Component, pageProps }) {
   const initialState = useInitialState();

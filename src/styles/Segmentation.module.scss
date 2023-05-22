@@ -13,6 +13,8 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 8px;
+    background-size: cover;
+    background-position: center;
 }
 
 .Segment-Container:before {
@@ -88,13 +90,14 @@ align-items: center;
         margin-top: 10px;
         display: flex;
         flex-flow: column wrap;
-        height: 250px;
+        height: 300px;;
         background-size: 100% 680px;
     }
    .Segment-Container p {
         width: 100%;
         margin: $--lg 0;
 	    text-align: center;
+        display: none;
    }
    .Customer_segment-container {
         width: 62%;

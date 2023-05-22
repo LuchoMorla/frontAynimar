@@ -15,6 +15,17 @@
     margin-bottom: 8px;
 }
 
+.Segment-Container:before {
+    content:'';
+	position: absolute;
+    top: 0;
+	bottom: 241px;
+	left: 0;
+	right: 0;
+	background-color: rgba(0,0,0,0.6);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(255,255,255,0) 100%);
+}
+
 .hiTitle {
     font-size: 3rem;
 }

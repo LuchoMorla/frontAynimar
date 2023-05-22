@@ -65,6 +65,7 @@ margin: 24px 0;
     background: $--soft-green;
     color: $--black;
 }
+
 .linkPeudoButton {
 display: flex;
 height: 100%;
@@ -101,6 +102,14 @@ align-items: center;
     width: 62%;
     margin: 2%;
 }
+
+.linkPeudoButton {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    }
 /*    .Segment-Container h1 {
     width: 200%;
    } */

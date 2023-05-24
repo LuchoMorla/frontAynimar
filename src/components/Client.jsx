@@ -53,7 +53,7 @@ const Client = ({ client }) => {
     updateCustomer(clientId, data)
       .then(() => {
         window.alert('^^ Actualizaste tus datos correctamente ^^');
-        router.push('/mi_cuenta/cliente');
+        /* router.push('/mi_cuenta/cliente'); */
       })
       .catch((error) => {
         if (error.response?.status === 401) {
@@ -64,10 +64,10 @@ const Client = ({ client }) => {
           );
         } else if (error.response) {
           window.alert('Algo salio mal: ' + error.response.status);
-          if (error.response.status == 409) {
+          /* if (error.response.status == 409) {
             window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
             router.push('/forgotPassword');
-          }
+          } */
         }
       });
   };

@@ -74,7 +74,9 @@ export default function TablaCards({ cards, uId, email }) {
 
     if (order === null) {
       toast.warning('No hay lista de pedidos');
+      console.log('1,5', onDebit);
       setOnDebit(false);
+      console.log('1,5', onDebit);
       return;
     }
 

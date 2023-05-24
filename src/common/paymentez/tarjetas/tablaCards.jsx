@@ -127,7 +127,7 @@ export default function TablaCards({ cards, uId, email }) {
     return (
       <>
         <div className="d-flex justify-content-between align-items-center">
-          <Button disable={onDebit} severity="success" onClick={() => InitDebito(e)}>
+          <Button disabled={onDebit} severity="success" onClick={() => InitDebito(e)}>
             Pagar
           </Button>
           <Button severity="danger" onClick={() => eliminarCard(e.token)} style={{ marginLeft: '10px' }}>

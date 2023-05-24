@@ -1,7 +1,6 @@
-import React, { useContext, /* useEffect, */ useRef }  from 'react';
+import React, { useContext, useRef }  from 'react';
 import AppContext from '@context/AppContext';
-import Image from 'next/image';/* 
-import AppContext from '@context/AppContext';*/
+import Image from 'next/image';
 import axios from 'axios';
 import endPoints from '@services/api';
 import Cookie from 'js-cookie';
@@ -12,21 +11,6 @@ import addedToCartImage from '@icons/bt_added_to_cart.svg';
 import styles from '@styles/ProductItem.module.scss';
 
 const ProductItem = ({ product }) => {
-	/* const MyLink = React.forwardRef(({ href, className, children }, ref) => {
-		return (
-		  <Link href={href ? href : '#'} passHref>
-			<a ref={ref} className={className}>
-			  {children}
-			</a>
-		  </Link>
-		);
-	  }); */
-	/* 	const { state, addToCart } = useContext(AppContext);
-
-	const handleClick = item => {
-	console.log('in cart: ', state.cart.includes(item)); 
-		addToCart(item);
-	};*/
 	const router = useRouter();
 
 	const { state, addToCart } = useContext(AppContext);
@@ -43,7 +27,7 @@ const ProductItem = ({ product }) => {
 		item.price = item.price * 100;
 	};
 
-	const submitHandler = async (event/* , product */) => {
+	const submitHandler = async (event) => {
 		event.preventDefault();
 		const userHaveToken = Cookie.get('token');
 		if(!userHaveToken) {
@@ -112,58 +96,16 @@ const ProductItem = ({ product }) => {
 		};
 	};
 
-	/* CODIGO SUGERIDO PARA OPTIMIZAR 
-	const createOrder = async () => {
-  const post = await axios.post(endPoints.orders.postOrder);
-  return post.data;
-};
-
-const submitHandler = async (event) => {
-  event.preventDefault();
-  const userHaveToken = Cookie.get('token');
-  if (!userHaveToken) {
-    alert('Para realizar esta acción necesitas iniciar sesión');
-    router.push('/login');
-    return;
-  }
-
-  const savedOrderId = window.localStorage.getItem('oi');
-  const orderId = savedOrderId ? parseInt(savedOrderId) : (await createOrder()).id;
-  window.localStorage.setItem('oi', `${orderId}`);
-
-  handleClick(product);
-  addToPacket(orderId)
-    .then(() => {
-      router.reload();
-    })
-    .catch((err) => {
-      if (err.response?.status === 401) {
-        window.alert('Probablemente necesites iniciar sesión de nuevo');
-      } else if (err.response) {
-        console.log('Algo salió mal: ' + err.response.status);
-      }
-    });
-};
-	*/
-/* 
-	useEffect(() => {
-		
-	}, [state.cart]); */
-
 	return (
 		<div className={styles.ProductItem}>
 			<Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
-			{/* <MyLink href={`/store/${product.id}`} className={styles['go_product']} ref={formRef}> */}
 				<Image src={product.image} width={240} height={240} alt={product.description} />
-			{/* </MyLink> */}
 			</Link>
 			<div className={styles['product-info']}>
 				<div>
 					<p>${product.price}</p>
 					<Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
-					{/* <MyLink href={`/store/${product.id}`} className={styles['go_product']} ref={formRef}> */}
 					<p className={styles.productName}>{product.name}</p>
-					{/* </MyLink> */}
 					</Link>
 				</div>
 				<form ref={formRef} onSubmit={submitHandler} >
@@ -182,7 +124,7 @@ const submitHandler = async (event) => {
 							src={addedToCartImage}
 							alt="added to cart" 
 							/> : <Image
-							src={addToCartImage} width={24} height={24}
+							src={addToCartImage} /* width={24} height={24} */
 							alt="add to cart" 
 							/>
 							}

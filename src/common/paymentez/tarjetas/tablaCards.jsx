@@ -105,6 +105,7 @@ export default function TablaCards({ cards, uId, email }) {
       if (res?.data?.paymentStatus === 'success') {
         //update order  => pagada
         updateOrder(order?.id, { state: 'pagada' });
+        window.localStorage.removeItem('oi');
       }
       setTransactionState(true);
       toast.info('Muchas gracias, tú pago se ah realizado con exito y de forma segura');

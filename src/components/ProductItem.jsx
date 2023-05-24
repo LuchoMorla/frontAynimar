@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef }  from 'react';
+import React, { useContext, /* useEffect, */ useRef }  from 'react';
 import AppContext from '@context/AppContext';
 import Image from 'next/image';/* 
 import AppContext from '@context/AppContext';*/
@@ -12,16 +12,15 @@ import addedToCartImage from '@icons/bt_added_to_cart.svg';
 import styles from '@styles/ProductItem.module.scss';
 
 const ProductItem = ({ product }) => {
-
-	const MyLink = React.forwardRef(({ href, className, children }, ref) => {
+	/* const MyLink = React.forwardRef(({ href, className, children }, ref) => {
 		return (
-		  <Link href={href} passHref>
+		  <Link href={href ? href : '#'} passHref>
 			<a ref={ref} className={className}>
 			  {children}
 			</a>
 		  </Link>
 		);
-	  });
+	  }); */
 	/* 	const { state, addToCart } = useContext(AppContext);
 
 	const handleClick = item => {
@@ -153,19 +152,19 @@ const submitHandler = async (event) => {
 
 	return (
 		<div className={styles.ProductItem}>
-			{/* <Link href={`/store/${product.id}`} className={styles['go_product']} passHref> */}
-			<MyLink href={`/store/${product.id}`} className={styles['go_product']} ref={formRef}>
+			<Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
+			{/* <MyLink href={`/store/${product.id}`} className={styles['go_product']} ref={formRef}> */}
 				<Image src={product.image} width={240} height={240} alt={product.description} />
-			</MyLink>
-			{/* </Link> */}
+			{/* </MyLink> */}
+			</Link>
 			<div className={styles['product-info']}>
 				<div>
 					<p>${product.price}</p>
-					{/* <Link href={`/store/${product.id}`} className={styles['go_product']} passHref> */}
-					<MyLink href={`/store/${product.id}`} className={styles['go_product']} ref={formRef}>
+					<Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
+					{/* <MyLink href={`/store/${product.id}`} className={styles['go_product']} ref={formRef}> */}
 					<p className={styles.productName}>{product.name}</p>
-					</MyLink>
-					{/* </Link> */}
+					{/* </MyLink> */}
+					</Link>
 				</div>
 				<form ref={formRef} onSubmit={submitHandler} >
 					<input /* type="number" */ type="hidden" id="amount" name='amount' value='1' min={1} required />{/* podriamos usar cambios de estado */}
@@ -194,5 +193,6 @@ const submitHandler = async (event) => {
 		</div>
 	);
 };
+ProductItem.displayName = 'ProductItem';
 
 export default ProductItem;

@@ -59,8 +59,6 @@ export default function TablaCards({ cards, uId, email }) {
 
   const InitDebito = async (e) => {
     console.log('1', onDebit);
-    setOnDebit(true);
-    console.log('1', onDebit);
     const _card = {
       number: e.nombre,
       holder_name: e.holder_name,
@@ -127,7 +125,10 @@ export default function TablaCards({ cards, uId, email }) {
     return (
       <>
         <div className="d-flex justify-content-between align-items-center">
-          <Button disabled={onDebit} severity="success" onClick={() => InitDebito(e)}>
+          <Button disabled={onDebit} severity="success" onClick={() => {
+            setOnDebit(true);
+            InitDebito(e);
+            }}>
             Pagar
           </Button>
           <Button severity="danger" onClick={() => eliminarCard(e.token)} style={{ marginLeft: '10px' }}>

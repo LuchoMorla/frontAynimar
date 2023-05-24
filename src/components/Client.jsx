@@ -1,12 +1,12 @@
-import React, { useRef } from 'react';
-import { useRouter } from 'next/router';
+import React, { useRef } from 'react';/* 
+import { useRouter } from 'next/router'; */
 import { updateCustomer } from '@services/api/entities/customers';
 import styles from '@styles/MyAccount.module.scss';
 
 const Client = ({ client }) => {
   const formRef = useRef(null);
-  const router = useRouter();
-
+/*   const router = useRouter();
+ */
   const getLocation = (event) => {
     event.preventDefault();
     const clientGeoLocationInput = document.getElementById('geolocation');

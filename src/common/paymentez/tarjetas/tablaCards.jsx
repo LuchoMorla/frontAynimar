@@ -58,9 +58,7 @@ export default function TablaCards({ cards, uId, email }) {
   };
 
   const InitDebito = async (e) => {
-    console.log('1', onDebit);
     setOnDebit(true);
-    console.log('1', onDebit);
     const _card = {
       number: e.nombre,
       holder_name: e.holder_name,
@@ -74,9 +72,7 @@ export default function TablaCards({ cards, uId, email }) {
 
     if (order === null) {
       toast.warning('No hay lista de pedidos');
-      console.log('1,5', onDebit);
       setOnDebit(false);
-      console.log('1,5', onDebit);
       return;
     }
 
@@ -112,14 +108,10 @@ export default function TablaCards({ cards, uId, email }) {
       }
       setTransactionState(true);
       toast.info('Muchas gracias, tú pago se ah realizado con exito y de forma segura');
-      console.log('2', onDebit);
       setOnDebit(false);
-      console.log('2', onDebit);
     } else {
       toast.error('Rejected: Trate más luego o con otra tarjeta');
-      console.log('3', onDebit);
       setOnDebit(false);
-      console.log('3', onDebit);
     }
   };
 

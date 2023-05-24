@@ -16,7 +16,7 @@ export default function TablaCards({ cards, uId, email }) {
   const transactionIdState = useContext(TestContext);
 
   const [transactionSuccess, setTransactionState] = useState(false);
-  const [onDebit, setOnDebit] = useState(false);
+ /*  const [onDebit, setOnDebit] = useState(false); */
 
   const [listCards, setList] = useState([
     {
@@ -57,8 +57,10 @@ export default function TablaCards({ cards, uId, email }) {
       });
   };
 
-  const InitDebito = async (e) => {
-    console.log('1', onDebit);
+  const InitDebito = async (e, event) => {/* 
+    console.log('1', onDebit); */
+    event.currentTarget.disabled = true;/* 
+    console.log('1', onDebit); */
     const _card = {
       number: e.nombre,
       holder_name: e.holder_name,
@@ -72,9 +74,9 @@ export default function TablaCards({ cards, uId, email }) {
 
     if (order === null) {
       toast.warning('No hay lista de pedidos');
-      console.log('1,5', onDebit);
-      setOnDebit(false);
-      console.log('1,5', onDebit);
+      event.currentTarget.disabled = false;
+     /*  setOnDebit(false); *//* 
+      console.log('1,5', onDebit); */
       return;
     }
 
@@ -110,14 +112,18 @@ export default function TablaCards({ cards, uId, email }) {
       }
       setTransactionState(true);
       toast.info('Muchas gracias, tú pago se ah realizado con exito y de forma segura');
-      console.log('2', onDebit);
-      setOnDebit(false);
-      console.log('2', onDebit);
+   /*    console.log('2', onDebit); */
+      
+      event.currentTarget.disabled = false;
+      /* setOnDebit(false); *//* 
+      console.log('2', onDebit); */
     } else {
       toast.error('Rejected: Trate más luego o con otra tarjeta');
-      console.log('3', onDebit);
-      setOnDebit(false);
-      console.log('3', onDebit);
+    /*   console.log('3', onDebit); */
+      
+      event.currentTarget.disabled = false;
+      /* setOnDebit(false); */
+      /* console.log('3', onDebit); */
     }
   };
 
@@ -125,10 +131,8 @@ export default function TablaCards({ cards, uId, email }) {
     return (
       <>
         <div className="d-flex justify-content-between align-items-center">
-          <Button disabled={onDebit} severity="success" onClick={() => {
-            setOnDebit(true);
-            InitDebito(e);
-            }}>
+          <Button /* disabled={onDebit} */ severity="success" onClick={() =>
+            InitDebito(e)}>
             Pagar
           </Button>
           <Button severity="danger" onClick={() => eliminarCard(e.token)} style={{ marginLeft: '10px' }}>

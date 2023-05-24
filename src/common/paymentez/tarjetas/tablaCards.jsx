@@ -16,6 +16,7 @@ export default function TablaCards({ cards, uId, email }) {
   const transactionIdState = useContext(TestContext);
 
   const [transactionSuccess, setTransactionState] = useState(false);
+  const [onDebit, setOnDebit] = useState(false);
 
   const [listCards, setList] = useState([
     {
@@ -57,6 +58,7 @@ export default function TablaCards({ cards, uId, email }) {
   };
 
   const InitDebito = async (e) => {
+    setOnDebit(true);
     const _card = {
       number: e.nombre,
       holder_name: e.holder_name,
@@ -70,6 +72,7 @@ export default function TablaCards({ cards, uId, email }) {
 
     if (order === null) {
       toast.warning('No hay lista de pedidos');
+      setOnDebit(false);
       return;
     }
 
@@ -105,8 +108,10 @@ export default function TablaCards({ cards, uId, email }) {
       }
       setTransactionState(true);
       toast.info('Muchas gracias, tú pago se ah realizado con exito y de forma segura');
+      setOnDebit(false);
     } else {
       toast.error('Rejected: Trate más luego o con otra tarjeta');
+      setOnDebit(false);
     }
   };
 
@@ -114,7 +119,7 @@ export default function TablaCards({ cards, uId, email }) {
     return (
       <>
         <div className="d-flex justify-content-between align-items-center">
-          <Button severity="success" onClick={() => InitDebito(e)}>
+          <Button disable={onDebit} severity="success" onClick={() => InitDebito(e)}>
             Pagar
           </Button>
           <Button severity="danger" onClick={() => eliminarCard(e.token)} style={{ marginLeft: '10px' }}>

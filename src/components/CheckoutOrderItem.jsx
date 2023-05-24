@@ -5,7 +5,9 @@ import close from '@icons/icon_close.png';
 import endPoints from '@services/api';
 import actualizarImg from '@icons/button_refresh_15001.png';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import styles from '@styles/CheckoutOrderItem.module.scss';
+
 
 const CheckoutOrderItem = ({ product }) => {
   /* 
@@ -16,6 +18,8 @@ const CheckoutOrderItem = ({ product }) => {
   /* 	const handleRemove = product => {
 		removeFromCart(product);
 	}; */
+
+  const router = useRouter();
 
   const inputRef = useRef(null),
     divRef = useRef(null);
@@ -91,7 +95,7 @@ const CheckoutOrderItem = ({ product }) => {
             cantidad:
           </label>
           {/* <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct.amount} /> */}
-          <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct?.amount || 0} />
+          <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct?.amount || router.reload()} />
 
           {buttonOpen == true ? (
             <button className={styles.updateButton} onClick={() => actualizarCantidad(dataAmount)}>

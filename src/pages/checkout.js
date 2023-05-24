@@ -93,6 +93,19 @@ const Checkout = () => {
 
   let valorTotalConIva = valorTotalSinIva * 1.12;
 
+ /*  function autoReload() {
+    setInterval(() => {
+      // Aquí puedes poner tu condición para verificar si se debe realizar la recarga
+      const condicion = state?.cart?.map();
+      if (condicion) {
+        location.reload(); // Recarga la página
+      }
+    }, 5000); // Intervalo de tiempo en milisegundos (en este caso, cada 5 segundos)
+  }
+  
+  // Llama a la función para iniciar el autorecarga
+  autoReload(); */
+
   return (
     <>
       <div>

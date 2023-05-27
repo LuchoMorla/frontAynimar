@@ -10,16 +10,30 @@ const Footer = () => {
 	return (
 		<>
 		<nav className={styles.Nav}>
+			<div className={styles['navbar-right']}>
+				<ul>
+						<li>
+							<button /* href="/recycling" */ onClick={() => { router.back(); }}  className={styles.footerLink}>
+									Atras
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" width={50} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+										<path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+									</svg>
+							</button>		
+						</li>
+				</ul>
+			</div>
 			<div className={styles['navbar-left']}>
 				<ul>
-					<li>
-						<button /* href="/recycling" */ onClick={() => { router.back(); }}  className={styles.footerLink}>
+{/* 					<li>
+						<button 
+						href="/recycling" 
+						onClick={() => { router.back(); }}  className={styles.footerLink}>
 								Atras
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" width={50} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                   					<path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               					</svg>
 							</button>		
-					</li>
+					</li> */}
 					<li>
                         {/* <div id="widgets" className={styles.widgets}></div>
                         <Script src='https://www.hazvaca.com/project/widgets_code/s/red/3408'
@@ -49,7 +63,7 @@ const Footer = () => {
 						<button /* href="/recycling" */ 
 						onClick={() => {/* 
 								console.log('i can see your current path is this one: ', currentPath);  */
-								currentPath == '/home' ? router.push('/store') : currentPath == '/store' ? router.push('/checkout') : currentPath == '/checkout' ? router.push('/mi_cuenta/cliente') : router.push('/mi_cuenta/orders');
+								currentPath == '/home' ? router.push('/store') : currentPath == '/store' ? router.push('/checkout') : currentPath == '/checkout' ? router.push('/mi_cuenta/orders')/* router.push('/mi_cuenta/cliente') */ : router.push('/mi_cuenta/orders');
 							}}
 						className={styles.footerLink}>
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none"  width={50} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

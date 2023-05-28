@@ -103,7 +103,7 @@ const ProductInfo = ({ product }) => {
 			<form ref={formRef} onSubmit={submitHandler} >
 				<p>${product?.price}</p>
 				<p>{product?.name}</p>
-				<p>{product?.description}</p>
+				<p className={styles.description}>{product?.description}</p>
 				<label htmlFor="amount">cantidad: </label>
 				<input type="number" id="amount" name='amount' min={1} required />
 				<button type='submit' className={(styles['primary-button'], styles['add-to-cart-button'])}>

@@ -6,7 +6,7 @@
 	display: flex;
 }
 .ProductInfo {
-	margin: 24px 24px 0 24px;
+	margin: 24px 24px 0 72px;
 }
 .image {
 	margin: 10px;
@@ -51,6 +51,10 @@
 .add-to-cart-button:active {
     background: $--soft-green;
     color: $--black;
+}
+
+.description {
+	font-size: 2rem;
 }
 @media (max-width: 640px) {
 	.stand_container {

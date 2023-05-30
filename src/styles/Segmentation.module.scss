@@ -89,8 +89,9 @@ align-items: center;
     .Segment-Container {
         margin-top: 10px;
         display: flex;
-        flex-flow: column wrap;
-        height: 300px;;
+        flex-flow: column;
+        height: 100%;
+        overflow: overlay;
         background-size: 100% 680px;
     }
    .Segment-Container p {

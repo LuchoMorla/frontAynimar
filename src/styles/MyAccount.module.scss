@@ -8,9 +8,10 @@
 	place-items: center;
 }
 .MyAccount-container {
-	display: grid;
-	grid-template-rows: auto 1fr auto;
-	width: 300px;
+	/* display: grid;
+	grid-template-rows: auto 1fr auto; */
+	display: flex;
+	width: 100%;
 }
 .logo {
 	width: 150px;
@@ -19,7 +20,7 @@
 	display: none;
 }
 .title {
-	font-size: $--lg;
+	font-size: 34px; //$--lg;
 	margin-bottom: 36px;
 	text-align: start;
 	margin-top: 100px;
@@ -28,10 +29,11 @@
 .form {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 }
-.form div {
+.form div, .userCheckoutLi {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row wrap;
 }
 .label {
 	font-size: $--sm;
@@ -40,11 +42,10 @@
 	color: $--white;
 }
 .value {
-	color: $--piel-beige;
+	color: $--morado-centro;
 	font-size: $--md;
-	margin: 8px 0 32px 0;
 }
-.login-button {
+.login-button, .geolocButton {
 	margin-top: 14px;
 	margin-bottom: 30px;
 	display: flex;
@@ -55,6 +56,7 @@
     width: 100%;
     align-items: center;
     justify-content: center;
+	cursor:pointer;
 }
 .login-button:hover {
     background: $--app-green;
@@ -64,6 +66,30 @@
     background: $--soft-green;
     color: $--black;
 }
+
+.userCheckout-container {
+	display: flex;
+	flex-flow: row wrap;
+    width: 100;
+	justify-content: center;
+}
+
+.userCheckoutLi {
+	display: flex;
+    flex-direction: row wrap;
+}
+
+.inputsContainer {
+	display: flex;
+	flex-flow: column wrap;
+	margin: 4px;
+}
+.inputsContainer input {
+	border-radius: 16px;
+    padding: 4px 8px;
+	font-size: $--md;
+}
+
 @media (max-width: 640px) {
 	.form-container {
 		height: 100%;

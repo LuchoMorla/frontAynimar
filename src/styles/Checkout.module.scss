@@ -118,6 +118,11 @@
   margin-bottom: 120px;
 }
 
+.pay-Button:hover {
+  background   : $--app-green;
+  color        : $--morado-centro;
+}
+
 .pagoTitle {
   color: $--white;
 }

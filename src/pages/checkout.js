@@ -114,7 +114,7 @@ const Checkout = () => {
         </Head>
         <div className={styles.Checkout}>
           <div className={styles['Checkout-container']}>
-            <h1 className={styles.title}>Verificacion | Checkout</h1>
+            <h1 className={styles.title}>Checkout</h1>
             {/* <div> */}
               <CustomerProfile />   
            {/*  </div> */}

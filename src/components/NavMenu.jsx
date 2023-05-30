@@ -9,9 +9,9 @@ const NavMenu = () => {
 				<li>
 					<Link href="/">Home</Link>
 				</li>
-{/* 				<li>
+				<li>
 					<Link href="/recycling">Reciclar</Link>
-				</li> */}
+				</li>
 				<li>
 					<Link href="/store">Tienda</Link>
 				</li>

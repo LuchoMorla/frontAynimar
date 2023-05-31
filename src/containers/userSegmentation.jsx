@@ -17,7 +17,7 @@ const userSegmentation = () => {
     </section>
     <section className={styles['Recycler_segment-container']}>
         <div>
-            <h1  className={styles.hiTitle}>Gana dinero ayudandonos a reciclar</h1>
+            <h1  className={styles.hiTitle}>Recicla y Gana</h1>
             <p>Véndele tus desechos a las empresas para que puedan convertirlos en productos útiles y responsables para tí y para todos por que ayudas a salvar a mundo fomentando el uso de productos que son reciprocos con el medio ambiente y la creacion de una nueva economía, la economía circular, donde se te paga por tus desperdicios.</p>
         </div>
         <div className={styles.buttonr}>

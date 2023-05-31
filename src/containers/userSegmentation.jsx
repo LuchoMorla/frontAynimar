@@ -5,15 +5,6 @@ import Link from "next/link";
 const userSegmentation = () => {
  return (
     <div className={styles['Segment-Container']}>
-    <section className={styles['Recycler_segment-container']}>
-        <div>
-            <h1  className={styles.hiTitle}>Gana dinero ayudandonos a reciclar</h1>
-            <p>Véndele tus desechos a las empresas para que puedan convertirlos en productos útiles y responsables para tí y para todos por que ayudas a salvar a mundo fomentando el uso de productos que son reciprocos con el medio ambiente y la creacion de una nueva economía, la economía circular, donde se te paga por tus desperdicios.</p>
-        </div>
-        <div className={styles.buttonr}>
-            <Link href="/signInRecycler" >Registrarte para vender reciclables</Link>
-        </div>
-    </section>
     <section className={styles['Customer_segment-container']}>
         <div className={styles.ContainerCallToAction}>
             <h1 className={styles.hiTitle}>{/* Compra de forma segura Online */}Pide ya!!</h1>
@@ -22,6 +13,15 @@ const userSegmentation = () => {
         </div>
         <div className={styles.buttonr}>
             <Link href="/signInCustomer" className={styles.linkPeudoButton} >¡Regístrate!{/*  para hacer compras */}</Link>
+        </div>
+    </section>
+    <section className={styles['Recycler_segment-container']}>
+        <div>
+            <h1  className={styles.hiTitle}>Gana dinero ayudandonos a reciclar</h1>
+            <p>Véndele tus desechos a las empresas para que puedan convertirlos en productos útiles y responsables para tí y para todos por que ayudas a salvar a mundo fomentando el uso de productos que son reciprocos con el medio ambiente y la creacion de una nueva economía, la economía circular, donde se te paga por tus desperdicios.</p>
+        </div>
+        <div className={styles.buttonr}>
+            <Link href="/signInRecycler" >Registrarte para vender reciclables</Link>
         </div>
     </section>
     </div>

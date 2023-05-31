@@ -1,13 +1,14 @@
 @import 'vars';
 
 .OrderItem {
-	display: grid;
-	grid-template-columns: auto 1fr auto auto;
+/* 	display: grid;
+	grid-template-columns: auto 1fr auto auto; */
+	display: flex;
+	flex-flow: row wrap;
 	gap: 16px;
 	margin-bottom: 24px;
-	margin-left: 3%;
-    margin-right: 3%;
 	align-items: center;
+	margin-top: 16px;
 }
 .OrderItem figure {
 	margin: 0;
@@ -27,4 +28,8 @@
 .OrderItem p:nth-child(3) {
 	font-size: $--md;
 	font-weight: bold;
+}
+
+.more-clickable-area {
+	cursor: pointer;
 }

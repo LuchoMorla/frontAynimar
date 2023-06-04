@@ -13,7 +13,8 @@ import Cookie from 'js-cookie';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import endPoints from '@services/api';
-import PaymentezDos from '@common/PaymentezDos';
+import PaymentezDos from '@common/PaymentezDos';/* 
+import DiscountCodeInput from '@components/DiscountCodeInput'; */
 import styles from '@styles/Checkout.module.scss';
 
 const Checkout = () => {
@@ -119,6 +120,8 @@ const Checkout = () => {
               <CustomerProfile />   
            {/*  </div> */}
             <div className={styles['Checkout-content']}>
+            {/* // buen lugar para agregar descuentosS 
+              <DiscountCodeInput />*/}
               <div /* ref={actualizarSumTotal} onChange={() => sumTotal()} */ className={styles['my-orders']}>
                 <table>
                   <tbody>

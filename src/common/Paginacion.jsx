@@ -63,7 +63,7 @@ const Paginate = ({ totalItems, itemsPerPage, neighbours, setOffset }) => {
       <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-700">
-            {/* Showing */}Mostrando <span className="font-medium">{itemsPerPage * (current - 1) + 1}</span> {/* to */}al{' '}
+            {/* Showing */}Mostrando <span className="font-medium">{itemsPerPage * (current - 1) + 1}</span> {/* to */} al {' '}
             <span className="font-medium">{current * itemsPerPage < totalItems ? current * itemsPerPage : totalItems}</span> {/* of */} de <span className="font-medium">{totalItems}</span> {/* results */} resultados
           </p>
         </div>

@@ -6,7 +6,7 @@ import Paginacion from '@common/Paginacion';
 import styles from '@styles/ProductList.module.scss';
 
 const ProductList = () => {
-	const PRODUCT_LIMIT = 28;
+	const PRODUCT_LIMIT = 16;
 /* 	const PRODUCT_OFFSET = 0; */
 	const [PRODUCT_OFFSET, setOffsetProducts] = useState(0);
 

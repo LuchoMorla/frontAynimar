@@ -8,9 +8,16 @@ import styles from '@styles/ProductList.module.scss';
 const ProductList = () => {
 	const PRODUCT_LIMIT = 16;
 /* 	const PRODUCT_OFFSET = 0; */
+	const [products, setProducts] = useState([]);
+	
 	const [PRODUCT_OFFSET, setOffsetProducts] = useState(0);
+
 	const totalProducts = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET)).length;
-	const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET), PRODUCT_OFFSET);
+	useEffect(() => {
+		const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET), PRODUCT_OFFSET);
+		setProducts(products);
+	}, [PRODUCT_OFFSET]);
+
 
 	return (
 		<section className={styles["main-container"]}>

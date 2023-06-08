@@ -9,17 +9,17 @@ const ProductList = () => {
 	const PRODUCT_LIMIT = 16;
 /* 	const PRODUCT_OFFSET = 0; */
 	const [PRODUCT_OFFSET, setOffsetProducts] = useState(0);
-	
-	const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET), PRODUCT_OFFSET);
+
+	let products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET), PRODUCT_OFFSET);
 	const totalProducts = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET)).length;
 
-	useEffect(() => {
+/* 	useEffect(() => {
 		try {
-		  fecthData();
+			
 		} catch (error) {
 		  console.log(error);
 		}
-	  }, [endPoints]);
+	  }, [endPoints]); */
 
 	return (
 		<section className={styles["main-container"]}>

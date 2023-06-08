@@ -20,7 +20,7 @@ const ProductList = () => {
 					<ProductItem product={product} key={product.id} />
 				))}
 			</div>
-			{totalProducts > 0 && <Paginacion totalItems={totalProducts} itemsPerPage={PRODUCT_LIMIT} setOffset={setOffsetProducts} neighbours={PRODUCT_LIMIT}></Paginacion>}
+			{totalProducts > 0 && <Paginacion totalItems={totalProducts} itemsPerPage={PRODUCT_LIMIT} setOffset={setOffsetProducts} neighbours={16}></Paginacion>}
 		</section>
 	);
 }

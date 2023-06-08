@@ -10,11 +10,7 @@ const ProductList = () => {
 /* 	const PRODUCT_OFFSET = 0; */
 	const [PRODUCT_OFFSET, setOffsetProducts] = useState(0);
 	const totalProducts = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET)).length;
-	useEffect(() => {
-		const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET), PRODUCT_OFFSET);
-		return products
-	}, [PRODUCT_OFFSET]);
-
+	const products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET), PRODUCT_OFFSET);
 
 	return (
 		<section className={styles["main-container"]}>

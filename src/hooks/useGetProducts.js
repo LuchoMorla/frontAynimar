@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useFetchProducts = (endPoint) => {
+const useGetProducts = (endPoint) => {
   const [data, setData] = useState([]);
 
   async function fetchData() {
@@ -20,4 +20,4 @@ const useFetchProducts = (endPoint) => {
   return data;
 };
 
-export default useFetchProducts;
+export default useGetProducts;

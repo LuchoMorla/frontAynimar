@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import endPoints from '@services/api/index';
-import useFetchProducts from '@hooks/useGetProducts';
+import useGetProducts from '@hooks/useGetProducts';
 import ProductItem from '@components/ProductItem';
 import Paginacion from '@common/Paginacion';
 import styles from '@styles/ProductList.module.scss';
@@ -8,11 +8,11 @@ import styles from '@styles/ProductList.module.scss';
 const ProductList = () => {
 	const PRODUCT_LIMIT = 16;
 /* 	const PRODUCT_OFFSET = 0; */
-	const [PRODUCT_OFFSET, setOffsetProducts] = useState(0);
+	const [offset, setOffset] = useState(0);
 
-	let products = useFetchProducts(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET), PRODUCT_OFFSET);
-	const totalProducts = useFetchProducts(endPoints.products.getProducts(10000000,0)).length;
-
+	let products = useGetProducts(endPoints.products.getProducts(PRODUCT_LIMIT, offset), offset);
+	const totalProducts = useGetProducts(endPoints.products.getProducts(10000000,0)).length;
+	/* let totalProducts = products.length; */
 	return (
 		<section className={styles["main-container"]}>
 			<div className={styles.ProductList}>
@@ -20,7 +20,7 @@ const ProductList = () => {
 					<ProductItem product={product} key={product.id} />
 				))}
 			</div>
-			{totalProducts > 0 && <Paginacion totalItems={totalProducts} itemsPerPage={PRODUCT_LIMIT} setOffset={setOffsetProducts} neighbours={3}></Paginacion>}
+			{totalProducts > 0 && <Paginacion totalItems={totalProducts} itemsPerPage={PRODUCT_LIMIT} setOffset={setOffset} neighbours={3}></Paginacion>}
 		</section>
 	);
 }

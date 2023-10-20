@@ -60,13 +60,13 @@ const Paginate = ({ totalItems, itemsPerPage, neighbours, setOffset }) => {
 
   return (
     <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-      <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-        <div>
+      <div className="sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        {/* { window.screen.width < 704 ? */} <div>
           <p className="text-sm text-gray-700">
             {/* Showing */}Mostrando <span className="font-medium">{itemsPerPage * (current - 1) + 1}</span> {/* to */} al {' '}
             <span className="font-medium">{current * itemsPerPage < totalItems ? current * itemsPerPage : totalItems}</span> {/* of */} de <span className="font-medium">{totalItems}</span> {/* results */} resultados
           </p>
-        </div>
+        </div> {/* : null */ }
         <div>
           <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
             <a

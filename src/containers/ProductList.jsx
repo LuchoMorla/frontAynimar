@@ -8,7 +8,7 @@ import styles from '@styles/ProductList.module.scss';
 const ProductList = () => {
 	const PRODUCT_LIMIT = 16;
 /* 	const PRODUCT_OFFSET = 0; */
-const [offsetProducts, setOffsetProducts] = useState(0);
+	const [offsetProducts, setOffsetProducts] = useState(0);
 
 	const products = useGetProducts(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts), offsetProducts);
 	const totalProducts = useGetProducts(endPoints.products.getProducts(10000000, 0)).length;/* 

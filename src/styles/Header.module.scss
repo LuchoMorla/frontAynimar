@@ -2,17 +2,8 @@
 
 .Nav {
   display: flex;
-  justify-content: space-between;
-  padding: 0 24px;
-  border-bottom: 1px solid $--soft-green;
-  position: fixed;
-  top: 0;
-  background: white;
-  /* width: calc(100% - 1px); */
-  width: 100%;
-  z-index: 1;
-  align-items: center;
-  opacity: 0.93;
+  margin: 0 auto;
+  max-width: 1024px;
 }
 .hamburger {
   display: none;
@@ -112,7 +103,7 @@
   align-items: center;
 }
 @media (max-width: 700px) {
-   .menu {
+  .menu {
     display: block;
   }
   .hamburger {

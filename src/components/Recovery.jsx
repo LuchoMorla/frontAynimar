@@ -3,7 +3,7 @@ import AppContext from '@context/AppContext';
 import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import logo from '@logos/logo-Aynimar.svg';
+import logo from '@logos/logoAynimar.svg';
 import imgCloseImage from '@assets/icons/close-eye.png';
 import imgOpenImage from '@assets/icons/open-eye.png';
 import styles from '@styles/PasswordRecovery.module.scss';

@@ -133,7 +133,7 @@ const Header = () => {
             {
               isTokenValid() ? ( // Verifica si el token existe
               <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
-                <Image src={userIcon} width={50} height={40} alt="user icon menu" />
+                <Image src={userIcon} alt="user icon menu" />
               </li>
             ) : (
               <li>

@@ -2,99 +2,95 @@
 
 .login {
 	width: 100%;
-	height: 125vh;
-	display: grid;
-	place-items: center;
+	height: auto;
 }
 .login-container {
 	display: flex;
-	grid-template-rows: auto 1fr auto;
 	flex-direction: column;
-	width: 300px;
-	align-items: center;
-	color: $--white;
+    width: 30rem;
+    align-items: left;
+	margin: 0 auto;
 }
-.logo {
-	width: 150px;
-	margin-bottom: 48px;
-	justify-self: center;
-	display: none;
-	margin-top: 11px;
+.login-container h1 {
+	font-size: 1.8rem;
+    font-weight: 800;
+	color: $--black;
+	text-align: center;
 }
+
 .form {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-}
-.form a {
-	color: $--hospital-green;
-	font-size: $--sm;
-	text-align: center;
-	text-decoration: none;
-	margin-bottom: 52px;
-}
-.label {
-	font-size: $--sm;
-	font-weight: bold;
-	margin-bottom: 4px;
-	color: white;
-}
-.input {
-	background-color: $--text-input-field;
-	border: none;
-	border-radius: 10px;
-	height: 30px;
-	font-size: $--md;
-	padding: 6px;
-	margin-bottom: 12px;
-	text-indent: 8px;
+
 }
 
-.primary-button {
-	background-color: $--hospital-green;
-	border-radius: 8px;
-	border: none;
-	color: $--white;
-	width: 100%;
-	cursor: pointer;
-	font-size: $--md;
-	font-weight: bold;
-	height: 50px;
+.label {
+	font-size: 1.4rem;
+    font-weight: bold;
 }
-.secondary-button {
-	background-color: $--white;
-	border-radius: 8px;
-	border: 1px solid $--hospital-green;
-	color: $--hospital-green;
-	width: 100%;
-	cursor: pointer;
-	font-size: var(--md);
-	font-weight: bold;
-	height: 50px;
+.input {
+	font-family: 'Baloo 2';
+	border-radius: .5rem;
+    border: none;
+    font-size: 1.4rem;
+    padding: .6rem 1rem;
+    margin-bottom: 1rem;
 }
-.login-button {
-	margin-top: 16px;
-	margin-bottom: 25px;
-	border: 1px inset $--piel-beige;
-	background: $--morado-centro;
-	border-radius: 25px;
-	color: $--white;
-	width: 100%;
-	height: 30px;
-	cursor: pointer;
+.input:focus {
+    outline: none;
+}
+.form button {
+	font-family: 'Baloo 2';
+    display: flex;
+    background: $--gray;
+    padding: 5px;
+    border-radius: .8rem;
+    color: white;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all .3s;
+	font-size: 1.4rem;
 }
 .login-button:hover {
-	background: $--app-green;
+	background: $--purple;
 }
-.login-button:active {
-	background: $--soft-green;
-	color: black;
-}
+
 .contenedorAuhtChange {
+	width: 100%;
 	display: flex;
-	flex-flow: row nowrap;
-	align-items: center;
-    height: 60px;
+	justify-content: space-between;
+	margin-top: .5rem;
+	list-style: none;
+	text-align: center;
+}
+
+.sigInCustomer {
+	width: 49%;
+	background: $--gray;
+    padding: .5rem 1rem;
+    border-radius: .8rem;
+    color: #fff;
+	font-family: 'Baloo 2';
+	transition: all .2s;
+}
+.sigInCustomer:hover {
+	background-color: $--purple;
+}
+.forgot {
+	width: 49%;
+	background: $--gray;
+    padding: .5rem 1rem;
+    border-radius: .8rem;
+    color: #fff;
+	font-family: 'Baloo 2';
+	transition: all .2s;
+}
+.forgot:hover {
+	background-color: $--purple;
 }
 
 /* .contenedorAuhtChange ul li a {
@@ -103,37 +99,7 @@ color: $--morado-centro;
 border: 1px solid $--white;
 padding: 8px;
 border-radius: 8px;
-} */    
-
-.contenedorAuhtChange li {
-	list-style: none;
-	cursor: pointer;
-}
-
-.forgot {
-	border: 1px solid $--morado-centro;
-	color: $--hospital-green;
-    padding: 8px;
-    border-radius: 25px;
-	margin: 8px;
-}
-
-.sigInCustomer {
-	border: 1px solid $--hospital-green;
-	padding: 8px;
-    border-radius: 25px;
-	background: $--soft-green;
-	margin: 8px;
-}
-
-.sigInCustomer a {
-	color: black;
-}
-
-.linkAuthChange {
-	width: 100%;
-	height: 100%      ;
-}
+} */ 
 
 @media (max-width: 640px) {
 	.logo {

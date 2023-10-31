@@ -39,8 +39,7 @@ export default function LoginPage() {
   return (
     <div className={styles.login}>
       <div className={styles['login-container']}>
-        <Image src={logo} width={100} height={100} className={styles.logo} alt="logo Aynimar" />
-        <h1 className={styles.title}>Mi cuenta</h1>
+        <h1 className={styles.title}>Incicia Sesión</h1>
 
         <form ref={formRef} className={styles.form} onSubmit={submitHandler} autoComplete="on">
           <div className={styles.form}>
@@ -61,11 +60,11 @@ export default function LoginPage() {
           </button>
         </form>
         <ul className={styles.contenedorAuhtChange}>
-        <li className={styles.sigInCustomer}>
+          <li className={styles.sigInCustomer}>
             <Link href="/signInCustomer" className={styles.linkAuthChange}>Registrate</Link>
           </li>
           <li className={styles.forgot}>
-            <Link href="/forgotPassword" className={styles.linkAuthChange}>Olvide mi Contraseña</Link>
+            <Link href="/forgotPassword" className={styles.linkAuthChange}>Olvidé mi Contraseña</Link>
           </li>
         </ul>
       </div>

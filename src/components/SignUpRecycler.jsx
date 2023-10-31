@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { addRecycler } from '@entities/recyclers';
-import logo from '@logos/logo-Aynimar.svg';
+import logo from '@logos/logoAynimar.svg';
 import styles from '@styles/Login.module.scss';
 
 const SignUp = () => {

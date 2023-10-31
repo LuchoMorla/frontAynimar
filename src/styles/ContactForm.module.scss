@@ -1,39 +1,55 @@
 @import 'vars';
 
 .form {
-    display: flex;
-    flex-flow: column wrap;
-    align-items: center;
+    margin: 0 auto;
 }
 .form_inputs-container {
     display: flex;
-    flex-flow: column wrap;
-    width: 250px;
-    color: white;
-    align-items: center;
+    flex-direction: column;
+    width: 30rem;
+    color: $--black;
+    align-items: left;
 }
 .form_inputs-container label {
-    margin: 10px;
+    font-size: 1.4rem;
+    font-weight: bold;
 }
 .form_inputs-container input {
-    width: 100%;
+    border-radius: .5rem;
+    border: none;
+    font-size: 1.4rem;
+    padding: .6rem 1rem;
+    margin-bottom: 1rem;
+}
+.form_inputs-container textarea {
+    border-radius: .5rem;
+    font-size: 1.4rem;
+    padding: .6rem 1rem;
+    margin-bottom: 1rem;
+    border: none;
+    font-family: 'Baloo 2';
+}
+.form_inputs-container textarea:focus {
+    outline: none;
+}
+.form_inputs-container input:focus {
+    outline: none;
 }
 .form_inputs-container .button {
+    font-family: 'Baloo 2';
     display: flex;
-    background: $--morado-centro;
+    background: $--gray;
     padding: 5px;
-    border-radius: $--lg;
+    border-radius: .8rem;
     color: white;
     width: 100%;
     align-items: center;
     justify-content: center;
     margin: $--sm 0;
     border: none;
+    cursor: pointer;
+    transition: all .3s;
 }
 .form_inputs-container .button:hover {
-    background: $--app-green;
-}
-.form_inputs-container .button:active {
-    background: $--soft-green;
-    color: $--black;
+    background: $--purple;
 }

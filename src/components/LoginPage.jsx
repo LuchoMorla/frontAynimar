@@ -39,7 +39,7 @@ export default function LoginPage() {
   return (
     <div className={styles.login}>
       <div className={styles['login-container']}>
-        <h1 className={styles.title}>Incicia Sesión</h1>
+        <h1 className={styles.title}>Inicia Sesión</h1>
 
         <form ref={formRef} className={styles.form} onSubmit={submitHandler} autoComplete="on">
           <div className={styles.form}>

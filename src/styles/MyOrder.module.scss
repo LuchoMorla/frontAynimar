@@ -2,22 +2,23 @@
 
 .MyOrder {
   width: 360px;
-  padding: 24px;
+  padding: 1rem;
   box-sizing: border-box;
   position: fixed;
   right: 0;
-  background-color: white;
+  background-color: #fff;
   top: 60px;
   bottom: 0;
-  border-radius: 6px;
-  border: 1px solid $--soft-green;
+  border-radius: 1rem 1rem 0 0;
   overflow-y: auto;
   z-index: 1;
-  opacity: 0.99;
 }
 .title-container {
   display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
+
 .MyOrder-container {
   position: sticky;
   bottom: 0;
@@ -71,11 +72,11 @@
 .order p:nth-child(2) {
   text-align: end;
   font-weight: bold;
-  color: $--app-green;
+  color: $--black;
 }
 
 .primary-button {
-  background: $--hospital-green;
+  background: $--gray;
   border-radius: 8px;
   border: none;
   color: $--white;
@@ -84,6 +85,10 @@
   font-size: $--md;
   font-weight: bold;
   height: 50px;
+  transition: all .2s;
+}
+.primary-button:hover {
+  background: $--purple;
 }
 
 .totalContainer {

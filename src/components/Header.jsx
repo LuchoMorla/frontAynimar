@@ -8,7 +8,7 @@ import MyOrder from '@containers/MyOrder';
 import MyPayment from '@containers/MyPayment';
 import Cookie from 'js-cookie';
 import menu from '@icons/icon_menu.svg';
-import logo from '@logos/logo-Aynimar.svg';
+import logo from '@logos/logoAynimar.svg';
 import AppContext from '@context/AppContext';
 import shoppingCart from '@icons/icon_shopping_cart.svg';
 import sellingCart from '@icons/reciclando.svg';

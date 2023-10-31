@@ -1,15 +1,19 @@
 @import 'vars';
 
 .contact {
-    padding: 100px;
+    margin: 0 auto;
+    max-width: 1024px;
     display: flex;
-    flex-flow: column wrap;
-    text-align: center;
+    flex-direction: column;
+}
+.form_inputs-container {
+    display: flex;
 }
 .title {
     text-align: center;
-    color: $--white;
-    margin: $--sm 0 0 0;
+    color: $--black;
+    font-size: 1.8rem;
+    font-weight: 800;
 }
 @media (max-width: 700px) {
     .contact {

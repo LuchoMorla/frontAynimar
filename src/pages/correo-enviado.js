@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React from 'react';
 import Image from 'next/image';
-import logo from '@logos/logo-Aynimar.svg';
+import logo from '@logos/logoAynimar.svg';
 import emailIcon from '@icons/email.svg';
 import styles from '@styles/SendEmail.module.scss';
 

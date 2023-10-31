@@ -42,7 +42,7 @@ const FormContact = () => {
                     <input type="email" id='email-address' name='email-address' />
                     <label htmlFor="message">mensaje: </label>
                     <textarea name='message' id='message' cols="30" rows="10"></textarea>
-                    <input type="submit" value='enviar mail' className={styles.button}/>
+                    <input type="submit" value='Enviar' className={styles.button}/>
                 </div>
             </form>
         </>

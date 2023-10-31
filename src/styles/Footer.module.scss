@@ -6,19 +6,16 @@
   position: fixed;
   bottom: 0;
   display: flex;
-  flex-shrink: 0;
-  justify-content: space-between;
+  justify-content: space-around;
   /* padding: 250px 24px; */
-  border-bottom: 1px solid $--soft-green;
  /*  position: fixed;
   top: 0; */
-  background: white;
+  background: $--gray;
+  color: #fff;
   /* width: calc(100% - 1px); */
   width: 100%;/* 
   z-index: 1; */
-  align-items: center;
-  opacity: 0.93;
-  height: 60px;
+  height: auto;
 }/* 
 .hamburger {
   display: none;
@@ -68,15 +65,15 @@
 .navbar-left ul li a,
 .navbar-right ul li a {
   text-decoration: none;
-  color: $--morado-centro;
-  border: 1px solid $--white;
+  color: #fff;
+  border: 1px solid #fff;
+  background-color: $--purple;
   padding: 8px;
   border-radius: 8px;
 }
 .navbar-left ul li a:hover,
 .navbar-right ul li a:hover {
-  border: 1px solid $--hospital-green;
-  color: $--hospital-green;
+  background-color: adjust-hue($--purple, $degrees: -8);
 }
 /* .navbar-email {
   color: $--morado-centro;
@@ -134,13 +131,21 @@
 }
 
 .footerLink {
-    margin: 8px;
-    display: flex;
-    flex-flow: row nowrap;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background-color: transparent;
+  padding: 0 .5rem;
+}
+
+.registrarse {
+  background-color: #fff;
 }
 
 .textoFooter {
-    color: $--black;
+    color: #fff;
+    text-align: left;
+    max-width: 700px;
 }
 
 @media (max-width: 700px) {

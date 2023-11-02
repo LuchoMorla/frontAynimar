@@ -1,13 +1,14 @@
 @import 'vars';
 
 .ProductItem {
-	width: 240px;
+	max-width: 240px;
+	/*border: 1px solid blue;*/
 }
 .ProductItem img {
-	width: 240px;
+	max-width: 240px;
 	height: 240px;
-	border-radius: 20px;
-	object-fit: cover;
+	border-radius: 1rem;
+	object-fit:contain;
 }
 .product-info {
 	display: flex;
@@ -15,24 +16,26 @@
 	align-items: center;
 	margin-top: 12px;
 }
-.product-info figure {
+/*.product-info figure {
 	margin: 0;
 }
-.product-info figure img {
+/*.product-info figure img {
 	width: 35px;
 	height: 35px;
-}
+	object-fit:contain;
+}*/
 .product-info div p:nth-child(1) {
-	font-weight: bold;
-	font-size: $--md;
+	font-weight: 800;
+	font-size: $--lg;
 	margin-top: 0;
 	margin-bottom: 4px;
+	color: black;
 }
 .product-info div p:nth-child(2) {
-	font-size: $--sm;
+	font-size: $--md;
 	margin-top: 0;
 	margin-bottom: 0;
-	color: $--soft-green;
+	color: $--black;
 }
 .go_product {
 	cursor: pointer;
@@ -44,6 +47,14 @@
 	color: $--soft-green;
 	cursor: pointer;
 }
+
+.addToCartImage {
+	width: 20rem;
+	background-color: black;
+	width: 200px;
+	border: 3px solid blue;
+}
+
 .pay-Button {
 	width        : 60%;
 	border-radius: 25px;
@@ -53,7 +64,19 @@
 	color        : $--app-green;
 	font-size    : 1rem;
 	cursor       : pointer;
-  }
+}
+
+.product-info form .primary-button:nth-child(2) {
+	background-color: aqua;
+	width: 2rem;
+	border-radius: 0;
+}
+.product-info form:nth-child(1) {
+	background-color: rgb(148, 218, 56);
+	width: 2rem;
+	border-radius: 0;
+}
+
 @media (max-width: 640px) {
 	.cards-container {
 		grid-template-columns: repeat(auto-fill, 140px);

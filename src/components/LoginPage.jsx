@@ -2,9 +2,6 @@ import React, { useRef } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Image from 'next/image';
-import logo from '@logos/logoAynimar.svg';
-import styles from '@styles/Login.module.scss';
 
 export default function LoginPage() {
   const auth = useAuth();

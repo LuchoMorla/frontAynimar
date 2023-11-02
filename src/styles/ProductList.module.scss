@@ -1,17 +1,18 @@
 @import 'vars';
 
-.ProductList {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, 240px);
-	gap: 26px;
-	place-content: center;
-	margin: 1rem 1rem 1rem 1rem;
-	background: var($--soft-green);
+.main-container {
+	margin: 0 auto;
+	max-width: 1024px;
 }
 
-.main-container {
-	margin-bottom: 60px;
+.ProductList {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.29rem;
 }
+
+
 
 @media (max-width: 640px) {
 	.ProductList {

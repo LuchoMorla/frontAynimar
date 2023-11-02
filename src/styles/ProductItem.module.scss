@@ -2,19 +2,22 @@
 
 .ProductItem {
 	max-width: 240px;
+	margin: 1rem .5rem;
+	background-color: #fff;
+	border-radius: 1rem;
+	padding: .4rem;
+	box-shadow: $--cardShadow;
 	/*border: 1px solid blue;*/
 }
 .ProductItem img {
 	max-width: 240px;
 	height: 240px;
-	border-radius: 1rem;
-	object-fit:contain;
+	border-radius: 1rem 1rem 0 0;
+	object-fit:cover;
 }
 .product-info {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
-	margin-top: 12px;
 }
 /*.product-info figure {
 	margin: 0;
@@ -29,7 +32,7 @@
 	font-size: $--lg;
 	margin-top: 0;
 	margin-bottom: 4px;
-	color: black;
+	color: $--black;
 }
 .product-info div p:nth-child(2) {
 	font-size: $--md;
@@ -42,17 +45,19 @@
 }
 .productName {
 	font-size: $--sm;
-	margin-top: 0;
-	margin-bottom: 0;
 	color: $--soft-green;
 	cursor: pointer;
 }
 
-.addToCartImage {
-	width: 20rem;
-	background-color: black;
-	width: 200px;
-	border: 3px solid blue;
+.product-info form .more-clickable-area {
+	margin-left: .5rem;
+	height: auto;
+}
+.product-info form .more-clickable-area img {
+	border-radius: 0;
+	min-width: 2.3rem;
+	height: auto;
+	justify-self:flex-start;
 }
 
 .pay-Button {
@@ -64,17 +69,6 @@
 	color        : $--app-green;
 	font-size    : 1rem;
 	cursor       : pointer;
-}
-
-.product-info form .primary-button:nth-child(2) {
-	background-color: aqua;
-	width: 2rem;
-	border-radius: 0;
-}
-.product-info form:nth-child(1) {
-	background-color: rgb(148, 218, 56);
-	width: 2rem;
-	border-radius: 0;
 }
 
 @media (max-width: 640px) {

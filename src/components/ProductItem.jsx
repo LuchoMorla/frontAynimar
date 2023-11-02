@@ -120,7 +120,6 @@ const ProductItem = ({ product }) => {
 								/> 
 								) : ( 
 								<Image
-									className={'addToCartImage'}
 									src={addToCartImage} /* width={24} height={24} */
 									alt="add to cart" 
 								/>

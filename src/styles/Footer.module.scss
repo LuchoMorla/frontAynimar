@@ -1,15 +1,6 @@
 @import 'vars';
 
 .Nav {
-/*   position: relative;
-  bottom: 0; */
-  position: fixed;
-  bottom: 0;
-  display: flex;
-  justify-content: space-around;
-  /* padding: 250px 24px; */
- /*  position: fixed;
-  top: 0; */
   background: $--gray;
   color: #fff;
   /* width: calc(100% - 1px); */

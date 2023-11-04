@@ -9,11 +9,9 @@
 	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
-	margin-bottom: 1.4rem;
+	margin-bottom: 1rem;
 }
 
 @media (max-width: 640px) {
-	.ProductList {
-		grid-template-columns: repeat(auto-fill, 140px);
-	}
+
 }

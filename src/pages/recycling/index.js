@@ -8,12 +8,12 @@ const recycling = () => {
   return (
     <>
       <Head>
-        <title>recycling | Aynimar</title>
+        <title>Recycling | Aynimar</title>
       </Head>
       <div className={styles.Recycling}>
-        <p>Gana dinero vendiendonos tus desechos para que convertirlos en productos útiles. Actualmente estamos ofreciendo
-          la compra de los siguientes residuos, en caso de no encontrar el que desees comprarnos o de tener algún incomveniente, siempre
-          puedes tomar contacto con nosotros en el boton Contactanos del menú o haciendo <Link href='/contact'>click aquí</Link>
+        <p>Gana dinero vendiendo tus desechos para su transformación en productos útiles. Compramos una variedad de residuos. 
+          Si no encuentras lo que deseas vender o tienes algún problema. Contactanos haciendo  
+          <Link href='/contact'> Click Aquí</Link>
         </p>
       </div>
       <WasteList /> 

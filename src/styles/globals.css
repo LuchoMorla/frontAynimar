@@ -3,8 +3,6 @@
 body {
     font-family: 'Baloo 2', sans-serif;
     background-color: #eeeeee;
-    width: 100%;
-    margin: 0 auto;
   }
   a {
     color: white;
@@ -12,7 +10,6 @@ body {
   }
   * {
     box-sizing: border-box;
-    margin: 0;
     padding: 0;
   }
   p, h1 {

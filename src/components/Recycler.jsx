@@ -129,7 +129,7 @@ const Recycler = ({ recycler }) => {
               defaultValue={recycler?.postalCode} className="value" />
 
               <label htmlFor="direccion" className={styles.label}>
-              Dirección de recolección
+                Dirección de recolección
               </label>
               <input type="text" name="direccion" id="direccion" autoComplete="street-address" 
               defaultValue={recycler?.streetAddress} required className="value" />

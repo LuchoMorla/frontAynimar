@@ -59,7 +59,7 @@ const Paginate = ({ totalItems, itemsPerPage, neighbours, setOffset }) => {
   }
 
   return (
-    <div className="flex justify-center mb-20">
+    <div className="flex justify-center mb-10">
       <div className="text-center font-bold">
         {/* { window.screen.width < 704 ? */} 
         <div>

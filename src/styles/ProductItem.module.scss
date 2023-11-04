@@ -8,6 +8,11 @@
 	padding: .4rem;
 	box-shadow: $--cardShadow;
 	/*border: 1px solid blue;*/
+	transition: all .3s ease-in-out;
+}
+.ProductItem:hover {
+	scale: 1.04;
+	box-shadow: $--cardShadowHover;
 }
 .ProductItem img {
 	max-width: 240px;

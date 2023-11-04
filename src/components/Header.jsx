@@ -99,7 +99,7 @@ const Header = () => {
           </Link>
         </div>
         <div className={styles['navbar-left']}>
-          <ul>
+          <ul className={styles['menuNav']}>
             <li>
               <Link href="/">Home</Link>
             </li>

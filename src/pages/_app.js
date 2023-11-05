@@ -44,7 +44,7 @@ function MyApp({ Component, pageProps }) {
           <Layout >
             <Component {...pageProps} />
           </Layout >
-          {/*<ToastContainer />*/}
+          {<ToastContainer />}
         </TestContext.Provider>
       </AppContext.Provider>
     </ProviderAuth>

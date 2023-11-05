@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import styles from '@styles/Login.module.scss'
+import styles from '@styles/Login.module.scss';
 
 export default function LoginPage() {
   const auth = useAuth();
@@ -53,7 +53,7 @@ export default function LoginPage() {
             {'\n'}
           </div>
 
-          <button type="submit" className={(styles['primary-button'], styles['login-button'])}>
+          <button type="submit" className={styles['login-button']}>
             Iniciar Sesión
           </button>
         </form>
@@ -68,4 +68,4 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};

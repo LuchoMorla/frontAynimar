@@ -17,12 +17,15 @@
 	color: $--black;
 	text-align: center;
 }
+.login-container a {
+	text-align: center;
+	color: #fff;
+}
 
 .form {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-
 }
 
 .label {
@@ -54,6 +57,7 @@
     cursor: pointer;
     transition: all .3s;
 	font-size: 1.4rem;
+	margin-bottom: .5rem;
 }
 .login-button:hover {
 	background: $--purple;
@@ -91,6 +95,11 @@
 }
 .forgot:hover {
 	background-color: $--purple;
+}
+
+.loginSignUp {
+	margin-bottom: .5rem;
+	color: $--black;
 }
 
 /* .contenedorAuhtChange ul li a {

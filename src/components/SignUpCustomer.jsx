@@ -45,7 +45,7 @@ const SignUp = () => {
     return (
       <div className={styles.login}>
       <div className={styles['login-container']}>
-        <Image src={logo} width={100} height={100} className={styles.logo} alt='logo Aynimar' />
+        {/*<Image src={logo} width={100} height={100} className={styles.logo} alt='logo Aynimar' />*/}
         <h1 className={styles.title}>Registro de cliente</h1>
 
         <form action="/" ref={formRef} className={styles.form} onSubmit={submitHandler} autoComplete="on">
@@ -66,7 +66,7 @@ const SignUp = () => {
             name="apellido"
             id="apellido"
             required
-            placeholder="Esario Lopez Khe"
+            placeholder="Esario Lopez"
             className={styles.input}
             />
             {'\n'}
@@ -87,7 +87,7 @@ const SignUp = () => {
             autoComplete="current-password" 
             required
             className={styles.input} 
-            placeholder="***Contraseña***"
+            placeholder="************"
             />
             {'\n'}
           </div>

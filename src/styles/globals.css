@@ -5,8 +5,8 @@ body {
     background-color: #eeeeee;
   }
   a {
-    color: white;
     text-decoration: none;
+    color: #fff;
   }
   * {
     box-sizing: border-box;

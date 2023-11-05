@@ -13,3 +13,9 @@
     color: $--purple;
     font-weight: 800;
 }
+
+@media (max-width: 700px) {
+    .Recycling p {
+        text-align: center;
+    }
+}

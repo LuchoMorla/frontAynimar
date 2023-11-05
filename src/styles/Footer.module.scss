@@ -93,7 +93,6 @@
   border: none;
 }
 
-
 @media (max-width: 700px) {
   .menu {
     display: block;
@@ -101,13 +100,13 @@
   .hamburger {
     display: flex;
   }
-  .navbar-left ul {
-    display: none;
-  }
   .navbar-email {
     display: none;
   }
-  .logo-container {
-    display: none;
-  } 
+  .textoFooter {
+    font-size: $--sm;
+  }
+  .Nav{
+    font-size: $--sm;
+  }
 }

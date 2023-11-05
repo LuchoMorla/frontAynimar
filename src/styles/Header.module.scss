@@ -122,7 +122,22 @@
   margin-right: .5rem;
 }
 
+@media screen and (max-width: 800px) {
+  .logo {
+    font-size: 2rem;
+  }
+  .navbar-selling-cart {
+    width: 1.8rem;
+  }
+  .navbar-shopping-cart {
+    width: 2.2rem;
+  }
+}
+
 @media (max-width: 700px) {
+
+  
+
   .menu {
     display: block;
   }

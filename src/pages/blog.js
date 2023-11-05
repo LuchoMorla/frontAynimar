@@ -6,7 +6,7 @@ const blog = () => {
     
     return (
         <div className={styles.blogContainter}>
-            <p>Como estamos en nuestros inicios, nos encontramos haciendo una campaña de Vaca o Crowdfunding y conseguir ese financiamiento para darte un mejor servicio.</p>
+            <p>Estamos en nuestras primeras etapas y actualmente llevamos a cabo una campaña de Crowdfunding para obtener el financiamiento necesario y poder ofrecerte un servicio de mayor calidad.</p>
                                 <div id="widgets"></div>
                         <Script src='https://www.hazvaca.com/project/widgets_code/s/red/3408'
                                 type='text/javascript'></Script>

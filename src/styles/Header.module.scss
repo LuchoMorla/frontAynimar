@@ -3,8 +3,9 @@
 .Nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: 0 auto;
-  padding: 2rem .5rem;
+  padding: 1rem .5rem;
   max-width: 1024px;
   color: $--black;
 }
@@ -18,21 +19,32 @@
   margin: 0;
   display: flex;
 }
+
 .nav-logo {
   width: 30px;
   height: 30px;
   padding: 0;
   margin: 0;
   cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+.nav-logo:hover {
+  scale: 1.1; 
 }
 .logo {
   color: $--black;
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: 800;
   margin-left: .5rem;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
+.logo:hover {
+  color: #3600ab;
+  transition: all .2s ease-in-out;
+}
+
 .navbar-left ul,
 .navbar-right ul {
   list-style: none;
@@ -40,7 +52,6 @@
   margin: 0;
   display: flex;
   align-items: center;
-  height: 60px;
 }
 .navbar-left {
   display: flex;
@@ -57,14 +68,13 @@
 .navbar-left ul li a,
 .navbar-right ul li a {
   text-decoration: none;
-  padding: 8px;
-  border-radius: 8px;
   color: $--black;
 }
 .navbar-left ul li a:hover,
 .navbar-right ul li a:hover {
-  border-bottom: 2px solid $--black;
-  font-weight: bolder;
+  border-bottom: 1px solid $--purple;
+  color: $--purple;
+  transition: all .2s ease-in-out;
 }
 .navbar-email {
   color: $--morado-centro;
@@ -72,8 +82,12 @@
   margin-right: 12px;
 }
 .navbar-shopping-cart {
-  position: relative;
   cursor: pointer;
+  scale: .9;
+}
+.navbar-shopping-cart:hover {
+  scale: 1;
+  transition: all .2s ease-in-out;
 }
 .navbar-shopping-cart div {
   width: 16px;
@@ -89,24 +103,41 @@
   justify-content: center;
   align-items: center;
 }
+
 .navbar-selling-cart {
-  position: relative;
+  cursor: pointer;
 }
-.navbar-selling-cart div {
-  width: 16px;
-  height: 16px;
-  background-color: $--hospital-green;
-  border-radius: 50%;
-  font-size: $--sm;
-  font-weight: bold;
-  position: absolute;
-  top: -6px;
-  right: -3px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.navbar-selling-cart:hover {
+  scale: 1.07;
+  transition: all .2s ease-in-out;
+  color: $--purple;
+  text-shadow: 1rem 1rem 1rem $--purple; // Como?
 }
+
+.shoppingCart {
+  height: 3rem;
+}
+
+.menuNav li{
+  margin-right: .5rem;
+}
+
+@media screen and (max-width: 800px) {
+  .logo {
+    font-size: 2rem;
+  }
+  .navbar-selling-cart {
+    width: 1.8rem;
+  }
+  .navbar-shopping-cart {
+    width: 2.2rem;
+  }
+}
+
 @media (max-width: 700px) {
+
+  
+
   .menu {
     display: block;
   }

@@ -54,23 +54,23 @@ const Footer = () => {
 					</li> */}
 				</ul>
 			</div>
-			<div className={styles['navbar-right']}>
+			<div className={styles['navbar-left']}>
 				<ul className={styles.footerRigthList}>
 					<li>
-						<Link href="/signInCustomer" className={styles.footerLink}>Registrarse</Link>			
+						<Link href="/signInCustomer" className={styles.footerLink	}>Registrarse</Link>			
 					</li>
 					<li>
 						<button /* href="/recycling" */ 
-						onClick={() => {/* 
+							onClick={() => {/* 
 								console.log('i can see your current path is this one: ', currentPath);  */
 								currentPath == '/home' ? router.push('/store') : currentPath == '/store' ? router.push('/checkout') : currentPath == '/checkout' ? router.push('/mi_cuenta/orders')/* router.push('/mi_cuenta/cliente') */ : router.push('/mi_cuenta/orders');
-							}}
-						className={styles.footerLink}>
+								}}
+							className={styles.footerLink}>
 							Adelante
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none"  width={50} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  					<path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              					</svg>
-							</button>		
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none"  width={50} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  				<path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              				</svg>
+						</button>		
 					</li>
 				</ul>
 			</div>

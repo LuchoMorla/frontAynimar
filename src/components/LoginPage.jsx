@@ -2,9 +2,7 @@ import React, { useRef } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Image from 'next/image';
-import logo from '@logos/logoAynimar.svg';
-import styles from '@styles/Login.module.scss';
+import styles from '@styles/Login.module.scss'
 
 export default function LoginPage() {
   const auth = useAuth();
@@ -37,10 +35,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={styles.login}>
+    <div className={styles['login']}>
       <div className={styles['login-container']}>
-        <Image src={logo} width={100} height={100} className={styles.logo} alt="logo Aynimar" />
-        <h1 className={styles.title}>Mi cuenta</h1>
+        <h1 className={styles.title}>Inicia Sesión</h1>
 
         <form ref={formRef} className={styles.form} onSubmit={submitHandler} autoComplete="on">
           <div className={styles.form}>
@@ -61,11 +58,11 @@ export default function LoginPage() {
           </button>
         </form>
         <ul className={styles.contenedorAuhtChange}>
-        <li className={styles.sigInCustomer}>
+          <li className={styles.sigInCustomer}>
             <Link href="/signInCustomer" className={styles.linkAuthChange}>Registrate</Link>
           </li>
           <li className={styles.forgot}>
-            <Link href="/forgotPassword" className={styles.linkAuthChange}>Olvide mi Contraseña</Link>
+            <Link href="/forgotPassword" className={styles.linkAuthChange}>Olvidé mi Contraseña</Link>
           </li>
         </ul>
       </div>

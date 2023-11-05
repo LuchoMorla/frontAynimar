@@ -1,11 +1,21 @@
 @import 'vars';
 
 .Recycling {
-    margin: 5rem 2rem;
+    max-width: 1024px;
+    margin: 0 auto;
 }
 .Recycling p {
-    margin-bottom: -55px;
+    color: $--black;
+    text-align: left;
+    margin-bottom: 1rem;
 }
 .Recycling p a {
-    color: $--morado-centro;
+    color: $--purple;
+    font-weight: 800;
+}
+
+@media (max-width: 700px) {
+    .Recycling p {
+        text-align: center;
+    }
 }

@@ -1,5 +1,3 @@
-import Image from 'next/image';
-import logo from '@logos/logoAynimar.svg';
 import Head from 'next/head';
 import FormContact from '@components/FormContact';
 import styles from '@styles/Contact.module.scss';

@@ -111,23 +111,19 @@ const ProductItem = ({ product }) => {
 				<form ref={formRef} onSubmit={submitHandler} >
 					<input /* type="number" */ type="hidden" id="amount" name='amount' value='1' min={1} required />{/* podriamos usar cambios de estado */}
 					<button type='submit' className={(styles['primary-button'], styles['add-to-cart-button'])}>
-						<figure className={styles['more-clickable-area']}
-							aria-hidden="true"
-							>
-							{/* {state.cart.includes(product) ? <Image
-								className={(styles.disabled, styles['add-to-cart-btn'])}
-								src={addedToCartImage}
-								alt="added to cart"
-							/> : <Image className={(styles['add-to-cart-btn'], styles.pointer)} src={addToCartImage} alt="add to cart" />}  */}
-							{ state.cart.includes(product) ? <Image
-							className={(styles.disabled, styles['add-to-cart-btn'])}
-							src={addedToCartImage}
-							alt="added to cart" 
-							/> : <Image
-							src={addToCartImage} /* width={24} height={24} */
-							alt="add to cart" 
-							/>
-							}
+						<figure className={styles['more-clickable-area']} aria-hidden="true">
+							{state.cart.includes(product) ? (
+								<Image
+									className={`${styles.disabled} ${styles['add-to-cart-btn']}`}
+									src={addedToCartImage}
+									alt="added to cart" 
+								/> 
+								) : ( 
+								<Image
+									src={addToCartImage} /* width={24} height={24} */
+									alt="add to cart" 
+								/>
+							)}
 						</figure>
 					</button> 
 				</form>

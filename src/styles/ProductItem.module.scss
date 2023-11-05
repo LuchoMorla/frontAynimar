@@ -1,49 +1,70 @@
 @import 'vars';
 
 .ProductItem {
-	width: 240px;
+	max-width: 240px;
+	margin: 1rem .5rem;
+	background-color: #fff;
+	border-radius: 1rem;
+	padding: .4rem;
+	box-shadow: $--cardShadow;
+	/*border: 1px solid blue;*/
+	transition: all .3s ease-in-out;
+}
+.ProductItem:hover {
+	scale: 1.04;
+	box-shadow: $--cardShadowHover;
 }
 .ProductItem img {
-	width: 240px;
+	max-width: 240px;
 	height: 240px;
-	border-radius: 20px;
-	object-fit: cover;
+	border-radius: 1rem 1rem 0 0;
+	object-fit:cover;
 }
 .product-info {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
-	margin-top: 12px;
 }
-.product-info figure {
+/*.product-info figure {
 	margin: 0;
 }
-.product-info figure img {
+/*.product-info figure img {
 	width: 35px;
 	height: 35px;
-}
+	object-fit:contain;
+}*/
 .product-info div p:nth-child(1) {
-	font-weight: bold;
-	font-size: $--md;
+	font-weight: 800;
+	font-size: $--lg;
 	margin-top: 0;
 	margin-bottom: 4px;
+	color: $--black;
 }
 .product-info div p:nth-child(2) {
-	font-size: $--sm;
+	font-size: $--md;
 	margin-top: 0;
 	margin-bottom: 0;
-	color: $--soft-green;
+	color: $--black;
 }
 .go_product {
 	cursor: pointer;
 }
 .productName {
 	font-size: $--sm;
-	margin-top: 0;
-	margin-bottom: 0;
 	color: $--soft-green;
 	cursor: pointer;
 }
+
+.product-info form .more-clickable-area {
+	margin-left: .5rem;
+	height: auto;
+}
+.product-info form .more-clickable-area img {
+	border-radius: 0;
+	min-width: 2.3rem;
+	height: auto;
+	justify-self:flex-start;
+}
+
 .pay-Button {
 	width        : 60%;
 	border-radius: 25px;
@@ -53,7 +74,8 @@
 	color        : $--app-green;
 	font-size    : 1rem;
 	cursor       : pointer;
-  }
+}
+
 @media (max-width: 640px) {
 	.cards-container {
 		grid-template-columns: repeat(auto-fill, 140px);

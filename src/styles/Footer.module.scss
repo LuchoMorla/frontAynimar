@@ -110,3 +110,12 @@
     font-size: $--sm;
   }
 }
+
+@media (max-width: 500px) {
+  .Nav {
+    justify-content: space-around;
+  }
+  .textoFooter {
+    display: none;
+  }
+}

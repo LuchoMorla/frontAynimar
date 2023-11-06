@@ -91,15 +91,8 @@
 	color: $--black;
 }
 
-@media (max-width: 640px) {
-	.cards-container {
-		grid-template-columns: repeat(auto-fill, 140px);
-	}
+@media (max-width: 523px) {
 	.ProductItem {
-		width: 140px;
-	}
-	.ProductItem img {
-		width: 140px;
-		height: 140px;
+		max-width: 138px;
 	}
 }

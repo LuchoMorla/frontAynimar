@@ -1,7 +1,11 @@
 @import 'vars';
 
 .form {
+    width: 100%;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 0 1rem;
 }
 .form_inputs-container {
     display: flex;

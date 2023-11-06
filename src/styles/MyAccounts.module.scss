@@ -1,22 +1,26 @@
 @import 'vars';
 .accounts-container {
+    max-width: 1024px;
     display: flex;
-    justify-content: center;
-    flex-flow: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 .title {
-    margin: 104px 24px 24px 24px;
     align-self: center;
+    color: $--black;
 }
 .accounts {
     display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    justify-content: space-around;
+    gap: 1rem;
 }
 .accounts a {
-    margin: 5px;
-    padding: 10px;
-    border: solid $--morado-centro;
+    padding: .5rem 1rem;
+    background-color: $--purple;
     border-radius: 25px;
+}
+.accounts a:hover {
+    scale: 1.02;
+    transition: all .2s ease-in-out;
+    box-shadow: .3rem .3rem .5rem #0000002c;
 }

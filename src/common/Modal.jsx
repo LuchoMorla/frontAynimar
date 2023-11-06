@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDom from 'react-dom';
 import Link from 'next/link';
-
 import styles from '@styles/Modal.module.scss';
 
 const Modal = ({ open, onClose, children }) => {

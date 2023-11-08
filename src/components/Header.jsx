@@ -76,14 +76,6 @@ const Header = () => {
     fetchMyOrders();
   }, [endPoints.orders.getOrderByState, token]);
 
-  const ModalContainer = () => {
-    const [isModalOpen, setIsModalOpen] = useState(true);
-
-    const closeModal = () => {
-      setIsModalOpen(false);
-    }
-  }
-
 /*   useEffect(() => {
     isTokenValid();
     const tokenIsValid = isTokenValid(token); 

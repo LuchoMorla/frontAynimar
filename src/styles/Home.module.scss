@@ -1,3 +1,5 @@
+@import 'vars';
+
 .recicler-title {
     margin: 0 auto;
     max-width: 1024px;
@@ -8,8 +10,14 @@
     padding: 0 1rem;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 781px) {
     .recicler-title {
         text-align: center;
+    }
+}
+
+@media (max-width: 391px) {
+    .recicler-title {
+        font-size: 2rem;
     }
 }

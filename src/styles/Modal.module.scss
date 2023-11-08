@@ -1,16 +1,13 @@
 @import 'vars';
 
 .popUp {
-   background   : $--app-green;
-   box-shadow   : 10px 10px 10px 10px rgb(0 0 0 / 30%);
-   border-radius: 10px;
-   padding      : 20px;
+   background   : #fff;
+   box-shadow   : .4rem .4rem .5rem rgb(0 0 0 / 30%);
+   border-radius: .8rem;
+   padding      : 1rem;
    text-align   : center;
-   width        : 95%;
-   max-height   : calc(100% - 120px);
-   margin       : 60px 0 0 0;
+   width        : auto;
    z-index      : 100;
-   overflow     : auto;
 }
 
 .header {
@@ -41,7 +38,7 @@
    line-height    : 16px;
    display        : block;
    text-align     : center;
-   color          : gray;
+   color          : $--gray;
    transition     : .3s ease all;
    text-decoration: none;
    margin         : 2px;

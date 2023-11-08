@@ -1,24 +1,35 @@
 @import 'vars';
 
 .Menu {
-	width: 170px;
+	width: auto;
 	height: auto;
-	border: 1px solid $--soft-green;
-	border-radius: 6px;
+	border-radius: 0.8rem 0 0 .8rem;
 	padding: 20px 20px 0 20px;
 	position: absolute;
-	top: 60px;
-	right: 50px;
-	z-index: 1;
+	top: 50%;
+	transform:translateY(-50%);
+	right: 0rem;
+	z-index: 99;
 	background-color: white;
+	animation: slideRight .3s ease-in-out;
 }
+@keyframes slideRight {
+	0% {
+		transform: translateX(100px);	
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
 .Menu ul {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
 .Menu ul li {
-	text-align: end;
+	display: flex;
+	justify-content: center;
 }
 .Menu ul li:nth-child(1),
 .Menu ul li:nth-child(2) {
@@ -26,7 +37,7 @@
 }
 .Menu ul li:last-child {
 	padding-top: 14px;
-	border-top: 1px solid $--piel-beige;
+	border-top: 1px solid $--purple;
 }
 /* .Menu ul li a:last-child {
 	color: $--hospital-green;
@@ -38,19 +49,25 @@
 	margin-bottom: 20px;
 	display: inline-block;
 }
+.Menu ul li a:hover {
+	font-weight: 800;
+}
 .Menu ul li button {
-	padding-top: 8px;
-	padding-bottom: 8px;
+	padding: 1rem 2rem 1rem;
+	width: 100%;
 	border: none;
 	border-top-left-radius: 50%;
 	border-top-right-radius: 50%;
 	color: $--black;
 	text-decoration: none;
-	margin-bottom: 20px;
 	display: inline-block;
 	cursor: pointer;
-	color: $--plomo-cafe;
-	background: $--very-very-light-pink;
+	color: #fff;
+	background: $--purple;
+	transition: all .2s ease-in-out;
+}
+.Menu ul li button:hover {
+	background-color: #3f00d2;
 }
 @media (max-width: 700px) {
 	.Menu {

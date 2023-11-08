@@ -19,24 +19,24 @@ const MostrarOrders = ({ order }) => {/*
 
 	return (
 		<>
-		<div className={styles.ProductItem}>
-			<div className={styles['product-info']}>
-				<div>
-					<p>Orden-{order.id}</p>
-					<p>Total de la orden: ${order.total / 100}</p>
-					<p>Estado: {order.state == 'carrito' ? 'En caja' : 'Pagada'}</p>
-					<p>Productos: {order.items ? order.items.length : order.items}</p>
-					<button className={styles['pay-Button']} onClick={() => setOpen(true)}>Ver productos</button>
+			<div className={styles.ProductItem}>
+				<div className={styles['product-info']}>
+					<div className={styles.Orders}>
+						<p>Orden N. {order.id}</p>
+						<p>Total de la orden: ${order.total / 100}</p>
+						<p>Estado: {order.state == 'carrito' ? 'En caja' : 'Pagada'}</p>
+						<p>Productos: {order.items ? order.items.length : order.items}</p>
+						<button className={styles['pay-Button']} onClick={() => setOpen(true)}>Ver productos</button>
+					</div>
 				</div>
 			</div>
-		</div>
-		<Modal open={open} onClose={() => setOpen(false)}>
-			<h3>Orden-{order.id}</h3>
-			{transformedItems.map((product) => (
-					<OrderItem product={product} key={`orderItem-${product.id}`} />
-			))}
-			<p>Total: ${order.total / 100}</p>
-		</Modal>
+			<Modal open={open} onClose={() => setOpen(false)}>
+				<h3>Orden {order.id}</h3>
+				{transformedItems.map((product) => (
+						<OrderItem product={product} key={`orderItem-${product.id}`} />
+				))}
+				<p>Total: ${order.total / 100}</p>
+			</Modal>
 		</>
 	);
 };

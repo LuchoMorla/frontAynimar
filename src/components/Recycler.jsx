@@ -77,96 +77,92 @@ const Recycler = ({ recycler }) => {
 
     return (
         <div className={styles.MyAccount}>
-        <div className={styles["MyAccount-container"]}>
-          <h1 className={styles.title}>Mi Cuenta de cooperación con el Reciclaje</h1>
+          <div className={styles["MyAccount-container"]}>
+            <h1 className={styles.title}>Mi Cuenta de cooperación con el Reciclaje</h1>
             <p>Edita tus datos para contactarte, poder realizar el pago que le corresponde y para poder recoger el producto.</p>
             <form action="/" className={styles.form} ref={formRef} autoComplete="on">
-            <div>
-              <label htmlFor="name" className={styles.label}>Nombre/s</label>
-              <input type='text' name="name"
-              id="name" autoComplete="name" required
-              defaultValue={recycler?.name} className="value" />
+              <div>
+                <label htmlFor="name" className={styles.label}>Nombre/s</label>
+                <input type='text' name="name"
+                  id="name" autoComplete="name" required
+                  defaultValue={recycler?.name} className="value" />
+                
+                <label htmlFor="apellido" className={styles.label}>Apellido/s</label>
+                <input type='text' name="apellido" 
+                  id="apellido" autoComplete="family-name"  required
+                  defaultValue={recycler?.lastName} className="value" />
 
-              <label htmlFor="apellido" className={styles.label}>Apellido/s</label>
-              <input type='text' name="apellido" 
-              id="apellido" autoComplete="family-name"  required
-              defaultValue={recycler?.lastName} className="value" />
+                <label htmlFor="cedula" className={styles.label}>Numero de cédula o identidad</label>
+                <input type='number' name="cedula" 
+                  id="cedula" required
+                  defaultValue={recycler?.identityNumber} className="value" />
+                  
+                <label htmlFor="telfono1" className={styles.label}>Telefono o celular 1</label>
+                <input type='tel' name="telfono1" 
+                  id="telfono1" autoComplete="tel" required
+                  defaultValue={recycler?.phone} className="value" />
+                  
+                <label htmlFor="telfono2" className={styles.label}>Telefono o celular 2</label>
+                <input type='tel' name="telfono2" 
+                  id="telfono2" autoComplete="tel"  required
+                  defaultValue={recycler?.phoneTwo} className="value" />
+                  
+                <label htmlFor="pais" className={styles.label}>Pais</label>
+                <input type='text' 
+                  name="pais"  required
+                  id="pais" autoComplete="country-name" 
+                  defaultValue={recycler?.countryOfResidence} className="value" />
+                  
+                <label htmlFor="provincia" className={styles.label}>Provincia</label>
+                <input type='text' name="provincia" 
+                  id="provincia" required
+                  defaultValue={recycler?.province} className="value" />
+                  
+                <label htmlFor="ciudad" className={styles.label}>Ciudad</label>
+                <input type='text' name="ciudad" 
+                  id="ciudad" required
+                  defaultValue={recycler?.city} className="value" />
+                  
+                <label htmlFor="postal-code" className={styles.label}>Codigo Postal</label>
+                <input type='number' name="postal-code" 
+                  id="postal-code" autoComplete="postal-code" required
+                  defaultValue={recycler?.postalCode} className="value" />
 
-              <label htmlFor="cedula" className={styles.label}>Numero de cedula o identidad</label>
-              <input type='text' name="cedula" 
-              id="cedula" required
-              defaultValue={recycler?.identityNumber} className="value" />
-              
-              <label htmlFor="telfono1" className={styles.label}>Telefono o celular 1</label>
-              <input type='tel' name="telfono1" 
-              id="telfono1" autoComplete="tel" required
-              defaultValue={recycler?.phone} className="value" />
-              
-              <label htmlFor="telfono2" className={styles.label}>Telefono o celular 2</label>
-              <input type='tel' name="telfono2" 
-              id="telfono2" autoComplete="tel"  required
-              defaultValue={recycler?.phoneTwo} className="value" />
-              
-              <label htmlFor="pais" className={styles.label}>Pais</label>
-              <input type='text' 
-              name="pais"  required
-              id="pais" autoComplete="country-name" 
-              defaultValue={recycler?.countryOfResidence} className="value" />
-              
-              <label htmlFor="provincia" className={styles.label}>Provincia</label>
-              <input type='text' name="provincia" 
-              id="provincia" required
-              defaultValue={recycler?.province} className="value" />
-              
-              <label htmlFor="ciudad" className={styles.label}>Ciudad</label>
-              <input type='text' name="ciudad" 
-              id="ciudad" required
-              defaultValue={recycler?.city} className="value" />
-              
-              <label htmlFor="postal-code" className={styles.label}>Codigo Postal</label>
-              <input type='text' name="postal-code" 
-              id="postal-code" autoComplete="postal-code" required
-              defaultValue={recycler?.postalCode} className="value" />
+                <label htmlFor="direccion" className={styles.label}>Dirección de recolección</label>
+                <input type="text" name="direccion" id="direccion" autoComplete="street-address" 
+                  defaultValue={recycler?.streetAddress} required className="value" />
 
-              <label htmlFor="direccion" className={styles.label}>
-                Dirección de recolección
-              </label>
-              <input type="text" name="direccion" id="direccion" autoComplete="street-address" 
-              defaultValue={recycler?.streetAddress} required className="value" />
+                <label htmlFor="geolocation" className={styles.label}>Ubicación de Google maps</label>
+                <input type="text" name="geolocation" id="geolocation"
+                  defaultValue={recycler?.geolocation ? recycler.geolocation : 'sin ubicacion'} required className="value" />
 
-              <label htmlFor="geolocation" className={styles.label}>
-              Ubicación de Google maps
-              </label>
-              <input type="text" name="geolocation" id="geolocation"
-              defaultValue={recycler?.geolocation ? recycler.geolocation : 'sin ubicacion'} required className="value" />
+                <button onClick={getLocation}>Obtener Ubicación Actual</button>
+                                
+                <label htmlFor="payment-type" className={styles.label}>¿Como te gustaria recibir los pagos?</label>
+                <input type='text' name="payment-type"  required
+                  id="payment-type" placeholder="Cheque | Deposito Bancario | Efectivo"
+                  defaultValue={recycler?.paymentType} className="value" />
+                  
+                <label htmlFor="banco" className={styles.label}>Banco</label>
+                <input type='text' name="banco" 
+                  id="banco" required
+                  defaultValue={recycler?.bank} className="value" />
 
-              <button onClick={getLocation}>Obtener Ubicación Actual</button>
-                            
-              <label htmlFor="payment-type" className={styles.label}>¿Como te gustaria recibir los pagos?</label>
-              <input type='text' name="payment-type"  required
-              id="payment-type" placeholder="Cheque | Deposito Bancario | Efectivo"
-              defaultValue={recycler?.paymentType} className="value" />
-              
-              <label htmlFor="banco" className={styles.label}>Banco</label>
-              <input type='text' name="banco" 
-              id="banco" required
-              defaultValue={recycler?.bank} className="value" />
+                <label htmlFor="type-count" className={styles.label}>Tipo de cuenta</label>
+                <input type='text'  name="type-count" 
+                  id="type-count" placeholder="C.Ahorros | C.Corriente"
+                  defaultValue={recycler?.typeCount} className="value" />
 
-              <label htmlFor="type-count" className={styles.label}>Tipo de cuenta</label>
-              <input type='text'  name="type-count" 
-              id="type-count" placeholder="C.Ahorros | C.Corriente"
-              defaultValue={recycler?.typeCount} className="value" />
-
-              <label htmlFor="count" className={styles.label}>Numero de cuenta</label>
-              <input type='text' name="count" 
-              id="count" required
-              defaultValue={recycler?.countNumber} className="value" />
-            </div>
-    
-            <button className={styles["login-button"]} onClick={submitHandler}>Editar</button>
-          </form>
-        </div>
+                <label htmlFor="count" className={styles.label}>Numero de cuenta</label>
+                <input type='text' name="count" 
+                  id="count" required
+                  defaultValue={recycler?.countNumber} className="value" />
+              </div>
+        
+              <button className={styles["login-button"]} onClick={submitHandler}>Editar</button>
+            </form>
+          </div>
       </div>
-    );
+  );
 };
 export default Recycler;

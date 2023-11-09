@@ -92,7 +92,7 @@ const CheckoutOrderItem = ({ product }) => {
       <td>
         <div ref={divRef} onChange={() => changeAmountOfItem(product)} className={styles.amountContainer} >
           <label htmlFor="amountChanged" className={styles.label}>
-            cantidad:
+            Cantidad:
           </label>
           {/* <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct.amount} /> */}
           <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct?.amount || router.reload()} />

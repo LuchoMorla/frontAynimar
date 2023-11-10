@@ -1,86 +1,86 @@
 @import 'vars';
 
 .OrderItem {
-
-	/* 	display: grid;
-	grid-template-columns: auto 1fr auto auto;
-	gap: 16px;
-	margin-bottom: 24px;
-	align-items: center; */
-	// display        : flex;
-	// flex-flow      : row nowrap;
-	// align-items    : center;
-	// justify-content: space-between;
-	figure {
-		margin: 0;
-
-		span {
-			vertical-align: middle !important;
-		}
-
-		img {
-			width        : 70px;
-			height       : 70px;
-			border-radius: 20px;
-			object-fit   : cover;
-			background   : white;
-		}
-	}
-
-	p {
-		color: $--white;
-	}
-
-	td {
-		padding: 0px 10px;
-	}
-
-	td:nth-child(2) p {
-		color: $--soft-green;
-	}
-
-	td:nth-child(5) p {
-		font-size  : $--md;
-		font-weight: bold;
-	}
-
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: .1rem solid $--purple;
 }
-
+.OrderItem td figure img {
+	border-radius: .4rem;
+	min-width: 9rem;
+	object-fit: cover;
+}
+.OrderItem td p {
+	color: $--black;
+	margin: .4rem .8rem;
+	line-height: normal;
+}
+.label {
+	font-weight: bold;
+}
+.OrderItem td div input {
+	background-color: white;
+	border: none;
+	font-size: $--lg;
+	font-weight: bold;
+	width: 4.2rem;
+	margin-right: 1rem;
+	font-family: 'Baloo 2', sans-serif;
+}
+.OrderItem td div input:focus {
+	outline: none;
+}
+/* Estilo para el input number */
+.OrderItem td div input[type="number"] {
+	text-align: center;
+}
+.amountContainer button {
+	background-color: $--purple;
+	color: white;
+	box-shadow: .2rem .2rem .3rem #00000033;
+	margin-right: 1rem;
+}
+.amountContainer button:hover {
+	scale: 1.01;
+	transition: all .2s ease-in-out;
+	box-shadow: .1rem .1rem .1rem #00000033;
+}
+.updateButton {
+	align-items: center;
+	gap: .4rem;
+	border: none;
+	display: flex;
+	justify-content: center;
+	border-radius: .4rem;
+    cursor: pointer;
+    background: none;
+    color: $--black;
+    padding: .4rem .7rem;
+	font-family: 'Baloo 2', sans-serif;
+}
 .more-clickable-area {
-	background   : $--white;
+	background   : white;
 	border-radius: 50%;
+	filter: invert(100%);
+	justify-self: end;
 }
 
 .more-clickable-area:hover {
 	cursor: pointer;
+	scale: 1.9;
+	transition: all .2s ease-in-out;
 }
 
 .label {
-	color: $--white;
+	color: $--black;
+	margin-right: 0.4rem;
 }
 
-.inputAmount {
-    border-radius: 8px;
-    margin: 2px 1px 8px 2px;
-    width: 54%;
-    padding: 2px;
-}
-
-.amountContainer{
-	display: flex;
-}
-
-.updateButton {
-	/* border-radius: 50%; */
-	border-radius: 25px;
-    cursor: pointer;
-    background: none;
-    color: white;
-    padding: 1px 8px 1px 0px;
-    margin: 0px 2px 16px 7px;
-	display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
+.OrderItem td:nth-child(4) p {
+	font-weight: bold;
+	font-size: $--sm;
+	line-height: normal;
 }
 
 @media (max-width: 700px) {

@@ -22,6 +22,17 @@
 	}
 }
 
+.closeButton {
+    position: absolute;
+    top: .1rem;
+    left: .8rem;
+    color: $--purple;
+    border: none;
+    cursor: pointer;
+	font-weight: bolder;
+	font-size: $--lg;
+}
+
 .Menu ul {
 	list-style: none;
 	padding: 0;
@@ -69,6 +80,9 @@
 .Menu ul li button:hover {
 	background-color: #3f00d2;
 }
+
+
+
 @media (max-width: 700px) {
 	.Menu {
 	position: fixed;

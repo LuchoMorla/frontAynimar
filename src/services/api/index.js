@@ -84,7 +84,9 @@ const endPoints = {
     createRecyclerBC: `${API}/api/${VERSION}/profile/my-recycler-data`,
   },
   mail: {
-    contact: `${API}/api/${VERSION}/mail/contact`
+    contact: `${API}/api/${VERSION}/mail/contact`,
+    vendingContact: `${API}/api/${VERSION}/mail/vendingContact`,
+    vendingProspectContact: `${API}/api/${VERSION}/mail/vendingProspectContact`,
   }
 };
 

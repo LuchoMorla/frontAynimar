@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 import styles from '@styles/Login.module.scss';
 
 export default function LoginPage() {
@@ -23,12 +24,15 @@ export default function LoginPage() {
     auth
       .signIn(data.email, data.password)
       .then(() => {
+        toast.success('ingreso correcto!!!');
         router.push('/store');
       })
       .catch((error) => {
-        if (error.response?.status === 401) {
-          window.alert('Usuario o contraseña incorrectos');
+        if (error.response?.status === 401) {/* 
+          window.alert('Usuario o contraseña incorrectos'); */
+          toast.error('Usuario o contraseña incorrectos');
         } else if (error.response) {
+          toast.error('Error ' + error.response.status);
           console.log('Algo salio mal: ' + error.response.status);
         }
       });

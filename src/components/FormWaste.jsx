@@ -5,6 +5,7 @@ import endPoints from '@services/api';
 import Image from 'next/image';
 import addToCartButton from '@icons/bt_add_to_cart.svg';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 import styles from '@styles/ProductInfo.module.scss';
 
 const WasteInfo = ({ product }) => {
@@ -29,7 +30,7 @@ const WasteInfo = ({ product }) => {
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    alert(1);
+    /* alert(1); */
     const addToPacket = async (paymentId) => {
       const config = {
         headers: {
@@ -61,18 +62,26 @@ const WasteInfo = ({ product }) => {
 
       addToPacket(bornedPaymentId)
         .then(() => {
+          toast.success('Producto agregado');
           handleClick(product);
           handleRedirect();
         })
         .catch((error) => {
           if (error.response?.status === 401) {
-            window.alert('algo salio mal');
+            toast.error('Algo salio mal :(');
           } else if (error.response) {
-            window.alert('Algo salio mal: ' + error.response.status);
-            console.log('Algo salio mal: ' + error.response.status);
+/*             window.alert('Algo salio mal: ' + error.response.status);
+            console.log('Algo salio mal: ' + error.response.status); */
+            toast.error('Algo salio mal: ' + error.response.status);
             if (error.response.status == 409) {
-              window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
-              router.push('/forgotPassword');
+              toast.error('Ya tienes una cuenta registrada, Error:( ' + error.response.status +' )');/* 
+              window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado'); */
+              let opcion = confirm('parece que olvidaste tu contraseña, quieres cambiar tu contraseña?');
+              if (opcion == true) {
+                router.push('/forgotPassword');
+              } else {
+                router.push('/login');
+              }
             }
           }
         });

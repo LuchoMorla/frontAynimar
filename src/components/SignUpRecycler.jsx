@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { addRecycler } from '@entities/recyclers';
+import { toast } from 'react-toastify';
 import logo from '@logos/logoAynimar.svg';
 import styles from '@styles/Login.module.scss';
 
@@ -29,17 +30,28 @@ const SignUp = () => {
 
       addRecycler(data)
       .then(() => {
+        toast.success('Bienvenido, Tu registro se ah realizado correctamente!!!');
+        toast.success('Te enviaremos un correo para tú confirmacion');
         router.push('/correo-enviado');
       })    
       .catch((error) => {
         if (error.response?.status === 401) {
-          window.alert('algo salio mal');
+          toast.error('algo salio Mal :(');
+          /* window.alert('algo salio mal'); */
         } else if (error.response) {
-          window.alert('Algo salio mal: ' + error.response.status);
-          console.log('Algo salio mal: ' + error.response.status);
+          toast.error('Algo salio mal, Error:( ' + error.response.status +' )');
+          /* window.alert('Algo salio mal: ' + error.response.status); */
+         /*  console.log('Algo salio mal: ' + error.response.status); */
           if (error.response.status == 409) {
-            window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
-            router.push('/forgotPassword');
+            toast.error('Ya tienes una cuenta registrada, Error:( ' + error.response.status +' )');/* 
+            window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado'); 
+            router.push('/forgotPassword');*/
+            let opcion = confirm('parece que olvidaste tu contraseña, quieres cambiar tu contraseña?');
+            if (opcion == true) {
+              router.push('/forgotPassword');
+            } else {
+              router.push('/login');
+            }
           }
         }
       });

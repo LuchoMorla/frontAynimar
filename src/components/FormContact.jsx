@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import axios from 'axios';
 import endPoints from '@services/api';
+import { toast } from 'react-toastify';
 import styles from '@styles/ContactForm.module.scss';
 
 const FormContact = () => {
@@ -25,10 +26,12 @@ const FormContact = () => {
             };
     
             const response = await axios.post(endPoints.mail.contact, data, config);
-            window.alert('mensaje enviado');
+            toast.success('Su mensaje fue enviado con exito');
+            /* window.alert('mensaje enviado'); */
             return response.data;
         } catch (error) {
-            window.alert('no pudimos enviar el mensaje');
+          toast.error('no pudimos enviar el mensaje');/* 
+            window.alert('no pudimos enviar el mensaje'); */
         };
     };
 

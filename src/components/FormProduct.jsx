@@ -7,6 +7,7 @@ import Image from 'next/image';
 import addToCartImage from '@icons/bt_add_to_cart.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 import styles from '@styles/ProductInfo.module.scss';
 
 const ProductInfo = ({ product }) => {
@@ -30,7 +31,8 @@ const ProductInfo = ({ product }) => {
 		event.preventDefault();
 		const userHaveToken = Cookie.get('token');
 		if(!userHaveToken) {
-			alert('para realizar esta accion necesitas iniciar sesion');
+			toast.error('Para realizar esta accion necesitas Iniciar Sesion');
+			/* alert('para realizar esta accion necesitas iniciar sesion'); */
 			router.push('/login');
 		};
 
@@ -48,11 +50,8 @@ const ProductInfo = ({ product }) => {
 				  'Content-Type': 'application/json',
 				},
 			  };
-
 				const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
-
 				return addProductToThePacked; 
-
 		};
 		
 		const savedOrderId = window.localStorage.getItem('oi');
@@ -65,13 +64,15 @@ const ProductInfo = ({ product }) => {
 			handleClick(product);
 			addToPacket(bornedOrderId)
 			.then(() => {
+				toast.success('Producto agregado corrrectamente');
 				router.reload();
 			})
 			.catch((err) => {
-				if (err.response?.status === 401) {
-					window.alert('Probablemente necesites iniciar sesion de nuevo');
+				if (err.response?.status === 401) {	
+					toast.error('Necesitas iniciar sesion de nuevo');/* 
+					window.alert('Probablemente necesites iniciar sesion de nuevo'); */
 				  } else if (err.response) {
-					console.log('Algo salio mal: ' + err.response.status);
+					toast.error('Algo salio mal: ' + err.response.status);
 				  }
 			});
 		} else {
@@ -79,13 +80,15 @@ const ProductInfo = ({ product }) => {
 			const numberOrderId = parseInt(savedOrderId);
 			addToPacket(numberOrderId)
 			.then(() => {
+				toast.success('Producto agregado corrrectamente');
 				router.reload();
 			})
 			.catch((err) => {
 				if (err.response?.status === 401) {
-					window.alert('Probablemente necesites iniciar sesion de nuevo');
+					toast.error('Necesitas iniciar sesion de nuevo');/* 
+					window.alert('Probablemente necesites iniciar sesion de nuevo'); */
 				  } else if (err.response) {
-					console.log('Algo salio mal: ' + err.response.status);
+					toast.error('Algo salio mal: ' + err.response.status);
 				  }
 			});
 		};

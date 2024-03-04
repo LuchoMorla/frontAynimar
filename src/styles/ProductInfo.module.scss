@@ -13,27 +13,32 @@
 	border-radius: 8px;
 }
 .ProductInfo p:nth-child(1) {
+	font-family: 'Baloo 2';
 	font-weight: bold;
 	font-size: $--md;
 	margin-top: 0;
 	margin-bottom: 4px;
 }
 .ProductInfo p:nth-child(2) {
-	color: $--soft-green;
+	font-family: 'Baloo 2';
+	color: $--black;
 	font-size: $--md;
 	margin-top: 0;
 	margin-bottom: 6px;
 }
 .ProductInfo p:nth-child(3) {
-	color: $--soft-green;
+	font-family: 'Baloo 2';
+	color: $--black;
 	font-size: $--sm;
 	margin-top: 0;
 	margin-bottom: 8px;
 }
 .ProductInfo label {
-	color: $--white;
+	font-family: 'Baloo 2';
+	color: $--black;
 }
 .add-to-cart-button {
+	font-family: 'Baloo 2';
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
@@ -46,15 +51,25 @@
 }
 .add-to-cart-button:hover {
     background: $--app-green;
+	font-family: 'Baloo 2';
 }
 
 .add-to-cart-button:active {
+	font-family: 'Baloo 2';
     background: $--soft-green;
     color: $--black;
 }
 
 .description {
+	font-family: 'Baloo 2';
+	font-size: 1.3rem !important;
+	color: $--black;
+}
+
+.price {
+	font-family: 'Baloo 2';
 	font-size: 1.5rem !important;
+	color: $--morado-centro;
 }
 @media (max-width: 640px) {
 	.stand_container {

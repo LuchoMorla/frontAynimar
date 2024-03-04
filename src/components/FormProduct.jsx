@@ -104,7 +104,7 @@ const ProductInfo = ({ product }) => {
 		}
 			<div className={styles.ProductInfo}>
 			<form ref={formRef} onSubmit={submitHandler} >
-				<p>${product?.price}</p>
+				<p className={styles.price}>${product?.price}</p>
 				<p>{product?.name}</p>
 				<p className={styles.description}>{product?.description}</p>
 				<label htmlFor="amount">cantidad: </label>

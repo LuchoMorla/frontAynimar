@@ -56,3 +56,9 @@
 .form_inputs-container .button:hover {
     background: $--purple;
 }
+
+@media (max-width: 370px) {
+    .form_inputs-container {
+        width: 95%;
+    }
+  }

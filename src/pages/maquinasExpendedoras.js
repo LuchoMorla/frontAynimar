@@ -18,7 +18,7 @@ const VendingProspect = () => {
             <div className={styles.imageContainer}>
             <Image className={styles.imageVending} src='https://vendingpassec.com/wp-content/uploads/2020/04/conocer-clientes-vending-1.jpg'  width={700} height={300} alt='Maquinas Expendedoras para aumentar la productividad en oficinas, hospitales, gymnasios, centros comerciales, etc.'  />
             </div>
-            <p className={styles.text}>Si cuentas con un espacio, continua llenando el siguiente formulario para que podamos ponernos en contacto con tigo y posicionar una de nuestras maquinas expendedoras en tú locacion.</p>
+            <p className={styles.text}>Si esta idea te agrada, continua llenando el siguiente formulario para que podamos ponernos en contacto con tigo y posicionar una de nuestras maquinas expendedoras en tú locacion.</p>
             <FormContact />
         </main>
         </>

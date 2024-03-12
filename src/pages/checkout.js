@@ -92,7 +92,7 @@ const Checkout = () => {
 
   let valorTotalSinIva = sumTotal();
 
-  let valorTotalConIva = valorTotalSinIva * 1.12;
+  let valorTotalConIva = valorTotalSinIva * 1.14;
 
  /*  function autoReload() {
     setInterval(() => {

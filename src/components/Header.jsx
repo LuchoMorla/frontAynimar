@@ -113,7 +113,7 @@ const Header = () => {
               <Link href="/contact">Contactanos</Link>
             </li>
             <li>
-              <Link href="/blog">Blog</Link>
+              <Link href="/aboutUs">Sobre nosotros</Link>
             </li>
           </ul>
         </div>

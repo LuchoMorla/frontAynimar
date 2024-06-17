@@ -18,7 +18,8 @@
       "@entities/*": ["services/api/entities/*"],
       "@nuvei": ["common/paymentez/*"],
       "@tarjetas": ["common/paymentez/tarjetas/*"],
-      "@gtag": ["lib/gtag.js"]
+      "@gtag": ["lib/gtag.js"],
+      "@games": ["games/*"]
     }
   }
 }

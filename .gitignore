@@ -40,3 +40,7 @@ yarn-error.log*
 Dockerfile
 usr/src/app
 
+**/public/sw.js
+**/public/workbox-*.js
+**/public/sw.js.map
+**/public/workbox-*.js.map

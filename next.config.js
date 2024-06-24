@@ -16,7 +16,7 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   disable: false,
   register: true,
-  sw: 'sw.js'
+  sw: 'service-worker.js'
 });
 
 module.exports = withPWA(nextConfig);

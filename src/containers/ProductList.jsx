@@ -30,6 +30,6 @@ const ProductList = () => {
 				</Paginacion>}
 		</section>
 	);
-};
+}
 
 export default ProductList;

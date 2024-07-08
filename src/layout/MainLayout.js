@@ -1,19 +1,18 @@
 import Header from "@components/Header";
 import Nav from "@common/Nav";
 
-export default function MainLayout({children}) {
-    return(
+export default function MainLayout({ children }) {
+    return (
         <>
-        <div className="min-h-full">
-            <Header/>
-            <Nav />
-            <main>{/* 
+            <div className="min-h-[100dvh]">
+                <Header />
+                <main className="">{/* 
             estos propiedades css nos provee tailwind
                  */}<div className="max-w-7xl mx-auto py-6 sm:px-6">
-                    {children}
-                </div>
-            </main>
-        </div>
+                        {children}
+                    </div>
+                </main>
+            </div>
         </>
     )
 };

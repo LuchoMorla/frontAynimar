@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import endPoints from '@services/api/';
@@ -24,30 +24,88 @@ function useProvideAuth() {
         'Content-Type': 'application/json',
       },
     };
-    const { data: access_token } = await axios.post(endPoints.auth.login, { email, password }, options);
-/*     console.log(access_token); */
-    if (access_token) {
-/*         const diasDisponiblesAntesDeCaducar = 3;
-        Cookie.set('token', access_token.access_token, { expires: diasDisponiblesAntesDeCaducar }); */
-      const token = access_token.access_token;
+    const { data } = await axios.post(endPoints.auth.login, { email, password }, options);
+    /*     console.log(access_token); */
+    if (data) {
+      /*         const diasDisponiblesAntesDeCaducar = 3;
+              Cookie.set('token', access_token.access_token, { expires: diasDisponiblesAntesDeCaducar }); */
+      const { token, user } = data;
       Cookie.set('token', token, { expires: 5 });
       axios.defaults.headers.Authorization = `Bearer ${token}`;
-      const { data: user } = await axios.get(endPoints.auth.profile);
-      setUser(user);
+      setUser({
+        id: user.id,
+        role: user.role
+      });
     }
   };
-  
-    /* Implementación del Logout */
-    const logout = async () => {
-      Cookie.remove('token');
-      setUser(null);
-      delete axios.defaults.headers.Autorization;
-      window.location.href = '/login';
+
+  /* Implementación del Logout */
+  const logout = async () => {
+    Cookie.remove('token');
+    setUser(null);
+    delete axios.defaults.headers.Autorization;
+    window.location.href = '/login';
+  }
+
+  const signUpBusinessOwner = async (body) => {
+    const options = {
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+    };
+
+    await axios.post(endPoints.businessOwner.create, {
+      user: body.user,
+      ...body.businessOwner
+    }, options);
+    await signIn(body.user.email, body.user.password);
+  };
+
+  const signUp = async (body) => {
+    const options = {
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+    };
+
+    await axios.post(endPoints.users.create, body, options);
+    await signIn(body.user.email, body.user.password);
+  };
+
+  const autoLogin = async (token) => {
+    axios.defaults.headers.Authorization = `Bearer ${token}`;
+    const options = {
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+    };
+    const { data: profile } = await axios.get(endPoints.auth.profile, { token }, options);
+    setUser({
+      id: profile.sub,
+      role: profile.role
+    });
+  }
+
+  const checkUser = () => {
+    const token = Cookie.get("token");
+
+    if (token) {
+      autoLogin(token);
     }
+  }
+
+  useEffect(() => {
+    checkUser();
+  }, []);
 
   return {
     user,
     signIn,
     logout,
+    signUpBusinessOwner,
+    signUp,
   };
 }

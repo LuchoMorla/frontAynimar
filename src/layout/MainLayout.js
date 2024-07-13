@@ -4,11 +4,11 @@ import Nav from "@common/Nav";
 export default function MainLayout({ children }) {
     return (
         <>
-            <div className="min-h-[100dvh]">
-                <Header />
-                <main className="">{/* 
+            <div className="min-h-[100dvh] flex flex-col">
+                {/* <Header /> */}
+                <main className="flex-1 flex flex-col">{/* 
             estos propiedades css nos provee tailwind
-                 */}<div className="max-w-7xl mx-auto py-6 sm:px-6">
+                 */}<div className="flex-1 flex flex-col">
                         {children}
                     </div>
                 </main>

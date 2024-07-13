@@ -4,11 +4,13 @@ import endPoints from '@services/api';
 import Upload from '@components/shared/Upload';
 import Cookies from 'js-cookie';
 import { AnimatePresence, motion } from 'framer-motion';
+import { toast, Toaster } from 'sonner';
 
 const WasteModal = ({ children, business, setWastes }) => {
   const [categories, setCategories] = useState([]);
   const [isOther, setOther] = useState(categories.length <= 0);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const blobImage = useRef(null);
   const blobCategory = useRef(null);
 
@@ -16,26 +18,20 @@ const WasteModal = ({ children, business, setWastes }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const { name, description, categoryOther, category: categoryKey, price } = Object.fromEntries(formData.entries());
+    axios.defaults.headers.Authorization = `Bearer ${Cookies.get('token')}`;
 
-    const { data: productFile } = await axios.post(
-      endPoints.files.addImage,
-      {
-        img: blobImage.current,
-      },
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
+    setLoading(true);
 
-    let categoryId = +categoryKey;
-
-    if (isOther) {
-      const { data: categoryFile } = await axios.post(
+    if (!blobImage.current) {
+      toast.error('Debes subir una imagen de la materia prima.');
+      setLoading(false);
+      return;
+    }
+    try {
+      const { data: wasteImage } = await axios.post(
         endPoints.files.addImage,
         {
-          img: blobCategory.current,
+          img: blobImage.current,
         },
         {
           headers: {
@@ -44,25 +40,51 @@ const WasteModal = ({ children, business, setWastes }) => {
         }
       );
 
-      const { data: category } = await axios.post(endPoints.categories.addCategory, {
-        name: categoryOther,
-        image: categoryFile.file.url,
+      let wasteCategoryId = +categoryKey;
+
+      if (isOther) {
+        if (!blobCategory.current) {
+          toast.error('Debes subir una imagen de la categoría.');
+          setLoading(false);
+          return;
+        }
+
+        const { data: categoryFile } = await axios.post(
+          endPoints.files.addImage,
+          {
+            img: blobCategory.current,
+          },
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+
+        const { data: category } = await axios.post(endPoints.categories.addWastesCategory, {
+          name: categoryOther,
+          image: categoryFile.file.url,
+        });
+        wasteCategoryId = category.id;
+      }
+
+      const { data: waste } = await axios.post(endPoints.wastes.addWastes, {
+        name,
+        description,
+        price: +price,
+        image: wasteImage.file.url,
+        wasteCategoryId,
+        businessId: business.id,
       });
-      categoryId = category.id;
+
+      setWastes((wastes) => [...wastes, waste]);
+      toast.success('Materia prima creada correctamente.');
+      handleClickClose();
+    } catch (err) {
+      toast.error('Ocurrió un error al crear la materia prima.');
     }
 
-    const { data: product } = await axios.post(endPoints.products.addProducts, {
-      name,
-      description,
-      price: +price,
-      image: productFile.file.url,
-      categoryId,
-      businessId: business.id,
-    });
-
-    setWastes((products) => [...products, product]);
-
-    handleClickClose();
+    setLoading(false);
   };
 
   const gettingCategories = async () => {
@@ -136,6 +158,7 @@ const WasteModal = ({ children, business, setWastes }) => {
                           Descripción
                         </label>
                         <input
+                          minLength={10}
                           id="description-product"
                           name="description"
                           type="text"
@@ -209,7 +232,7 @@ const WasteModal = ({ children, business, setWastes }) => {
                         )}
                       </AnimatePresence>
 
-                      <Upload textButton="Sube la imagen del producto" modalTitle="Subir imagen del producto" blobImage={blobImage} />
+                      <Upload textButton="Sube la imagen de la materia prima" modalTitle="Subir imagen de la materia prima" blobImage={blobImage} />
                     </form>
                   </div>
                   {/*footer*/}
@@ -222,11 +245,12 @@ const WasteModal = ({ children, business, setWastes }) => {
                       Cerrar
                     </button>
                     <button
+                      disabled={loading}
                       form="form-create-product"
-                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      className="disabled:bg-emerald-200 disabled:pointer-events-none bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="submit"
                     >
-                      Crear producto
+                      Crear materia prima
                     </button>
                   </div>
                 </div>
@@ -236,6 +260,7 @@ const WasteModal = ({ children, business, setWastes }) => {
           </>
         )}
       </AnimatePresence>
+      <Toaster richColors closeButton />
     </>
   );
 };

@@ -30,7 +30,7 @@ const BusinessCard = ({ business, setBusiness, isAddeable = false, businessOwner
   return (
     <Link href={`/dashboard/business/${business.id}`}>
       <a>
-        <article ref={wave} className="cursor-pointer w-48 p-3 rounded shadow-md">
+        <article ref={wave} className="cursor-pointer w-48 max-w-full p-3 rounded shadow-md">
           <header className="overflow-hidden">
             <img className="w-30 rounded-t" src={business.image} alt={`Imagen de ${business.name}`} width={200} height={200} />
           </header>

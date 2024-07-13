@@ -11,6 +11,7 @@ const ProductEditModal = ({ children, product, setProducts }) => {
   const [showModal, setShowModal] = useState(false);
   const blobImage = useRef(null);
   const blobCategory = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmitEditModal = async (e) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ const ProductEditModal = ({ children, product, setProducts }) => {
     let categoryId = +categoryKey;
     let productFileURL = '';
 
+    setLoading(true);
     if (blobImage.current) {
       const { data: productFile } = await axios.post(
         endPoints.files.addImage,
@@ -70,6 +72,8 @@ const ProductEditModal = ({ children, product, setProducts }) => {
     setProducts((products) => products.map((product) => (product.id === +productUpdated.id ? productUpdated.rta : product)));
 
     handleClickClose();
+
+    setLoading(false);
   };
 
   const gettingCategories = async () => {
@@ -232,8 +236,9 @@ const ProductEditModal = ({ children, product, setProducts }) => {
                       Cerrar
                     </button>
                     <button
+                      disabled={loading}
                       form="form-create-product"
-                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      className="disabled:bg-emerald-100 disabled:pointer-events-none bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="submit"
                     >
                       Editar producto

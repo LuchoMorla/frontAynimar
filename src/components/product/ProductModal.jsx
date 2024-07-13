@@ -4,6 +4,7 @@ import endPoints from '@services/api';
 import Upload from '@components/shared/Upload';
 import Cookies from 'js-cookie';
 import { AnimatePresence, motion } from 'framer-motion';
+import { toast, Toaster } from 'sonner';
 
 const ProductModal = ({ children, business, setProducts }) => {
   const [categories, setCategories] = useState([]);
@@ -11,31 +12,26 @@ const ProductModal = ({ children, business, setProducts }) => {
   const [showModal, setShowModal] = useState(false);
   const blobImage = useRef(null);
   const blobCategory = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmitAddModal = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const { name, description, categoryOther, category: categoryKey, price } = Object.fromEntries(formData.entries());
 
-    const { data: productFile } = await axios.post(
-      endPoints.files.addImage,
-      {
-        img: blobImage.current,
-      },
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
+    setLoading(true);
 
-    let categoryId = +categoryKey;
+    if (!blobImage.current) {
+      toast.error('Debes subir una imagen para el producto');
+      setLoading(false);
+      return;
+    }
 
-    if (isOther) {
-      const { data: categoryFile } = await axios.post(
+    try {
+      const { data: productFile } = await axios.post(
         endPoints.files.addImage,
         {
-          img: blobCategory.current,
+          img: blobImage.current,
         },
         {
           headers: {
@@ -44,25 +40,50 @@ const ProductModal = ({ children, business, setProducts }) => {
         }
       );
 
-      const { data: category } = await axios.post(endPoints.categories.addCategory, {
-        name: categoryOther,
-        image: categoryFile.file.url,
+      let categoryId = +categoryKey;
+
+      if (isOther) {
+        if (!blobCategory.current) {
+          toast.error('Debes subir una imagen para la categoría');
+          setLoading(false);
+          return;
+        }
+
+        const { data: categoryFile } = await axios.post(
+          endPoints.files.addImage,
+          {
+            img: blobCategory.current,
+          },
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+
+        const { data: category } = await axios.post(endPoints.categories.addCategory, {
+          name: categoryOther,
+          image: categoryFile.file.url,
+        });
+        categoryId = category.id;
+      }
+
+      const { data: product } = await axios.post(endPoints.products.addProducts, {
+        name,
+        description,
+        price: +price,
+        image: productFile.file.url,
+        categoryId,
+        businessId: business.id,
       });
-      categoryId = category.id;
+
+      toast.success('Producto creado con éxito');
+      setProducts((products) => [...products, product]);
+      handleClickClose();
+    } catch (err) {
+      toast.error('Hubo un error al crear el producto');
     }
-
-    const { data: product } = await axios.post(endPoints.products.addProducts, {
-      name,
-      description,
-      price: +price,
-      image: productFile.file.url,
-      categoryId,
-      businessId: business.id,
-    });
-
-    setProducts((products) => [...products, product]);
-
-    handleClickClose();
+    setLoading(false);
   };
 
   const gettingCategories = async () => {
@@ -138,6 +159,7 @@ const ProductModal = ({ children, business, setProducts }) => {
                         <input
                           id="description-product"
                           name="description"
+                          minLength={10}
                           type="text"
                           required
                           className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -149,6 +171,7 @@ const ProductModal = ({ children, business, setProducts }) => {
                           Precio
                         </label>
                         <input
+                          step="any"
                           id="price-product"
                           name="price"
                           type="number"
@@ -222,8 +245,9 @@ const ProductModal = ({ children, business, setProducts }) => {
                       Cerrar
                     </button>
                     <button
+                      disabled={loading}
                       form="form-create-product"
-                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      className="bg-emerald-500 disabled:bg-emerald-200 disabled:pointer-events-none text-white active:bg-emerald-600 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="submit"
                     >
                       Crear producto
@@ -236,6 +260,7 @@ const ProductModal = ({ children, business, setProducts }) => {
           </>
         )}
       </AnimatePresence>
+      <Toaster richColors closeButton />
     </>
   );
 };

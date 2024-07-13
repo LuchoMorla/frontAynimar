@@ -56,9 +56,10 @@ function useProvideAuth() {
     };
 
     await axios.post(endPoints.businessOwner.create, {
+      ...body.businessOwner,
       user: body.user,
-      ...body.businessOwner
     }, options);
+
     await signIn(body.user.email, body.user.password);
   };
 

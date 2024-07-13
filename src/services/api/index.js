@@ -5,10 +5,18 @@ const endPoints = {
   auth: {
     login: `${API}/api/${VERSION}/auth/login`,
     profile: `${API}/api/${VERSION}/auth/profile`,
+    signOut: `${API}/api/${VERSION}/auth/sign-out`,
   },
   wastes: {
     getWastes: `${API}/api/${VERSION}/wastes/`,
+    addWastes: `${API}/api/${VERSION}/wastes/`,
     updateWastes: (id) => `${API}/api/${VERSION}/wastes/${id}`,
+    deleteWastes: (id) => `${API}/api/${VERSION}/wastes/${id}`,
+  },
+  offers: {
+    getOffers: (id) => `${API}/api/${VERSION}/offers/by-business/${id}`,
+    getOffer: (id) => `${API}/api/${VERSION}/offers/${id}`,
+    removeOffer: (id) => `${API}/api/${VERSION}/offers/${id}`,
   },
   products: {
     getProduct: (id) => `${API}/api/${VERSION}/products/${id}/`,
@@ -41,6 +49,9 @@ const endPoints = {
     getAllBusiness: (id) => `${API}/api/${VERSION}/business/${id}`,
     create: `${API}/api/${VERSION}/business/`,
     getOne: (id) => `${API}/api/${VERSION}/business/${id}`,
+  },
+  orders: {
+    getOrdersByBusinessId: (id) => `${API}/api/${VERSION}/orders/by/business/${id}`,
   }
 
 };

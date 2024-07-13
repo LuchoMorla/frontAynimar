@@ -1,31 +1,47 @@
-import RegisterPage from "@components/RegisterPage";
-import { BriefcaseIcon, TruckIcon } from "@heroicons/react/solid";
+import { BriefcaseIcon } from "@heroicons/react/solid";
+import { useAuth } from "@hooks/useAuth";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { toast, Toaster } from "sonner";
+import logoAynimar from "@assets/logos/logoAynimar.svg";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function CreateOwnerBusiness() {
-  const [dataBusinessOwner, setDataBusinessOwner] = useState(false);
-  const [passRegister, setPassRegister] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const auth = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    e.preventDefault();
-    setDataBusinessOwner(data);
-    setPassRegister(true);
+    try {
+      setLoading(true);
+      await auth.signUpBusinessOwner({
+        user: {
+          email: data.email,
+          password: data.password,
+        },
+        businessOwner: {
+          name: data.name,
+          lastName: data.lastName,
+          identityNumber: data.identityNumber,
+        },
+      });
+      setLoading(false);
+
+      toast.success("Registrado correctamente");
+      location.href = "/dashboard";
+    } catch (err) {
+      toast.error("Error");
+    }
   };
 
-  if (passRegister) {
-    return <RegisterPage title="Ahora, creemos tu cuenta" dataBusinessOwner={dataBusinessOwner} />
-  }
-
   return (
-    <main className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 flex-col gap-4">
+    <main className="min-h-full flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 flex-col gap-4">
       <section className="max-w-md w-full space-y-8">
-        <div>
-          <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 [text-wrap:_balance]">Registrate como Dueño de Negocio</h2>
+        <div className="flex items-center flex-col">
+          <Image className="mx-auto h-12 w-auto" src={logoAynimar} alt="Workflow" />
+          <h2 className="mt-6 text-center text-2xl font-extrabold text-gray-900 [text-wrap:_balance]">Registrate como Dueño de Negocio</h2>
         </div>
       </section>
       <section className="max-w-md w-full space-y-8">
@@ -45,11 +61,11 @@ export default function CreateOwnerBusiness() {
             />
           </div>
           <div>
-            <label htmlFor="name-owner-business" className="sr-only">
+            <label htmlFor="lastName-owner-business" className="sr-only">
               Apellido
             </label>
             <input
-              id="name-owner-business"
+              id="lastName-owner-business"
               name="lastName"
               type="name"
               autoComplete="name"
@@ -59,17 +75,44 @@ export default function CreateOwnerBusiness() {
             />
           </div>
           <div>
-            <label htmlFor="name-owner-business" className="sr-only">
-              DNI
+            <label htmlFor="dni-owner-business" className="sr-only">
+              Número de célula
             </label>
             <input
-              id="name-owner-business"
+              id="dni-owner-business"
               name="identityNumber"
               type="number"
               required
               className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="DNI"
-              minLength={8}
+              placeholder="Número de célula"
+            />
+          </div>
+          <div>
+            <label htmlFor="email-owner-business" className="sr-only">
+              Correo
+            </label>
+            <input
+              id="email-owner-business"
+              name="email"
+              type="email"
+              required
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Correo"
+
+            />
+          </div>
+          <div>
+            <label htmlFor="password-owner-business" className="sr-only">
+              Password
+            </label>
+            <input
+              id="password-owner-business"
+              name="password"
+              type="password"
+              required
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+
             />
           </div>
 
@@ -78,17 +121,19 @@ export default function CreateOwnerBusiness() {
           </Link>
 
           <button
+            disabled={loading}
             type="submit"
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="disabled:pointer-events-none disabled:bg-indigo-200 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             <span className="absolute left-0 inset-y-0 flex items-center pl-3">
 
               <BriefcaseIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
             </span>
-            Siguiente
+            Registrarse
           </button>
         </form>
       </section>
+      <Toaster richColors closeButton />
     </main>
   )
 }

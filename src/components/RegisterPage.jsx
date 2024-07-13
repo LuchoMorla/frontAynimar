@@ -1,36 +1,26 @@
-import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import { LockClosedIcon } from '@heroicons/react/solid';
-import useFetch from '@hooks/useFetch';
-import endPoints from '@services/api';
 import { useAuth } from '@hooks/useAuth';
 import { toast, Toaster } from 'sonner';
+import logoAynimar from '@assets/logos/logoAynimar.svg';
+import Image from 'next/image';
 
-export default function RegisterPage({ title = 'Crea tu nueva cuenta', dataBusinessOwner }) {
+export default function RegisterPage() {
   const router = useRouter();
   const auth = useAuth();
+
   const submitHandler = async (event) => {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
     event.preventDefault();
     try {
-      if (dataBusinessOwner) {
-        await auth.signUpBusinessOwner({
-          user: {
-            email: data.email,
-            password: data.password,
-          },
-          businessOwner: dataBusinessOwner,
-        });
-      } else {
-        await auth.signUp({
-          user: {
-            email: data.email,
-            password: data.password,
-          },
-        });
-      }
+      await auth.signUp({
+        user: {
+          email: data.email,
+          password: data.password,
+        },
+      });
     } catch (err) {
       toast.error('Error al registrarse.');
     }
@@ -40,11 +30,11 @@ export default function RegisterPage({ title = 'Crea tu nueva cuenta', dataBusin
 
   return (
     <>
-      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
-          <div>
-            <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">{title}</h2>
+          <div className="flex flex-col">
+            <Image className="mx-auto h-12 w-auto" src={logoAynimar} alt="Workflow" />
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Crea una nueva cuenta</h2>
           </div>
           <form className="mt-8 space-y-6" onSubmit={submitHandler}>
             <input type="hidden" name="remember" defaultValue="true" />

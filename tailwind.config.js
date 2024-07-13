@@ -9,7 +9,7 @@ module.exports = {
     "./src/public/*.{ico,svg}",
     "./src/common/*.{js,jsx}",
     "./src/styles/*.{css,scss}",
-    "./node_modules/@nextui-org/theme/dist/components/**/*.js"
+    "./node_modules/@nextui-org/theme/dist/components/(avatar|table|checkbox|spacer).js"
   ],
   theme: {
     colors: {

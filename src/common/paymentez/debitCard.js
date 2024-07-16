@@ -19,6 +19,7 @@ export default async function Debito(uid, email, card, referencia, order, tokenC
   const product = (order?.items && count > 0) ? order?.items[0].description : "";
   const description = (count > 0) ? `Compre ${count} productos, incluido ${product}` : "";
 
+  // const total = order?.total / 100;         // Cent to Dollar
   const total = order?.total;         // Cent to Dollar
   const tax_percentage = 14;
   const amount = parseFloat((total * (1 + tax_percentage / 100)).toFixed(2));

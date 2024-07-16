@@ -46,6 +46,9 @@ const Header = () => {
       const { data: getOrder } = await axios.get(endPoints.orders.getOrderByState, { params: { state: 'carrito' } });
       orderState.setOrder(getOrder);
       const items = getOrder.items;
+      // items.forEach((el) => {
+      //   el.price = el.price / 100;
+      // });
       if (items.length > 0) {
         getCart(items);
         const getStorageOrderId = window.localStorage.getItem('oi');

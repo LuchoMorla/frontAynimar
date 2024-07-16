@@ -5,11 +5,15 @@
     flex-flow: column wrap;
     align-items: center;
 }
+.form-container {
+    & h1, p {
+        color: #2b2b2b;
+    }
+}
 .form_inputs-container {
     display: flex;
     flex-flow: column wrap;
     width: 250px;
-    color: white;
     align-items: center;
 }
 .form_inputs-container label {

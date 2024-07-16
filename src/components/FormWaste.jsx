@@ -70,11 +70,11 @@ const WasteInfo = ({ product }) => {
           if (error.response?.status === 401) {
             toast.error('Algo salio mal :(');
           } else if (error.response) {
-/*             window.alert('Algo salio mal: ' + error.response.status);
+            /*             window.alert('Algo salio mal: ' + error.response.status);
             console.log('Algo salio mal: ' + error.response.status); */
             toast.error('Algo salio mal: ' + error.response.status);
             if (error.response.status == 409) {
-              toast.error('Ya tienes una cuenta registrada, Error:( ' + error.response.status +' )');/* 
+              toast.error('Ya tienes una cuenta registrada, Error:( ' + error.response.status + ' )'); /* 
               window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado'); */
               let opcion = confirm('parece que olvidaste tu contraseña, quieres cambiar tu contraseña?');
               if (opcion == true) {
@@ -116,7 +116,7 @@ const WasteInfo = ({ product }) => {
         <div className={styles.ProductInfo}>
           <form ref={formRef} onSubmit={submitHandler}>
             {/* <p>${product?.price / 100}</p> */}
-            <p>${product?.price / 100}</p>
+            <p>${product?.price}</p>
             <p>{product?.name}</p>
             <p>{product?.description}</p>
             <label htmlFor="amount">cantidad: </label>

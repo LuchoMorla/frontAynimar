@@ -29,15 +29,15 @@ const Header = () => {
 
   const getCookieUserValidator = () => {
     const token = Cookie.get('token');
-    if(!token){
+    if (!token) {
       return false;
-    } 
+    }
     return true;
- };
+  };
 
- const isTokenValid = () => {
-  return getCookieUserValidator();
-};
+  const isTokenValid = () => {
+    return getCookieUserValidator();
+  };
 
   const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
 
@@ -46,9 +46,6 @@ const Header = () => {
       const { data: getOrder } = await axios.get(endPoints.orders.getOrderByState, { params: { state: 'carrito' } });
       orderState.setOrder(getOrder);
       const items = getOrder.items;
-      items.forEach((el) => {
-        el.price = el.price / 100;
-      });
       if (items.length > 0) {
         getCart(items);
         const getStorageOrderId = window.localStorage.getItem('oi');
@@ -60,7 +57,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    //log 
+    //log
     isTokenValid();
     //fetch Orders
     const fetchMyOrders = async () => {
@@ -76,7 +73,7 @@ const Header = () => {
     fetchMyOrders();
   }, [endPoints.orders.getOrderByState, token]);
 
-/*   useEffect(() => {
+  /*   useEffect(() => {
     isTokenValid();
     const tokenIsValid = isTokenValid(token); 
     // Realiza cualquier lógica adicional basada en la validez del token aquí
@@ -124,14 +121,13 @@ const Header = () => {
               <Image className={(styles['more-clickable-area'], styles.pointer)} src={sellingCart} alt="selling to recycler cart" />
               {state.metacircle.length > 0 ? <div>{state.metacircle.length}</div> : null}
             </li>
-{/*             {
+            {/*             {
               //Añadire logica para que esto aparezca cuando el usuario haya iniciado session
               <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
               <Image src={userIcon} width={50} height={40} alt="user icon menu" />
             </li>
             } */}
-            {
-              isTokenValid() ? ( // Verifica si el token existe
+            {isTokenValid() ? ( // Verifica si el token existe
               <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
                 <Image src={userIcon} alt="user icon menu" />
               </li>
@@ -139,8 +135,7 @@ const Header = () => {
               <li>
                 <Link href="/login">Iniciar sesión</Link>
               </li>
-            )
-            }
+            )}
             <li className={styles['navbar-shopping-cart']} onClick={() => toggleOrder()} aria-hidden="true">
               <Image className={(styles['more-clickable-area'], styles.pointer)} src={shoppingCart} alt="shopping cart" />
               {state.cart.length > 0 ? <div>{state.cart.length}</div> : null}

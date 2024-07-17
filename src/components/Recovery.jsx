@@ -27,7 +27,7 @@ export default function Recovery() {
     };
     let thePassword = data.password;
     let theConfirmPassword = data.confirmPassword;
-    if (thePassword != theConfirmPassword) {
+    if (thePassword !== theConfirmPassword) {
       window.alert('Las contraseñas no son iguales');
     }
     if (thePassword === theConfirmPassword) {

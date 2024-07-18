@@ -92,14 +92,12 @@ const Footer = () => {
           </ul>
         </div>
       </nav>
-      <footer className="pt-4">
-        <nav className="flex items-center justify-center py-4 bg-slate-500">
+      <footer className="w-full">
+        <nav className="flex items-center justify-center py-2 bg-[#333333]">
           <p className="text-gray-100">
-            Si eres un dueño de negocio. Ingresa a{' '}
             <a className="font-bold" href="https://circular-merchant.aynimar.com/">
-              nuestra plataforma para ti
+              Registra tu negocio
             </a>
-            .
           </p>
         </nav>
       </footer>

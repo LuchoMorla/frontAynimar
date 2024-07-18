@@ -92,8 +92,8 @@ const Footer = () => {
           </ul>
         </div>
       </nav>
-      <footer className="w-full">
-        <nav className="flex items-center justify-center py-2 bg-[#333333]">
+      <footer className="max-w-5xl mx-auto">
+        <nav className="flex items-center justify-center pb-2 bg-[#333333] rounded-[0_0_1rem_1rem]">
           <p className="text-gray-100">
             <a className="font-bold" href="https://circular-merchant.aynimar.com/">
               Registra tu negocio

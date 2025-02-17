@@ -102,6 +102,7 @@ const ProductInfo = ({ product }) => {
           <form ref={formRef} onSubmit={submitHandler}>
             <p className={styles.price}>${product?.price}</p>
             <p>{product?.name}</p>
+            {product?.stock === null ? <></> : product?.stock === 0 ? <p className={`${styles['out-of-stock']} !text-lg !font-bold`}>Producto agotado</p> : <p>Disponible</p>}
             <p className={styles.description}>{product?.description}</p>
             <label htmlFor="amount">cantidad: </label>
             <input type="number" id="amount" name="amount" min={1} required />

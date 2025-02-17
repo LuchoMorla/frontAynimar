@@ -7,7 +7,7 @@ const ProductDetail = () => {
 	return (
 		<aside className={styles.ProductDetail}>
 			<div className={styles["ProductDetail-close"]}>
-				<img src={close} alt="close" />
+				<img className='object-cover' src={close} alt="close" />
 			</div>
 			<ProductInfo />
 		</aside>

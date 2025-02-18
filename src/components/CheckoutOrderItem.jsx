@@ -8,7 +8,6 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import styles from '@styles/CheckoutOrderItem.module.scss';
 
-
 const CheckoutOrderItem = ({ product }) => {
   /* 
 	const { state } = useContext(AppContext); */
@@ -25,6 +24,11 @@ const CheckoutOrderItem = ({ product }) => {
     divRef = useRef(null);
 
   const actualizarCantidad = async (data) => {
+    if (product.stock !== null && data.amount > product.stock) {
+      alert(`No hay suficiente stock para agregar esa cantidad al carrito. Intenta con una cantidad menor a ${product.stock}`);
+      return;
+    }
+
     const config = {
       headers: {
         accept: '*/*',
@@ -90,12 +94,20 @@ const CheckoutOrderItem = ({ product }) => {
         <p>{product?.name}</p>
       </td>
       <td>
-        <div ref={divRef} onChange={() => changeAmountOfItem(product)} className={styles.amountContainer} >
+        <div ref={divRef} onChange={() => changeAmountOfItem(product)} className={styles.amountContainer}>
           <label htmlFor="amountChanged" className={styles.label}>
             Cantidad:
           </label>
           {/* <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct.amount} /> */}
-          <input ref={inputRef} type="number" id="amountChanged" name="amountChanged" className={styles.inputAmount} defaultValue={product?.OrderProduct?.amount || router.reload()} />
+          <input
+            ref={inputRef}
+            type="number"
+            id="amountChanged"
+            name="amountChanged"
+            className={styles.inputAmount}
+            defaultValue={product?.OrderProduct?.amount || router.reload()}
+            max={product.stock ?? undefined}
+          />
 
           {buttonOpen == true ? (
             <button className={styles.updateButton} onClick={() => actualizarCantidad(dataAmount)}>

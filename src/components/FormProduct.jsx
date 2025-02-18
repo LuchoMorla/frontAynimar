@@ -34,8 +34,14 @@ const ProductInfo = ({ product }) => {
       router.push('/login');
     }
 
+    const formData = new FormData(formRef.current);
+
+    if (product.stock !== null && product.stock - parseInt(formData.get('amount')) < 0) {
+      toast.error('No hay suficiente stock para agregar esa cantidad al carrito');
+      return;
+    }
+
     const addToPacket = async (orderId) => {
-      const formData = new FormData(formRef.current);
       const packet = {
         orderId: orderId,
         productId: product.id,
@@ -102,7 +108,13 @@ const ProductInfo = ({ product }) => {
           <form ref={formRef} onSubmit={submitHandler}>
             <p className={styles.price}>${product?.price}</p>
             <p>{product?.name}</p>
-            {product?.stock === null ? <></> : product?.stock === 0 ? <p className={`${styles['out-of-stock']} !text-lg !font-bold`}>Producto agotado</p> : <p>Disponible</p>}
+            {product?.stock === null ? (
+              <></>
+            ) : product?.stock === 0 ? (
+              <p className={`${styles['out-of-stock']} !text-lg !font-bold`}>Producto agotado</p>
+            ) : (
+              <p className={`${styles['out-of-stock']} !text-lg !font-bold`}>Stock disponible: {product.stock} unidades</p>
+            )}
             <p className={styles.description}>{product?.description}</p>
             <label htmlFor="amount">cantidad: </label>
             <input type="number" id="amount" name="amount" min={1} required />

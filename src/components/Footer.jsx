@@ -44,7 +44,7 @@ const Footer = () => {
                         <Script src='https://www.hazvaca.com/project/widgets_code/s/red/3408'
                                 type='text/javascript'></Script> */}
               <p className={styles.textoFooter}>
-                Estamos haciendo entregas inmediatas actualmente en la ciudad de Quito, nos comunicaremos en caso de poder o no poder realizar la entrega en su ciudad o País.
+                Importamos productos y tenemos la mision de implementar la economia circular en el Ecuador.
               </p>
             </li>
             {/* 					<li>

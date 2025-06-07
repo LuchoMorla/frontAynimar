@@ -4,6 +4,8 @@
 	margin: 104px 34px 24px 34px;
 	justify-content: center;
 	display: flex;
+    	align-items: center;
+    	flex-flow: wrap;
 }
 .ProductInfo {
 	margin: 24px 24px 0 72px;
@@ -42,7 +44,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
-	margin: 24px 0;
+	margin: 24px 50%;
 	border-radius: 25px;
 	height: 45px;
 	width: 125px;

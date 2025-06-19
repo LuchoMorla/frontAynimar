@@ -5,12 +5,13 @@ const endPoints = {
   products: {
     getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
     postProducts: `${API}/api/${VERSION}/products/`,
-    getProducts: (limit, offset) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}&price_min=0&price_max=10000000&show_shop=true`,
+    getProducts: (limit, offset,  price_min = 0, price_max = 10000, showShop = true) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}&price_min=${price_min}&price_max=${price_max}&showShop=${showShop}`,
     putProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
     deleteProduct: (id) => `${API}/api/${VERSION}/products/${id}`
   },
   wastes: {
-    getProducts: (limit, offset) => `${API}/api/${VERSION}/wastes?limit=${limit}&offset=${offset}&price_min=0&price_max=10000000`,
+    getProducts: (limit, offset, price_min = 0, price_max = 10000) =>
+      `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}&price_min=${price_min}&price_max=${price_max}`,
     postProducts: `${API}/api/${VERSION}/wastes/`,
     getProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,
     putProduct: (id) => `${API}/api/${VERSION}/wastes/${id}`,

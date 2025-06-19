@@ -31,6 +31,8 @@ const Checkout = () => {
   // Paymentez
   /*   let tarjetas = []; */
   const [uId, setuId] = useState(0);
+  // Payment Metod state
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const getCookieUser = () => {
     const token = Cookie.get('token');
@@ -73,7 +75,7 @@ const Checkout = () => {
     return sum.toFixed(2);
   };
 
-  const openModalHandler = async (event) => {
+  /* const openModalHandler = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(refValidation.current);
@@ -88,11 +90,64 @@ const Checkout = () => {
     } else {
       alert('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, leelos y luego haz click en el checkbox');
     };
+  }; */
+    const openModalHandler = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(refValidation.current);
+    const termsAccepted = formData.get('termsAndConds') === 'on';
+
+    if (!termsAccepted) {
+      alert('Debes aceptar los términos y condiciones para continuar.');
+      return;
+    }
+
+    if (paymentMethod === 'card') {
+      setOpen(true); // Muestra modal con Tarjetas
+    } else if (paymentMethod === 'cash') {
+      try {
+        // Aquí llamas a tu backend para generar el pedido
+        const token = getCookieUser();
+        const decoded = jwt.decode(token, { complete: true });
+        const userId = decoded.payload.sub;
+
+        const payload = {
+/*           userId,
+          paymentType: 'cash_on_delivery',
+          products: state.cart, */
+          userId: userId,
+          items: state.cart.map((item) => ({
+          productId: item.id,
+          amount: item.OrderProduct.amount,
+          price: item.price,
+         })),
+          total: parseFloat(valorTotalConIva.toFixed(2)),
+          paymentMethod: 'contra_entrega', // importante para distinguir
+          status: 'pendiente',
+        };
+
+        /* await axios.post(endPoints.payments.createCashPayment, payload);
+
+        alert('Tu pedido ha sido registrado con pago contra entrega.');
+        router.push('mi_cuenta/orders'); */ 
+          const response = await axios.post(endPoints.orders.postOrder, payload, config);
+          if (response.status === 201 || response.status === 200) {
+            alert("Tu pedido ha sido registrado con pago contra entrega.");
+            router.push('mi_cuenta/orders');
+          }
+      } catch (error) {
+        console.error(error);
+        alert('Hubo un error procesando tu pedido.', error);
+      }
+    } else {
+      alert('Selecciona un método de pago antes de continuar.');
+    }
   };
+
 
   let valorTotalSinIva = sumTotal();
 
-  let valorTotalConIva = valorTotalSinIva * 1.14;
+  let valorTotalConIva = valorTotalSinIva * 1.15;
 
  /*  function autoReload() {
     setInterval(() => {
@@ -169,9 +224,21 @@ const Checkout = () => {
                   </Link>
                 </div>
                 <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
-                <button className={styles['pay-Button']} type="submit">
-                  Pagar con tarjeta de credito o debito (Visa o Mastercard).
-                </button>
+                  <button
+                    className={styles['pay-Button']}
+                    type="submit"
+                    onClick={() => setPaymentMethod('card')}
+                  >
+                    Pagar con tarjeta de crédito o débito (Visa o Mastercard)
+                  </button>
+
+                  <button
+                    className={styles['pay-Button']}
+                    type="submit"
+                    onClick={() => setPaymentMethod('cash')}
+                  >
+                    Pago a contra entrega
+                  </button>
               </form>
             </div>
           </div>

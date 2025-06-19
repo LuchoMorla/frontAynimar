@@ -130,7 +130,7 @@ const Checkout = () => {
 
         alert('Tu pedido ha sido registrado con pago contra entrega.');
         router.push('mi_cuenta/orders'); */ 
-          const response = await axios.post(endPoints.orders.postOrder, payload, config);
+          const response = await axios.post(endPoints.orders.postOrder, payload);
           if (response.status === 201 || response.status === 200) {
             alert("Tu pedido ha sido registrado con pago contra entrega.");
             router.push('mi_cuenta/orders');

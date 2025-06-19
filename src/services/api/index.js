@@ -5,7 +5,8 @@ const endPoints = {
   products: {
     getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
     postProducts: `${API}/api/${VERSION}/products/`,
-    getProducts: (limit, offset,  price_min = 0, price_max = 10000, showShop=true ) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}&price_min=${price_min}&price_max=${price_max}&showShop=${showShop}`,
+        getProducts: (limit, offset,  price_min = 0, price_max = 10000) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}&price_min=${price_min}&price_max=${price_max}`,
+/*     getProducts: (limit, offset,  price_min = 0, price_max = 10000, showShop=true ) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}&price_min=${price_min}&price_max=${price_max}&showShop=${showShop}`, */
     putProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
     deleteProduct: (id) => `${API}/api/${VERSION}/products/${id}`
   },

@@ -29,17 +29,25 @@ const ProductItem = ({ product }) => {
     event.preventDefault();
     const userHaveToken = Cookie.get('token');
     if (!userHaveToken) {
-      alert('para realizar esta accion necesitas iniciar sesion');
+      alert('Para realizar esta acción necesitas iniciar sesión');
       router.push('/login');
+      return;
     }
-    product.OrderProduct = 1;
+    
+    // Verificar si el producto ya está en el carrito
+    if (state.cart.some(item => item.id === product.id)) {
+      alert('Este producto ya está en tu carrito');
+      return;
+    }
+    
+    // Asignar OrderProduct para compatibilidad con el carrito
+    product.OrderProduct = { amount: 1 };
+    
     const addToPacket = async (orderId) => {
-      /* const formData = new FormData(formRef.current); 
-			console.log(formData);*/
       const packet = {
         orderId: orderId,
         productId: product.id,
-        amount: 1 /* parseInt(formData.get('amount'))  */, // parseInt(formData.get('amount')) -> <input type="number" id="amount" name='amount' min={1} required />
+        amount: 1
       };
 
       const config = {
@@ -50,48 +58,33 @@ const ProductItem = ({ product }) => {
       };
 
       const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
-      console.log('addProductToThePacked', addProductToThePacked);
       return addProductToThePacked;
     };
 
-    const savedOrderId = window.localStorage.getItem('oi');
-    if (savedOrderId == null) {
-      const getOrder = await createOrder();
-      const bornedOrderId = getOrder.id;
-      window.localStorage.setItem('oi', `${bornedOrderId}`);
-
+    try {
+      const savedOrderId = window.localStorage.getItem('oi');
+      let orderId;
+      
+      if (savedOrderId == null) {
+        const getOrder = await createOrder();
+        orderId = getOrder.id;
+        window.localStorage.setItem('oi', `${orderId}`);
+      } else {
+        orderId = parseInt(savedOrderId);
+      }
+      
+      await addToPacket(orderId);
       handleClick(product);
-      addToPacket(bornedOrderId)
-        .then(() => {
-          /* 
-				handleClick(product); */
-          /* 	debugger; */
-          /* router.reload(); */
-        })
-        .catch((err) => {
-          if (err.response?.status === 401) {
-            window.alert('Probablemente necesites iniciar sesion de nuevo');
-          } else if (err.response) {
-            console.log('Algo salio mal: ' + err.response.status);
-          }
-        });
-    } else {
-      const numberOrderId = parseInt(savedOrderId);
-      handleClick(product);
-      addToPacket(numberOrderId)
-        .then(() => {
-          /* 
-				handleClick(product); */
-          /* 				debugger; */
-          /* router.reload(); */
-        })
-        .catch((err) => {
-          if (err.response?.status === 401) {
-            window.alert('Probablemente necesites iniciar sesion de nuevo');
-          } else if (err.response) {
-            console.log('Algo salio mal: ' + err.response.status);
-          }
-        });
+      alert('Producto agregado al carrito correctamente');
+    } catch (err) {
+      if (err.response?.status === 401) {
+        alert('Probablemente necesites iniciar sesión de nuevo');
+        router.push('/login');
+      } else if (err.response) {
+        alert('Algo salió mal: ' + err.response.status);
+      } else {
+        alert('Error al agregar el producto al carrito');
+      }
     }
   };
 
@@ -108,7 +101,7 @@ const ProductItem = ({ product }) => {
           </Link>
         </div>
         <form ref={formRef} onSubmit={submitHandler}>
-          <input /* type="number" */ type="hidden" id="amount" name="amount" value="1" min={1} required />
+          <input type="hidden" id="amount" name="amount" value="1" min={1} required />
           {/* podriamos usar cambios de estado */}
           <button type="submit" className={(styles['primary-button'], styles['add-to-cart-button'])}>
             <figure className={styles['more-clickable-area']} aria-hidden="true">

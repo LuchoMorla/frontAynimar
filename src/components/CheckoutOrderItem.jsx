@@ -5,7 +5,6 @@ import close from '@icons/icon_close.png';
 import endPoints from '@services/api';
 import actualizarImg from '@icons/button_refresh_15001.png';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import styles from '@styles/CheckoutOrderItem.module.scss';
 
 const CheckoutOrderItem = ({ product }) => {
@@ -18,39 +17,62 @@ const CheckoutOrderItem = ({ product }) => {
 		removeFromCart(product);
 	}; */
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const inputRef = useRef(null),
     divRef = useRef(null);
 
   const actualizarCantidad = async (data) => {
-    if (product.stock !== null && data.amount > product.stock) {
-      alert(`No hay suficiente stock para agregar esa cantidad al carrito. Intenta con una cantidad menor a ${product.stock}`);
-      return;
+    try {
+      // Validar que la cantidad sea mayor que 0
+      if (data.amount <= 0) {
+        alert('La cantidad debe ser mayor que 0');
+        return;
+      }
+      
+      if (product.stock !== null && data.amount > product.stock) {
+        alert(`No hay suficiente stock para agregar esa cantidad al carrito. Intenta con una cantidad menor a ${product.stock}`);
+        return;
+      }
+
+      const config = {
+        headers: {
+          accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+      };
+      const { amount, productId, orderId } = data;
+      const body = {
+        amount: amount,
+        productId: productId,
+        orderId: orderId,
+      };
+      const id = data.itemId;
+      const { data: update } = await axios.patch(endPoints.orders.editItem(id), body, config);
+
+      setUpdateButton(false);
+      return update;
+    } catch (error) {
+      console.error('Error al actualizar cantidad:', error);
+      throw error;
     }
-
-    const config = {
-      headers: {
-        accept: '*/*',
-        'Content-Type': 'application/json',
-      },
-    };
-    const { amount, productId, orderId } = data;
-    const body = {
-      amount: amount,
-      productId: productId,
-      orderId: orderId,
-    };
-    const id = data.itemId;
-    const { data: update } = await axios.patch(endPoints.orders.editItem(id), body, config);
-
-    setUpdateButton(false);
-    return update;
   };
 
   const changeAmountOfItem = (product) => {
     let amountInt = inputRef.current.value;
+    
+    // Validar que la cantidad sea un número válido
+    if (isNaN(parseInt(amountInt)) || parseInt(amountInt) <= 0) {
+      alert('Por favor ingrese una cantidad válida mayor a 0');
+      return;
+    }
+    
     const orderProduct = product.OrderProduct;
+    if (!orderProduct) {
+      alert('No se encontró información del producto en la orden');
+      return;
+    }
+    
     const itemId = orderProduct.id;
     const data = {
       itemId: itemId,
@@ -58,29 +80,51 @@ const CheckoutOrderItem = ({ product }) => {
       productId: product.id,
       orderId: orderProduct.orderId,
     };
+    
     product.OrderProduct.amount = amountInt;
     setChangeDataAmount(data);
     setUpdateButton(true);
   };
 
   const removeItemProduct = async (item) => {
-    const config = {
-      headers: {
-        accept: '*/*',
-        'Content-Type': 'application/json',
-      },
-    };
-    const deleteItem = await axios.delete(endPoints.orders.deleteItem(item), config);
-    return deleteItem.data;
+    try {
+      const config = {
+        headers: {
+          accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+      };
+      const deleteItem = await axios.delete(endPoints.orders.deleteItem(item), config);
+      return deleteItem.data;
+    } catch (error) {
+      console.error('Error al eliminar producto:', error);
+      throw error;
+    }
   };
 
   const handleRemove = (product) => {
-    removeFromCart(product);
-    const orderProductId = product.OrderProduct.id;
-    if (!orderProductId) {
-      console.log('se cago, no accedi');
+    try {
+      removeFromCart(product);
+      
+      if (!product.OrderProduct || !product.OrderProduct.id) {
+        console.error('No se encontró ID del producto en la orden');
+        return;
+      }
+      
+      const orderProductId = product.OrderProduct.id;
+      
+      removeItemProduct(orderProductId)
+        .then(() => {
+          alert('Producto eliminado del carrito correctamente');
+        })
+        .catch((err) => {
+          console.error('Error al eliminar el producto:', err);
+          alert('Error al eliminar el producto del carrito');
+        });
+    } catch (error) {
+      alert('Error al procesar la solicitud');
+      console.error(error);
     }
-    removeItemProduct(orderProductId);
   };
 
   return (
@@ -105,8 +149,10 @@ const CheckoutOrderItem = ({ product }) => {
             id="amountChanged"
             name="amountChanged"
             className={styles.inputAmount}
-            defaultValue={product?.OrderProduct?.amount || router.reload()}
-            max={product.stock ?? undefined}
+            defaultValue={product?.OrderProduct?.amount || 1}
+            min={1}
+            max={product.stock || 999}
+            required
           />
 
           {buttonOpen == true ? (

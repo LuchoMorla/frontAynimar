@@ -32,20 +32,32 @@ const ProductInfo = ({ product }) => {
       toast.error('Para realizar esta accion necesitas Iniciar Sesion');
       /* alert('para realizar esta accion necesitas iniciar sesion'); */
       router.push('/login');
+      return;
     }
 
     const formData = new FormData(formRef.current);
+    const amount = parseInt(formData.get('amount'));
 
-    if (product.stock !== null && product.stock - parseInt(formData.get('amount')) < 0) {
+    if (product.stock !== null && product.stock - amount < 0) {
       toast.error('No hay suficiente stock para agregar esa cantidad al carrito');
       return;
     }
+
+    // Verificar si el producto ya está en el carrito
+    const productInCart = state.cart.find(item => item.id === product.id);
+    if (productInCart) {
+      toast.warning('Este producto ya está en tu carrito. Puedes modificar la cantidad en la página de checkout.');
+      return;
+    }
+
+    // Asignar OrderProduct para compatibilidad con el carrito
+    product.OrderProduct = { amount: amount };
 
     const addToPacket = async (orderId) => {
       const packet = {
         orderId: orderId,
         productId: product.id,
-        amount: parseInt(formData.get('amount')),
+        amount: amount
       };
 
       const config = {
@@ -54,47 +66,35 @@ const ProductInfo = ({ product }) => {
           'Content-Type': 'application/json',
         },
       };
+
       const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
       return addProductToThePacked;
     };
 
-    const savedOrderId = window.localStorage.getItem('oi');
-
-    if (savedOrderId == null) {
-      const getOrder = await createOrder();
-      const bornedOrderId = getOrder.id;
-      window.localStorage.setItem('oi', `${bornedOrderId}`);
-
+    try {
+      const savedOrderId = window.localStorage.getItem('oi');
+      let orderId;
+      
+      if (savedOrderId == null) {
+        const getOrder = await createOrder();
+        orderId = getOrder.id;
+        window.localStorage.setItem('oi', `${orderId}`);
+      } else {
+        orderId = parseInt(savedOrderId);
+      }
+      
+      await addToPacket(orderId);
       handleClick(product);
-      addToPacket(bornedOrderId)
-        .then(() => {
-          toast.success('Producto agregado corrrectamente');
-          router.reload();
-        })
-        .catch((err) => {
-          if (err.response?.status === 401) {
-            toast.error('Necesitas iniciar sesion de nuevo'); /* 
-					window.alert('Probablemente necesites iniciar sesion de nuevo'); */
-          } else if (err.response) {
-            toast.error('Algo salio mal: ' + err.response.status);
-          }
-        });
-    } else {
-      handleClick(product);
-      const numberOrderId = parseInt(savedOrderId);
-      addToPacket(numberOrderId)
-        .then(() => {
-          toast.success('Producto agregado corrrectamente');
-          router.reload();
-        })
-        .catch((err) => {
-          if (err.response?.status === 401) {
-            toast.error('Necesitas iniciar sesion de nuevo'); /* 
-					window.alert('Probablemente necesites iniciar sesion de nuevo'); */
-          } else if (err.response) {
-            toast.error('Algo salio mal: ' + err.response.status);
-          }
-        });
+      toast.success(`Producto agregado al carrito correctamente (${amount} unidades)`);
+      router.reload();
+    } catch (err) {
+      if (err.response?.status === 401) {
+        toast.error('Necesitas iniciar sesion de nuevo');
+      } else if (err.response) {
+        toast.error('Algo salio mal: ' + err.response.status);
+      } else {
+        toast.error('Error al agregar el producto al carrito');
+      }
     }
   };
 

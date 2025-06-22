@@ -7,6 +7,7 @@ import Referencia from '../reference';
 import Debito from '../debitCard';
 import { toast } from 'react-toastify';
 import TestContext from '@context/TestContext';
+import AppContext from '@context/AppContext';
 import { sendTransaction } from '@services/api/entities/transaction';
 import { updateOrder } from '@services/api/entities/updateOrder';
 import TransactionResp from '@containers/TransactionResp';
@@ -14,6 +15,7 @@ import TransactionResp from '@containers/TransactionResp';
 export default function TablaCards({ cards, uId, email }) {
   const orderState = useContext(TestContext);
   const transactionIdState = useContext(TestContext);
+  const { clearCart } = useContext(AppContext);
 
   const [transactionSuccess, setTransactionState] = useState(false);
   const [onDebit, setOnDebit] = useState(false);
@@ -106,6 +108,8 @@ export default function TablaCards({ cards, uId, email }) {
         //update order  => pagada
         updateOrder(order?.id, { state: 'pagada' });
         window.localStorage.removeItem('oi');
+        // Limpiar el carrito
+        clearCart && clearCart();
       }
       setTransactionState(true);
       toast.info('Muchas gracias, tú pago se ah realizado con exito y de forma segura');

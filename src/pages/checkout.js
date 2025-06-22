@@ -20,7 +20,7 @@ import styles from '@styles/Checkout.module.scss';
 const Checkout = () => {
   const router = useRouter();
 
-  const { state /* , toggleOrder */ } = useContext(AppContext);
+  const { state, clearCart /* , toggleOrder */ } = useContext(AppContext);
 
   /* 	const actualizarSumTotal = useRef(null); */
   const [email, setEmail] = useState('mail@vacio.com');
@@ -63,16 +63,20 @@ const Checkout = () => {
 
   // checkout
   const sumTotal = () => {
-    //const reducer = (accumalator, currentValue) => accumalator + currentValue.price * currentValue.OrderProduct['amount'];
-    const reducer = (accumalator, currentValue) => {
-      if (currentValue.price && currentValue.OrderProduct && currentValue.OrderProduct.amount) {
-        return accumalator + currentValue.price * currentValue.OrderProduct.amount;
-      } else {
-        return accumalator;
-      }
-    };
-    const sum = state.cart.reduce(reducer, 0);
-    return sum.toFixed(2);
+    try {
+      const reducer = (accumalator, currentValue) => {
+        if (currentValue.price && currentValue.OrderProduct && currentValue.OrderProduct.amount) {
+          return accumalator + currentValue.price * currentValue.OrderProduct.amount;
+        } else {
+          return accumalator;
+        }
+      };
+      const sum = state.cart.reduce(reducer, 0);
+      return parseFloat(sum.toFixed(2));
+    } catch (error) {
+      console.error('Error al calcular el total:', error);
+      return 0;
+    }
   };
 
   /* const openModalHandler = async (event) => {
@@ -102,6 +106,12 @@ const Checkout = () => {
       return;
     }
 
+    // Verificar que haya productos en el carrito
+    if (state.cart.length === 0) {
+      alert('No hay productos en el carrito');
+      return;
+    }
+
     if (paymentMethod === 'card') {
       setOpen(true); // Muestra modal con Tarjetas
     } else if (paymentMethod === 'cash') {
@@ -112,9 +122,6 @@ const Checkout = () => {
         const userId = decoded.payload.sub;
 
         const payload = {
-/*           userId,
-          paymentType: 'cash_on_delivery',
-          products: state.cart, */
           userId: userId,
           items: state.cart.map((item) => ({
           productId: item.id,
@@ -126,18 +133,20 @@ const Checkout = () => {
           status: 'pendiente',
         };
 
-        /* await axios.post(endPoints.payments.createCashPayment, payload);
+        // Mostrar mensaje de procesamiento
+        alert('Procesando su pedido, por favor espere...');
 
-        alert('Tu pedido ha sido registrado con pago contra entrega.');
-        router.push('mi_cuenta/orders'); */ 
-          const response = await axios.post(endPoints.orders.postOrder, payload);
-          if (response.status === 201 || response.status === 200) {
-            alert("Tu pedido ha sido registrado con pago contra entrega.");
-            router.push('mi_cuenta/orders');
-          }
+        const response = await axios.post(endPoints.orders.postOrder, payload);
+         if (response.status === 201 || response.status === 200) {
+           // Limpiar el carrito y la orden local
+           window.localStorage.removeItem('oi');
+           clearCart();
+           alert("Tu pedido ha sido registrado con pago contra entrega.");
+           router.push('mi_cuenta/orders');
+         }
       } catch (error) {
         console.error(error);
-        alert('Hubo un error procesando tu pedido.', error);
+        alert('Hubo un error procesando tu pedido: ' + (error.response?.data?.message || 'Error desconocido'));
       }
     } else {
       alert('Selecciona un método de pago antes de continuar.');
@@ -210,6 +219,11 @@ const Checkout = () => {
                     </button>
                   </p>
                 </div>
+                {state.cart.length === 0 && (
+                  <div className={styles.emptyCartWarning}>
+                    <p>No hay productos en el carrito</p>
+                  </div>
+                )}
               </div>
             </div>
             <div>

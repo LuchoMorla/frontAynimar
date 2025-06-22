@@ -109,6 +109,13 @@ const useInitialState = () => {
     });
   };
 
+  const clearCart = () => {
+    setState({
+      ...state,
+      cart: []
+    });
+  };
+
   return {
     state,
     addToCart,
@@ -123,7 +130,8 @@ const useInitialState = () => {
     useOrderId,
     toggleNavMenu,
     showPassword,
-    setOrderData
+    setOrderData,
+    clearCart
   };
 };
 

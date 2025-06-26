@@ -26,8 +26,10 @@ const ProductInfo = ({ product }) => {
   };
 
   const submitHandler = async (event) => {
+    console.log('sumbitHandler');
     event.preventDefault();
     const userHaveToken = Cookie.get('token');
+    console.log('userHAveToken: ', userHaveToken);
     if (!userHaveToken) {
       toast.error('Para realizar esta accion necesitas Iniciar Sesion');
       /* alert('para realizar esta accion necesitas iniciar sesion'); */
@@ -37,28 +39,37 @@ const ProductInfo = ({ product }) => {
 
     const formData = new FormData(formRef.current);
     const amount = parseInt(formData.get('amount'));
-
+    console.log('amount: ', amount);
     if (product.stock !== null && product.stock - amount < 0) {
+      console.log('se activo funcion de validacion de productos en stock');
       toast.error('No hay suficiente stock para agregar esa cantidad al carrito');
       return;
     }
 
     // Verificar si el producto ya está en el carrito
+    console.log('verificaremos si el producto esta en el carrito');
     const productInCart = state.cart.find(item => item.id === product.id);
+    console.log(productInCart);
     if (productInCart) {
+      console.log('muy bien se le agrego un warming que valida si ya esta este producto, 10, aqui si se activo');
       toast.warning('Este producto ya está en tu carrito. Puedes modificar la cantidad en la página de checkout.');
       return;
     }
-
+    console.log('OrderProduct va a ser alterado', product.OrderProduct);
+    console.log('futuro: ', amount);
     // Asignar OrderProduct para compatibilidad con el carrito
     product.OrderProduct = { amount: amount };
-
+    
+    console.log('OrderProduct fue alterado, según por compatibilidad con el carrito, ojo :)');
+    console.log('orderProduct fue alterado', product.OrderProduct);
     const addToPacket = async (orderId) => {
+      console.log('addTo Packet');
       const packet = {
         orderId: orderId,
         productId: product.id,
         amount: amount
       };
+      console.log(packet);
 
       const config = {
         headers: {
@@ -68,31 +79,45 @@ const ProductInfo = ({ product }) => {
       };
 
       const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
+      console.log(addProductToThePacked);
       return addProductToThePacked;
     };
 
     try {
+      console.log('TryCatch SubmitHandler');
       const savedOrderId = window.localStorage.getItem('oi');
+      console.log('savedOrderId:', savedOrderId);
       let orderId;
       
       if (savedOrderId == null) {
+        console.log('entramos a validacion de null Order ID');
         const getOrder = await createOrder();
+        console.log('creamos order ID que no habia');
         orderId = getOrder.id;
+        console.log('habemusOrder Id');
         window.localStorage.setItem('oi', `${orderId}`);
+        console.log('guardamos OrderId: ', orderId);
       } else {
+        console.log('si teniamos order ID: ', savedOrderId);
         orderId = parseInt(savedOrderId);
       }
-      
+      console.log('vamos agregar al packet');
       await addToPacket(orderId);
+      console.log('packeted');
       handleClick(product);
+      console.log('handleClickDone');
       toast.success(`Producto agregado al carrito correctamente (${amount} unidades)`);
+      console.log('Toastify and reload');
       router.reload();
     } catch (err) {
       if (err.response?.status === 401) {
+        console.log('error 401');
         toast.error('Necesitas iniciar sesion de nuevo');
       } else if (err.response) {
+        console.log('errror en response');
         toast.error('Algo salio mal: ' + err.response.status);
       } else {
+        console.log('otra clase de error');
         toast.error('Error al agregar el producto al carrito');
       }
     }

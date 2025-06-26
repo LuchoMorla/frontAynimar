@@ -110,6 +110,7 @@ const useInitialState = () => {
   };
 
   const clearCart = () => {
+    console.log('se uso clearCart');
     setState({
       ...state,
       cart: []

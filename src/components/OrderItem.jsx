@@ -13,23 +13,52 @@ const OrderItem = ({ product }) => {
 	const amount = orderProduct.amount;
 
 	const removeItemProduct = async (item) => {
+		console.log('removeItemProduct');
+		console.log('recivo item: ', item);
+		console.log(item);
 		const config = {
 		  headers: {
 			accept: '*/*',
 			'Content-Type': 'application/json',
 		  },
 		};
-		const deleteItem = await axios.delete(endPoints.orders.deleteItem(item), config);
+		console.log('consulta, enviamos: ', item);
+		console.log(item);
+		console.log('parametro 1 en consulta: ', endPoints.orders.deleteItem(item));
+		console.log(endPoints.orders.deleteItem(item));
+		const deleteItem = await axios.delete(endPoints.orders.deleteItem(item), config)
+			.catch((err) => {
+			console.log({ err });
+			console.log('algo paso con deleteItem');
+		});
+		console.log(deleteItem);
 		return deleteItem.data;
 	  };
 	
 	const handleRemove = (product) => {
-		removeFromCart(product);
-		const orderProductId = product.OrderProduct.id;
+		console.log('handle Remove');
+		console.log(product);
+		const orderProductId = product.id ;
+		/* const { id } = product; 
+		console.log('destructured id:', id);*/
+		/* 
+		const orderProductId = product.OrderProduct.id; */
+		console.log('orderProductId', orderProductId);
 		if (!orderProductId) {
 		  console.log('se cago, no accedi');
 		}
-		removeItemProduct(orderProductId);
+		console.log('vamos a declarar el exito');
+		removeItemProduct(orderProductId)
+/* 		.then(()=> {
+
+		}) */
+		.catch((err) => {
+			console.log({ err });
+			console.log('algo paso con removeItemProduct');
+		});
+		console.log('removeFromCart');
+		removeFromCart(product);
+		console.log('si desaparecio es por que lo hicimos bien');
 	  };
 
 	return (

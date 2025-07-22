@@ -38,7 +38,11 @@ const OrderItem = ({ product }) => {
 	const handleRemove = (product) => {
 		console.log('handle Remove');
 		console.log(product);
-		const orderProductId = product.id ;
+		// const orderProductId = product.id ;
+		
+		//cambiojoseluis
+		const orderProductId = product.OrderProduct.id ;
+		
 		/* const { id } = product; 
 		console.log('destructured id:', id);*/
 		/* 

@@ -169,8 +169,15 @@ const Checkout = () => {
             'Content-Type': 'application/json',
           },
         };
-        console.log('pago contra entrega?');
-        const response = await axios.post(endPoints.orders.postOrder, payload, config);
+        // console.log('pago contra entrega?');
+        // const response = await axios.post(endPoints.orders.postOrder, payload, config);
+
+        //cambiojoseluis
+        const savedOrderId = window.localStorage.getItem('oi');
+          let body = {
+            state: 'pendiente_envio',
+          };
+        const response = await axios.patch(endPoints.orders.updateOrder(savedOrderId), body, config);
         
         console.log('respuesta: ', response);
         console.log(response);

@@ -11,7 +11,7 @@ const MostrarOrders = ({ order }) => {
   const transformedItems = order.items.map((item) => {
     // Realiza una copia profunda del objeto 'item'
     const newItem = { ...item };
-    // Retorna el objeto transformado
+    // Retorna el objeto transformado11
     return newItem;
   });
 

@@ -22,7 +22,15 @@ const MostrarOrders = ({ order }) => {
           <div className={styles.Orders}>
             <p>Orden N. {order.id}</p>
             <p>Total de la orden: ${order.total}</p>
-            <p>Estado: {order.state == 'carrito' ? 'En caja' : 'pendiente_envio' ? 'Para Enviar' : 'Pagada'}</p>
+            <p>
+              Estado: {
+                order.state === 'carrito'
+                  ? 'En caja'
+                  : order.state === 'pendiente_envio'
+                  ? 'Para Enviar'
+                  : 'Pagada'
+              }
+            </p>
             <p>Productos: {order.items ? order.items.length : order.items}</p>
             <button className={styles['pay-Button']} onClick={() => setOpen(true)}>
               Ver productos

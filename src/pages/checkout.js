@@ -16,6 +16,7 @@ import endPoints from '@services/api';
 import PaymentezDos from '@common/PaymentezDos';/* 
 import DiscountCodeInput from '@components/DiscountCodeInput'; */
 import styles from '@styles/Checkout.module.scss';
+import { toast } from 'react-toastify';
 
 const Checkout = () => {
   const router = useRouter();
@@ -38,7 +39,7 @@ const Checkout = () => {
     const token = Cookie.get('token');
 
     if (!token) {
-      alert('necesitas iniciar session');
+      toast.error('Necesitas iniciar sesión');
       router.push('/login');
       return false;
     }
@@ -92,7 +93,7 @@ const Checkout = () => {
     if (open == true) {
       setOpen(true);
     } else {
-      alert('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, leelos y luego haz click en el checkbox');
+      alert ('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, leelos y luego haz click en el checkbox');
     };
   }; */
     const openModalHandler = async (event) => {
@@ -107,7 +108,7 @@ const Checkout = () => {
     if (open == true) {
       setOpen(true);
     } else {
-      alert('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, leelos y luego haz click en el checkbox');
+      alert ('necesitas aceptar nuestros terminos y condiciones para proceder a pagar, leelos y luego haz click en el checkbox');
     }; */
     console.log('para que le heches ojo el comentario copie y pegue');
     const formData = new FormData(refValidation.current);
@@ -116,7 +117,7 @@ const Checkout = () => {
 
     if (!termsAccepted) {
       console.log('los terminos y condiciones deben ser aceptados se activo');
-      alert('Debes aceptar los términos y condiciones para continuar.');
+      toast.error('Debes aceptar los términos y condiciones para continuar.');
       return;
     }
     console.log('paso la prueba la validacion');
@@ -125,7 +126,7 @@ const Checkout = () => {
     console.log('NO IF products in cart');
     if (state.cart.length === 0) {
       console.log('validacion si hay productos en el carrito se activo, este man para que la agrego?');
-      alert('No hay productos en el carrito');
+      toast.error('No hay productos en el carrito');
       return;
     }
     console.log('out if');
@@ -162,7 +163,7 @@ const Checkout = () => {
 
         // Mostrar mensaje de procesamiento
         console.log('lampara del procesamiento');
-        alert('Procesando su pedido, por favor espere...');
+        toast.info('Procesando su pedido, por favor espere...');
         const config = {
           headers: {
             accept: '*/*',
@@ -188,17 +189,17 @@ const Checkout = () => {
            clearCart();
            console.log('se usó una funcion crada por un programador mediocre');
            console.log('se añade lo unico que se queria hacer en esta parte: lo de arriba de este bloque puede ser borrado despues de debuggearlo bien');
-           alert("Tu pedido ha sido registrado con pago contra entrega.");
+           toast.success("Tu pedido ha sido registrado con pago contra entrega.");
            router.push('mi_cuenta/orders');
          }
       } catch (error) {
         console.error(error);
-        alert('Hubo un error procesando tu pedido: ' + (error.response?.data?.message || 'Error desconocido'));
+        toast.error('Hubo un error procesando tu pedido: ' + (error.response?.data?.message || 'Error desconocido'));
       }
       console.log('cerramos catch pago contra entrega');
     } else {    
       console.log('Selecciona un método de pago antes de continuar. Error en el selec de uno de los dos botones');
-      alert('Selecciona un método de pago antes de continuar.');
+      toast.error('Selecciona un método de pago antes de continuar.');
     }
   };
   console.log('comienza sumTotal, todo antes de aqui es tu culpa');

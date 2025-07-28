@@ -32,7 +32,7 @@ const ProductInfo = ({ product }) => {
     console.log('userHAveToken: ', userHaveToken);
     if (!userHaveToken) {
       toast.error('Para realizar esta accion necesitas Iniciar Sesion');
-      /* alert('para realizar esta accion necesitas iniciar sesion'); */
+      /* alert ('para realizar esta accion necesitas iniciar sesion'); */
       router.push('/login');
       return;
     }

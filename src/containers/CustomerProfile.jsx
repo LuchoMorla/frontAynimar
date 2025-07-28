@@ -4,6 +4,7 @@ import endPoints from '@services/api';
 import { useRouter } from "next/router";
 import { createCustomerByRecycler } from '@services/api/entities/customers';
 import Client from '@components/Client';
+import { toast } from 'react-toastify';
 
 const clientProfile = () => {
   const [client, setClient] = useState('vacio');
@@ -18,7 +19,7 @@ const clientProfile = () => {
     clientData()
     .catch((error) => {
       if (error.response?.status === 401) {
-        window.alert('Probablemente necesites iniciar sesion de nuevo');
+        toast.warning('Probablemente necesites iniciar sesion de nuevo');
       } else if (error.response) {
         console.log('Algo salio mal: ' + error.response.status);
       }
@@ -34,7 +35,7 @@ const clientProfile = () => {
       })
       .catch((error) => {
         if (error.response) {
-          window.alert('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona despues de refrescar la pagina recuerda que puedes contactarnos ;).');
+          toast.error('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona despues de refrescar la pagina recuerda que puedes contactarnos ;).');
           router.reload(window.location.pathname);
         }
       });

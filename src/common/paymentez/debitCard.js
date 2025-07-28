@@ -16,7 +16,7 @@ export default async function Debito(uid, email, card, referencia, order, tokenC
   const lastname = order?.customer?.lastName || "";
   const phone = order?.customer?.phone || "";
   const count = order?.items?.length;
-  const product = (order?.items && count > 0) ? order?.items[0].description : "";
+  const product = (order?.items && count > 0) ? order?.items[0].name : "";
   const description = (count > 0) ? `Compre ${count} productos, incluido ${product}` : "";
 
   // const total = order?.total / 100;         // Cent to Dollar
@@ -49,7 +49,7 @@ export default async function Debito(uid, email, card, referencia, order, tokenC
   };
 
   try {
-    const debito = await axios.post(`https://ccapi.paymentez.com/v2/transaction/debit`,
+    const debito = await axios.post(`https://ccapi-stg.paymentez.com/v2/transaction/debit`,
       payloadOption,
       {
         headers: {

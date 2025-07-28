@@ -29,7 +29,7 @@ export default function LoginPage() {
       })
       .catch((error) => {
         if (error.response?.status === 401) {/* 
-          window.alert('Usuario o contraseña incorrectos'); */
+          window.alert ('Usuario o contraseña incorrectos'); */
           toast.error('Usuario o contraseña incorrectos');
         } else if (error.response) {
           toast.error('Error ' + error.response.status);

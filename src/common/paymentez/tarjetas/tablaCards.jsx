@@ -90,6 +90,8 @@ export default function TablaCards({ cards, uId, email }) {
     const _debito = await Debito(uId, email, _card, _reference, order, e.token);
 
     const transactionData = _debito?.data?.transaction;
+    console.log(_debito);
+    console.log(transactionData);
     const { id, amount, payment_date, status, authorization_code } = transactionData;
 
     if (_debito) {
@@ -104,6 +106,7 @@ export default function TablaCards({ cards, uId, email }) {
         authorizationCode: authorization_code,
       };
       const res = await sendTransaction(data);
+      console.log(res);
       if (res?.data?.paymentStatus === 'success') {
         //update order  => pagada
         updateOrder(order?.id, { state: 'pagada' });

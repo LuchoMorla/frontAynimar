@@ -18,7 +18,7 @@ const WasteInfo = ({ product }) => {
   };
 
   const handleRedirect = () => {
-    window.alert('hemos registrado tú pedido, nos comunicaremos con tigo para pasar a recolectar el producto, te redigiremos a una nueva pagina para confirmar tús datos de contacto');
+    toast.success('hemos registrado tú pedido, nos comunicaremos con tigo para pasar a recolectar el producto, te redigiremos a una nueva pagina para confirmar tús datos de contacto');
     router.push('/mi_cuenta/recycler');
   };
 
@@ -30,7 +30,7 @@ const WasteInfo = ({ product }) => {
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    /* alert(1); */
+    /* alert (1); */
     const addToPacket = async (paymentId) => {
       const config = {
         headers: {
@@ -47,7 +47,7 @@ const WasteInfo = ({ product }) => {
 
       const addProductToThePacked = await axios.post(endPoints.payments.postCommodity, packet, config);
       /* 			if (addProductToThePacked.status = 401) {
-				alert('necesitas iniciar sesion');
+				alert ('necesitas iniciar sesion');
 				router.push('/login');
 			} */
       return addProductToThePacked;
@@ -70,12 +70,12 @@ const WasteInfo = ({ product }) => {
           if (error.response?.status === 401) {
             toast.error('Algo salio mal :(');
           } else if (error.response) {
-            /*             window.alert('Algo salio mal: ' + error.response.status);
+            /*             window.alert ('Algo salio mal: ' + error.response.status);
             console.log('Algo salio mal: ' + error.response.status); */
             toast.error('Algo salio mal: ' + error.response.status);
             if (error.response.status == 409) {
               toast.error('Ya tienes una cuenta registrada, Error:( ' + error.response.status + ' )'); /* 
-              window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado'); */
+              window.alert ('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado'); */
               let opcion = confirm('parece que olvidaste tu contraseña, quieres cambiar tu contraseña?');
               if (opcion == true) {
                 router.push('/forgotPassword');
@@ -96,12 +96,12 @@ const WasteInfo = ({ product }) => {
         })
         .catch((error) => {
           if (error.response?.status === 401) {
-            window.alert('algo salio mal');
+            toast.error('algo salio mal');
           } else if (error.response) {
-            window.alert('Algo salio mal: ' + error.response.status);
+            toast.error('Algo salio mal: ' + error.response.status);
             console.log('Algo salio mal: ' + error.response.status);
             if (error.response.status == 409) {
-              window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+              toast.error('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
               router.push('/forgotPassword');
             }
           }

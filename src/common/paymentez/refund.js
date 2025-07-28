@@ -10,7 +10,7 @@ export default async function Refund(transactionId) {
   const auth_token = Buffer.from(appcode + ';' + variableTimestamp + ';' + uniq_token_hash).toString('base64');
  // pruebas https://ccapi-stg.paymentez.com/v2/transaction/refund/
   try {
-    const refund = await axios.post(`https://ccapi.paymentez.com/v2/transaction/refund/`, {
+    const refund = await axios.post(`https://ccapi-stg.paymentez.com/v2/transaction/refund/`, {
       "transaction": {
         "id": transactionId
       }

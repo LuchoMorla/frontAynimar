@@ -7,6 +7,7 @@ import router from 'next/router';
 import axios from 'axios';
 import MostrarOrders from '@components/MostrarOrders';
 import styles from '@styles/OrderCustomer.module.scss';
+import { toast } from 'react-toastify';
 
 const OrdersList = () => {
 
@@ -28,7 +29,7 @@ const OrdersList = () => {
     const getCookieUser = () => {
         const token = Cookie.get('token');
         if(!token){
-          alert('necesitas iniciar session');
+          toast.error('necesitas iniciar session');
           router.push('/login');
         } /* 
         setuId(token);*/

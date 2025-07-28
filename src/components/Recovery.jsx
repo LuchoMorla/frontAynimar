@@ -7,6 +7,7 @@ import logo from '@logos/logoAynimar.svg';
 import imgCloseImage from '@assets/icons/close-eye.png';
 import imgOpenImage from '@assets/icons/open-eye.png';
 import styles from '@styles/PasswordRecovery.module.scss';
+import { toast } from 'react-toastify';
 
 export default function Recovery() {
   const { state, showPassword } = useContext(AppContext);
@@ -28,7 +29,7 @@ export default function Recovery() {
     let thePassword = data.password;
     let theConfirmPassword = data.confirmPassword;
     if (thePassword !== theConfirmPassword) {
-      window.alert('Las contraseñas no son iguales');
+      toast.error('Las contraseñas no son iguales');
     }
     if (thePassword === theConfirmPassword) {
       const token = queryToken;
@@ -36,12 +37,12 @@ export default function Recovery() {
       auth
         .changePassword(token, newPassword)
         .then(() => {
-          window.alert('tu contraseña fue cambiada');
+          toast.success('tu contraseña fue cambiada');
           router.push('/login');
         })
         .catch((error) => {
           if (error.response?.status === 401) {
-            window.alert('Usuario o contraseña incorrectos');
+            toast.error('Usuario o contraseña incorrectos');
           } else if (error.response) {
             console.log('Algo salio mal :' + error.response.status);
           }

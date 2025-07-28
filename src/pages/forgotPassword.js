@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import logo from '@logos/logoAynimar.svg';
 import styles from '@styles/Login.module.scss';
+import { toast } from 'react-toastify';
 
 export default function ForgetPassword() {
   const formRef = useRef(null);
@@ -28,7 +29,7 @@ export default function ForgetPassword() {
       })
       .catch((error) => {
       if (error.response?.status === 401) {
-        window.alert('Usuario o contraseña incorrectos');
+        toast.error('Usuario o contraseña incorrectos');
       } else if (error.response) {
         console.log('Algo salio mal: ' + error.response.status);
        }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 /* import Image from 'next/image';
  import logo from '@logos/logo-Aynimar.svg' */
 /* import styles from '@styles/Login.module.scss';   */
@@ -18,7 +19,7 @@ export default function AutoLoginPage() {
             })
             .catch((error) => {
               if (error.response?.status === 401) {
-                window.alert('Usuario o contraseña incorrectos');
+                toast.error('Usuario o contraseña incorrectos');
               } else if (error.response) {
                 console.log('Algo salio mal :' + error.response.status);
               }

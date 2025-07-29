@@ -2,6 +2,7 @@ import React, { useRef } from 'react';/*
 import { useRouter } from 'next/router'; */
 import { updateCustomer } from '@services/api/entities/customers';
 import styles from '@styles/MyAccount.module.scss';
+import { toast } from 'react-toastify';
 
 const Client = ({ client }) => {
   const formRef = useRef(null);
@@ -25,7 +26,7 @@ const Client = ({ client }) => {
     };
 
     function error(err) {
-      window.alert('ERROR(' + err.code + '): ' + err.message);
+      toast.error('ERROR(' + err.code + '): ' + err.message);
       console.warn('ERROR(' + err.code + '): ' + err.message);
     };
 
@@ -52,20 +53,21 @@ const Client = ({ client }) => {
     };
     updateCustomer(clientId, data)
       .then(() => {
-        window.alert('^^ Actualizaste tus datos correctamente ^^');
+        toast.success('Actualizaste tus datos correctamente');
         /* router.push('/mi_cuenta/cliente'); */
       })
       .catch((error) => {
         if (error.response?.status === 401) {
-          window.alert('algo salio mal :(');
+          toast.error('algo salio mal');
         } else if (error.response?.status === 400) {
-          window.alert(
-            ':O error por mal envio de actualización de datos, para actualizar una recomendación es que no dejes datos vacios, pon na en caso de que no tengas la información, y si te continua saliendo error, lo mejor es que pruebes con infrmación real y confiable'
+          toast.error(
+            'error por mal envio de actualización de datos, para actualizar una recomendación es que no dejes datos vacios, pon la en caso de que no tengas la información, y si te continua saliendo error, lo mejor es que pruebes con información real y confiable'
           );
         } else if (error.response) {
-          window.alert('Algo salio mal: ' + error.response.status);
+          toast.error('Error ' + error.response.status);
+          console.log('Algo salio mal: ' + error.response.status);
           /* if (error.response.status == 409) {
-            window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+            window.alert ('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
             router.push('/forgotPassword');
           } */
         }

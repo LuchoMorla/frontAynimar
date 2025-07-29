@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import addToCartImage from '@icons/bt_add_to_cart.svg';
 import addedToCartImage from '@icons/bt_added_to_cart.svg';
 import styles from '@styles/ProductItem.module.scss';
+import { toast } from 'react-toastify';
 
 const ProductItem = ({ product }) => {
   const router = useRouter();
@@ -29,7 +30,7 @@ const ProductItem = ({ product }) => {
     event.preventDefault();
     const userHaveToken = Cookie.get('token');
     if (!userHaveToken) {
-      alert('Para realizar esta acción necesitas iniciar sesión');
+      toast.warning('Para realizar esta acción necesitas iniciar sesión');
       router.push('/login');
       return;
     }
@@ -37,7 +38,7 @@ const ProductItem = ({ product }) => {
     // Verificar si el producto ya está en el carrito
     if (state.cart.some(item => item.id === product.id)) {
       console.log('el producto esta en carrito por eso se activo esta funcion, producta ponerle un tostify');
-      alert('Este producto ya está en tu carrito');
+      toast.info('Este producto ya está en tu carrito');
       return;
     }
     
@@ -105,19 +106,19 @@ const ProductItem = ({ product }) => {
       console.log('agregamos al paquete la orden');
       handleClick(product);
       console.log('handleClick se ejecuto al final');
-      alert('Producto agregado al carrito correctamente');
+      toast.success('Producto agregado al carrito correctamente');
       console.log('salimos del try');
     } catch (err) {
       if (err.response?.status === 401) {
         console.log('catch1');
-        alert('Probablemente necesites iniciar sesión de nuevo');
+        toast.warning('Probablemente necesites iniciar sesión de nuevo');
         router.push('/login');
       } else if (err.response) {
                 console.log('catch2');
-        alert('Algo salió mal: ' + err.response.status);
+        toast.error('Algo salió mal: ' + err.response.status);
       } else {
                 console.log('catch3');
-        alert('Error al agregar el producto al carrito');
+        toast.error('Error al agregar el producto al carrito');
       }
     }
   };

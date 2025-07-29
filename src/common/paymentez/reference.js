@@ -10,7 +10,7 @@ export default async function Referencia(uid, email, order) {
     const auth_token = Buffer.from(appcode + ';' + variableTimestamp + ';' + uniq_token_hash).toString('base64');
 
     try {
-        const referencia = await axios.post(`https://ccapi.paymentez.com/v2/transaction/init_reference`, {
+        const referencia = await axios.post(`https://ccapi-stg.paymentez.com/v2/transaction/init_reference`, {
             "locale": "es",
             "order": {
                 "amount": order.total,

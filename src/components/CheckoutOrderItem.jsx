@@ -7,6 +7,7 @@ import actualizarImg from '@icons/button_refresh_15001.png';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styles from '@styles/CheckoutOrderItem.module.scss';
+import { toast } from 'react-toastify';
 
 const CheckoutOrderItem = ({ product }) => {
   /* 
@@ -32,12 +33,12 @@ const CheckoutOrderItem = ({ product }) => {
       console.log('entramos al trycacth y empiezan las validaciones de este wevon');
       // Validar que la cantidad sea mayor que 0
       if (data.amount <= 0) {
-        alert('La cantidad debe ser mayor que 0');
+        toast.warning('La cantidad debe ser mayor que 0');
         return;
       }
       
       if (product.stock !== null && data.amount > product.stock) {
-        alert(`No hay suficiente stock para agregar esa cantidad al carrito. Intenta con una cantidad menor a ${product.stock}`);
+        toast.warning(`No hay suficiente stock para agregar esa cantidad al carrito. Intenta con una cantidad menor a ${product.stock}`);
         return;
       }
       console.log('validacion que habia antes tambien termino');
@@ -77,7 +78,7 @@ const CheckoutOrderItem = ({ product }) => {
     console.log('let amountInt');
     // Validar que la cantidad sea un número válido
     if (isNaN(parseInt(amountInt)) || parseInt(amountInt) <= 0) {
-      alert('Por favor ingrese una cantidad válida mayor a 0');
+      toast.warning('Por favor ingrese una cantidad válida mayor a 0');
       return;
     }
     
@@ -86,7 +87,7 @@ const CheckoutOrderItem = ({ product }) => {
     console.log('orderProductId: ', orderProduct.id);
     if (!orderProduct) {
       console.log('no se encontro orderProduct');
-      alert('No se encontró información del producto en la orden');
+      toast.warning('No se encontró información del producto en la orden');
       return;
     }
     console.log('otro atributo que viene null: es el id de orderProduct');
@@ -155,18 +156,18 @@ const CheckoutOrderItem = ({ product }) => {
       removeItemProduct(orderProductId)
         .then(() => {
           console.log('Promesa cumplio con la mision');
-          alert('Producto eliminado del carrito correctamente');
+          toast.success('Producto eliminado del carrito correctamente');
         })
         .catch((err) => {
           console.log('promesa dio error');
           console.error('Error al eliminar el producto:', err);
-          alert('Error al eliminar el producto del carrito');
+          toast.error('Error al eliminar el producto del carrito');
         });
       console.log('terminamos de procesar la declaracion');
     console.groupEnd('handeRemove');
     } catch (error) {
       console.log('catchiamos un error en la funcion remove item');
-      alert('Error al procesar la solicitud');
+      toast.error('Error al procesar la solicitud');
       console.error(error);
     }
   };

@@ -11,6 +11,8 @@ import { createOrderFetch /* , uOrders */ } from '@hooks/useOrders';
 /* import { addToPacket } from '@hooks/useItems'; */
 import { useRouter } from 'next/router';
 import styles from '@styles/ProductInfo.module.scss';
+import { toast } from 'react-toastify';
+
 
 const ProductInfo = ({ product }) => {
   const router = useRouter();
@@ -35,7 +37,7 @@ const ProductInfo = ({ product }) => {
   const submitHandler = async (event) => {
     const userHaveToken = Cookie.get('token');
     if (!userHaveToken) {
-      alert('para realizar esta accion necesitas iniciar sesion');
+      toast.warning('Para realizar esta accion necesitas iniciar sesion');
       router.push('/login');
     }
     event.preventDefault();
@@ -62,7 +64,7 @@ const ProductInfo = ({ product }) => {
 				*/
       const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
       /* 				if (addProductToThePacked.response?.error.status === 401) {
-					window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
+					window.alert ('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
 					router.push('/login');
 				  } else if (addProductToThePacked.response?.error) {
 					console.log('Algo salio mal: ' + error.response.status);
@@ -70,7 +72,7 @@ const ProductInfo = ({ product }) => {
       return addProductToThePacked;
       /* 			} catch (error) {
 					if (err.response?.status === 401) {
-						window.alert('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
+						window.alert ('Probablemente necesites iniciar sesion de nuevo, te redigiremos a la pagina de inicio de sesion para que te a');
 						router.push('/login');
 					  } else if (err.response) {
 						console.log('Algo salio mal: ' + err.response.status);
@@ -79,7 +81,7 @@ const ProductInfo = ({ product }) => {
 
       /* 			window.localStorage.setItem('item_id', `${addProductToThePacked.data.id}`); */
       /* 			if (addProductToThePacked.status = 401) {
-				alert('necesitas iniciar sesion');
+				alert ('necesitas iniciar sesion');
 				router.push('/login');
 			} */
     };
@@ -94,7 +96,7 @@ const ProductInfo = ({ product }) => {
       handleClick(product);
       addToPacket(bornedOrderId).catch((err) => {
         if (err.response?.status === 401) {
-          window.alert('Probablemente necesites iniciar sesion de nuevo');
+          toast.warning('Probablemente necesites iniciar sesion de nuevo');
         } else if (err.response) {
           console.log('Algo salio mal: ' + err.response.status);
         }
@@ -105,7 +107,7 @@ const ProductInfo = ({ product }) => {
       /* Creo que queria guardar el numero de order id en el local storage OrderId(numberOrderId); */
       addToPacket(numberOrderId).catch((err) => {
         if (err.response?.status === 401) {
-          window.alert('Probablemente necesites iniciar sesion de nuevo');
+          toast.warning('Probablemente necesites iniciar sesion de nuevo');
         } else if (err.response) {
           console.log('Algo salio mal: ' + err.response.status);
         }

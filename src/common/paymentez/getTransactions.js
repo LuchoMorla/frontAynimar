@@ -11,7 +11,7 @@ export default async function getTransactions() {
   const auth_token = Buffer.from(appcode + ';' + variableTimestamp + ';' + uniq_token_hash).toString('base64');
 
   try {
-    axios.get(`https://ccapi.paymentez.com/v2/transaction/verify`, {},
+    axios.get(`https://ccapi-stg.paymentez.com/v2/transaction/verify`, {},
       {
         headers: {
           "Content-Type": "application/json",

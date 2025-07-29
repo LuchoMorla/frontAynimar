@@ -4,6 +4,7 @@
   import { useRouter } from "next/router";
   import { createRecyclerByCustomer } from '@services/api/entities/recyclers';
   import Recycler from "@components/Recycler";
+  import { toast } from 'react-toastify';
 
   const recyclerProfile = () => {
       const [recycler, setRecycler] = useState('vacio');
@@ -18,7 +19,7 @@
         recyclerData()
         .catch((error) => {
           if (error.response?.status === 401) {
-            window.alert('Probablemente necesites iniciar sesion de nuevo');
+            toast.warning('Probablemente necesites iniciar sesion de nuevo');
           } else if (error.response) {
             console.log('Algo salio mal: ' + error.response.status);
           }
@@ -34,7 +35,7 @@
           })
           .catch((error) => {
             if (error.response) {
-              window.alert('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona despues de refrescar la pagina recuerda que puedes contactarnos.');
+              toast.error('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona despues de refrescar la pagina recuerda que puedes contactarnos.');
               router.reload(window.location.pathname);
             }
           });

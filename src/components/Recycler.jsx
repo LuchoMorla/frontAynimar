@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useRouter } from "next/router";
 import { updateRecycler } from '@services/api/entities/recyclers';
 import styles from '@styles/MyAccount.module.scss';
+import { toast } from 'react-toastify';
 
 const Recycler = ({ recycler }) => {
    const formRef = useRef(null);
@@ -21,7 +22,7 @@ const Recycler = ({ recycler }) => {
     };
 
     function error(err) {
-      window.alert('ERROR(' + err.code + '): ' + err.message);
+      toast.error('ERROR(' + err.code + '): ' + err.message);
       console.warn('ERROR(' + err.code + '): ' + err.message);
     };
 
@@ -58,17 +59,17 @@ const Recycler = ({ recycler }) => {
 
     updateRecycler(recyclerId, data)
       .then(() => {
-        window.alert('^^ Actualizaste tus datos correctamente ^^, si viniste aquí por 1ra primera vez, te contactaremos muy pronto...');
+        toast.success('Actualizaste tus datos correctamente, si viniste aquí por 1ra primera vez, te contactaremos muy pronto...');
           router.push('/mi_cuenta/recycler');
       })
       .catch((error)=> { if (error.response?.status === 401) {
-        window.alert('algo salio mal :(');
+        toast.error('algo salio mal :(');
        } else if (error.response?.status === 400) {
-        window.alert(':O error por mal envio de actualización de datos, para actualizar una recomendación es que no dejes datos vacios, pon na en caso de que no tengas la información, y si te continua saliendo error, lo mejor es que pruebes con infrmación real y confiable');
+        toast.error(':O error por mal envio de actualización de datos, para actualizar una recomendación es que no dejes datos vacios, pon na en caso de que no tengas la información, y si te continua saliendo error, lo mejor es que pruebes con infrmación real y confiable');
        } else if (error.response) {
-        window.alert('Algo salio mal: ' + error.response.status);
+        toast.error('Error ' + error.response.status);
         if (error.response.status == 409) {
-          window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
+          toast.error('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
           router.push('/forgotPassword');
         };
       };

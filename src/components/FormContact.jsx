@@ -27,11 +27,11 @@ const FormContact = () => {
     
             const response = await axios.post(endPoints.mail.contact, data, config);
             toast.success('Su mensaje fue enviado con exito');
-            /* window.alert('mensaje enviado'); */
+            /* window.alert ('mensaje enviado'); */
             return response.data;
         } catch (error) {
           toast.error('no pudimos enviar el mensaje');/* 
-            window.alert('no pudimos enviar el mensaje'); */
+            window.alert ('no pudimos enviar el mensaje'); */
         };
     };
 

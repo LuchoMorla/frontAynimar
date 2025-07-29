@@ -34,14 +34,14 @@ const SignUp = () => {
       })
       .catch((error)=> { if (error.response?.status === 401) {
         toast.error('algo salio Mal :(');/* 
-        window.alert('algo salio mal :('); */
+        window.alert ('algo salio mal :('); */
        } else if (error.response) {
         toast.error('Algo salio mal, Error:( ' + error.response.status +' )');
-        /* window.alert('Algo salio mal: ' + error.response.status); */
+        /* window.alert ('Algo salio mal: ' + error.response.status); */
         /* console.log('Algo salio mal: ' + error.response.status); */
         if (error.response.status == 409) {
           toast.error('Ya tienes una cuenta registrada, Error:( ' + error.response.status +' )');/* 
-          window.alert('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado'); */
+          window.alert ('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado'); */
           let opcion = confirm('parece que olvidaste tu contraseña, quieres cambiar tu contraseña?');
           if (opcion == true) {
             router.push('/forgotPassword');

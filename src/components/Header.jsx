@@ -19,69 +19,95 @@ import styles from '@styles/Header.module.scss';
 import TestContext from '@context/TestContext';
 
 const Header = () => {
+  // NOTA: La lógica de `useAuth`, `token` y `setToken` parece causar re-renders.
+  // Es mejor manejar la validación del token de forma más directa dentro de useEffect o con una función simple.
+  // He mantenido tu código, pero considera refactorizar esto en el futuro.
   const [token, setToken] = useState(null);
   const orderState = useContext(TestContext);
-  const hola = useAuth();
+  const auth = useAuth(); // Renombrado de 'hola' a 'auth' para mayor claridad
   if (!token) {
-    hola.getAuth();
+    auth.getAuth();
     setToken('haveToken');
   }
 
-  const getCookieUserValidator = () => {
-    const token = Cookie.get('token');
-    if (!token) {
-      return false;
-    }
-    return true;
-  };
-
-  const isTokenValid = () => {
-    return getCookieUserValidator();
-  };
-
   const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
 
-  const fetchOrders = async () => {
-    if (state.cart.length <= 0) {
-      const { data: getOrder } = await axios.get(endPoints.orders.getOrderByState, { params: { state: 'carrito' } });
-      orderState.setOrder(getOrder);
-      const items = getOrder.items;
-      // items.forEach((el) => {
-      //   el.price = el.price / 100;
-      // });
-      if (items.length > 0) {
-        getCart(items);
-        const getStorageOrderId = window.localStorage.getItem('oi');
-        if (!getStorageOrderId) {
-          window.localStorage.setItem('oi', `${getOrder.id}`);
-        }
-      }
-    }
+  // Función simple y clara para verificar si existe la cookie del token.
+  const isUserAuthenticated = () => {
+    return !!Cookie.get('token');
   };
 
+
+  // --- NUEVA LÓGICA DE CARGA DE DATOS ---
   useEffect(() => {
-    //log
-    isTokenValid();
-    //fetch Orders
-    const fetchMyOrders = async () => {
+    const userHasToken = isUserAuthenticated();
+    const guestOrderId = window.localStorage.getItem('oi');
+
+    const fetchCartData = async () => {
+      // Si el carrito en el estado de React ya tiene items, no hacemos nada.
+      if (state.cart.length > 0) {
+        return;
+      }
+
+      let orderData = null;
+
       try {
-        await fetchOrders();
+        if (userHasToken) {
+          // --- FLUJO PARA USUARIO LOGUEADO ---
+          console.log('Usuario autenticado. Buscando orden de "carrito"...');
+          // Hacemos la llamada dentro de un try/catch por si el usuario no tiene carrito activo.
+          try {
+            const { data } = await axios.get(endPoints.orders.getOrderByState, { params: { state: 'carrito' } });
+            orderData = data;
+          } catch (error) {
+            // Es un caso normal que no haya un carrito, no es un error crítico.
+            console.log('El usuario autenticado no tiene una orden de tipo "carrito" activa.');
+          }
+
+        } else if (guestOrderId) {
+          // --- FLUJO PARA INVITADO ---
+          console.log(`Usuario invitado. Buscando orden de carrito #${guestOrderId}...`);
+          const { data } = await axios.get(endPoints.orders.getGuestOrder(guestOrderId));
+          orderData = data;
+        }
+
+        // Si se encontró una orden (de cualquier tipo), se procesa.
+        if (orderData && orderData.items && orderData.items.length > 0) {
+          console.log('Orden encontrada, poblando el estado del carrito con:', orderData.items);
+          
+          // Llenamos el carrito en el Contexto Principal
+          getCart(orderData.items);
+          
+          // Actualizamos el otro contexto si es necesario
+          if (orderState && orderState.setOrder) {
+            orderState.setOrder(orderData);
+          }
+
+          // Nos aseguramos de que el ID de la orden esté en localStorage
+          if (!window.localStorage.getItem('oi')) {
+            window.localStorage.setItem('oi', `${orderData.id}`);
+          }
+        }
       } catch (error) {
-        console.log(error);
-        if (error.status == 401) {
-          console.log('funciono doble CATCH Luis, campuramos el error 401 mira-> ' + error.status + ` y  tambien el mensaje es ${error.message}`);
+        console.error('Error al intentar cargar los datos del carrito:', error);
+        
+        // Si el error es 404 (Not Found) o 403 (Forbidden) para una orden de invitado,
+        // significa que la orden ya no es válida (quizás ya se compró o asoció).
+        // La limpiamos del localStorage para evitar futuras llamadas fallidas.
+        if (guestOrderId && !userHasToken && error.response && (error.response.status === 404 || error.response.status === 403)) {
+          console.log(`La orden de invitado #${guestOrderId} no es válida. Limpiando localStorage.`);
+          window.localStorage.removeItem('oi');
         }
       }
     };
-    fetchMyOrders();
-  }, [endPoints.orders.getOrderByState, token]);
 
-  /*   useEffect(() => {
-    isTokenValid();
-    const tokenIsValid = isTokenValid(token); 
-    // Realiza cualquier lógica adicional basada en la validez del token aquí
+    fetchCartData();
 
-  }, [token]); */
+    // Este efecto se ejecutará solo una vez cuando el componente se monte,
+    // o si el estado del carrito cambia (por ejemplo, si se vacía).
+    // Esto evita llamadas innecesarias a la API en cada re-render.
+  }, [state.cart.length]);
+
 
   return (
     <>
@@ -121,17 +147,12 @@ const Header = () => {
         <div className={styles['navbar-right']}>
           <ul>
             <li className={styles['navbar-selling-cart']} onClick={() => togglePayment()} aria-hidden="true">
-              <Image className={(styles['more-clickable-area'], styles.pointer)} src={sellingCart} alt="selling to recycler cart" />
+              <Image className={`${styles['more-clickable-area']} ${styles.pointer}`} src={sellingCart} alt="selling to recycler cart" />
               {state.metacircle.length > 0 ? <div>{state.metacircle.length}</div> : null}
             </li>
-            {/*             {
-              //Añadire logica para que esto aparezca cuando el usuario haya iniciado session
-              <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
-              <Image src={userIcon} width={50} height={40} alt="user icon menu" />
-            </li>
-            } */}
-            {isTokenValid() ? ( // Verifica si el token existe
-              <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
+            
+            {isUserAuthenticated() ? (
+              <li className={`${styles['more-clickeable-area']} ${styles['navbar-email']} ${styles.pointer}`} onClick={() => toggleMenu()} aria-hidden="true">
                 <Image src={userIcon} alt="user icon menu" />
               </li>
             ) : (
@@ -140,7 +161,7 @@ const Header = () => {
               </li>
             )}
             <li className={styles['navbar-shopping-cart']} onClick={() => toggleOrder()} aria-hidden="true">
-              <Image className={(styles['more-clickable-area'], styles.pointer)} src={shoppingCart} alt="shopping cart" />
+              <Image className={`${styles['more-clickable-area']} ${styles.pointer}`} src={shoppingCart} alt="shopping cart" />
               {state.cart.length > 0 ? <div>{state.cart.length}</div> : null}
             </li>
           </ul>

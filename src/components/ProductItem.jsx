@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useState } from 'react'; // Añadido useState
 import AppContext from '@context/AppContext';
 import Image from 'next/image';
 import axios from 'axios';
@@ -13,145 +13,125 @@ import { toast } from 'react-toastify';
 
 const ProductItem = ({ product }) => {
   const router = useRouter();
-
   const { state, addToCart } = useContext(AppContext);
-  const formRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false); // Estado para controlar el click
 
+  // Función para usuarios logueados
   const createOrder = async () => {
-    const post = await axios.post(endPoints.orders.postOrder);
-    return post.data;
+    const { data } = await axios.post(endPoints.orders.postOrder);
+    return data;
   };
 
+  // Función para actualizar el estado local
   const handleClick = (item) => {
     addToCart(item);
   };
 
+  // --- FUNCIÓN SUBMITHANDLER CORREGIDA Y ADAPTADA ---
   const submitHandler = async (event) => {
     event.preventDefault();
+    if (isLoading) return; // Previene dobles clics
+    setIsLoading(true);
+
     const userHaveToken = Cookie.get('token');
-    if (!userHaveToken) {
-      toast.warning('Para realizar esta acción necesitas iniciar sesión');
-      router.push('/login');
-      return;
-    }
-    
-    // Verificar si el producto ya está en el carrito
-    if (state.cart.some(item => item.id === product.id)) {
-      console.log('el producto esta en carrito por eso se activo esta funcion, producta ponerle un tostify');
-      toast.info('Este producto ya está en tu carrito');
-      return;
-    }
-    
-    // Asignar OrderProduct para compatibilidad con el carrito
-    console.log('se hara una asignacion directa al valor product.OrderProduct: ', product.OrderProduct);
-    product.OrderProduct = { amount: 1 };
-    console.log('era directa no en objeto pero'); 
-    console.log(product.OrderProduct);
-    console.log('quizas solo debes hacerle asi:  product.OrderProduct = 1;');
+    const amount = 1; // En esta vista, la cantidad siempre es 1.
 
-    const addToPacket = async (orderId) => {
-      console.group('addToPacket');
+    // 1. VERIFICAMOS SI EL PRODUCTO YA ESTÁ EN EL CARRITO
+    if (state.cart.some((item) => item.id === product.id)) {
+      toast.info('Este producto ya está en tu carrito.');
+      setIsLoading(false);
+      return;
+    }
+
+    const productId = product.id;
+
+    try {
+      // 2. OBTENEMOS O CREAMOS LA ORDEN (PARA INVITADO O USUARIO)
+      let orderId = window.localStorage.getItem('oi') ? parseInt(window.localStorage.getItem('oi')) : null;
+
+      if (!orderId) {
+        if (userHaveToken) {
+          const newOrder = await createOrder();
+          orderId = newOrder.id;
+        } else {
+          const { data } = await axios.post(endPoints.orders.postGuestOrder);
+          orderId = data.id;
+        }
+        window.localStorage.setItem('oi', `${orderId}`);
+      }
+
+      // 3. PREPARAMOS Y ENVIAMOS EL PAQUETE A LA API
       const packet = {
-        orderId: orderId,
-        productId: product.id,
-        amount: 1
+        orderId,
+        productId,
+        amount,
       };
-      console.log(packet);
 
-      const config = {
-        headers: {
-          accept: '*/*',
-          'Content-Type': 'application/json',
+      let newItemFromApi;
+      if (userHaveToken) {
+        const { data } = await axios.post(endPoints.orders.postItem, packet);
+        newItemFromApi = data;
+      } else {
+        const { data } = await axios.post(endPoints.orders.postItemToGuest, packet);
+        newItemFromApi = data;
+      }
+
+      // 4. CONSTRUIMOS EL OBJETO CORRECTO PARA EL ESTADO LOCAL
+      const itemToAdd = {
+        ...product,
+        OrderProduct: {
+          id: newItemFromApi.id, // ¡El ID de la BD que faltaba!
+          amount: newItemFromApi.amount,
+          orderId: newItemFromApi.orderId,
+          productId: newItemFromApi.productId,
         },
       };
 
-      const addProductToThePacked = await axios.post(endPoints.orders.postItem, packet, config);
-      console.log(addProductToThePacked);
-      console.groupEnd('addToPacket');
-      return addProductToThePacked;
-    };
+      // 5. ACTUALIZAMOS EL ESTADO Y NOTIFICAMOS
+      handleClick(itemToAdd);
+      toast.success('Producto agregado al carrito');
 
-    try {
-      console.log('empezamos el trycattch de productItem');
-      console.log('consultamos si tenemos orderId');
-      const savedOrderId = window.localStorage.getItem('oi');
-      console.log(savedOrderId);
-      
-      console.log('HAsta aqui quedo mi logica y borrro un monton');
-      let orderId; 
-      console.log('inicia con let orderId');
-      
-      if (savedOrderId == null) {
-        console.log('inicia mi funcion if');
-        const getOrder = await createOrder();
-        console.log('mantenemos el getOrder');
-        orderId = getOrder.id;
-        console.log('El hace su magia: ', orderId);
-        window.localStorage.setItem('oi', `${orderId}`);
-        console.log('termino su magia, comienza la mia');
-        if(orderId == null){
-        console.log('mi magia fue activada');
-        const bornedOrderId = getOrder.id;
-        window.localStorage.setItem('oi', `${bornedOrderId}`);
-        console.log('termine poniendome salvaje');
-        }
-      } else {
-        console.log('volvimos al else por que si habia savedOrderId');
-        orderId = parseInt(savedOrderId);
-      }
-      console.log('termiamos de ver que sucedio con lo que deberia estar en localstorage');
-      console.log('resulta que yo hice un if else más grande, el me lo acorto');
-      await addToPacket(orderId);
-      console.log('resulta que tambien cambia la forma en hacer las consultas aqui... quizas solo debamos volver a la forma en que lo haciamos antes, quizas...');
-      console.log('agregamos al paquete la orden');
-      handleClick(product);
-      console.log('handleClick se ejecuto al final');
-      toast.success('Producto agregado al carrito correctamente');
-      console.log('salimos del try');
     } catch (err) {
+      console.error("Error al agregar producto desde ProductItem:", err);
+      const errorMessage = err.response?.data?.message || 'Error al agregar el producto.';
+      toast.error(errorMessage);
       if (err.response?.status === 401) {
-        console.log('catch1');
-        toast.warning('Probablemente necesites iniciar sesión de nuevo');
+        Cookie.remove('token');
         router.push('/login');
-      } else if (err.response) {
-                console.log('catch2');
-        toast.error('Algo salió mal: ' + err.response.status);
-      } else {
-                console.log('catch3');
-        toast.error('Error al agregar el producto al carrito');
       }
+    } finally {
+      setIsLoading(false); // Reactivamos el botón
     }
   };
 
   return (
     <div className={styles.ProductItem}>
       <Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
-        <Image src={product.image} width={240} height={240} alt={product.description} />
+        <Image src={product.image} width={240} height={240} alt={product.name} priority={false} />
       </Link>
       <div className={styles['product-info']}>
         <div>
-          <p>${product.price}</p>
+          <p>${product.price.toFixed(2)}</p>
           <Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
             <p className={styles.productName}>{product.name}</p>
           </Link>
         </div>
-        <form ref={formRef} onSubmit={submitHandler}>
-          <input type="hidden" id="amount" name="amount" value="1" min={1} required />
-          {/* podriamos usar cambios de estado */}
-          <button type="submit" className={(styles['primary-button'], styles['add-to-cart-button'])}>
-            <figure className={styles['more-clickable-area']} aria-hidden="true">
-              {state.cart.includes(product) ? (
-                <Image className={`${styles.disabled} ${styles['add-to-cart-btn']}`} src={addedToCartImage} alt="added to cart" />
-              ) : (
-                <Image src={addToCartImage} /* width={24} height={24} */ alt="add to cart" />
-              )}
-            </figure>
-          </button>
-        </form>
+        {/* Usamos un botón simple en lugar de un formulario, ya que la cantidad es fija */}
+        <figure className={styles['more-clickable-area']} onClick={submitHandler} aria-hidden="true">
+          {isLoading ? (
+            // Opcional: mostrar un pequeño spinner o simplemente deshabilitar visualmente
+            <Image className={`${styles.disabled} ${styles['add-to-cart-btn']}`} src={addedToCartImage} alt="agregando..." />
+          ) : state.cart.some((item) => item.id === product.id) ? (
+            <Image className={`${styles.disabled} ${styles['add-to-cart-btn']}`} src={addedToCartImage} alt="added to cart" />
+          ) : (
+            <Image src={addToCartImage} alt="add to cart" />
+          )}
+        </figure>
       </div>
     </div>
   );
 };
+
 ProductItem.displayName = 'ProductItem';
 
 export default ProductItem;

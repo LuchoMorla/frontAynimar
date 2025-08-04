@@ -19,12 +19,12 @@ import styles from '@styles/Header.module.scss';
 import TestContext from '@context/TestContext';
 
 const Header = () => {
+  // NOTA: La lógica de `useAuth`, `token` y `setToken` parece causar re-renders.
+  // Es mejor manejar la validación del token de forma más directa dentro de useEffect o con una función simple.
+  // He mantenido tu código, pero considera refactorizar esto en el futuro.
   const [token, setToken] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [cartLoaded, setCartLoaded] = useState(false);
   const orderState = useContext(TestContext);
-  const auth = useAuth();
-  
+  const auth = useAuth(); // Renombrado de 'hola' a 'auth' para mayor claridad
   if (!token) {
     auth.getAuth();
     setToken('haveToken');
@@ -32,58 +32,35 @@ const Header = () => {
 
   const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
 
-  // Función para verificar autenticación
-  const checkAuthentication = () => {
+  // Función simple y clara para verificar si existe la cookie del token.
+  const isUserAuthenticated = () => {
     return !!Cookie.get('token');
   };
 
-  // Effect para monitorear cambios en la autenticación
+
+  // --- NUEVA LÓGICA DE CARGA DE DATOS ---
   useEffect(() => {
-    const checkAuthStatus = () => {
-      const authStatus = checkAuthentication();
-      setIsAuthenticated(authStatus);
-    };
-
-    // Verificar inmediatamente
-    checkAuthStatus();
-
-    // Verificar cada 500ms por si la cookie se establece después del redirect
-    const authInterval = setInterval(checkAuthStatus, 500);
-
-    // Limpiar el interval después de 5 segundos
-    const timeout = setTimeout(() => {
-      clearInterval(authInterval);
-    }, 5000);
-
-    return () => {
-      clearInterval(authInterval);
-      clearTimeout(timeout);
-    };
-  }, []);
-
-  // Effect principal para cargar datos del carrito
-  useEffect(() => {
-    // Si ya se cargó el carrito, no hacer nada
-    if (cartLoaded || state.cart.length > 0) {
-      return;
-    }
-
+    const userHasToken = isUserAuthenticated();
     const guestOrderId = window.localStorage.getItem('oi');
 
     const fetchCartData = async () => {
+      // Si el carrito en el estado de React ya tiene items, no hacemos nada.
+      if (state.cart.length > 0) {
+        return;
+      }
+
       let orderData = null;
 
       try {
-        if (isAuthenticated) {
+        if (userHasToken) {
           // --- FLUJO PARA USUARIO LOGUEADO ---
           console.log('Usuario autenticado. Buscando orden de "carrito"...');
+          // Hacemos la llamada dentro de un try/catch por si el usuario no tiene carrito activo.
           try {
-            const { data } = await axios.get(endPoints.orders.getOrderByState, { 
-              params: { state: 'carrito' } 
-            });
+            const { data } = await axios.get(endPoints.orders.getOrderByState, { params: { state: 'carrito' } });
             orderData = data;
-            console.log('Carrito encontrado para usuario autenticado:', data);
           } catch (error) {
+            // Es un caso normal que no haya un carrito, no es un error crítico.
             console.log('El usuario autenticado no tiene una orden de tipo "carrito" activa.');
           }
 
@@ -94,56 +71,43 @@ const Header = () => {
           orderData = data;
         }
 
-        // Si se encontró una orden, procesarla
+        // Si se encontró una orden (de cualquier tipo), se procesa.
         if (orderData && orderData.items && orderData.items.length > 0) {
           console.log('Orden encontrada, poblando el estado del carrito con:', orderData.items);
           
-          // Llenar el carrito en el Contexto Principal
+          // Llenamos el carrito en el Contexto Principal
           getCart(orderData.items);
           
-          // Actualizar el otro contexto si es necesario
+          // Actualizamos el otro contexto si es necesario
           if (orderState && orderState.setOrder) {
             orderState.setOrder(orderData);
           }
 
-          // Asegurar que el ID de la orden esté en localStorage
+          // Nos aseguramos de que el ID de la orden esté en localStorage
           if (!window.localStorage.getItem('oi')) {
             window.localStorage.setItem('oi', `${orderData.id}`);
           }
         }
-
-        // Marcar como cargado independientemente del resultado
-        setCartLoaded(true);
-
       } catch (error) {
         console.error('Error al intentar cargar los datos del carrito:', error);
         
-        // Limpiar orden de invitado inválida
-        if (guestOrderId && !isAuthenticated && error.response && 
-            (error.response.status === 404 || error.response.status === 403)) {
+        // Si el error es 404 (Not Found) o 403 (Forbidden) para una orden de invitado,
+        // significa que la orden ya no es válida (quizás ya se compró o asoció).
+        // La limpiamos del localStorage para evitar futuras llamadas fallidas.
+        if (guestOrderId && !userHasToken && error.response && (error.response.status === 404 || error.response.status === 403)) {
           console.log(`La orden de invitado #${guestOrderId} no es válida. Limpiando localStorage.`);
           window.localStorage.removeItem('oi');
         }
-        
-        setCartLoaded(true);
       }
     };
 
-    // Solo ejecutar si tenemos información suficiente para decidir
-    if (isAuthenticated || (!isAuthenticated && window.localStorage.getItem('oi'))) {
-      fetchCartData();
-    } else if (!isAuthenticated && !window.localStorage.getItem('oi')) {
-      // Usuario no autenticado sin orden de invitado
-      setCartLoaded(true);
-    }
+    fetchCartData();
 
-    // Dependencias: isAuthenticated y cartLoaded
-  }, [isAuthenticated, cartLoaded, state.cart.length, getCart, orderState]);
+    // Este efecto se ejecutará solo una vez cuando el componente se monte,
+    // o si el estado del carrito cambia (por ejemplo, si se vacía).
+    // Esto evita llamadas innecesarias a la API en cada re-render.
+  }, [state.cart.length]);
 
-  // Effect adicional para resetear cartLoaded cuando el usuario cambia de estado de autenticación
-  useEffect(() => {
-    setCartLoaded(false);
-  }, [isAuthenticated]);
 
   return (
     <>
@@ -187,7 +151,7 @@ const Header = () => {
               {state.metacircle.length > 0 ? <div>{state.metacircle.length}</div> : null}
             </li>
             
-            {isAuthenticated ? (
+            {isUserAuthenticated() ? (
               <li className={`${styles['more-clickeable-area']} ${styles['navbar-email']} ${styles.pointer}`} onClick={() => toggleMenu()} aria-hidden="true">
                 <Image src={userIcon} alt="user icon menu" />
               </li>

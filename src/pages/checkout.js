@@ -217,8 +217,8 @@ const associateGuestCart = async () => {
     } else if (paymentMethod === 'cash') {
       try {
         toast.info('Procesando su pedido, por favor espere...');
-        const token = getCookieUser();
-        const decoded = jwt.decode(token, { complete: true });
+        // const token = getCookieUser();
+        // const decoded = jwt.decode(token, { complete: true });
         // const userId = decoded.payload.sub;
 
         // const payload = {

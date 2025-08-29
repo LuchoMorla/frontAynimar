@@ -219,7 +219,7 @@ const associateGuestCart = async () => {
         toast.info('Procesando su pedido, por favor espere...');
         const token = getCookieUser();
         const decoded = jwt.decode(token, { complete: true });
-        const userId = decoded.payload.sub;
+        // const userId = decoded.payload.sub;
 
         // const payload = {
         //   userId: userId,

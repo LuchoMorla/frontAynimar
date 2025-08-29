@@ -28,6 +28,9 @@ export default function TablaCards({ cards, uId, email }) {
 
   // useEffect para cargar la orden - CORREGIDO
   useEffect(() => {
+    if (onDebit) {
+      return; 
+    }
     const loadActiveOrder = async () => {
       if (orderFromContext && orderFromContext.items && orderFromContext.items.length > 0) {
         return; // Solo retornar si hay una orden válida con items
@@ -133,7 +136,12 @@ export default function TablaCards({ cards, uId, email }) {
           try {
             toast.info('Pago exitoso. Finalizando tu orden...');
             
-            await updateOrder(order.id, { state: 'pagada' });
+            // await updateOrder(order.id, { state: 'pagada' });
+            await updateOrder(order.id, { 
+              state: 'pagada',
+              stateOrder: 'aprobado', 
+              paymentMethod: 'tarjeta'   
+            });
             
             // Limpiar en el orden correcto y asegurar que se complete
             window.localStorage.removeItem('oi');

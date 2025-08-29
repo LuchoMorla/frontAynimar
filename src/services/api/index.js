@@ -63,8 +63,8 @@ const endPoints = {
     login: `${API}/api/${VERSION}/auth/login`,
     autoLogin: `${API}/api/${VERSION}/auth/auto-login`,
     recovery: `${API}/api/${VERSION}/auth/recovery`,
-    changePassword: `${API}/api/${VERSION}/auth/change-password`/* ,
-    profile: `${API}/api/${VERSION}/auth/profile` */
+    changePassword: `${API}/api/${VERSION}/auth/change-password`,
+    profile: `${API}/api/${VERSION}/auth/profile`
   },
   /*   categories:{
       getCategories: `${API}/api/${VERSION}/categories`,

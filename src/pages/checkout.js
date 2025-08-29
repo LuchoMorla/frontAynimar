@@ -221,17 +221,17 @@ const associateGuestCart = async () => {
         const decoded = jwt.decode(token, { complete: true });
         const userId = decoded.payload.sub;
 
-        const payload = {
-          userId: userId,
-          items: state.cart.map((item) => ({
-            productId: item.id,
-            amount: item.OrderProduct.amount,
-            price: item.price,
-          })),
-          total: parseFloat(valorTotalConIva.toFixed(2)),
-          paymentMethod: 'contra_entrega',
-          status: 'pendiente',
-        };
+        // const payload = {
+        //   userId: userId,
+        //   items: state.cart.map((item) => ({
+        //     productId: item.id,
+        //     amount: item.OrderProduct.amount,
+        //     price: item.price,
+        //   })),
+        //   total: parseFloat(valorTotalConIva.toFixed(2)),
+        //   paymentMethod: 'contra_entrega',
+        //   status: 'pendiente',
+        // };
 
         const config = { headers: { 'Content-Type': 'application/json' } };
         const savedOrderId = window.localStorage.getItem('oi');

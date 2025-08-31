@@ -1,14 +1,34 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { updateCustomer } from '@services/api/entities/customers';
 import styles from '@styles/MyAccount.module.scss';
 import { toast } from 'react-toastify';
 
 // El componente ahora acepta 'isGuest' y 'onSubmit' para ser controlado desde fuera.
-const Client = ({ client, isGuest = false, onSubmit }) => {
+const Client = ({ client, isGuest = false, onSubmit, onCompletenessChange, onUpdateSuccess }) => {
+// const Client = ({ client, isGuest = false, onSubmit }) => {
   
     console.log("Datos del cliente cargados:", client); 
   
   const formRef = useRef(null);
+
+  // --- NUEVO: Hook para verificar si el perfil está completo ---
+  useEffect(() => {
+    // Solo se ejecuta si no es un invitado y tenemos la función para comunicarnos
+    if (!isGuest && typeof onCompletenessChange === 'function' && client) {
+      // Lista de campos que deben estar llenos.
+      // Puedes ajustar esta lista según tus necesidades.
+      const requiredFields = [
+        'name', 'lastName', 'identityNumber', 'phone', 'countryOfResidence',
+        'province', 'city', 'postalCode', 'streetAddress'
+      ];
+      
+      // La variable 'isComplete' será 'true' solo si todos los campos de la lista tienen un valor.
+      const isComplete = requiredFields.every(field => client[field] && String(client[field]).trim() !== '');
+      
+      // Informamos al componente padre sobre el estado del perfil.
+      onCompletenessChange(isComplete);
+    }
+  }, [client, isGuest, onCompletenessChange]); // Se ejecuta cada vez que estos valores cambian
 
   const getLocation = (event) => {
     event.preventDefault();
@@ -50,6 +70,9 @@ const Client = ({ client, isGuest = false, onSubmit }) => {
     updateCustomer(clientId, data)
       .then(() => {
         toast.success('Actualizaste tus datos correctamente');
+        if (typeof onUpdateSuccess === 'function') {
+          onUpdateSuccess(); // Esto provocará que clientProfile vuelva a pedir los datos.
+        }
       })
       .catch((error) => {
         if (error.response?.status === 401) {

@@ -25,6 +25,10 @@ const Checkout = () => {
   const { state, clearCart } = useContext(AppContext);
   const auth = useAuth();
 
+  // --- NUEVO: Estado para saber si el perfil está completo ---
+  const [isProfileComplete, setIsProfileComplete] = useState(false);
+
+
   const [email, setEmail] = useState('mail@vacio.com');
   const [open, setOpen] = useState(false);
   const refValidation = useRef(null);
@@ -47,6 +51,7 @@ const Checkout = () => {
   const getUserEmail = async (id) => {
     try {
       const { data: fetch } = await axios.get(endPoints.users.getUser(id));
+      console.log('Respuesta de la API:', fetch);
       const email = fetch.email;
       setEmail(email);
       console.log('Email obtenido de la API:', email);
@@ -269,7 +274,9 @@ const associateGuestCart = async () => {
             </h1>
             
             {auth.user ? (
-              <CustomerProfile />
+              // --- MODIFICADO: Pasamos la función para que CustomerProfile la use ---
+            <CustomerProfile onProfileStatusChange={setIsProfileComplete} />
+              // <CustomerProfile />
             ) : (
               <Client isGuest={true} onSubmit={handleGuestCheckout} />
             )}
@@ -312,7 +319,10 @@ const associateGuestCart = async () => {
             </div>
             
             {auth.user && (
+               
               <div>
+                {/* --- LÓGICA PRINCIPAL: Condicional para mostrar pago o advertencia --- */}
+              {isProfileComplete ? (
                 <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
                   <div className={styles['terminosyCondiciones-container']}>
                     <input type="checkbox" name="termsAndConds" id="termsAndConds" />
@@ -331,6 +341,13 @@ const associateGuestCart = async () => {
                       Pago a contra entrega
                     </button>
                 </form>
+                 ) : (
+                // Si no, muestra este mensaje de advertencia
+                <div className={styles.profileWarning}> {/* (Puedes añadir estilos para esta clase) */}
+                  <h4>Completa tus datos para continuar</h4>
+                  <p>Por favor, asegúrate de llenar todos los campos de tu perfil y guardar los cambios. Una vez que tus datos estén completos, los botones de pago aparecerán aquí.</p>
+                </div>
+              )}
               </div>
             )}
           </div>

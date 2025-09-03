@@ -6,7 +6,7 @@ import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import actualizarImg from '@icons/button_refresh_15001.png';
 import Tarjetas from '@common/paymentez/tarjetas/Tarjetas';
-import CustomerProfile from "@containers/CustomerProfile";
+import CustomerProfile from '@containers/CustomerProfile';
 import Client from '@components/Client';
 import { useRouter } from 'next/router';
 import Modal from '@common/Modal';
@@ -25,29 +25,25 @@ const Checkout = () => {
   const { state, clearCart } = useContext(AppContext);
   const auth = useAuth();
 
-  // --- NUEVO: Estado para saber si el perfil está completo ---
   const [isProfileComplete, setIsProfileComplete] = useState(false);
-
-
   const [email, setEmail] = useState('mail@vacio.com');
   const [open, setOpen] = useState(false);
   const refValidation = useRef(null);
-
   const [uId, setuId] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
 
-  // Función helper para obtener token (del código funcionando)
+  // --- Función para obtener el token ---
   const getCookieUser = () => {
     const token = Cookie.get('token');
     if (!token) {
       toast.error('Necesitas iniciar sesión');
       router.push('/login');
-      return false;
+      return null;
     }
     return token;
   };
 
-  // Función para obtener email desde la API (del código funcionando)
+  // --- Función para obtener email desde API ---
   const getUserEmail = async (id) => {
     try {
       const { data: fetch } = await axios.get(endPoints.users.getUser(id));
@@ -57,7 +53,6 @@ const Checkout = () => {
       console.log('Email obtenido de la API:', email);
     } catch (error) {
       console.error('Error al obtener email del usuario:', error);
-      // Fallback: usar el email del auth si existe
       if (auth.user?.email) {
         setEmail(auth.user.email);
         console.log('Usando email del auth como fallback:', auth.user.email);
@@ -65,27 +60,33 @@ const Checkout = () => {
     }
   };
 
-  // UseEffect mejorado que combina ambos enfoques
+  // --- Lógica principal: cuando auth.user cambia (login manual o automático) ---
   useEffect(() => {
     if (auth.user) {
       const token = getCookieUser();
       if (!token) return;
-      
+
       try {
         const decodificado = jwt.decode(token, { complete: true });
         const userId = decodificado.payload.sub;
         setuId(userId);
-        
-        // Primero intentamos obtener el email de la API (más confiable)
+
+        // Intentar obtener email desde API
         getUserEmail(userId);
-        
-        // Como fallback inmediato, usamos auth.user.email si existe
+
+        // Fallback: usar email del auth
         if (auth.user.email) {
           setEmail(auth.user.email);
         }
+
+        // --- 🔥 Asociar carrito de invitado solo si hay un orderId en localStorage ---
+        const guestOrderId = window.localStorage.getItem('oi');
+        if (guestOrderId) {
+          associateGuestCart();
+        }
+
       } catch (error) {
         console.error('Error al decodificar token:', error);
-        // Si hay problema con el token, usar solo el email del auth
         if (auth.user.email) {
           setEmail(auth.user.email);
         }
@@ -93,14 +94,14 @@ const Checkout = () => {
     }
   }, [auth.user]);
 
+  // --- Función para calcular total ---
   const sumTotal = () => {
     try {
       const reducer = (accumalator, currentValue) => {
         if (currentValue.price && currentValue.OrderProduct && currentValue.OrderProduct.amount) {
           return accumalator + currentValue.price * currentValue.OrderProduct.amount;
-        } else {
-          return accumalator;
         }
+        return accumalator;
       };
       const sum = state.cart.reduce(reducer, 0);
       return parseFloat(sum.toFixed(2));
@@ -110,41 +111,43 @@ const Checkout = () => {
     }
   };
 
-  // Pega esta función dentro del componente Checkout en Checkout.js
-const associateGuestCart = async () => {
+  // --- Asociar carrito de invitado ---
+  const associateGuestCart = async () => {
     const token = Cookie.get('token');
     const guestOrderId = window.localStorage.getItem('oi');
 
     console.log('🔗 Verificando asociación de carrito:', { token: !!token, guestOrderId });
 
-    if (token && guestOrderId) {
-      try {
-        console.log('🔗 Asociando carrito de invitado:', guestOrderId);
-        await axios.patch(
-          endPoints.orders.associateOrder,
-          { orderId: parseInt(guestOrderId) },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        console.log(`✅ Carrito de invitado #${guestOrderId} asociado con éxito.`);
-        
-        return true;
-        
-      } catch (error) {
-        console.error('❌ Error al asociar el carrito de invitado:', error);
-        return false;
-      }
+    if (!token || !guestOrderId) {
+      console.log('ℹ️ No hay token o orderId para asociar');
+      return false;
     }
-    
-    console.log('ℹ️ No hay carrito de invitado para asociar');
-    return false;
-};
 
+    try {
+      console.log('🔗 Asociando carrito de invitado:', guestOrderId);
+      await axios.patch(
+        endPoints.orders.associateOrder,
+        { orderId: parseInt(guestOrderId, 10) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log(`✅ Carrito de invitado #${guestOrderId} asociado con éxito.`);
+      window.localStorage.removeItem('oi'); // Limpiar para evitar reintentos
+      return true;
+
+    } catch (error) {
+      console.error('❌ Error al asociar el carrito de invitado:', error);
+      toast.error('No se pudo asociar tu carrito. Por favor, contacta soporte.');
+      return false;
+    }
+  };
+
+  // --- Registro de invitado ---
   const handleGuestCheckout = async (event) => {
     event.preventDefault();
     toast.info('Registrando tu cuenta...');
 
     const formData = new FormData(event.target);
-
     const registrationData = {
       name: formData.get('name'),
       lastName: formData.get('apellido'),
@@ -169,49 +172,46 @@ const associateGuestCart = async () => {
       if (response && response.auth) {
         toast.success('¡Registro exitoso! Iniciando sesión...');
         auth.manualSignIn(response.auth);
-         // Usamos un pequeño delay para asegurar que la cookie del token se establezca correctamente
-        setTimeout(async () => {
-            console.log('Intentando asociar carrito después del registro...');
-            await associateGuestCart();
-        }, 200); // Un pequeño delay puede ayudar a asegurar que todo esté en su lugar
+        window.dispatchEvent(new Event('tokenSet'));
       } else {
         throw new Error('La respuesta del registro no fue la esperada.');
       }
     } catch (error) {
       console.error("Error en el registro del invitado:", error);
+       
       if (error.response?.status === 409) {
         toast.error('El correo electrónico ya está registrado. Por favor, inicia sesión.');
+        router.push('/login');
+        return false;
       } else {
         toast.error('Hubo un error durante el registro.');
       }
     }
   };
 
+  // --- Manejo de pago ---
   const openModalHandler = async (event) => {
     event.preventDefault();
 
-    // Validaciones
     const formData = new FormData(refValidation.current);
     const termsAccepted = formData.get('termsAndConds') === 'on';
     if (!termsAccepted) {
       toast.error('Debes aceptar los términos y condiciones para continuar.');
       return;
     }
+
     if (state.cart.length === 0) {
       toast.error('No hay productos en el carrito');
       return;
     }
 
-    // Verificar que el usuario está logueado
     if (!auth.user) {
       toast.error('Ocurrió un error. Por favor, refresca la página.');
       return;
     }
 
-    // Verificar que tenemos email antes de continuar
     if (!email || email === 'mail@vacio.com') {
       toast.error('Error al obtener datos del usuario. Por favor, refresca la página.');
-      console.error('Email no disponible:', email);
       return;
     }
 
@@ -221,39 +221,24 @@ const associateGuestCart = async () => {
       setOpen(true);
     } else if (paymentMethod === 'cash') {
       try {
-        toast.info('Procesando su pedido, por favor espere...');
-        // const token = getCookieUser();
-        // const decoded = jwt.decode(token, { complete: true });
-        // const userId = decoded.payload.sub;
-
-        // const payload = {
-        //   userId: userId,
-        //   items: state.cart.map((item) => ({
-        //     productId: item.id,
-        //     amount: item.OrderProduct.amount,
-        //     price: item.price,
-        //   })),
-        //   total: parseFloat(valorTotalConIva.toFixed(2)),
-        //   paymentMethod: 'contra_entrega',
-        //   status: 'pendiente',
-        // };
-
-        const config = { headers: { 'Content-Type': 'application/json' } };
+        toast.info('Procesando tu pedido, por favor espere...');
         const savedOrderId = window.localStorage.getItem('oi');
         const body = { state: 'pendiente_envio' };
+        const config = { headers: { 'Content-Type': 'application/json' } };
+
         const response = await axios.patch(endPoints.orders.updateOrder(savedOrderId), body, config);
-        
-        if (response.status === 201 || response.status === 200) {
-           window.localStorage.removeItem('oi');
-           clearCart();
-           toast.success("Tu pedido ha sido registrado con pago contra entrega.");
-           router.push('/mi_cuenta/orders');
+
+        if (response.status === 200 || response.status === 201) {
+          window.localStorage.removeItem('oi');
+          clearCart();
+          toast.success("Tu pedido ha sido registrado con pago contra entrega.");
+          router.push('/mi_cuenta/orders');
         }
       } catch (error) {
         console.error(error);
         toast.error('Hubo un error procesando tu pedido: ' + (error.response?.data?.message || 'Error desconocido'));
       }
-    } else {    
+    } else {
       toast.error('Selecciona un método de pago antes de continuar.');
     }
   };
@@ -263,100 +248,113 @@ const associateGuestCart = async () => {
 
   return (
     <>
-      <div>
-        <Head>
-          <title>Checkout | Aynimar</title>
-        </Head>
-        <div className={styles.Checkout}>
-          <div className={styles['Checkout-container']}>
-            <h1 className={styles.title}>
-              {auth.user ? 'Finaliza tu Compra' : 'Regístrate para Continuar'}
-            </h1>
-            
-            {auth.user ? (
-              // --- MODIFICADO: Pasamos la función para que CustomerProfile la use ---
+      <Head>
+        <title>Checkout | Aynimar</title>
+      </Head>
+
+      <div className={styles.Checkout}>
+        <div className={styles['Checkout-container']}>
+          <h1 className={styles.title}>
+            {/* {auth.user ? 'Finaliza tu Compra' : 'Regístrate para Continuar'} */}
+            {auth.user ? 'Finaliza tu Compra' : 'Regístrate primero'}
+          </h1>
+
+          {auth.user ? (
             <CustomerProfile onProfileStatusChange={setIsProfileComplete} />
-              // <CustomerProfile />
-            ) : (
-              <Client isGuest={true} onSubmit={handleGuestCheckout} />
-            )}
-           
-            <div className={styles['Checkout-content']}>
-              <div className={styles['my-orders']}>
-                <table>
-                  <tbody>
-                    {state?.cart?.map((product) => (
-                      <CheckOrderItem product={product} key={`orderItem-${product?.id}`} />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className={styles.order}>
-                <div className={styles.totalContainer}>
-                  <p><span>Total sin IVA</span></p>
-                  <p>
-                    ${valorTotalSinIva}{' '}
-                    <button onClick={() => router.reload()} className={styles.reloadButton}>
-                      <Image src={actualizarImg} alt='Actualizar | Update' width={20} height={20} />
-                    </button>
-                  </p>
-                </div>
-                <div className={styles.totalContainer}>
-                  <p><span>Total con IVA</span></p>
-                  <p>
-                    ${valorTotalConIva.toFixed(2)}{' '}
-                    <button onClick={() => router.reload()} className={styles.reloadButton}>
-                      <Image src={actualizarImg} alt='Actualizar | Update' width={20} height={20} />
-                    </button>
-                  </p>
-                </div>
-                {state.cart.length === 0 && (
-                  <div className={styles.emptyCartWarning}>
-                    <p>No hay productos en el carrito</p>
-                  </div>
-                )}
-              </div>
+          ) : (
+            <Client isGuest={true} onSubmit={handleGuestCheckout} />
+          )}
+
+          <div className={styles['Checkout-content']}>
+            <div className={styles['my-orders']}>
+              <table>
+                <tbody>
+                  {state.cart.map((product) => (
+                    <CheckOrderItem product={product} key={`orderItem-${product.id}`} />
+                  ))}
+                </tbody>
+              </table>
             </div>
-            
-            {auth.user && (
-               
-              <div>
-                {/* --- LÓGICA PRINCIPAL: Condicional para mostrar pago o advertencia --- */}
-              {isProfileComplete ? (
-                <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
-                  <div className={styles['terminosyCondiciones-container']}>
-                    <input type="checkbox" name="termsAndConds" id="termsAndConds" />
-                    <p className={styles.termsAndCondsTextContent}>
-                      he leído y acepto los
-                    </p>
-                    <Link href="/terminosYCondiciones" className={styles.termsAndCondLink} passHref>
-                      <p className={styles.termsAndCondLink}>términos y condiciones</p>
-                    </Link>
-                  </div>
-                  <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
-                    <button className={styles['pay-Button']} type="submit" onClick={() => setPaymentMethod('card')}>
-                      Pagar con tarjeta de crédito o débito (Visa o Mastercard)
-                    </button>
-                    <button className={styles['pay-Button']} type="submit" onClick={() => setPaymentMethod('cash')}>
-                      Pago a contra entrega
-                    </button>
-                </form>
-                 ) : (
-                // Si no, muestra este mensaje de advertencia
-                <div className={styles.profileWarning}> {/* (Puedes añadir estilos para esta clase) */}
-                  <h4>Completa tus datos para continuar</h4>
-                  <p>Por favor, asegúrate de llenar todos los campos de tu perfil y guardar los cambios. Una vez que tus datos estén completos, los botones de pago aparecerán aquí.</p>
+
+            <div className={styles.order}>
+              <div className={styles.totalContainer}>
+                <p><span>Total sin IVA</span></p>
+                <p>
+                  ${valorTotalSinIva}
+                  <button onClick={() => router.reload()} className={styles.reloadButton}>
+                    <Image src={actualizarImg} alt="Actualizar" width={20} height={20} />
+                  </button>
+                </p>
+              </div>
+              <div className={styles.totalContainer}>
+                <p><span>Total con IVA</span></p>
+                <p>
+                  ${valorTotalConIva.toFixed(2)}
+                  <button onClick={() => router.reload()} className={styles.reloadButton}>
+                    <Image src={actualizarImg} alt="Actualizar" width={20} height={20} />
+                  </button>
+                </p>
+              </div>
+              {state.cart.length === 0 && (
+                <div className={styles.emptyCartWarning}>
+                  <p>No hay productos en el carrito</p>
                 </div>
               )}
+            </div>
+
+            {auth.user && (
+              <div>
+                {isProfileComplete ? (
+                  <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
+                    <div className={styles['terminosyCondiciones-container']}>
+                      <input type="checkbox" name="termsAndConds" id="termsAndConds" />
+                      <p className={styles.termsAndCondsTextContent}>
+                        he leído y acepto los
+                      </p>
+                      <Link href="/terminosYCondiciones" className={styles.termsAndCondLink} passHref>
+                        <p>términos y condiciones</p>
+                      </Link>
+                    </div>
+                    <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
+                    <button
+                      className={styles['pay-Button']}
+                      type="submit"
+                      onClick={() => setPaymentMethod('card')}
+                    >
+                      Pagar con tarjeta de crédito o débito (Visa o Mastercard)
+                    </button>
+                    <button
+                      className={styles['pay-Button']}
+                      type="submit"
+                      onClick={() => setPaymentMethod('cash')}
+                    >
+                      Pago a contra entrega
+                    </button>
+                  </form>
+                ) : (
+                  <div className={styles.profileWarning}>
+                    <h4>Completa tus datos para continuar</h4>
+                    <p>
+                      Por favor, asegúrate de llenar todos los campos de tu perfil y guardar los cambios.
+                      Una vez que tus datos estén completos, los botones de pago aparecerán aquí.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
+
       <Modal open={open} onClose={() => setOpen(false)}>
         <h1 className={styles.modaltitle}>Billetera de tarjetas de credito</h1>
         <Tarjetas userEmail={email} uId={uId} />
-        <PaymentezDos userEmail={email} uId={uId} />
+        {/* <PaymentezDos userEmail={email} uId={uId} /> */}
+        <PaymentezDos 
+          key={`${email}-${uId}`} 
+          userEmail={email} 
+          uId={uId} 
+        />
       </Modal>
     </>
   );

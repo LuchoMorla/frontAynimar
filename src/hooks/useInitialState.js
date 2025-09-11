@@ -14,107 +14,113 @@ const initialState = {
 };
 
 const useInitialState = () => {
-
   const [state, setState] = useState(initialState);
 
   const showPassword = () => {
-    setState({
-      ...state,
-      showingPassword: !state.showingPassword,
-    });
+    setState(prevState => ({
+      ...prevState,
+      showingPassword: !prevState.showingPassword,
+    }));
   };
 
   const getCart = (payload) => {
-    setState({
-      ...state,
-      cart: state.cart = payload,
-    });
+    setState(prevState => ({
+      ...prevState,
+      cart: payload,
+    }));
   };
 
   const addToCart = (payload) => {
     console.log('addToCart', payload);
-    setState({
-      ...state,
-      cart: state.cart.includes(payload) ? state.cart : [...state.cart, payload],
-    });
+    setState(prevState => ({
+      ...prevState,
+      cart: prevState.cart.some((item) => item.id === payload.id) 
+        ? prevState.cart 
+        : [...prevState.cart, payload],
+    }));
   };
 
   const removeFromCart = (payload) => {
-    setState({
-      ...state,
-      cart: state.cart.filter((items) => items.id !== payload.id),
-    });
+    setState(prevState => ({
+      ...prevState,
+      cart: prevState.cart.filter((item) => item.id !== payload.id),
+    }));
   };
 
   const toggleOrder = () => {
-    setState({
-      ...state,
-      orderIsOpen: !state.orderIsOpen,
-    });
+    setState(prevState => ({
+      ...prevState,
+      orderIsOpen: !prevState.orderIsOpen,
+    }));
   };
 
   const addToMetacircle = (payload) => {
-    setState({
-      ...state,
-      metacircle: state.metacircle.includes(payload) ? state.metacircle : [...state.metacircle, payload],
-    });
+    setState(prevState => ({
+      ...prevState,
+      metacircle: prevState.metacircle.some((item) => item.id === payload.id)
+        ? prevState.metacircle 
+        : [...prevState.metacircle, payload],
+    }));
   };
 
   const removeFromMetacircle = (payload) => {
-    setState({
-      ...state,
-      metacircle: state.metacircle.filter((items) => items.id !== payload.id),
-    });
+    setState(prevState => ({
+      ...prevState,
+      metacircle: prevState.metacircle.filter((item) => item.id !== payload.id),
+    }));
   };
 
   const togglePayment = () => {
-    setState({
-      ...state,
-      paymentIsOpen: !state.paymentIsOpen,
-    });
+    setState(prevState => ({
+      ...prevState,
+      paymentIsOpen: !prevState.paymentIsOpen,
+    }));
   };
 
   const toggleMenu = () => {
-    setState({
-      ...state,
-      menuIsOpen: !state.menuIsOpen,
-    });
+    setState(prevState => ({
+      ...prevState,
+      menuIsOpen: !prevState.menuIsOpen,
+    }));
   };
 
   const toggleNavMenu = () => {
-    setState({
-      ...state,
-      navMenuIsOpen: !state.navMenuIsOpen,
-    });
+    setState(prevState => ({
+      ...prevState,
+      navMenuIsOpen: !prevState.navMenuIsOpen,
+    }));
   };
 
-  const usePaymentId = () => {
-    setState({
-      ...state,
-      havePaymentId: state.havePaymentId
-    });
+  const setPaymentId = (payload) => {
+    setState(prevState => ({
+      ...prevState,
+      havePaymentId: payload
+    }));
   };
 
-  const useOrderId = () => {
-    setState({
-      ...state,
-      haveOrderId: state.haveOrderId
-    });
+  const setOrderId = (payload) => {
+    setState(prevState => ({
+      ...prevState,
+      haveOrderId: payload
+    }));
   };
 
   const setOrderData = (payload) => {
-    setState({
-      ...state,
+    setState(prevState => ({
+      ...prevState,
       orderData: payload
-    });
+    }));
   };
 
-  const clearCart = () => {
+  // FUNCIÓN MEJORADA - Ahora es asíncrona para compatibilidad
+  const clearCart = async () => {
     console.log('se uso clearCart');
-    setState({
-      ...state,
+    setState(prevState => ({
+      ...prevState,
       cart: []
-    });
+    }));
+    // Pequeña pausa para asegurar que el estado se actualice
+    return Promise.resolve();
   };
 
   return {
@@ -127,8 +133,8 @@ const useInitialState = () => {
     addToMetacircle,
     removeFromMetacircle,
     togglePayment,
-    usePaymentId,
-    useOrderId,
+    setPaymentId,
+    setOrderId,
     toggleNavMenu,
     showPassword,
     setOrderData,

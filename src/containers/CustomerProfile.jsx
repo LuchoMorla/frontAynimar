@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState  } from 'react';
 import axios from 'axios';
 import endPoints from '@services/api';
 import { useRouter } from "next/router";
@@ -6,25 +6,30 @@ import { createCustomerByRecycler } from '@services/api/entities/customers';
 import Client from '@components/Client';
 import { toast } from 'react-toastify';
 
-const clientProfile = () => {
+// const clientProfile = () => {
+const clientProfile = ({ onProfileStatusChange }) => {
+
   const [client, setClient] = useState('vacio');
   const router = useRouter(); 
 
+   // La mantenemos igual, pero ahora la llamaremos directamente cuando sea necesario
   const clientData = async () => {
-    const { data: fetch } = await axios.get(endPoints.profile.clientData);
-    setClient(fetch);
-    return fetch;
-  };
-  if (client == 'vacio') {
-    clientData()
-    .catch((error) => {
+    try {
+      const { data: fetch } = await axios.get(endPoints.profile.clientData);
+      setClient(fetch);
+    } catch (error) {
       if (error.response?.status === 401) {
         toast.warning('Probablemente necesites iniciar sesion de nuevo');
       } else if (error.response) {
         console.log('Algo salio mal: ' + error.response.status);
       }
-    });
+    }
+  };
+
+  if (client == 'vacio') {
+    clientData();
   }
+
   if(client == null) {
     const ejecutar = async () => {
       await createCustomerByRecycler()
@@ -41,6 +46,7 @@ const clientProfile = () => {
       });
   }
 
-  return <Client client={client} />;
+  // return <Client client={client} />;
+  return <Client client={client} onCompletenessChange={onProfileStatusChange} onUpdateSuccess={clientData} />;
 };
 export default clientProfile;

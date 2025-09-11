@@ -4,240 +4,373 @@ import styles from '@styles/TerminosyCondiciones.module.scss';
 const terminosYCondiciones = () => {
   return (
     <>
-      <div className={styles.doContainer}>
-        <h1>Términos y Condiciones</h1>
-        <p>
-          <strong>Vigente desde el 5 de febrero de 2023</strong>
-        </p>
-      </div>
       <div className={styles.termAndCondsContainer}>
+        {/* Sección: Quiénes Somos */}
+        <h1>¡Bienvenido a Aynimar.com!</h1>
+        <p>Todos nuestros productos están diseñados a tu medida y no se venden en cualquier tienda física ni digital.</p>
+        <p>Nuestro propósito es hacer que nuestros clientes se sientan únicos y exclusivos al usar nuestros productos.</p>
+        <p>Si alguna vez tienes alguna sugerencia sobre cómo podemos mejorar, ¡ponte en contacto! Nos encanta escuchar y aprender de ti, tanto de lo bueno y lo malo.</p>
+        <p>Nos reconforta crear en ti una confianza única sobre el mercado digital. ¡Así creceremos juntos!</p>
+        <p>Valoramos ese sentimiento y creemos que todos los clientes deben tener la mejor experiencia en el mercado digital a través de nosotros.</p>
+
+        <h2>¿Por qué comprar con nosotros?</h2>
+        <ul>
+          <li>Colecciones únicas y de moda</li>
+          <li>Procesamiento de pedidos seguro y protegido</li>
+          <li>Excelente servicio al cliente</li>
+          <li>Promociones y descuentos especiales continuos</li>
+          <li>Manejamos una plataforma ágil y sencilla de utilizar</li>
+          <li>Fomentamos la confianza en nuestros clientes sobre el mercado digital</li>
+          <li>Manejamos una gran variedad del país</li>
+          <li>Cobertura de envíos a todo el país</li>
+          <li>Ampliamos el conocimiento sobre las compras en internet</li>
+        </ul>
+
+        <hr />
+
+        {/* Sección: Términos del Servicio */}
+        <h1>TÉRMINOS DEL SERVICIO</h1>
+        <p>Este sitio web es operado por AYNIMAR S.A.S. En todo el sitio, los términos &quot;nosotros&quot;, &quot;nos&quot; y &quot;nuestro&quot; se refieren a AYNIMAR S.A.S.</p>
+        <p>AYNIMAR S.A.S. ofrece este sitio web, que incluye toda la información, herramientas y servicios disponibles para ti.</p>
+        <p>Nuestra tienda está alojada en Shopify Inc. quienes nos brindan la plataforma de comercio electrónico en línea que nos permite vender nuestros productos y servicios.</p>
         <p>
-          Los términos y Condiciones de Uso de la Plataforma B2B y B2C de Compras de aynimar.com, (en adelante, “Términos”) regulan los derechos y obligaciones de los Usuarios (en este caso específico
-          el/los Cliente(s)) de esta Tienda Online en el Ecuador. En este sentido, sugerimos leerlos con detenimiento. Estos Términos y Condiciones se encuentran en armonía con la Legislación del
-          Ecuador y están sometidos a la misma. Al comprar en https://www.aynimar.com/ está aceptando los siguientes términos y condiciones:
-          <p> ¡LE ROGAMOS QUE LEA ESTOS TÉRMINOS Y CONDICIONES CON ATENCIÓN!</p>
+          Al visitar nuestro sitio y / o comprar de nuestra oferta, participas de nuestro &quot;Servicio&quot; y aceptas estar sujeto a los términos políticas y condiciones, referenciados en este
+          mismo sitio. Los términos de servicio se aplican a todos los usuarios del sitio, que pueden ser navegadores, proveedores, clientes, comerciantes y / o contribuyentes de
+          contenido.
         </p>
-        <div className={styles.list}>
-          <ol>
-            <li>
-              Aplicación y aceptación de los términos 1.1 El acceso y uso del Cliente a la plataforma www.aynimar.com, el software y los productos y servicios de la misma están sujetos a los términos
-              y las condiciones contenidos en este documento y cualquier otra normativa y política de la plataforma en cuestión. Al acceder y utilizar la Plataforma, usted se compromete a aceptar y
-              someterse a estos Términos de uso. Por favor, no acceda o utilice la Plataforma si no acepta todos los Términos aquí estipulados. 1.2 Usted no puede acceder o utilizar la Plataforma ni
-              aceptar las Términos si no tiene la edad (18 años en adelante) o potestad legal para formalizar un acuerdo vinculante con Aynimar por parte de sus representantes legales. Todo usuario que tenga
-              alguna discapacidad que le imposibilite utilizar la Plataforma de manera adecuada, deberá acceder y utilizarlo con la supervisión de una persona que no tenga limitaciones físicas y/o
-              mentales a fin de que pueda ejercer sus derechos derivados del uso de esta plataforma de manera efectiva, tiene derecho a utilizar la Plataforma con programas de accesibilidad que le
-              permitan manejar la aplicación y derecho a soporte asistido por parte de Plataforma. 1.3 Aynimar en su Tienda Online www.aynimar.com a la cual denominaremos “la Plataforma”, podrá
-              modificar cualquiera de los Términos en cualquier momento mediante la publicación de la modificación correspondiente y los Términos actualizados en la Plataforma. Al continuar accediendo
-              o adquiriendo los productos, usted acepta que los Términos modificados y refundidos le son de aplicación.
-            </li>
-            <li>
-              Prestación de Servicios 2.1 El Usuario debe registrarse como Cliente en www.aynimar.com con el fin de acceder y utilizar la Plataforma para comprar nuestro portafolio de producto.
-              Además, Aynimar se reserva el derecho, sin previo aviso, de restringir el acceso o la utilización de la Plataforma a Clientes sujetos a otras condiciones que Aynimar pueda imponer a su
-              entera discreción.
-            </li>
-            <li>
-              Clientes en general 3.1 Como condición para el acceso y uso de la Plataforma, usted acepta que cumplirá con toda la legislación y las normativas aplicables al acceder o usar la
-              Plataforma www.aynimar.com. 3.2 El Cliente acepta no emprender ninguna acción para socavar la integridad de los sistemas informáticos o redes de Aynimar o de ningún otro Cliente, ni
-              obtener acceso no autorizado a dichos sistemas informáticos o redes, caso contrario la empresa tomará las medidas legales de conocerse alguna acción fraudulenta del Cliente.
-            </li>
-            <li>
-              4. Cuentas de los Clientes 4.1 Una vez registrado en www.aynimar.com, aynimar asignará una cuenta y proporcionará, para cada Cliente registrado, una identificación de Cliente y una
-              contraseña (esta última la escogerá el usuario durante su registro). Dicho proceso contará con una confirmación vía correo electrónico una vez que el registro haya sido satisfactorio.
-              Donde la utilización haremos uso de cookies y el uso de estas solamente será utilizada para la encriptación de información necesaria para la autorización e interacción del Cliente con la
-              plataforma, como el uso de sesión. 4.2 El conjunto de Identificación de Cliente y contraseña es único para cada cuenta. El Cliente será el único responsable de mantener la
-              confidencialidad y seguridad de su identificación y accesos, así como de todos los usos y actividades que se lleven a cabo en la cuenta. Es total responsabilidad de Cliente compartir,
-              ceder o permitir el uso de su cuenta, identificación o contraseña a terceros. El Cliente acuerda notificar a Aynimar inmediatamente si tiene conocimiento de cualquier uso no autorizado
-              de su cuenta, o de cualquier otra infracción. 4.3 El Cliente reconoce que el uso compartido de su cuenta con otras personas o permitir que múltiples usuarios fuera de su entidad
-              empresarial utilicen su cuenta (en lo sucesivo y conjuntamente, el “uso múltiple“) puede causar un daño irreparable a Aynimar o a otros Clientes de la Plataforma. El Cliente eximirá a
-              Aynimar, representantes y colaboradores de cualquier pérdida o daño que puedan sufrir como consecuencia del uso múltiple de su cuenta. El Cliente también acepta que, en caso de un uso
-              múltiple de su cuenta o de no poder mantener la seguridad de la misma, Aynimar no será responsable de ninguna pérdida o daños derivados de tal infracción y tendrá derecho a suspender o
-              cancelar la cuenta del Cliente sin responsabilidad en relación frente al mismo si cualquiera de las circunstancias anteriores tiene lugar.
-            </li>
-            <li>
-              Responsabilidades de los Clientes 5.1 El Cliente reconoce, garantiza y acepta que (a) tiene plenas facultades para aceptar los Términos, conceder la autorización y llevar a cabo las
-              obligaciones que figuran aquí y (b) accederá y utilizará la Plataforma únicamente con fines comerciales. 5.2 El Cliente estará obligado a proporcionar información o material acerca de su
-              entidad, empresa o productos y servicios como parte del proceso de registro. El Cliente reconoce, garantiza y acepta que (a) dicha información y dicho material, se presenten durante el
-              proceso de registro o posteriormente durante el uso de la Plataforma, son verdaderos, precisos, actualizados y completos, y (b) mantendrá y corregirá con prontitud toda la información y
-              los materiales para que sigan siendo verdaderos, precisos, actualizados y completos. 5.3 Los datos proporcionados por el Cliente, por el sólo hecho de brindarlos, consienten expresamente
-              que Aynimar podrá utilizarlos con fines operativos del sistema de comercio electrónico en la Plataforma, así como podrán ser utilizados en otros sitios web propios de la empresa. 5.4
-              Aynimar tratará y procesará aquellos datos personales que el Cliente o visitante ingrese en la Plataforma www.aynimar.com de conformidad con todas las leyes aplicables de la República
-              del Ecuador. 5.5 Aynimar (a) ha adoptado las medidas técnicas de seguridad y los estándares de calidad existentes, a fin de garantizar al máximo la seguridad y confidencialidad de las
-              comunicaciones, (b) se compromete a actualizar y mantener las medidas técnicas que estime necesarias para garantizar la seguridad y confidencialidad de los Datos de Carácter Personal,
-              impidiendo cualquier alteración, pérdida, tratamiento, procesamiento o acceso no autorizado.
-            </li>
-            <li>
-              Infracciones de los Clientes 6.1 Si un Cliente infringe cualquiera de los Términos, o si Aynimar tiene motivos razonables y comprobables que ha incumplido alguno de los Términos, este
-              tendrá derecho a tomar cualquier medida disciplinaria que considere necesaria, incluyendo sin limitación: (a) suspender o cancelar la cuenta del mismo a su entera discreción sin incurrir
-              en responsabilidad por cualesquiera pérdidas o daños derivados de o en relación con dicha suspensión o terminación; y (b) cualesquiera otras medidas correctoras, disciplinarias o
-              sanciones que Aynimar pueda considerar necesarias o adecuadas a su entera discreción. 6.2 Sin limitar la generalidad de lo dispuesto en los Términos, se considera que un Cliente incumple
-              los Términos en cualquiera de las siguientes circunstancias: 1. a) si Aynimar tiene motivos razonables para sospechar que dicho Cliente ha utilizado una tarjeta de crédito robada u otra
-              información falsa o engañosa en cualquier transacción. 1. b) si Aynimar tiene motivos razonables para sospechar que cualquier información proporcionada por el Cliente no está actualizada
-              o completa, o es falsa, inexacta o engañosa; 1. c) si Aynimar cree que las acciones del Cliente pueden provocar una pérdida financiera o responsabilidad legal de Aynimar. 1. c) si
-              Aynimar tiene indicios que el Cliente utiliza la Plataforma para estafar a cualquier persona o entidad; ya sea mediante falsificación de identidad o asociación ilícita. 1. e) si Aynimar
-              tiene indicios que el Cliente planea socavar la integridad de los datos, los sistemas o las redes utilizados, de cualquier otro Cliente de la Plataforma o de obtener acceso no autorizado
-              a dichos datos, sistemas o redes. 6.3 Aynimar, en cualquier momento y según nuestro criterio razonable, podremos imponer límites, suspender o cancelar el uso por parte del Cliente del
-              uso de la Plataforma y dicho incumplimiento implica o se sospecha razonablemente que incurren en actividades deshonestas o fraudulentas. Aynimar se reserva el derecho de, pero no estará
-              obligado a, investigar dicho incumplimiento o a solicitar confirmación por parte del Cliente. 6.4 El Cliente se compromete a indemnizar a Aynimar, representantes y colaboradores, y a
-              exonerarlos de cualquier responsabilidad ante cualquier daño, pérdida, reclamación y responsabilidad (incluyendo los costes legales sobre la base de una indemnización completa) que
-              puedan derivarse de la comprobación legal de algún acto ilícito.
-            </li>
-            <li>
-              7. Fuerza mayor 7.1 Aynimar no se hace responsable ni está obligado a pagar indemnización alguna por cualquier tipo de pérdida derivada de la falta de disponibilidad, los inconvenientes
-              o los fallos de los servicios o sistemas por los siguientes motivos (a) el cierre del sistema para su mantenimiento; (b) la incapacidad de transmitir datos debido a averías en el ERP y/o
-              CRM o cualquier otro sistema ligado a la gestión funcional de la Plataforma; (c) fallo del sistema e incapacidad para desempeñar sus funciones debido a acontecimientos de fuerza mayor,
-              incluidos, entre otros, tifones, terremotos, inundaciones, cortes de electricidad, incendios, tormentas, guerras, disturbios políticos, huelgas laborales, escasez de mano de obra o
-              materiales, disturbios, insurrecciones, disturbios civiles, atentados terroristas, explosiones, casos fortuitos, acciones gubernamentales, órdenes de juzgados o tribunales nacionales o
-              extranjeros, incumplimiento de terceros; o (d) suspensión o retraso de los servicios o averías de los sistemas por razones que escapan al control razonable de Aynimar tales como ataques
-              de hackers o cibernéticos, ajustes técnicos o fallos del departamento de sistemas, actualizaciones de sitios web, problemas de terceros o cualquier suspensión o perturbación del
-              transporte o del funcionamiento de las empresas (incluidos, entre otros, los retrasos o la perturbación de la reanudación del trabajo o del funcionamiento ordenados por cualquier
-              organismo gubernamental) en caso de propagación nacional o regional de una epidemia o pandemia.
-            </li>
-            <li>
-              Derechos de propiedad intelectual 8.1 Aynimar es el único propietario legítimo de todos los derechos e intereses de la Plataforma www.aynimar.com y del Contenido del Sitio. La plataforma
-              de Aynimar www.aynimar.com incluye los secretos comerciales y derechos de propiedad intelectual protegidos por derechos de autor en todo el mundo y otras leyes. Todos los derechos de
-              titularidad, propiedad y propiedad intelectual sobre la Plataforma B2B pertenecerán a Aynimar. Todos los derechos no reclamados en virtud de los presentes Términos de uso o por Aynimar
-              quedan reservados. 8.2 www.aynimar.com, los iconos y logotipos relacionados son marcas comerciales registradas, marcas comerciales o marcas de servicio de Aynimar; y están protegidos por
-              la legislación Ecuatoriana en materia de derechos de autor, marcas registradas y otras leyes de derechos de propiedad. La copia modificación, uso o publicación no autorizada de estas
-              marcas están estrictamente prohibidos. 8.3 El Cliente no puede usar ninguna marca comercial, marca de servicio o logotipo de dichas terceras partes independientes sin la previa
-              autorización para el uso de las mismas.
-            </li>
-            <li>
-              Disposiciones generales El Cliente y Aynimar son contratistas independientes, y los presentes Términos no pretenden ni crean ninguna relación de representación, asociación, empresa
-              conjunta.
-            </li>
-            <li>
-              10. Precios Los Servicios de Promoción y Oferta pueden variar en función de la categorización de nuestros clientes. No se ofrece ninguna declaración de que todas las ofertas y
-              promociones estarán disponibles para todos los Clientes, incluso estas serán diferenciadas para cada uno. Aynimar puede, a nuestra entera discreción, limitar, negar o crear diferentes
-              niveles de acceso para exponer los productos del portafolio (o cualquier característica) a los diferentes tipos de Clientes. 10.1 Todos los precios de los productos que se muestran a
-              través de la Plataforma B2B están sujetos a autorizaciones específicas para cada Cliente en cuanto a promociones, ofertas, liquidación de productos, entre otros; dependiendo de la
-              categorización asignada a cada Cliente dentro del Sistema Comercial. No obstante, estos precios no reflejan los costos correspondientes al envío de los productos; en ciertos casos
-              excepcionales (por ejemplo, premura de entrega con proveedor logístico externo). 10.2 El Cliente podrá revisar dichos costos en el detalle que se mostrará antes de finalizar la compra.
-            </li>
-            <li>
-              Procedimiento de uso y aceptación de contratos a través la Plataforma En el registro ofrecido por medio de la Plataforma www.aynimar.com se informará, de manera inequívoca y fácilmente
-              accesible, los pasos que deberá seguir el Cliente para completarlos.
-            </li>
-            <li>
-              Formación del consentimiento y validación de los contratos celebrados en este sitio 12.1 Aynimar a través de su plataforma www.aynimar.com; ofertará, productos de todo tipo e indole que se encuentre dentro de los marcos de la ley, se prevee comercializar con productos provenientes de las fabricas, a la vez se comercializara con negocios productos que puedan ser reutilizados o usados para crear nuevos productos,
-              que podrán ser adquiridas por el Cliente vía electrónica, utilizando los mecanismos que la misma Plataforma ofrece para ello. 12.2 Toda aceptación de oferta y/o promoción quedará sujeta
-              a la condición suspensiva de que Aynimar valide la transacción. En consecuencia, para toda operación que se efectúe en este sitio, la confirmación, validación y/o verificación por parte
-              de Aynimar, será requisito para la formación del consentimiento. 12.3 Para validar la transacción Aynimar deberá verificar: (a) Que dispone, en el momento de la aceptación de oferta, de
-              las especies en stock; (b) que valida y acepta el medio de pago ofrecido por el Cliente; (c) que los datos registrados por el Cliente en el sitio coinciden con los proporcionados al
-              efectuar su aceptación de oferta. 12.4 A efectos de comunicar al Cliente acerca de esta validación, Aynimar mostrará en la Plataforma www.aynimar.com las confirmaciones de stock,
-              adquisición del (los) producto(s), métodos de pago y datos del cliente, previo a finalizar el proceso de compra.
-            </li>
-            <li>
-              Confirmación del Pedido 13.1 El cliente confirmará el pedido realizado haciendo “clic” en el botón FINALIZAR dentro del proceso de pago. 13.2 A partir de esta confirmación el pedido es
-              firme y definitivo; quedará registrado de forma automática y Aynimar procederá a su entrega. La confirmación del pedido por parte del cliente conlleva la aceptación de los precios,
-              descripción de los productos ofertados y la previa lectura y aceptación de los presentes Términos. 13.3 Una vez finalizado el proceso de compra, el sistema confirmará al cliente el
-              pedido realizado por medio de correo electrónico a la dirección consignada al registrarse. 13.4 La confirmación junto con la factura electrónica serán los únicos documentos válidos para
-              reclamo, etc.
-            </li>
-            <li>
-              Métodos de Pago 14.1 El Cliente se compromete a pagar en el momento que realiza la compra; al precio que figure en el sitio web www.aynimar.com.(a) A cada uno de los productos ofrecidos
-              se les sumarán las tarifas correspondientes a impuestos (IVA) y gastos de envío pertinentes (si los hubieren). (b) En cualquier caso, dichas tarifas serán comunicadas previamente al
-              Cliente antes de formalizar la compra. 14.2 La empresa oferente informará, en todos los casos, de forma clara e inequívoca, el precio, total de impuestos generados por los productos, así
-              como los medios de pago aceptados y financiación. 14.3 Actualmente, los pagos podrán efectuarse bajo el estado crediticio que el cliente mantiene con Aynimar bajo la modalidad de Crédito
-              Directo, con un monto predefinido por cada Cliente, una vez se haya evaluado la capacidad adquisitiva del mismo y se lo categorice de acuerdo al tipo de negocio y nivel de compra. 14.4
-              Los datos transaccionales del Cliente sujeto al método de pago por Crédito Directo, serán administrados por Aynimar, no así aquellos que dependan de entidades financieras cuando el(los)
-              método(s) de pago sea(n) por medio de tarjetas de crédito y débito o cualquier otro sistema bancario. 14.5 El Cliente deberá notificar a Aynimar cualquier cargo indebido o fraudulento en
-              sus compras, mediante email o vía telefónica, en el menor plazo de tiempo posible para realizar las gestiones oportunas. 14.6 Se hará devolución en efectivo total o parcial por la
-              mercadería devuelta del Cliente, solo en los casos en los que el producto vendido, no haya sido el ofrecido, por caso de error, o también se hará devolución en caso de la entrega de
-              productos averiados o que no cumplen la función para la cual fueron destinados, porque para Aynimar la satisfacción justa del cliente es nuestra prioridad.
-            </li>
-            <li>
-              Costos de Envío 15.1 Aynimar ofrece servicio puerta a puerta al punto de distribución para las compras realizadas desde la Plataforma www.aynimar.com, dependiendo del producto y la
-              ubicación del cliente puede ser incluido o no serlo, la entrega del mismo se realizará en la ubicación declarada por el Cliente en la Plataforma, y después de realizada la compra,
-              Aynimar se comunicara con el cliente detallando los detalles de entrega al momento de hacerla, y en caso de requerir costo extra se le presentaran las cotizaciones al cliente, siendo una
-              modalidad de servicio temporal mientras mejoramos nuestro servicio de logística, porque nos preocupamos que nuestro servicio logístico sea sustentable y amigable con el medio ambiente,
-              buscamos innovar y brindarte un servicio menos contamínante, en algunos casos el costo de transporte y entrega de producto comprado por el Cliente puede ya estar incluido al momento de
-              realizar la compra desde la Plataforma; salvo el uso de un operador logístico externo quien estipulará sus tarifas, rutas y frecuencias de envío para agilitar tiempos de entrega o
-              entregas exclusivas. El costo del operador externo se gestionará independientemente de la compra con el cliente, solo si el Cliente lo solicita por cualquier canal de comunicación
-              fehaciente (Vía telefónica, correo electrónico). 15.2 Todos los pedidos que se entreguen en el local o almacén del Cliente, tendrán lugar dentro del territorio ecuatoriano y estarán
-              sujetos a la cobertura de la matriz y del operador logístico. Los tiempos de entrega variarán según la distancia del despacho. Aynimar ofrece el soporte personalizado para hacer posible
-              que las entregas de pedidos fuera del territorio Ecuatoriano pueda estar disponible, o ser accedido, a pesar de ser un servicio que no se encuentra disponible, en caso de no poder
-              realizarse el envió al cabo de un tiempo, Aynimar se compromete con la devolución del total pagado por el producto por parte del Cliente. (ESTIPULAR FRECUENCIA DE ENVÍO A NIVEL
-              NACIONAL.) 15.3 Previo a finalizar con el proceso de compra, el Cliente visualizará el plazo en el que recibirá su compra, el cual oscila entre 24 a 120 horas laborables (1 a 5 días), a
-              partir de la confirmación del pago, sin perjuicio de demoras que pudieran originarse por causas ajenas a la voluntad de Aynimar. En dichos casos se informará al cliente sobre el tiempo
-              aproximado de entrega. (a) Las compras que realice el Cliente hasta la 16:00 de lunes a viernes (dentro de la ciudad de Quito) serán despachadas y entregadas el mismo día en medida de lo
-              posible, a más tardar hasta el día siguiente posterior a la confirmación de la orden, tiempo que corre una vez aprobada la transacción bancaria. (b) Las compras que realice el Cliente
-              hasta la 16:00 de lunes a viernes (a otras ciudades y provincias) serán despachadas a partir del día siguiente y dependiendo de la frecuencia de entrega que tenga el operador logístico,
-              a los distintos lugares con un tiempo estimado entre 24 y 120 horas laborables (1 a 5 días) a ser despachadas. (c) Las compras que realice el Cliente después de las 16:00 de lunes a
-              viernes serán despachadas a partir del día siguiente ingresando a una cola de procesos y dependiendo de la frecuencia de entrega que tenga el operador logístico, a los distintos lugares
-              con un tiempo estimado entre 24 y 120 horas laborables (1 a 5 días) a ser despachadas. (d) Para las compras que se confirmen los días sábados y domingos, se contará el tiempo de entrega
-              a partir del día lunes de la sigueinte semana, debido al factor de horario laboral de la Empresa.
-            </li>
-            <li>
-              Política de Entrega 16.1 El pedido se entregará al Cliente cuyos datos personales y dirección se hayan registrado en la Plataforma www.aynimar.com, al momento de finalizar la compra.
-              16.2 Bodega recibirá la confirmación de compra y se encargará de realizar el picking y packing de la mercadería oportunamente para su despacho. Toda compra proveniente de la Plataforma
-              www.aynimar.com, deberá estar diferenciada (branding del ecommerce: sellos, cajas, material POP, cupones, entre otros) de las demás entregas que no dependan del canal en cuestión,
-              pudiendo en ciertos casos no estarlo, debido a la flexibilidad comercial de aynimar. 16.3 Al entregarse la mercadería, se verificará la identidad del beneficiario mediante documento de
-              identidad o documento de la empresa y firma de recepción al operador logístico. 16.4 Se considerará un envío exitoso una vez que el Cliente o autorizado firme el recibo de entrega
-              correspondiente, consignando su nombre y documento de identidad, así como haber examinado los mismos, por lo que implica su conformidad con los productos recibidos, en cuanto a cantidad,
-              calidad y estado en que se encuentran; caso contario el operador logístico notificará el incidente suscitado para los correctivos pertinentes. 16.5 Si el cliente o persona que recibe el
-              pedido no estuviese presente en el punto de destino, el día que el proveedor logístico realice la entrega; este último dejará un comprobante indicando cómo proceder para concertar una
-              nueva entrega y a su vez se comunicará con Aynimar para solicitar información adicional y coordinar una nueva fecha de entrega. De no concretarse la entrega en el segundo intento, el
-              operador logístico devolverá la mercadería a la sucursal más próxima y se concretará con el cliente un tercer envío, con cargos adicionales por transportar el pedido a las bodegas de
-              Aynimar y nuevamente al punto de destino del cliente. Dicha modalidad aplicará para los siguientes intentos de envío.
-            </li>
-            <li>
-              Diligencia de Entrega 17.1 El Cliente deberá comprobar el buen estado del paquete ante el transportista que, por cuenta de Aynimar, realice la entrega del producto solicitado, indicando
-              en el registro de entrega cualquier anomalía que pudiera detectar en el embalaje. Una vez revisado el producto, el Cliente detectase cualquier incidencia como golpe, rotura, deterioro,
-              producto caducado, indicios de haber sido abierto, consumido o cualquier desperfecto causado en éste por el envío; el Cliente deberá comunicarlo a Aynimar vía telefónica, por correo
-              electrónico o cualquier medio de comunicación, en el menor tiempo posible (antes de las siguientes 24 horas desde la entrega) para que Aynimar inicie con el protocolo pertinente. Si el
-              Cliente realiza el reclamo posterior al tiempo determinado no se atenderán incidencias por ese tipo. 17.2 Si el motivo por el que no se ha podido realizar la entrega es el extravío del
-              paquete, Aynimar tomará las medidas pertinentes (e incluso legales) con el operador logístico (sea interno o externo) si se desconoce el motivo de la mercadería faltante. 17.3 En estos
-              casos, los plazos de entrega oscilan entre seis a diez días laborables.
-            </li>
-            <li>
-              DESESTIMIENTOS Cambios (previos a la entrega de mercadería) • Aynimar permitirá que el Cliente realice cambios en sus órdenes de compra, siempre y cuando existan inconvenientes con el
-              stock e inventario de ciertos productos, expresamente en este caso; Aynimar realizará una nota de crédito por el monto de aquellos productos no adquiridos y que el Cliente precise no
-              cambiarlos por otros del portafolio de acuerdo al siguiente apartado. • Aynimar actuará oportunamente para notificar al cliente por cualquier medio fehaciente del inconveniente ocurrido,
-              y actuará inmediatamente con la solución. • Bajo ningún concepto se aprobarán cambios que se traduzcan en pagos mayores a los confirmados en las órdenes de compra (salvo solicitud
-              expresa del Gerencia General si así lo amerita). • Aynimar solo aprobará cambios previos a la recepción del pedido, siempre y cuando el Cliente se rija a todos los apartados anteriores.
-            </li>
-            <li>
-              CAMBIOS (POSTERIORES A LA ENTREGA DE MERCADERÍA) 19.1 En esta modalidad de cambio, el cliente recibirá un artículo similar en características y precio al registrado en la orden de
-              compra. Una vez confirmada la orden de compra no se realizarán devoluciones por el mismo medio de pago. Únicamente se procederá cuando la solicitud de cambio sea comunicada a Aynimar por
-              cualquier medio fehaciente, dentro de 24 horas hábiles a partir de la recepción del producto y rigiéndose a las siguientes políticas de cambio: • a) Cuando el producto y/o cantidades no
-              corresponde(n) al detalle de la factura. • b) El producto corresponde al detalle de la factura, pero no es el solicitado en la orden de compra. • El producto se encuentra mal empaquetado
-              y etiquetado, dañado, roto, caducado, sucio, consumido y/o presenta alteraciones físicas distintas de su estado o forma original. 19.2 Si posterior a la recepción del/los pedido(s), el
-              Cliente no informa a Aynimar sobre su intención de cambiar el/los producto(s) recibidos dentro de 24 horas hábiles, contadas desde el momento de la recepción; el Cliente perderá el
-              derecho a solicitar cambios de mercadería. 19.3 Por otro lado, de confirmarse la solicitud de cambio en tiempo y forma por un asesor de Aynimar, el Cliente estará habilitado para llevar
-              la mercadería a la sucursal de Aynimar más próxima, en donde el Administrador de la Sucursal deberá realizar la consulta y el seguimiento del pedido con los departamentos responsables
-              para saber cómo proceder. 19.4 El Administrador de la Sucursal también verificará que el/los producto(s) presentado(s) cumpla(n) por lo menos con uno de los literales incluidos en la
-              política de cambio para proceder con la entrega del/los nuevo(s) producto(s) sin costos adicionales. 19.5 Si el Cliente no tiene a disposición una sucursal y/o bodega de Aynimar cercana,
-              podrá comunicarse por los medios autorizados (Telf: xxxxxxxxxxx Correo: baynimar@gmail.com y coordinar el envío de la mercadería desde cualquier punto del operador logístico a nivel
-              nacional, sin cargos de envíos adicionales. 19.6 Aynimar notificará al cliente sobre la recepción de la mercadería y el tiempo estimado en el que recibirá su(s) nuevo(s) producto(s), sin
-              cargos de envío.
-            </li>
-            <li>
-              Notificación verbal o escrita por los medios autorizados Telf: XXXXXXXX Correo: baynimar@gmail.com dentro de 24 horas laborables, posteriores a la recepción del pedido, con los
-              siguientes soportes: • a) Copia Cedula de identidad (a color) • b) Número de factura o comprobante de pago • c) Guía de Remisión del Operador Logístico • d) Día en que recibió el pedido
-              • e) Motivo del cambio • Especificaciones del paquete (tanto para cambios en local Aynimar o envío desde un punto físico del Operador Logístico). • a) El producto debe estar en el mismo
-              estado en que se entregó y deberá conservar su embalaje y etiquetado original. • b) El valor del envío correrá por parte de Aynimar y debe hacerse usando la misma caja en que ha sido
-              recibido para proteger el producto. Para el supuesto que no pueda hacerse con la caja con la que se entregó, el Cliente deberá enviarlo en una caja protectora con el fin de que el
-              producto llegue a Aynimar con las máximas garantías posibles. • c) Debe incluirse todos los soportes mencionados en el apartado anterior dentro del paquete. 21.1 Si el motivo para
-              cambiar la mercadería es ajeno a los motivos expuestos en apartados anteriores (los productos llegaron al Cliente de manera correcta y en buen estado; pero no son del agrado del Cliente)
-              no podrá ser cambiado. 21.2 Aynimar actúa en calidad de Fabricante y Distribuidor de Fabricantes, garantizando que los productos comercializados mediante la plataforma www.aynimar.com se
-              encuentran en buen estado y no presentan defectos, ni vicios ocultos que puedan hacerlos peligrosos, dañinos o inadecuados para su consumo.
-            </li>
-            <li>
-              Garantías 21.3.1 En el evento de presentarse defectos en la calidad de los bienes adquiridos a través del Sitio, se podrá hacer uso de la garantía legal en los términos estipulados en la
-              ley y los presentes Términos: 1. a) Aynimar garantiza la calidad de todos los productos que vende a sus clientes hasta 60 días después de efectuada la compra, siempre que se presenten
-              defectos de calidad y que el producto haya recibido el manejo y almacenamiento adecuado 2. b) Quedan excluidos de garantía productos que presenten: Rasgones, raspones, ruptura de
-              cualquiera de los materiales que conforman el envase que contiene el líquido 1. c) Con la garantía de calidad, Aynimar se compromete: a) En primer lugar reponer el producto motivo de
-              reclamo una vez que el departamento de control de Calidad lo apruebe dentro de los siguientes 15 días laborables después de haber recibido el producto en la fábrica. 1. d) Para poder
-              hacer efectiva la Garantía esta debe cumplir a cabalidad con todas las condiciones como lo son vigencia de la garantía, factura de compra, cartera del cliente con respaldos y sin
-              encontrare en morosidad; el daño del producto debe ser por un defecto de fabricación y ninguna de las anteriores aplicará en caso de evidenciarse un mal uso por parte del 21.3.2 Aynimar se reserva el derecho de REPONER EL PRODUCTO. 21.3.3 El producto DE REPOSICION deberá enviarse a la dirección registrada por el cliente. La REPOSICION se realizará dentro de los 30
-              días hábiles siguientes. Para solicitar una garantía, el cliente debe ingresar su reclamo en nuestra sección “contáctanos” o enviar un correo a baynimar@gmail.com, y comunicar al asesor
-              que maneja su cuenta adjuntando la información de compra y de contacto (# factura, fecha de compra, teléfono de contacto) explicando el inconveniente con el producto y adjuntando mínimo
-              3 fotos tanto evidenciando el defecto del mismo como mostrando el estado general del mismo. Por medio de correo electrónico se dará aprobación o no de la garantía 21.4 El Cliente se
-              somete a una adecuada y oportuna atención que Aynimar bajo su ética institucional tiene con sus Clientes y terceros, para cualquier duda, consulta o sugerencia que pudiera surgir
-              comunicarse a los medios autorizados (Telf: xxxxxxxxxxx Correo: baynimar@gmail.com Será un placer atenderle!
-            </li>
-          </ol>
-        </div>
+        <p>Si no estás de acuerdo con todos los términos y condiciones de este acuerdo, no debes acceder al sitio web ni utilizar ningún servicio.</p>
+        <p>
+          Estaremos actualizando para mejorar los Términos de servicio en nuestro sitio web. Debes por tanto revisar la página periódicamente para enterarte de los cambios. Si accedes al
+          sitio web después de la publicación de cualquier cambio ello constituye la aceptación de los mismos.
+        </p>
+
+        <h2>SECCIÓN 1 - TÉRMINOS DE LA TIENDA EN LÍNEA</h2>
+        <p>
+          Al aceptar los Términos de servicio, declaras que eres mayor de edad de acuerdo a las leyes de tu país y que autorizas en caso necesario para que cualquiera de tus dependientes
+          menores use este sitio.
+        </p>
+        <p>
+          Es importante que entiendas que no puedes usar nuestros productos para ningún propósito ilegal o no autorizado según las leyes de tu país, incluidas, las leyes de derechos de
+          autor, ni pueden transmitir virus informáticos de ninguna naturaleza.
+        </p>
+        <p>Un incumplimiento o violación de cualquiera de los Términos descritos tendrá como resultado la terminación inmediata de nuestros Servicios.</p>
+
+        <h2>SECCIÓN 2 - CONDICIONES GENERALES</h2>
+        <p>AYNIMAR S.A.S. reserva el derecho de aceptar o no el servicio a terceras personas de acuerdo a su criterio.</p>
+        <p>
+          Debes comprender que tu información, puede transferirse sin cifrar e involucrar transmisiones a través de varias redes; y que pueden existir cambios para ajustarse y adaptarse a
+          los requisitos técnicos de conexión entre redes o dispositivos, no obstante la información de las tarjetas de crédito siempre será cifrada durante la transferencia a través de
+          redes.
+        </p>
+        <p>
+          Aceptas no reproducir, duplicar, copiar, vender, revender o explotar cualquier parte del Servicio, ni usar el Servicio o el acceso al Servicio o a cualquier contacto en el sitio
+          web a través del cual se brinda el servicio, sin nuestro permiso expreso por escrito.
+        </p>
+        <p>Los títulos utilizados en este acuerdo se incluyen solo por conveniencia y no limitarán ni afectarán los Términos.</p>
+
+        <h2>SECCIÓN 3 - EXACTITUD, INTEGRIDAD Y PUNTUALIDAD DE LA INFORMACIÓN</h2>
+        <p>
+          La información suministrada en nuestro sitio es de carácter general y podría no estar actualizada en el momento, es tu responsabilidad consultar otras fuentes para tomar tus
+          decisiones.
+        </p>
+
+        <h2>SECCIÓN 4 - MODIFICACIONES AL SERVICIO Y PRECIOS</h2>
+        <p>
+          Los precios de nuestros productos pueden variar según las variables del mercado, por lo tanto nos reservamos el derecho de modificar o interrumpir el Servicio en cualquier momento
+          sin previo aviso.
+        </p>
+
+        <h2>SECCIÓN 5 - PRODUCTOS O SERVICIOS</h2>
+        <p>
+          Algunos productos o servicios pueden estar disponibles exclusivamente en línea a través del sitio web, pueden tener cantidades limitadas y estarán sujetos a devolución o cambio de
+          acuerdo con nuestra Política de devolución.
+        </p>
+        <p>AYNIMAR S.A.S. garantiza la fidelidad de las formas y colores de nuestros productos pero no puede garantizar su visualización en los monitores o impresoras de los usuarios.</p>
+        <p>Nos reservamos el derecho de limitar las cantidades o descontinuar cualquier producto o servicio que ofrecemos.</p>
+        <p>La calidad de cualquier producto, servicio, información u otro material es propia del fabricante y no del diseño o expectativa del usuario.</p>
+
+        <h2>SECCIÓN 6 - PRECISIÓN DE LA FACTURACIÓN Y LA INFORMACIÓN DE LA CUENTA</h2>
+        <p>
+          En el caso de que hagamos un cambio o cancelemos un pedido, intentaremos notificarlo en el correo electrónico y / o la dirección de facturación / número de teléfono proporcionado
+          en el momento en que se realizó el pedido.
+        </p>
+        <p>
+          Es responsabilidad del usuario proporcionar información de la cuenta actual, completa y precisa para todas las compras realizadas en nuestra tienda y si se produce algún cambio
+          actualizar la información de inmediato.
+        </p>
+        <p>Para obtener más detalles, consulta nuestra Política de devoluciones.</p>
+
+        <h2>SECCIÓN 7 - HERRAMIENTAS OPCIONALES</h2>
+        <p>
+          Es posible que te proporcionemos acceso a herramientas de terceros sobre las que no supervisamos ni tenemos ningún control, en este caso es tu responsabilidad su correcto manejo,
+          en ese caso reconoces y aceptas que proporcionamos acceso &quot;tal cual&quot; y &quot;según estén disponibles&quot; sin garantías, representaciones o condiciones de ningún tipo y sin ningún
+          respaldo. No tendremos ninguna responsabilidad derivada o relacionada con su uso de herramientas opcionales de terceros.
+        </p>
+
+        <h2>SECCIÓN 8 - ENLACES DE TERCEROS</h2>
+        <p>
+          Los enlaces en nuestro sitio pueden dirigirlo a sitios web de terceros que no están afiliados a nosotros, no somos responsables de examinar o evaluar el contenido o la precisión
+          y no garantizamos cualquier material, producto o servicio externo, ni ningún daño o perjuicio relacionado con la compra o el uso de bienes, servicios, recursos, contenido o
+          cualquier otra transacción realizada en relación con sitios web de terceros.
+        </p>
+
+        <h2>SECCIÓN 9 - COMENTARIOS, OPINIONES Y OTROS ENVÍOS DEL USUARIO</h2>
+        <p>
+          Si, a nuestra solicitud o no, envías presentaciones específicas (por ejemplo, participaciones en un concurso), ideas creativas, sugerencias, propuestas, planes u otros
+          materiales, ya sea en línea, por correo electrónico, por correo postal o de otro modo, aceptas que podemos, en cualquier momento, sin restricciones, editar, copiar, publicar,
+          distribuir, traducir y utilizar en cualquier medio cualquier comentario que nos envíes.
+        </p>
+        <p>No tenemos ni tendremos ninguna obligación de mantener la confidencialidad de los comentarios; pagar una compensación por cualquier comentario; o responder a cualquier comentario.</p>
+        <p>
+          Podemos, sin obligación, monitorear, editar o eliminar contenido que, a nuestro criterio, sea ilegal, ofensivo, amenazante, calumnioso, difamatorio, pornográfico, obsceno o de
+          cualquier otra forma objetable, o que viole la propiedad intelectual de cualquier parte o nuestros Términos de servicio.
+        </p>
+        <p>
+          Es tu obligación que tus comentarios, no violen ningún derecho de terceros, incluidos los derechos de autor, marca registrada, privacidad, personalidad u otro derecho personal o
+          de propiedad, y que no contienen material difamatorio o ilegal, abusivo u obsceno, ningún virus informático u otro malware que pueda afectar de alguna manera el funcionamiento del
+          Servicio o cualquier sitio web relacionado.
+        </p>
+        <p>No puedes utilizar una dirección de correo electrónico falsa o suplantar a otra persona para engañar a AYNIMAR S.A.S. o a terceros en cuanto al origen de los comentarios.</p>
+        <p>Eres el único responsable de los comentarios que hagas y de su precisión. No asumimos ninguna responsabilidad por los comentarios publicados.</p>
+
+        <h2>SECCIÓN 10 - INFORMACIÓN PERSONAL</h2>
+        <p>El envío de información personal a través de la tienda se rige por nuestra Política de privacidad, que puedes consultar en nuestro sitio web.</p>
+
+        <h2>SECCIÓN 11 - ERRORES, INEXACTITUDES Y OMISIONES</h2>
+        <p>
+          Ocasionalmente, pudiera existir información en nuestro sitio o en el Servicio que contiene errores tipográficos, inexactitudes u omisiones que pueden estar relacionadas con
+          descripciones de productos, precios, promociones, ofertas, cargos de envío de productos, tiempos de tránsito y disponibilidad. Nos reservamos el derecho de corregir cualquier
+          error, inexactitud u omisión, y de cambiar o actualizar la información o cancelar pedidos si alguna información en el Servicio o en cualquier sitio web relacionado es inexacta en
+          cualquier momento sin previo aviso.
+        </p>
+        <p>
+          No asumimos ninguna obligación de actualizar, modificar o aclarar la información en el Servicio o en cualquier sitio web relacionado, incluida, entre otros, la información de
+          precios, excepto según lo exija la ley.
+        </p>
+        <p>
+          Ninguna actualización especificada o fecha de actualización aplicada en el Servicio o en cualquier sitio web relacionado, debo tomar para indicar que la información en el Servicio
+          o en cualquier sitio web relacionado ha sido modificada o actualizada.
+        </p>
+
+        <h2>SECCIÓN 12 - USOS PROHIBIDOS</h2>
+        <p>
+          Además de otras prohibiciones establecidas en los Términos de servicio, se prohíbe utilizar el sitio o su contenido: (a) para cualquier propósito ilegal; (b) solicitar a otros
+          que realicen o participen en actos ilícitos; (c) violar cualquier reglamento, regla, ley u ordenanza local internacional, federal, provincial o estatal; (d) infringir o violar
+          nuestros derechos de propiedad intelectual o los derechos de propiedad intelectual de terceros; (e) acosar, abusar, insultar, dañar, difamar, calumniar, menospreciar, intimidar o
+          discriminar por motivos de género, orientación sexual, religión, etnia, raza, edad, nacionalidad o discapacidad; (f) enviar información falsa o engañosa; (g) cargar o transmitir
+          virus o cualquier otro tipo de código malintencionado que se utilizará o se podrá utilizar de cualquier forma que afecte la funcionalidad o el funcionamiento del Servicio o de
+          cualquier sitio web relacionado, otros sitios web o Internet; (h) recopilar o rastrear la información personal de otros; (i) enviar spam, phishing, pharm, pretext, spider,
+          crawl o scrape; (j) para cualquier propósito obsceno o inmoral; o (k) para interferir o eludir las características de seguridad del Servicio o cualquier sitio web relacionado,
+          otros sitios web o Internet. Nos reservamos el derecho de terminar el uso del Servicio o cualquier sitio web relacionado por violar cualquiera de los usos prohibidos.
+        </p>
+
+        <h2>SECCIÓN 13 - RENUNCIA DE GARANTÍAS; LIMITACIÓN DE RESPONSABILIDAD</h2>
+        <p>
+          Trataremos que el uso de nuestro servicio sea ininterrumpido, oportuno, seguro o libre de errores y que los resultados que puedan obtenerse del uso del servicio sean precisos y
+          confiables, sin embargo es algo que no es posible garantizar totalmente.
+        </p>
+        <p>Es posible que, de vez en cuando, debamos cancelar el servicio por diversos períodos de tiempo en cualquier momento, sin previo aviso.</p>
+        <p>
+          El usuario acepta expresamente que el uso o la imposibilidad de usar el servicio será bajo su propio riesgo. El servicio y todos los productos y servicios que se le brindan a
+          través del servicio se brindan (excepto según lo expresamente indicado por nosotros) {'tal como están'} y {'según estén disponibles'} para su uso, sin ninguna representación,
+          garantía o condición de ningún tipo, ya sea expresa o implícita, incluidas todas las garantías o condiciones implícitas de comerciabilidad, calidad comercial, idoneidad para un
+          propósito particular, durabilidad, título y no infracción.
+        </p>
+        <p>
+          En ningún caso AYNIMAR S.A.S., nuestros directores, funcionarios, empleados, afiliados, agentes, contratistas, pasantes, proveedores, prestadores de servicios o licenciatarios
+          serán responsables de cualquier lesión, pérdida, reclamo o cualquier daño directo, indirecto, incidental, punitivo, especial o daños consecuentes de cualquier tipo, incluidos,
+          entre otros, lucro cesante, pérdida de ingresos, pérdida de ahorros, pérdida de datos, costos de reemplazo o cualquier daño similar, ya sea por contrato, agravio (incluida
+          negligencia), responsabilidad estricta o de otro tipo, que surja del uso de cualquiera de los servicios o productos adquiridos, o para cualquier otro reclamo relacionado con el
+          uso del servicio o cualquier producto, o cualquier error u omisión en cualquier contenido, o cualquier pérdida o daño incurrido como resultado del uso del servicio o contenido o
+          producto publicado, transmitido o puesto a disposición a través del servicio, incluso si se advierte de su posibilidad.
+        </p>
+        <p>
+          Debido a que algunos estados o jurisdicciones no permiten la exclusión o la limitación de responsabilidad por daños consecuentes o incidentales, en dichos estados o
+          jurisdicciones, nuestra responsabilidad se limitará a lo permitido por la ley.
+        </p>
+
+        <h2>SECCIÓN 14 - INDEMNIZACIÓN</h2>
+        <p>
+          El usuario acepta indemnizar, defender y eximir de responsabilidad a AYNIMAR S.A.S. y a nuestra matriz, subsidiarias, afiliadas, socios, funcionarios, directores, agentes,
+          contratistas, otorgantes de licencias, proveedores de servicios, subcontratistas, proveedores, pasantes y empleados, indemnes de cualquier reclamo o demanda, incluyendo
+          honorarios razonables de abogados, hechos acaecidos por cualquier tercero debido a que surjan del incumplimiento de los Términos de servicio o los documentos que incorporan como
+          referencia, o la violación de cualquier ley de sus derechos.
+        </p>
+
+        <h2>SECCIÓN 15 - DIVISIBILIDAD</h2>
+        <p>
+          En el caso de que se determine que alguna disposición de los Términos de servicio es ilegal, nula o inaplicable, dicha disposición será, no obstante, ejecutable en la mayor
+          medida permitida por la ley aplicable, y la parte inaplicable se considerará separada de los Términos de Servicio, tal determinación no afectará la validez y aplicabilidad de
+          cualquier otra disposición restante.
+        </p>
+
+        <h2>SECCIÓN 16 - TERMINACIÓN</h2>
+        <p>Las obligaciones y responsabilidades de las partes incurridas antes de la fecha de terminación sobrevivirán a la terminación de este acuerdo para todos los propósitos.</p>
+        <p>
+          Estos Términos de servicio son efectivos a menos y hasta que el usuario o nosotros los prescindamos. El Usuario puede rescindir los Términos de servicio en cualquier momento
+          notificandonos que ya no desea utilizarlos o cuando deje de utilizar nuestro sitio.
+        </p>
+        <p>
+          Si, a nuestro exclusivo criterio, el usuario no cumple, o sospechamos que no ha cumplido con la disposición de los Términos de servicio, también podemos rescindir el acuerdo en
+          cualquier momento, sin previo aviso y el usuario seguirá siendo responsable de todos los montos adeudados.
+        </p>
+
+        <h2>SECCIÓN 17 - ACUERDO COMPLETO</h2>
+        <p>El hecho de que no ejerzamos o hagamos cumplir cualquier derecho o disposición de los Términos de servicio no constituirá una renuncia a dicho derecho o disposición.</p>
+        <p>
+          Los Términos de servicio y cualquier política o regla operativa publicada en nuestro sitio o con respecto al Servicio, constituye el acuerdo completo y el entendimiento entre el
+          usuario y AYNIMAR S.A.S., y rigen el uso del Servicio, reemplazando cualquier acuerdo, comunicaciones y propuestas anteriores sean de forma oral o escrita.
+        </p>
+        <p>Cualquier ambigüedad en la interpretación de los Términos de servicio no se interpretará en contra del grupo de redacción.</p>
+
+        <h2>SECCIÓN 18 - LEY APLICABLE</h2>
+        <p>Los Términos de servicio y cualquier acuerdo separado mediante el cual le proporcionemos Servicios se regirán e interpretarán de acuerdo con las leyes de cada país.</p>
+
+        <h2>SECCIÓN 19 - CAMBIOS EN LOS TÉRMINOS DE SERVICIO</h2>
+        <p>El usuario puede y debe revisar la versión más actualizada de los Términos de servicio en cualquier momento en esta página.</p>
+
+        <h2>SECCIÓN 20 - INFORMACIÓN DE CONTACTO</h2>
+        <p>Las preguntas sobre los Términos de servicio deben enviarse a baynimar@gmail.com</p>
+
+        <hr />
+
+        {/* Sección: Política de Devolución */}
+        <h1>POLÍTICA DE DEVOLUCIÓN</h1>
+        <h2>Política de devoluciones, reembolso y reemplazo:</h2>
+        <p>
+          Si recibiste un artículo que está dañado o defectuoso, con gusto lo reemplazaremos sin costo adicional para ti. Por favor contáctanos dentro de las 48 horas posteriores a la
+          recepción del mismo.
+        </p>
+        <p>Solo podemos ofrecerte reemplazos sin costo adicional si cumple con los siguientes criterios: Los artículos están defectuosos, dañados, rotos o sucios a la llegada.</p>
+        <p>AYNIMAR S.A.S. no es responsable de los paquetes que se pierden en tránsito.</p>
+        <p>No aceptamos devoluciones o reembolsos si el cliente cambia de opinión después de recibir su(s) pedido(s).</p>
+        <p>
+          <b>Nota:</b> AYNIMAR S.A.S. no se hace responsable de ningún paquete perdido o mal enviado. Asegúrese de que toda la información que ha proporcionado sea correcta antes de
+          enviar su pedido para evitar pérdidas u otros contratiempos. Se recomienda que ingresen cuidadosamente las direcciones correctas, de lo contrario, el paquete no se entregará.
+        </p>
+        <p>Si cree que ha introducido una dirección incorrecta, debe ponerse en contacto con nosotros inmediatamente para corregir el error.</p>
+        <p>Si tiene otras inquietudes, comuníquese con nuestro Servicio de Atención al Cliente por correo electrónico: baynimar@gmail.com.</p>
+        
+        <h3>DEVOLVER A LOS PAQUETES DEL REMITENTE:</h3>
+        <p>
+          AYNIMAR S.A.S. no se hace responsable de los paquetes que se devuelven al remitente, dicha responsabilidad es asumida por la empresa de transporte. Una vez que el artículo se
+          recibe en el almacén, podemos volver a empaquetarlo, volver a etiquetarlo y volver a enviarlo; sin embargo, debe comprender que hacerlo requiere un costo adicional.
+        </p>
+        <p>
+          El costo de la devolución, es el equivalente al envío que realizó el remitente al destinario más el valor del envío del destinario (cliente) al remitente (vendedor). La tarifa
+          oficial de Servientrega por flete de paquetería con un peso igual o menos a un (1) kilogramo es de quince mil pesos ($15.000) lo que implicaría un costo total de devolución de
+          treinta mil ($30.000).
+        </p>
+
+        <h2>Política de cancelación ¿Puedo cancelar mi (s) pedido (s)?</h2>
+        <p>
+          Sí. Las cancelaciones deben realizarse dentro de las 24 horas posteriores a la realización del pedido. Envíanos un correo electrónico o un mensaje a nuestras líneas de atención en
+          Facebook en un plazo de 24 horas y haznos saber el motivo por el que deseas cancelar tu pedido. No aceptamos la cancelación de pedidos fuera del período de 24 horas.
+        </p>
+        <p>
+          Todos los reembolsos se procesarán en un plazo de 24 a 48 horas antes de que el fondo se refleje en la cuenta bancaria del cliente. No devuelvas tu compra al fabricante.
+          Envíanos un correo electrónico indicando tu inquietud y adjunta una imagen de los artículos que muestren la etiqueta de tamaño y su empaque original dentro de las 48 horas
+          posteriores a la recepción del pedido para obtener un reemplazo o reembolso. Nota: Nuestro equipo inspeccionará / verificará la (s) foto (s) antes de emitir un reemplazo.
+        </p>
+        <p>AYNIMAR S.A.S. se reserva el derecho de rechazar cualquier reemplazo y reembolso si no cumple con los criterios anteriores.</p>
+
+        <h3>Reembolsos atrasados o faltantes (si corresponde)</h3>
+        <p>
+          Si aún no has recibido un reembolso, revisa tu cuenta bancaria nuevamente, puede tomar algún tiempo antes de que tu reembolso se publique oficialmente. Si has hecho todo esto y
+          aún no has recibido tu reembolso, comunícate con nosotros enviando un boleto en nuestro sitio web www.aynimar.com
+        </p>
+        <p>
+          Es muy raro que nuestros productos estén dañados o defectuosos. El departamento de control de calidad de AYNIMAR S.A.S. inspeccionará los productos devueltos; si el daño es
+          consecuencia de un defecto de fabricación o bien si el producto no cumple con las especificaciones de fábrica, se procederá a realizar el respectivo proceso de cambio.
+        </p>
+        <p>En cuanto a los productos en los que se debe seleccionar una talla, habrán 2 situaciones:</p>
+        <ol>
+          <li>El cliente elige la talla y la tienda envía la talla correcta que el cliente pidió. Si la persona desea cambiar el tallaje, debe asumir el respectivo costo de la devolución.</li>
+          <li>En caso de que la tienda haya enviado la talla equivocada al que el cliente solicitó, asumiríamos el costo del flete de devolución.</li>
+        </ol>
+
+        <h2>¿CÓMO FUNCIONA O APLICA?</h2>
+        <ul>
+          <li>Se debe entregar el producto con todos sus accesorios y empaques originales.</li>
+          <li>Debes presentar la factura de compra por medio virtual.</li>
+        </ul>
+        <p>
+          Después de comunicar tu inconformidad y aclarar qué quiere hacer el cambio de tu compra, DISPONE DE TRES (3) DÍAS HÁBILES para devolver el producto. Si el producto no se ha
+          devuelto en este plazo no habrá lugar para ejercer el derecho a cambio.
+        </p>
+        <p>
+          AYNIMAR S.A.S. dispondrá de un máximo de quince (15) días hábiles después de haber recibido el producto para realizar el proceso de garantía. En caso de que el proceso demore más de
+          lo antes mencionado se le notificará al cliente las razones de esto.
+        </p>
+        <p>
+          Los costos de transporte y los demás que conlleve el proceso de cambio serán asumidos en su totalidad por la empresa AYNIMAR S.A.S. siempre y cuando el departamento de control y
+          calidad de AYNIMAR S.A.S. haya determinado que el daño en los productos devueltos sea consecuencia de un defecto de fabricación y no por un mal uso o negligencia (exposición a
+          productos químicos, sustancias cáusticas, fuente de llama abierta, mucho calor, etc.).
+        </p>
+        <p>
+          Los productos no tienen cambio por cuestiones de higiene y sanitarias estipuladas en la ley colombiana. Por tu seguridad y la de todos nuestros clientes, no realizamos cambio de
+          productos de aseo o uso personal, tales como: afeitadoras, cortadoras de pelo, entre otros. Recuerde que en caso de tener dudas sobre el uso correcto de estos productos puede
+          hacer uso de videotutoriales explicativos o consultarnos a nosotros directamente; que con gusto le brindaremos toda la asesoría pertinente.
+        </p>
+        <p>Para consultar más sobre cuáles de nuestros productos tiene devolución o cuáles no, junto con el tiempo que estipulamos como garantía:</p>
+
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Categorías</th>
+              <th>Productos</th>
+              <th>¿Tiene devolución?</th>
+              <th>Garantía (tiempo)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Artículos animales o mascotas</td>
+              <td>- Accesorios<br />- Artículos<br />- Juguetes</td>
+              <td>Tienen devolución siempre que estén sin usar</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Productos para adultos (sexuales)</td>
+              <td>Todos los productos de esta categoría</td>
+              <td>No tienen devolución</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Bebés</td>
+              <td>Todos los productos de esta categoría</td>
+              <td>Tienen devolución siempre que estén en su paquete original y sin usar</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Hogar y muebles</td>
+              <td>- Cuidado del hogar</td>
+              <td>Tienen devolución siempre que estén en su paquete original y sin usar</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Ropa y accesorios</td>
+              <td>Todos los productos de esta categoría</td>
+              <td>Tienen devolución siempre que estén sin usar y con su etiqueta original</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Herramientas</td>
+              <td>Todos los productos de esta categoría</td>
+              <td>Tienen devolución siempre que estén sin usar</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Belleza y cuidado personal</td>
+              <td>
+                - Depilación<br />- Higiene personal<br />- Maquillaje<br />- Perfumes y fragancias<br />- Productos de barbería<br />- Tratamientos de belleza<br />- Ropa interior.
+                <br />- Artículos de peluquería<br />- Cuidado de la piel<br />- Cuidado del cabello<br />- Electrodomésticos de belleza<br />- Manicure y pedicure
+              </td>
+              <td>No tienen devolución a menos que el producto esté en su empaque original y sin usar.</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </>
   );

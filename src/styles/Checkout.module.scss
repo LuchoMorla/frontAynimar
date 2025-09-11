@@ -210,11 +210,26 @@
 }
 
 .termsAndCondLink {
-  color : $--black !important;
+  color : $--purple;
   margin: 0 8px;
   cursor: pointer;
   font-weight: bold;
+   &:hover {
+    color: darken($--black, 20%); 
+  }
 }
+
+// .termsAndCondLink {
+//   color: $--purple; 
+//   font-weight: bold;
+//   text-decoration: underline; 
+//   cursor: pointer;
+//   transition: color 0.2s ease; 
+//   &:hover {
+//     color: darken($--purple, 10%); 
+//     text-decoration: none; 
+//   }
+// }
 
 .modaltitle {
   margin-bottom: 20px;
@@ -230,4 +245,41 @@
   .MyOrder {
     width: 100%;
   }
+}
+
+/* --- ESTILOS PARA EL MODAL CON SCROLL --- */
+
+// 1. Este es el contenedor que acabamos de añadir en el JSX
+.modalContentWrapper {
+  // Define una altura máxima. El modal nunca será más alto que el 85% de la pantalla.
+  // Esto es clave para que no se salga de la vista en pantallas pequeñas.
+  max-height: 85vh; 
+  
+  // La magia sucede aquí: añade una barra de scroll vertical SÓLO SI el contenido es más alto que max-height.
+  overflow-y: auto;
+
+  // Añade un poco de espacio para que el contenido no pegue con la barra de scroll.
+  // El 'padding-right' es un poco más grande para compensar el espacio que ocupa la barra.
+  padding: 5px 15px 5px 5px;
+}
+
+// 2. (Opcional pero recomendado) Estilo personalizado para la barra de scroll, para que se vea moderna.
+.modalContentWrapper::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra */
+}
+
+.modalContentWrapper::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Color del fondo de la barra */
+  border-radius: 10px;
+}
+
+.modalContentWrapper::-webkit-scrollbar-thumb {
+  background-color: $--purple; /* El color principal de tu scrollbar (puedes usar tu variable) */
+  border-radius: 10px;
+  border: 2px solid transparent; // Opcional: crea un pequeño borde
+  background-clip: content-box;
+}
+
+.modalContentWrapper::-webkit-scrollbar-thumb:hover {
+  background-color: darken($--purple, 10%); // Un poco más oscuro en hover
 }

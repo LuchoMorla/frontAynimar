@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useEffect, useContext, createContext } from 'react';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import endPoints from '@services/api/';
@@ -26,6 +26,32 @@ export const useAuth = () => {
 
 function useProviderAuth() {
   const [user, setUser] = useState(null);
+  // --- INICIO DE LA MODIFICACIÓN ---
+  // Este efecto se ejecuta una sola vez cuando el hook se carga por primera vez.
+  useEffect(() => {
+    // Función asíncrona para cargar el usuario desde la cookie.
+    async function loadUserFromCookie() {
+      const token = Cookie.get('token');
+      if (token) {
+        // Si hay un token, lo ponemos en las cabeceras para la siguiente petición.
+        axios.defaults.headers.Authorization = `Bearer ${token}`;
+        try {
+          // Hacemos la llamada al endpoint de perfil para obtener los datos del usuario.
+          const { data: userData } = await axios.get(endPoints.auth.profile);
+          // Si todo va bien, establecemos el usuario en el estado.
+          setUser(userData);
+        } catch (error) {
+          // Si el token es inválido o expiró, la petición fallará.
+          // Removemos la cookie rota y nos aseguramos de que el usuario sea null.
+          console.error("Fallo al cargar la sesión desde la cookie", error);
+          Cookie.remove('token');
+          setUser(null);
+        }
+      }
+    }
+    loadUserFromCookie();
+  }, []); // El array vacío asegura que solo se ejecute una vez.
+  // --- FIN DE LA MODIFICACIÓN ---
 
   const getAuth = async () => {
     const token = Cookie.get('token');
@@ -50,6 +76,25 @@ function useProviderAuth() {
       setUser(user);
     }
   };
+
+  // --- INICIO DE LA NUEVA FUNCIÓN ---
+  // Objetivo: Iniciar sesión manualmente cuando ya tenemos el token y los datos del usuario.
+  const manualSignIn = (authData) => {
+    console.log('sing')
+    // authData será el objeto { user, token } que nos devuelve el AuthService
+    if (authData && authData.token && authData.user) {
+      const diasDisponiblesAntesDeCaducar = 30;
+      const token = authData.token;
+      Cookie.set('token', token, { expires: diasDisponiblesAntesDeCaducar });
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+      const user = authData.user;
+      setUser(user);
+      console.log('✅ Sesión iniciada manualmente con éxito.');
+    } else {
+      console.error("manualSignIn falló: Faltan datos de autenticación.");
+    }
+  };
+  // --- FIN DE LA NUEVA FUNCIÓN ---
 
   const autoSignIn = async (token) => {
     const options = {
@@ -114,6 +159,7 @@ function useProviderAuth() {
   return {
     user: user,
     signIn: signIn,
+    manualSignIn: manualSignIn, // --- AÑADIR ESTA LÍNEA ---
     autoSignIn: autoSignIn,
     recovery: recovery,
     changePassword: changePassword,

@@ -20,68 +20,184 @@ import TestContext from '@context/TestContext';
 
 const Header = () => {
   const [token, setToken] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [cartLoaded, setCartLoaded] = useState(false);
   const orderState = useContext(TestContext);
-  const hola = useAuth();
+  const auth = useAuth();
+  
   if (!token) {
-    hola.getAuth();
+    auth.getAuth();
     setToken('haveToken');
   }
 
-  const getCookieUserValidator = () => {
-    const token = Cookie.get('token');
-    if (!token) {
-      return false;
-    }
-    return true;
-  };
-
-  const isTokenValid = () => {
-    return getCookieUserValidator();
-  };
-
   const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
 
-  const fetchOrders = async () => {
-    if (state.cart.length <= 0) {
-      const { data: getOrder } = await axios.get(endPoints.orders.getOrderByState, { params: { state: 'carrito' } });
-      orderState.setOrder(getOrder);
-      const items = getOrder.items;
-      // items.forEach((el) => {
-      //   el.price = el.price / 100;
-      // });
-      if (items.length > 0) {
-        getCart(items);
-        const getStorageOrderId = window.localStorage.getItem('oi');
-        if (!getStorageOrderId) {
-          window.localStorage.setItem('oi', `${getOrder.id}`);
-        }
-      }
-    }
+  // Función para verificar autenticación
+  const checkAuthentication = () => {
+    return !!Cookie.get('token');
   };
 
+  // Effect para monitorear cambios en la autenticación
   useEffect(() => {
-    //log
-    isTokenValid();
-    //fetch Orders
-    const fetchMyOrders = async () => {
-      try {
-        await fetchOrders();
-      } catch (error) {
-        console.log(error);
-        if (error.status == 401) {
-          console.log('funciono doble CATCH Luis, campuramos el error 401 mira-> ' + error.status + ` y  tambien el mensaje es ${error.message}`);
-        }
+    const checkAuthStatus = () => {
+      const authStatus = checkAuthentication();
+      if (authStatus !== isAuthenticated) {
+        console.log('Estado de autenticación cambió:', authStatus);
+        setIsAuthenticated(authStatus);
+        // Resetear cartLoaded cuando cambia el estado de auth
+        setCartLoaded(false);
       }
     };
-    fetchMyOrders();
-  }, [endPoints.orders.getOrderByState, token]);
 
-  /*   useEffect(() => {
-    isTokenValid();
-    const tokenIsValid = isTokenValid(token); 
-    // Realiza cualquier lógica adicional basada en la validez del token aquí
+    // Verificar inmediatamente
+    checkAuthStatus();
 
-  }, [token]); */
+    // Verificar cada 200ms por si la cookie se establece después del redirect
+    const authInterval = setInterval(checkAuthStatus, 200);
+
+    // También escuchar eventos de storage por si la cookie se establece en otra pestaña
+    const handleStorageChange = () => {
+      checkAuthStatus();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Event listener personalizado para cuando se establece el token
+    const handleTokenSet = () => {
+      console.log('🔔 Evento tokenSet recibido en Header');
+      setTimeout(() => {
+        const newAuthStatus = checkAuthentication();
+        console.log('🔍 Verificando auth después de tokenSet:', newAuthStatus);
+        if (newAuthStatus !== isAuthenticated) {
+          setIsAuthenticated(newAuthStatus);
+          setCartLoaded(false);
+        }
+      }, 50);
+    };
+    
+    window.addEventListener('tokenSet', handleTokenSet);
+
+    // Limpiar después de 10 segundos
+    const timeout = setTimeout(() => {
+      clearInterval(authInterval);
+    }, 10000);
+
+    return () => {
+      clearInterval(authInterval);
+      clearTimeout(timeout);
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('tokenSet', handleTokenSet);
+    };
+  }, [isAuthenticated]);
+
+  // Effect principal para cargar datos del carrito
+  useEffect(() => {
+    console.log('useEffect carrito ejecutándose:', { 
+      cartLoaded, 
+      cartLength: state.cart.length, 
+      isAuthenticated 
+    });
+
+    // Si ya se cargó el carrito y tiene items, no hacer nada
+    if (cartLoaded && state.cart.length > 0) {
+      console.log('Carrito ya cargado con items, saltando...');
+      return;
+    }
+
+    const guestOrderId = window.localStorage.getItem('oi');
+    console.log('guestOrderId desde localStorage:', guestOrderId);
+
+    const fetchCartData = async () => {
+      let orderData = null;
+
+      try {
+        if (isAuthenticated) {
+          // --- FLUJO PARA USUARIO LOGUEADO ---
+          console.log('🔐 Usuario autenticado. Buscando orden de "carrito"...');
+          try {
+            const response = await axios.get(endPoints.orders.getOrderByState, { 
+              params: { state: 'carrito' },
+              headers: {
+                'Authorization': `Bearer ${Cookie.get('token')}`
+              }
+            });
+            orderData = response.data;
+            console.log('✅ Carrito encontrado para usuario autenticado:', orderData);
+          } catch (error) {
+            console.log('ℹ️ El usuario autenticado no tiene una orden de tipo "carrito" activa.');
+            console.log('Error details:', error.response?.status, error.response?.data);
+          }
+
+        } else if (guestOrderId && !isAuthenticated) {
+          // --- FLUJO PARA INVITADO ---
+          console.log(`👤 Usuario invitado. Buscando orden de carrito #${guestOrderId}...`);
+          try {
+            const response = await axios.get(endPoints.orders.getGuestOrder(guestOrderId));
+            orderData = response.data;
+            console.log('✅ Carrito encontrado para invitado:', orderData);
+          } catch (error) {
+            console.log('❌ Error cargando carrito de invitado:', error.response?.status);
+          }
+        }
+
+        // Si se encontró una orden, procesarla
+        if (orderData && orderData.items && orderData.items.length > 0) {
+          console.log('📦 Procesando orden encontrada, items:', orderData.items.length);
+          
+          // Llenar el carrito en el Contexto Principal
+          getCart(orderData.items);
+          
+          // Actualizar el otro contexto si es necesario
+          if (orderState && orderState.setOrder) {
+            orderState.setOrder(orderData);
+          }
+
+          // Asegurar que el ID de la orden esté en localStorage
+          if (!window.localStorage.getItem('oi')) {
+            window.localStorage.setItem('oi', `${orderData.id}`);
+          }
+        } else {
+          console.log('🛒 No se encontró carrito o está vacío');
+        }
+
+        // Marcar como cargado independientemente del resultado
+        setCartLoaded(true);
+
+      } catch (error) {
+        console.error('❌ Error al intentar cargar los datos del carrito:', error);
+        
+        // Limpiar orden de invitado inválida
+        if (guestOrderId && !isAuthenticated && error.response && 
+            (error.response.status === 404 || error.response.status === 403)) {
+          console.log(`🧹 La orden de invitado #${guestOrderId} no es válida. Limpiando localStorage.`);
+          window.localStorage.removeItem('oi');
+        }
+        
+        setCartLoaded(true);
+      }
+    };
+
+    // Ejecutar la carga si:
+    // 1. El usuario está autenticado, O
+    // 2. Es invitado pero tiene un guestOrderId, O
+    // 3. No está autenticado y no tiene guestOrderId (para marcar como cargado)
+    console.log('🎯 Condiciones para cargar:', {
+      isAuthenticated,
+      hasGuestOrder: !!guestOrderId,
+      shouldLoad: isAuthenticated || guestOrderId || (!isAuthenticated && !guestOrderId)
+    });
+
+    if (isAuthenticated || guestOrderId || (!isAuthenticated && !guestOrderId)) {
+      fetchCartData();
+    }
+
+  }, [isAuthenticated, cartLoaded, state.cart.length, getCart, orderState]);
+
+  // Effect adicional para resetear cartLoaded cuando el usuario cambia de estado de autenticación
+  useEffect(() => {
+    console.log('🔄 Reseteando cartLoaded por cambio de autenticación');
+    setCartLoaded(false);
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -121,17 +237,12 @@ const Header = () => {
         <div className={styles['navbar-right']}>
           <ul>
             <li className={styles['navbar-selling-cart']} onClick={() => togglePayment()} aria-hidden="true">
-              <Image className={(styles['more-clickable-area'], styles.pointer)} src={sellingCart} alt="selling to recycler cart" />
+              <Image className={`${styles['more-clickable-area']} ${styles.pointer}`} src={sellingCart} alt="selling to recycler cart" />
               {state.metacircle.length > 0 ? <div>{state.metacircle.length}</div> : null}
             </li>
-            {/*             {
-              //Añadire logica para que esto aparezca cuando el usuario haya iniciado session
-              <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
-              <Image src={userIcon} width={50} height={40} alt="user icon menu" />
-            </li>
-            } */}
-            {isTokenValid() ? ( // Verifica si el token existe
-              <li className={(styles['more-clickeable-area'], styles['navbar-email'], styles.pointer)} onClick={() => toggleMenu()} aria-hidden="true">
+            
+            {isAuthenticated ? (
+              <li className={`${styles['more-clickeable-area']} ${styles['navbar-email']} ${styles.pointer}`} onClick={() => toggleMenu()} aria-hidden="true">
                 <Image src={userIcon} alt="user icon menu" />
               </li>
             ) : (
@@ -140,7 +251,7 @@ const Header = () => {
               </li>
             )}
             <li className={styles['navbar-shopping-cart']} onClick={() => toggleOrder()} aria-hidden="true">
-              <Image className={(styles['more-clickable-area'], styles.pointer)} src={shoppingCart} alt="shopping cart" />
+              <Image className={`${styles['more-clickable-area']} ${styles.pointer}`} src={shoppingCart} alt="shopping cart" />
               {state.cart.length > 0 ? <div>{state.cart.length}</div> : null}
             </li>
           </ul>

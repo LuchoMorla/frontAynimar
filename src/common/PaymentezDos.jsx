@@ -29,17 +29,34 @@ export default function PaymentezDos({ userEmail, uId }) {
     };
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (typeof PaymentGateway !== 'function') {
-        console.error('❌ PaymentGateway no está definido. Asegúrate de haber cargado el SDK.');
-        return;
-      }
-      paymentForm();
-    }, 200); // espera 200ms al DOM
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (typeof PaymentGateway !== 'function') {
+  //       console.error('❌ PaymentGateway no está definido. Asegúrate de haber cargado el SDK.');
+  //       return;
+  //     }
+  //     paymentForm();
+  //   }, 200);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
+  useEffect(() => {
+  // 🔴 No inicializar si los datos no están listos
+  if (!userEmail || userEmail === 'mail@vacio.com' || !uId || uId === 0) {
+    console.log('🟡 PaymentezDos: Datos de usuario no listos aún. Esperando...');
+    return;
+  }
+
+  const timer = setTimeout(() => {
+    if (typeof PaymentGateway !== 'function') {
+      console.error('❌ PaymentGateway no está definido. Asegúrate de haber cargado el SDK.');
+      return;
+    }
+    paymentForm();
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, [userEmail, uId]); // ✅ Ahora depende de los datos del usuario
 
   useEffect(() => {
     if (!saveProcessing) {

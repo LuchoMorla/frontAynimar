@@ -132,7 +132,7 @@ const Checkout = () => {
       );
 
       console.log(`✅ Carrito de invitado #${guestOrderId} asociado con éxito.`);
-      window.localStorage.removeItem('oi'); // Limpiar para evitar reintentos
+      // window.localStorage.removeItem('oi'); // Limpiar para evitar reintentos
       return true;
 
     } catch (error) {
@@ -318,9 +318,11 @@ const Checkout = () => {
                     <div className={styles['terminosyCondiciones-container']}>
                       <input type="checkbox" name="termsAndConds" id="termsAndConds" />
                       <p className={styles.termsAndCondsTextContent}>
-                        He leído y acepto los{' '}
-                        <Link href="/terminosYCondiciones" className={styles.termsAndCondLink}>
-                          términos y condiciones
+                        He leído y acepto los {' '}
+                        <Link href="/terminosYCondiciones">
+                          <span className={styles.termsAndCondLink}>
+                            términos y condiciones
+                          </span>
                         </Link>
                       </p>
                     </div>

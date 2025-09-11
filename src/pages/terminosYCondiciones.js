@@ -30,11 +30,11 @@ const terminosYCondiciones = () => {
 
         {/* Sección: Términos del Servicio */}
         <h1>TÉRMINOS DEL SERVICIO</h1>
-        <p>Este sitio web es operado por AYNIMAR S.A.S. En todo el sitio, los términos "nosotros", "nos" y "nuestro" se refieren a AYNIMAR S.A.S.</p>
+        <p>Este sitio web es operado por AYNIMAR S.A.S. En todo el sitio, los términos &quot;nosotros&quot;, &quot;nos&quot; y &quot;nuestro&quot; se refieren a AYNIMAR S.A.S.</p>
         <p>AYNIMAR S.A.S. ofrece este sitio web, que incluye toda la información, herramientas y servicios disponibles para ti.</p>
         <p>Nuestra tienda está alojada en Shopify Inc. quienes nos brindan la plataforma de comercio electrónico en línea que nos permite vender nuestros productos y servicios.</p>
         <p>
-          Al visitar nuestro sitio y / o comprar de nuestra oferta, participas de nuestro "Servicio" y aceptas estar sujeto a los términos políticas y condiciones, referenciados en este
+          Al visitar nuestro sitio y / o comprar de nuestra oferta, participas de nuestro &quot;Servicio&quot; y aceptas estar sujeto a los términos políticas y condiciones, referenciados en este
           mismo sitio. Los términos de servicio se aplican a todos los usuarios del sitio, que pueden ser navegadores, proveedores, clientes, comerciantes y / o contribuyentes de
           contenido.
         </p>
@@ -103,7 +103,7 @@ const terminosYCondiciones = () => {
         <h2>SECCIÓN 7 - HERRAMIENTAS OPCIONALES</h2>
         <p>
           Es posible que te proporcionemos acceso a herramientas de terceros sobre las que no supervisamos ni tenemos ningún control, en este caso es tu responsabilidad su correcto manejo,
-          en ese caso reconoces y aceptas que proporcionamos acceso "tal cual" y "según estén disponibles" sin garantías, representaciones o condiciones de ningún tipo y sin ningún
+          en ese caso reconoces y aceptas que proporcionamos acceso &quot;tal cual&quot; y &quot;según estén disponibles&quot; sin garantías, representaciones o condiciones de ningún tipo y sin ningún
           respaldo. No tendremos ninguna responsabilidad derivada o relacionada con su uso de herramientas opcionales de terceros.
         </p>
 

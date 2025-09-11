@@ -322,7 +322,7 @@ const Checkout = () => {
                         He leído y acepto los{' '} {/* El {' '} añade un espacio en blanco */}
                         <Link href="/terminosYCondiciones" passHref>
                           {/* El enlace ahora es una etiqueta <a> dentro del párrafo, que es lo correcto */}
-                          <a className={styles.termsAndCondLink}>
+                          <a href="/terminosYCondiciones" className={styles.termsAndCondLink}>
                             términos y condiciones
                           </a>
                         </Link>

@@ -4,18 +4,38 @@ import styles from '@styles/TerminosyCondiciones.module.scss';
 const terminosYCondiciones = () => {
   return (
     <>
-      {/* Contenedor principal para el título y el cuerpo de los términos */}
       <div className={styles.termAndCondsContainer}>
-        <h1>Términos del Servicio</h1>
+        {/* Sección: Quiénes Somos */}
+        <h1>¡Bienvenido a Aynimar.com!</h1>
+        <p>Todos nuestros productos están diseñados a tu medida y no se venden en cualquier tienda física ni digital.</p>
+        <p>Nuestro propósito es hacer que nuestros clientes se sientan únicos y exclusivos al usar nuestros productos.</p>
+        <p>Si alguna vez tienes alguna sugerencia sobre cómo podemos mejorar, ¡ponte en contacto! Nos encanta escuchar y aprender de ti, tanto de lo bueno y lo malo.</p>
+        <p>Nos reconforta crear en ti una confianza única sobre el mercado digital. ¡Así creceremos juntos!</p>
+        <p>Valoramos ese sentimiento y creemos que todos los clientes deben tener la mejor experiencia en el mercado digital a través de nosotros.</p>
 
-        <p>
-          Este sitio web es operado por AYNIMAR S.A.S. En todo el sitio, los términos {'nosotros'}, {'nos'} y {'nuestro'} se refieren a AYNIMAR S.A.S. AYNIMAR S.A.S. ofrece este
-          sitio web, que incluye toda la información, herramientas y servicios disponibles para ti.
-        </p>
+        <h2>¿Por qué comprar con nosotros?</h2>
+        <ul>
+          <li>Colecciones únicas y de moda</li>
+          <li>Procesamiento de pedidos seguro y protegido</li>
+          <li>Excelente servicio al cliente</li>
+          <li>Promociones y descuentos especiales continuos</li>
+          <li>Manejamos una plataforma ágil y sencilla de utilizar</li>
+          <li>Fomentamos la confianza en nuestros clientes sobre el mercado digital</li>
+          <li>Manejamos una gran variedad del país</li>
+          <li>Cobertura de envíos a todo el país</li>
+          <li>Ampliamos el conocimiento sobre las compras en internet</li>
+        </ul>
+
+        <hr />
+
+        {/* Sección: Términos del Servicio */}
+        <h1>TÉRMINOS DEL SERVICIO</h1>
+        <p>Este sitio web es operado por AYNIMAR S.A.S. En todo el sitio, los términos "nosotros", "nos" y "nuestro" se refieren a AYNIMAR S.A.S.</p>
+        <p>AYNIMAR S.A.S. ofrece este sitio web, que incluye toda la información, herramientas y servicios disponibles para ti.</p>
         <p>Nuestra tienda está alojada en Shopify Inc. quienes nos brindan la plataforma de comercio electrónico en línea que nos permite vender nuestros productos y servicios.</p>
         <p>
-          Al visitar nuestro sitio y / o comprar de nuestra oferta, participas de nuestro {'Servicio'} y aceptas estar sujeto a los términos políticas y condiciones, referenciados en
-          este mismo sitio. Los términos de servicio se aplican a todos los usuarios del sitio, que pueden ser navegadores, proveedores, clientes, comerciantes y / o contribuyentes de
+          Al visitar nuestro sitio y / o comprar de nuestra oferta, participas de nuestro "Servicio" y aceptas estar sujeto a los términos políticas y condiciones, referenciados en este
+          mismo sitio. Los términos de servicio se aplican a todos los usuarios del sitio, que pueden ser navegadores, proveedores, clientes, comerciantes y / o contribuyentes de
           contenido.
         </p>
         <p>Si no estás de acuerdo con todos los términos y condiciones de este acuerdo, no debes acceder al sitio web ni utilizar ningún servicio.</p>
@@ -49,12 +69,15 @@ const terminosYCondiciones = () => {
         <p>Los títulos utilizados en este acuerdo se incluyen solo por conveniencia y no limitarán ni afectarán los Términos.</p>
 
         <h2>SECCIÓN 3 - EXACTITUD, INTEGRIDAD Y PUNTUALIDAD DE LA INFORMACIÓN</h2>
-        <p>La información suministrada en nuestro sitio es de carácter general y podría no estar actualizada en el momento, es tu responsabilidad consultar otras fuentes para tomar tus decisiones.</p>
+        <p>
+          La información suministrada en nuestro sitio es de carácter general y podría no estar actualizada en el momento, es tu responsabilidad consultar otras fuentes para tomar tus
+          decisiones.
+        </p>
 
         <h2>SECCIÓN 4 - MODIFICACIONES AL SERVICIO Y PRECIOS</h2>
         <p>
-          Los precios de nuestros productos pueden variar según las variables del mercado, por lo tanto nos reservamos el derecho de modificar o interrumpir el Servicio en cualquier
-          momento sin previo aviso.
+          Los precios de nuestros productos pueden variar según las variables del mercado, por lo tanto nos reservamos el derecho de modificar o interrumpir el Servicio en cualquier momento
+          sin previo aviso.
         </p>
 
         <h2>SECCIÓN 5 - PRODUCTOS O SERVICIOS</h2>
@@ -80,22 +103,22 @@ const terminosYCondiciones = () => {
         <h2>SECCIÓN 7 - HERRAMIENTAS OPCIONALES</h2>
         <p>
           Es posible que te proporcionemos acceso a herramientas de terceros sobre las que no supervisamos ni tenemos ningún control, en este caso es tu responsabilidad su correcto manejo,
-          en ese caso reconoces y aceptas que proporcionamos acceso {'tal cual'} y {'según estén disponibles'} sin garantías, representaciones o condiciones de ningún tipo y sin ningún
+          en ese caso reconoces y aceptas que proporcionamos acceso "tal cual" y "según estén disponibles" sin garantías, representaciones o condiciones de ningún tipo y sin ningún
           respaldo. No tendremos ninguna responsabilidad derivada o relacionada con su uso de herramientas opcionales de terceros.
         </p>
 
         <h2>SECCIÓN 8 - ENLACES DE TERCEROS</h2>
         <p>
-          Los enlaces en nuestro sitio pueden dirigirlo a sitios web de terceros que no están afiliados a nosotros, no somos responsables de examinar o evaluar el contenido o la precisión y
-          no garantizamos cualquier material, producto o servicio externo, ni ningún daño o perjuicio relacionado con la compra o el uso de bienes, servicios, recursos, contenido o
+          Los enlaces en nuestro sitio pueden dirigirlo a sitios web de terceros que no están afiliados a nosotros, no somos responsables de examinar o evaluar el contenido o la precisión
+          y no garantizamos cualquier material, producto o servicio externo, ni ningún daño o perjuicio relacionado con la compra o el uso de bienes, servicios, recursos, contenido o
           cualquier otra transacción realizada en relación con sitios web de terceros.
         </p>
 
         <h2>SECCIÓN 9 - COMENTARIOS, OPINIONES Y OTROS ENVÍOS DEL USUARIO</h2>
         <p>
-          Si, a nuestra solicitud o no, envías presentaciones específicas (por ejemplo, participaciones en un concurso), ideas creativas, sugerencias, propuestas, planes u otros materiales,
-          ya sea en línea, por correo electrónico, por correo postal o de otro modo, aceptas que podemos, en cualquier momento, sin restricciones, editar, copiar, publicar, distribuir,
-          traducir y utilizar en cualquier medio cualquier comentario que nos envíes.
+          Si, a nuestra solicitud o no, envías presentaciones específicas (por ejemplo, participaciones en un concurso), ideas creativas, sugerencias, propuestas, planes u otros
+          materiales, ya sea en línea, por correo electrónico, por correo postal o de otro modo, aceptas que podemos, en cualquier momento, sin restricciones, editar, copiar, publicar,
+          distribuir, traducir y utilizar en cualquier medio cualquier comentario que nos envíes.
         </p>
         <p>No tenemos ni tendremos ninguna obligación de mantener la confidencialidad de los comentarios; pagar una compensación por cualquier comentario; o responder a cualquier comentario.</p>
         <p>
@@ -193,7 +216,7 @@ const terminosYCondiciones = () => {
         </p>
 
         <h2>SECCIÓN 17 - ACUERDO COMPLETO</h2>
-        <p>El hecho de que no ejerzcamos o hagamos cumplir cualquier derecho o disposición de los Términos de servicio no constituirá una renuncia a dicho derecho o disposición.</p>
+        <p>El hecho de que no ejerzamos o hagamos cumplir cualquier derecho o disposición de los Términos de servicio no constituirá una renuncia a dicho derecho o disposición.</p>
         <p>
           Los Términos de servicio y cualquier política o regla operativa publicada en nuestro sitio o con respecto al Servicio, constituye el acuerdo completo y el entendimiento entre el
           usuario y AYNIMAR S.A.S., y rigen el uso del Servicio, reemplazando cualquier acuerdo, comunicaciones y propuestas anteriores sean de forma oral o escrita.
@@ -208,6 +231,146 @@ const terminosYCondiciones = () => {
 
         <h2>SECCIÓN 20 - INFORMACIÓN DE CONTACTO</h2>
         <p>Las preguntas sobre los Términos de servicio deben enviarse a baynimar@gmail.com</p>
+
+        <hr />
+
+        {/* Sección: Política de Devolución */}
+        <h1>POLÍTICA DE DEVOLUCIÓN</h1>
+        <h2>Política de devoluciones, reembolso y reemplazo:</h2>
+        <p>
+          Si recibiste un artículo que está dañado o defectuoso, con gusto lo reemplazaremos sin costo adicional para ti. Por favor contáctanos dentro de las 48 horas posteriores a la
+          recepción del mismo.
+        </p>
+        <p>Solo podemos ofrecerte reemplazos sin costo adicional si cumple con los siguientes criterios: Los artículos están defectuosos, dañados, rotos o sucios a la llegada.</p>
+        <p>AYNIMAR S.A.S. no es responsable de los paquetes que se pierden en tránsito.</p>
+        <p>No aceptamos devoluciones o reembolsos si el cliente cambia de opinión después de recibir su(s) pedido(s).</p>
+        <p>
+          <b>Nota:</b> AYNIMAR S.A.S. no se hace responsable de ningún paquete perdido o mal enviado. Asegúrese de que toda la información que ha proporcionado sea correcta antes de
+          enviar su pedido para evitar pérdidas u otros contratiempos. Se recomienda que ingresen cuidadosamente las direcciones correctas, de lo contrario, el paquete no se entregará.
+        </p>
+        <p>Si cree que ha introducido una dirección incorrecta, debe ponerse en contacto con nosotros inmediatamente para corregir el error.</p>
+        <p>Si tiene otras inquietudes, comuníquese con nuestro Servicio de Atención al Cliente por correo electrónico: baynimar@gmail.com.</p>
+        
+        <h3>DEVOLVER A LOS PAQUETES DEL REMITENTE:</h3>
+        <p>
+          AYNIMAR S.A.S. no se hace responsable de los paquetes que se devuelven al remitente, dicha responsabilidad es asumida por la empresa de transporte. Una vez que el artículo se
+          recibe en el almacén, podemos volver a empaquetarlo, volver a etiquetarlo y volver a enviarlo; sin embargo, debe comprender que hacerlo requiere un costo adicional.
+        </p>
+        <p>
+          El costo de la devolución, es el equivalente al envío que realizó el remitente al destinario más el valor del envío del destinario (cliente) al remitente (vendedor). La tarifa
+          oficial de Servientrega por flete de paquetería con un peso igual o menos a un (1) kilogramo es de quince mil pesos ($15.000) lo que implicaría un costo total de devolución de
+          treinta mil ($30.000).
+        </p>
+
+        <h2>Política de cancelación ¿Puedo cancelar mi (s) pedido (s)?</h2>
+        <p>
+          Sí. Las cancelaciones deben realizarse dentro de las 24 horas posteriores a la realización del pedido. Envíanos un correo electrónico o un mensaje a nuestras líneas de atención en
+          Facebook en un plazo de 24 horas y haznos saber el motivo por el que deseas cancelar tu pedido. No aceptamos la cancelación de pedidos fuera del período de 24 horas.
+        </p>
+        <p>
+          Todos los reembolsos se procesarán en un plazo de 24 a 48 horas antes de que el fondo se refleje en la cuenta bancaria del cliente. No devuelvas tu compra al fabricante.
+          Envíanos un correo electrónico indicando tu inquietud y adjunta una imagen de los artículos que muestren la etiqueta de tamaño y su empaque original dentro de las 48 horas
+          posteriores a la recepción del pedido para obtener un reemplazo o reembolso. Nota: Nuestro equipo inspeccionará / verificará la (s) foto (s) antes de emitir un reemplazo.
+        </p>
+        <p>AYNIMAR S.A.S. se reserva el derecho de rechazar cualquier reemplazo y reembolso si no cumple con los criterios anteriores.</p>
+
+        <h3>Reembolsos atrasados o faltantes (si corresponde)</h3>
+        <p>
+          Si aún no has recibido un reembolso, revisa tu cuenta bancaria nuevamente, puede tomar algún tiempo antes de que tu reembolso se publique oficialmente. Si has hecho todo esto y
+          aún no has recibido tu reembolso, comunícate con nosotros enviando un boleto en nuestro sitio web www.aynimar.com
+        </p>
+        <p>
+          Es muy raro que nuestros productos estén dañados o defectuosos. El departamento de control de calidad de AYNIMAR S.A.S. inspeccionará los productos devueltos; si el daño es
+          consecuencia de un defecto de fabricación o bien si el producto no cumple con las especificaciones de fábrica, se procederá a realizar el respectivo proceso de cambio.
+        </p>
+        <p>En cuanto a los productos en los que se debe seleccionar una talla, habrán 2 situaciones:</p>
+        <ol>
+          <li>El cliente elige la talla y la tienda envía la talla correcta que el cliente pidió. Si la persona desea cambiar el tallaje, debe asumir el respectivo costo de la devolución.</li>
+          <li>En caso de que la tienda haya enviado la talla equivocada al que el cliente solicitó, asumiríamos el costo del flete de devolución.</li>
+        </ol>
+
+        <h2>¿CÓMO FUNCIONA O APLICA?</h2>
+        <ul>
+          <li>Se debe entregar el producto con todos sus accesorios y empaques originales.</li>
+          <li>Debes presentar la factura de compra por medio virtual.</li>
+        </ul>
+        <p>
+          Después de comunicar tu inconformidad y aclarar qué quiere hacer el cambio de tu compra, DISPONE DE TRES (3) DÍAS HÁBILES para devolver el producto. Si el producto no se ha
+          devuelto en este plazo no habrá lugar para ejercer el derecho a cambio.
+        </p>
+        <p>
+          AYNIMAR S.A.S. dispondrá de un máximo de quince (15) días hábiles después de haber recibido el producto para realizar el proceso de garantía. En caso de que el proceso demore más de
+          lo antes mencionado se le notificará al cliente las razones de esto.
+        </p>
+        <p>
+          Los costos de transporte y los demás que conlleve el proceso de cambio serán asumidos en su totalidad por la empresa AYNIMAR S.A.S. siempre y cuando el departamento de control y
+          calidad de AYNIMAR S.A.S. haya determinado que el daño en los productos devueltos sea consecuencia de un defecto de fabricación y no por un mal uso o negligencia (exposición a
+          productos químicos, sustancias cáusticas, fuente de llama abierta, mucho calor, etc.).
+        </p>
+        <p>
+          Los productos no tienen cambio por cuestiones de higiene y sanitarias estipuladas en la ley colombiana. Por tu seguridad y la de todos nuestros clientes, no realizamos cambio de
+          productos de aseo o uso personal, tales como: afeitadoras, cortadoras de pelo, entre otros. Recuerde que en caso de tener dudas sobre el uso correcto de estos productos puede
+          hacer uso de videotutoriales explicativos o consultarnos a nosotros directamente; que con gusto le brindaremos toda la asesoría pertinente.
+        </p>
+        <p>Para consultar más sobre cuáles de nuestros productos tiene devolución o cuáles no, junto con el tiempo que estipulamos como garantía:</p>
+
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Categorías</th>
+              <th>Productos</th>
+              <th>¿Tiene devolución?</th>
+              <th>Garantía (tiempo)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Artículos animales o mascotas</td>
+              <td>- Accesorios<br />- Artículos<br />- Juguetes</td>
+              <td>Tienen devolución siempre que estén sin usar</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Productos para adultos (sexuales)</td>
+              <td>Todos los productos de esta categoría</td>
+              <td>No tienen devolución</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Bebés</td>
+              <td>Todos los productos de esta categoría</td>
+              <td>Tienen devolución siempre que estén en su paquete original y sin usar</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Hogar y muebles</td>
+              <td>- Cuidado del hogar</td>
+              <td>Tienen devolución siempre que estén en su paquete original y sin usar</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Ropa y accesorios</td>
+              <td>Todos los productos de esta categoría</td>
+              <td>Tienen devolución siempre que estén sin usar y con su etiqueta original</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Herramientas</td>
+              <td>Todos los productos de esta categoría</td>
+              <td>Tienen devolución siempre que estén sin usar</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Belleza y cuidado personal</td>
+              <td>
+                - Depilación<br />- Higiene personal<br />- Maquillaje<br />- Perfumes y fragancias<br />- Productos de barbería<br />- Tratamientos de belleza<br />- Ropa interior.
+                <br />- Artículos de peluquería<br />- Cuidado de la piel<br />- Cuidado del cabello<br />- Electrodomésticos de belleza<br />- Manicure y pedicure
+              </td>
+              <td>No tienen devolución a menos que el producto esté en su empaque original y sin usar.</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </>
   );

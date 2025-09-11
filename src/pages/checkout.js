@@ -306,14 +306,27 @@ const Checkout = () => {
               <div>
                 {isProfileComplete ? (
                   <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
-                    <div className={styles['terminosyCondiciones-container']}>
+                    {/* <div className={styles['terminosyCondiciones-container']}>
                       <input type="checkbox" name="termsAndConds" id="termsAndConds" />
                       <p className={styles.termsAndCondsTextContent}>
-                        he leído y acepto los
+                        he leído y acepto los{' '}
                       </p>
                       <Link href="/terminosYCondiciones" className={styles.termsAndCondLink} passHref>
                         <p>términos y condiciones</p>
                       </Link>
+                    </div> */}
+                    <div className={styles['terminosyCondiciones-container']}>
+                      <input type="checkbox" name="termsAndConds" id="termsAndConds" />
+                      {/* Usamos un solo párrafo para toda la frase */}
+                      <p className={styles.termsAndCondsTextContent}>
+                        He leído y acepto los{' '} {/* El {' '} añade un espacio en blanco */}
+                        <Link href="/terminosYCondiciones" passHref>
+                          {/* El enlace ahora es una etiqueta <a> dentro del párrafo, que es lo correcto */}
+                          <a className={styles.termsAndCondLink}>
+                            términos y condiciones
+                          </a>
+                        </Link>
+                      </p>
                     </div>
                     <h3 className={styles.pagoTitle}>Proceder a pagar</h3>
                     <button
@@ -347,6 +360,7 @@ const Checkout = () => {
       </div>
 
       <Modal open={open} onClose={() => setOpen(false)}>
+        <div className={styles.modalContentWrapper}>
         <h1 className={styles.modaltitle}>Billetera de tarjetas de credito</h1>
         <Tarjetas userEmail={email} uId={uId} />
         {/* <PaymentezDos userEmail={email} uId={uId} /> */}
@@ -355,6 +369,7 @@ const Checkout = () => {
           userEmail={email} 
           uId={uId} 
         />
+        </div>
       </Modal>
     </>
   );

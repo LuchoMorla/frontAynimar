@@ -319,12 +319,8 @@ const Checkout = () => {
                       <input type="checkbox" name="termsAndConds" id="termsAndConds" />
                       <p className={styles.termsAndCondsTextContent}>
                         He leído y acepto los{' '}
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <Link href="/terminosYCondiciones" passHref>
-                          {/* La etiqueta <a> ya NO tiene href, obedeciendo a Next.js */}
-                          <a className={styles.termsAndCondLink}>
-                            términos y condiciones
-                          </a>
+                        <Link href="/terminosYCondiciones" className={styles.termsAndCondLink}>
+                          términos y condiciones
                         </Link>
                       </p>
                     </div>

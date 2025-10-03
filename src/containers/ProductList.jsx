@@ -79,13 +79,13 @@ const ProductList = () => {
 			{/* Panel de filtros mejorado */}
 			<div style={{
 				// background: '#ffffff',
-				padding: '24px',
-				marginBottom: '24px',
+				padding: '14px',
+				// marginBottom: '24px',
 				borderRadius: '12px',
 				border: '1px solid #e8eaed',
 				// boxShadow: '0 1px 6px 0 rgba(32,33,36,.28)',
 				maxWidth: '800px',
-				margin: '0 auto 24px auto'
+				margin: '0 auto 0 auto'
 			}}>
 				
 				{/* Campo de búsqueda principal estilo Google */}
@@ -143,7 +143,7 @@ const ProductList = () => {
 				</div>
 				
 				{/* Botón para mostrar/ocultar filtros de precio */}
-				<div style={{ textAlign: 'center', marginBottom: '16px' }}>
+				<div style={{ textAlign: 'center' }}>
 					<button
 						onClick={() => setShowPriceFilters(!showPriceFilters)}
 						style={{

@@ -1,0 +1,107 @@
+@import 'vars';
+
+.container {
+  font-family: 'Baloo 2', sans-serif;
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.prompt {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $--black;
+  margin: 0 0 10px;
+}
+
+.stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.star {
+  font-size: 1.8rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.12s ease, color 0.12s ease;
+
+  &:hover:not(:disabled) {
+    transform: scale(1.15);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.active {
+  color: #f59e0b;
+}
+
+.inactive {
+  color: #d1d5db;
+}
+
+.reviewForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reviewInput {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.88rem;
+  color: $--black;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 12px;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $--morado-centro;
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+.submitBtn {
+  font-family: 'Baloo 2', sans-serif;
+  align-self: flex-start;
+  background: $--morado-centro;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 22px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease;
+
+  &:hover {
+    background: darken($--morado-centro, 8%);
+  }
+}
+
+.successMessage {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #15803d;
+  padding: 14px 18px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

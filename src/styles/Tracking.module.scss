@@ -1,0 +1,308 @@
+@import 'vars';
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, $--very-very-light-pink 0%, #f8fff5 100%);
+  font-family: 'Baloo 2', sans-serif;
+  padding: 0 0 48px;
+}
+
+// ── Header ──────────────────────────────────────────────────────────────────
+
+.header {
+  background: $--morado-centro;
+  color: white;
+  padding: 16px 24px;
+  text-align: center;
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.78rem;
+  opacity: 0.8;
+  margin: 2px 0 0;
+}
+
+// ── Card container ───────────────────────────────────────────────────────────
+
+.card {
+  max-width: 540px;
+  margin: 28px auto 0;
+  padding: 28px 24px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  mx: 16px;
+}
+
+.orderMeta {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.orderId {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: $--morado-centro;
+  margin: 0 0 4px;
+}
+
+.orderDate {
+  font-size: 0.82rem;
+  color: $--plomo-cafe;
+  margin: 0;
+}
+
+.customerGreeting {
+  font-size: 0.9rem;
+  color: $--gray;
+  margin: 6px 0 0;
+  font-weight: 600;
+}
+
+// ── Vertical Stepper ─────────────────────────────────────────────────────────
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 0 28px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  position: relative;
+}
+
+.pending {} // placeholder so CSS Modules exports styles.pending (avoids "undefined" in className)
+
+// Vertical connector line between steps
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  width: 2px;
+  height: calc(100% - 8px);
+  background: #e5e7eb;
+  z-index: 0;
+}
+
+.step.done::after  { background: $--app-green; }
+.step.active::after { background: linear-gradient(to bottom, $--morado-centro, #e5e7eb); }
+
+.stepBubble {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  position: relative;
+  z-index: 1;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.step.done .stepBubble {
+  background: $--app-green;
+  border-color: $--app-green;
+}
+
+.step.active .stepBubble {
+  background: $--morado-centro;
+  border-color: $--morado-centro;
+  box-shadow: 0 0 0 4px rgba(130, 66, 123, 0.15);
+}
+
+.stepContent {
+  padding: 8px 0 24px;
+  flex: 1;
+}
+
+.stepLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #9ca3af;
+  margin: 0 0 2px;
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+.step.done .stepLabel  { color: #15803d; }
+.step.active .stepLabel { color: $--morado-centro; }
+
+.stepDesc {
+  font-size: 0.78rem;
+  color: $--plomo-cafe;
+  margin: 0;
+}
+
+.step.active .stepDesc { color: $--gray; }
+
+// ── Tracking info box ────────────────────────────────────────────────────────
+
+.trackingBox {
+  background: linear-gradient(135deg, #f0fdf4 0%, $--very-very-light-pink 100%);
+  border: 1.5px solid $--app-green;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.trackingTitle {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #15803d;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.trackingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.trackingKey {
+  font-size: 0.82rem;
+  color: $--gray;
+  font-weight: 600;
+}
+
+.trackingValue {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: $--black;
+  font-family: monospace;
+  letter-spacing: 0.04em;
+}
+
+.copyBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 9px 0;
+  border-radius: 8px;
+  border: 1.5px solid $--morado-centro;
+  background: white;
+  color: $--morado-centro;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  justify-content: center;
+  transition: background 0.18s ease;
+
+  &:hover { background: $--very-very-light-pink; }
+  &.copied { background: $--app-green; color: white; border-color: $--app-green; }
+}
+
+// ── Cancelled / error state ──────────────────────────────────────────────────
+
+.alertBox {
+  background: #fff5f5;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 0.88rem;
+  color: #b91c1c;
+  font-weight: 600;
+  text-align: center;
+}
+
+// ── CTA buttons ──────────────────────────────────────────────────────────────
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: none;
+  background: $--morado-centro;
+  color: white;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover { background: darken($--morado-centro, 8%); }
+}
+
+.btnSecondary {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 1.5px solid $--morado-centro;
+  background: white;
+  color: $--morado-centro;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s ease;
+
+  &:hover { background: $--very-very-light-pink; }
+}
+
+// ── Error / 404 ──────────────────────────────────────────────────────────────
+
+.notFound {
+  max-width: 400px;
+  margin: 60px auto;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.notFoundIcon { font-size: 3rem; margin-bottom: 12px; }
+
+.notFoundTitle {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: $--morado-centro;
+  margin: 0 0 8px;
+}
+
+.notFoundText {
+  font-size: 0.9rem;
+  color: $--plomo-cafe;
+  margin: 0 0 20px;
+}
+
+// ── Responsive ───────────────────────────────────────────────────────────────
+
+@media (max-width: 560px) {
+  .card { margin: 16px 12px 0; padding: 20px 16px; }
+}

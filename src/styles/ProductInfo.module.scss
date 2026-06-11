@@ -1,19 +1,26 @@
 @import 'vars';
 
+/* ── Layout (original, extended with flex-start for gallery alignment) ── */
 .stand_container {
 	margin: 104px 34px 24px 34px;
 	justify-content: center;
 	display: flex;
-    	align-items: center;
-    	flex-flow: wrap;
+    align-items: flex-start;
+    flex-flow: wrap;
+    gap: 16px;
 }
 .ProductInfo {
-	margin: 24px 24px 0 72px;
+	margin: 24px 24px 0 24px;
+	max-width: 480px;
+	flex: 1;
+	min-width: 280px;
 }
 .image {
 	margin: 10px;
 	border-radius: 8px;
 }
+
+/* ── Legacy positional selectors (preserved for FormProductG) ── */
 .ProductInfo p:nth-child(1) {
 	font-family: 'Baloo 2';
 	font-weight: bold;
@@ -39,43 +46,112 @@
 	font-family: 'Baloo 2';
 	color: $--black;
 }
+
+/* ── Button (original) ── */
 .add-to-cart-button {
 	font-family: 'Baloo 2';
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
-	margin: 24px 50%;
+	margin: 24px 0;
 	border-radius: 25px;
 	height: 45px;
-	width: 125px;
+	width: auto;
+	min-width: 140px;
+	padding: 0 20px;
 	background-color: $--morado-centro !important;
 	color: white;
+	gap: 8px;
 }
 .add-to-cart-button:hover {
-    background: $--app-green;
+    background: $--app-green !important;
 	font-family: 'Baloo 2';
 }
-
 .add-to-cart-button:active {
 	font-family: 'Baloo 2';
-    background: $--soft-green;
+    background: $--soft-green !important;
     color: $--black;
 }
+.add-to-cart-button:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
 
+/* ── Named classes (original) ── */
 .description {
 	font-family: 'Baloo 2';
 	font-size: 1.3rem !important;
 	color: $--black;
 }
-
 .price {
 	font-family: 'Baloo 2';
 	font-size: 1.5rem !important;
 	color: $--morado-centro;
 }
+
+/* ── New classes for FormProduct extended features ── */
+.productName {
+	font-family: 'Baloo 2', sans-serif;
+	font-weight: 600;
+	color: $--black;
+	font-size: $--md;
+	margin: 0 0 4px;
+}
+.stockBadge {
+	font-family: 'Baloo 2', sans-serif;
+	font-size: $--sm;
+	color: #15803d;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 4px 0 8px;
+}
+.stockDot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #22c55e;
+	flex-shrink: 0;
+}
+.outOfStock {
+	font-family: 'Baloo 2', sans-serif;
+	font-size: $--sm;
+	font-weight: 700;
+	color: #dc2626;
+	margin: 4px 0 8px;
+}
+.amountLabel {
+	font-family: 'Baloo 2', sans-serif;
+	font-size: $--sm;
+	color: $--black;
+	display: block;
+	margin-bottom: 4px;
+}
+.amountInput {
+	font-family: 'Baloo 2', sans-serif;
+	width: 72px;
+	padding: 6px 10px;
+	border: 1.5px solid #d1d5db;
+	border-radius: 8px;
+	font-size: $--md;
+	margin-bottom: 16px;
+	display: block;
+	transition: border-color 0.2s ease;
+	&:focus {
+		outline: none;
+		border-color: $--morado-centro;
+	}
+}
+
+/* ── Responsive ── */
 @media (max-width: 640px) {
 	.stand_container {
 		display: block;
 		margin: 104px -5% 24px 5%;
+	}
+	.ProductInfo {
+		max-width: 100%;
+		margin-left: 0;
 	}
 }

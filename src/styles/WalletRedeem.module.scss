@@ -1,0 +1,295 @@
+@import 'vars';
+
+/* ══════════════════════════════════════════
+   WalletRedeem panel
+══════════════════════════════════════════ */
+
+.panel {
+  background: linear-gradient(135deg, #f0fdf4 0%, #f0ebfd 100%);
+  border: 1.5px solid rgba($--app-green, 0.55);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin: 20px 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  font-family: 'Baloo 2', sans-serif;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.leafIcon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $--morado-centro;
+  margin: 0;
+}
+
+/* ── Balance badge ── */
+.balanceRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.balanceLabel {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.9rem;
+  color: $--gray;
+}
+
+.balanceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $--app-green;
+  color: $--black;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-weight: 700;
+}
+
+.balanceNum {
+  font-size: 1.15rem;
+}
+
+.balanceUnit {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.balanceLoading {
+  font-size: 0.85rem;
+  color: $--plomo-cafe;
+  font-style: italic;
+}
+
+.balanceError {
+  font-size: 0.8rem;
+  color: #b91c1c;
+}
+
+/* ── Selector ── */
+.selectorLabel {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.88rem;
+  color: $--gray;
+  margin: 0 0 10px;
+}
+
+.maxHint {
+  color: $--plomo-cafe;
+  font-size: 0.82rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.stepBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid $--morado-centro;
+  background: white;
+  color: $--morado-centro;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+
+  &:hover:not(:disabled) {
+    background: $--morado-centro;
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.creditInput {
+  font-family: 'Baloo 2', sans-serif;
+  width: 72px;
+  text-align: center;
+  padding: 6px 8px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: $--black;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $--morado-centro;
+  }
+
+  /* hide native number arrows */
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.clearBtn {
+  font-family: 'Baloo 2', sans-serif;
+  background: none;
+  border: none;
+  color: $--plomo-cafe;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  margin-bottom: 12px;
+
+  &:hover {
+    color: #b91c1c;
+  }
+}
+
+.noCreditsNote {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.85rem;
+  color: $--plomo-cafe;
+  font-style: italic;
+  margin: 4px 0 12px;
+}
+
+/* ── Totals breakdown ── */
+.breakdown {
+  border-top: 1px solid rgba($--app-green, 0.4);
+  margin-top: 14px;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.breakdownRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.9rem;
+  color: $--gray;
+}
+
+.discount {
+  color: #15803d;
+  font-weight: 600;
+}
+
+.totalRow {
+  border-top: 1px solid rgba($--morado-centro, 0.25);
+  margin-top: 4px;
+  padding-top: 8px;
+  font-weight: 700;
+  color: $--black;
+  font-size: 1rem;
+}
+
+.totalAmount {
+  font-size: 1.2rem;
+  color: $--morado-centro;
+  font-weight: 800;
+}
+
+/* ══════════════════════════════════════════
+   CheckoutTrustBadges  (shares this file)
+══════════════════════════════════════════ */
+
+.trustSection {
+  margin: 20px 0 16px;
+  font-family: 'Baloo 2', sans-serif;
+}
+
+.trustTitle {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: $--plomo-cafe;
+  margin: 0 0 12px;
+}
+
+.badgeGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 14px;
+  flex: 1 1 140px;
+  min-width: 130px;
+  max-width: 200px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.09);
+  }
+}
+
+.badgeEmoji {
+  font-size: 1.3rem;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.badgeTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $--black;
+  line-height: 1.2;
+}
+
+.badgeDesc {
+  font-size: 0.72rem;
+  color: $--plomo-cafe;
+  line-height: 1.3;
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 16px;
+    margin: 14px 0;
+  }
+
+  .badgeGrid {
+    gap: 8px;
+  }
+
+  .badge {
+    flex: 1 1 calc(50% - 8px);
+    max-width: none;
+  }
+}

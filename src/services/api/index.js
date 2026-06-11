@@ -55,7 +55,8 @@ const endPoints = {
      deleteItemGuest: (id) => `${API}/api/${VERSION}/orders/item-guest/${id}`, // <-- NUEVA
     editItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
     deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
-    updateOrder: (id) => `${API}/api/${VERSION}/orders/${id}`
+    updateOrder: (id) => `${API}/api/${VERSION}/orders/${id}`,
+    checkout: `${API}/api/${VERSION}/orders/checkout`,
   },
   transaction: {
     debits: `${API}/api/${VERSION}/debits/`,
@@ -96,7 +97,23 @@ const endPoints = {
     contact: `${API}/api/${VERSION}/mail/contact`,
     vendingContact: `${API}/api/${VERSION}/mail/vendingContact`,
     vendingProspectContact: `${API}/api/${VERSION}/mail/vendingProspectContact`,
-  }
+  },
+  wallet: {
+    myBalance: `${API}/api/${VERSION}/wallets/my-wallet`,
+  },
+  admin: {
+    allOrders: `${API}/api/${VERSION}/orders`,
+    updateOrder: (id) => `${API}/api/${VERSION}/orders/${id}`,
+    productsByProvider: (provider) => `${API}/api/${VERSION}/products?sourceProvider=${provider}&limit=200`,
+    catalogPreview: (provider, page = 1, limit = 20, keyword = '') => {
+      const base = `${API}/api/${VERSION}/import/catalog?provider=${provider}&page=${page}&limit=${limit}`;
+      return keyword ? `${base}&keyword=${encodeURIComponent(keyword)}` : base;
+    },
+    importProduct: `${API}/api/${VERSION}/import/product`,
+    importDropi: `${API}/api/${VERSION}/import/dropi`,
+    importEffi: `${API}/api/${VERSION}/import/effi`,
+    syncAllStock: `${API}/api/${VERSION}/import/sync-all`,
+  },
 };
 
 export default endPoints;

@@ -19,6 +19,8 @@ import styles from '@styles/Checkout.module.scss';
 import { toast } from 'react-toastify';
 import { useAuth } from '@hooks/useAuth';
 import { addCustomer } from '@services/api/entities/customers';
+import WalletRedeem from '@components/WalletRedeem';
+import CheckoutTrustBadges from '@components/CheckoutTrustBadges';
 
 const Checkout = () => {
   const router = useRouter();
@@ -31,6 +33,9 @@ const Checkout = () => {
   const refValidation = useRef(null);
   const [uId, setuId] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
+
+  // Green Wallet: integer credits the user wants to redeem
+  const [creditsToApply, setCreditsToApply] = useState(0);
 
   // --- Función para obtener el token ---
   const getCookieUser = () => {
@@ -178,7 +183,7 @@ const Checkout = () => {
       }
     } catch (error) {
       console.error("Error en el registro del invitado:", error);
-       
+
       if (error.response?.status === 409) {
         toast.error('El correo electrónico ya está registrado. Por favor, inicia sesión.');
         router.push('/login');
@@ -189,7 +194,7 @@ const Checkout = () => {
     }
   };
 
-  // --- Manejo de pago ---
+  // --- Manejo de pago (extendido con Green Wallet) ---
   const openModalHandler = async (event) => {
     event.preventDefault();
 
@@ -215,6 +220,45 @@ const Checkout = () => {
       return;
     }
 
+    const savedOrderId = window.localStorage.getItem('oi');
+
+    // ── Green Wallet: call checkout endpoint if user is applying credits ──
+    if (creditsToApply > 0 && savedOrderId) {
+      try {
+        toast.info('Aplicando Huellas de Reciclaje a tu pedido...');
+        const token = Cookie.get('token');
+        const { data: checkoutResult } = await axios.post(
+          endPoints.orders.checkout,
+          { orderId: parseInt(savedOrderId, 10), creditsToApply },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        console.log('[Checkout] Credits applied:', checkoutResult);
+
+        // Credits covered the full amount — order is complete
+        if (checkoutResult.amountToPay === 0) {
+          window.localStorage.removeItem('oi');
+          await clearCart();
+          toast.success(
+            `¡Pedido pagado con ${checkoutResult.creditsApplied} Huellas de Reciclaje! 🌿`
+          );
+          router.push('/mi_cuenta/orders');
+          return;
+        }
+
+        // Credits partially reduce the amount — continue to payment
+        toast.success(
+          `${checkoutResult.creditsApplied} crédito(s) aplicado(s). Resta pagar $${checkoutResult.amountToPay.toFixed(2)}.`
+        );
+      } catch (err) {
+        console.error('[Checkout] Credits error:', err);
+        const msg = err.response?.data?.message || 'No se pudieron aplicar los créditos.';
+        toast.error(msg);
+        return;
+      }
+    }
+
+    // ── Original payment flow (unchanged) ──
     console.log('Datos para pago - Email:', email, 'UserId:', uId);
 
     if (paymentMethod === 'card') {
@@ -222,7 +266,6 @@ const Checkout = () => {
     } else if (paymentMethod === 'cash') {
       try {
         toast.info('Procesando tu pedido, por favor espere...');
-        const savedOrderId = window.localStorage.getItem('oi');
         const body = { state: 'pendiente_envio' };
         const config = { headers: { 'Content-Type': 'application/json' } };
 
@@ -255,7 +298,6 @@ const Checkout = () => {
       <div className={styles.Checkout}>
         <div className={styles['Checkout-container']}>
           <h1 className={styles.title}>
-            {/* {auth.user ? 'Finaliza tu Compra' : 'Regístrate para Continuar'} */}
             {auth.user ? 'Finaliza tu Compra' : 'Regístrate primero'}
           </h1>
 
@@ -302,19 +344,20 @@ const Checkout = () => {
               )}
             </div>
 
+            {/* ── Green Wallet panel (authenticated users only) ── */}
+            <WalletRedeem
+              subtotal={valorTotalSinIva}
+              isAuthenticated={Boolean(auth.user)}
+              onCreditsChange={setCreditsToApply}
+            />
+
+            {/* ── Trust badges ── */}
+            <CheckoutTrustBadges />
+
             {auth.user && (
               <div>
                 {isProfileComplete ? (
                   <form className={styles.paySubmitForm} ref={refValidation} onSubmit={openModalHandler}>
-                    {/* <div className={styles['terminosyCondiciones-container']}>
-                      <input type="checkbox" name="termsAndConds" id="termsAndConds" />
-                      <p className={styles.termsAndCondsTextContent}>
-                        he leído y acepto los{' '}
-                      </p>
-                      <Link href="/terminosYCondiciones" className={styles.termsAndCondLink} passHref>
-                        <p>términos y condiciones</p>
-                      </Link>
-                    </div> */}
                     <div className={styles['terminosyCondiciones-container']}>
                       <input type="checkbox" name="termsAndConds" id="termsAndConds" />
                       <p className={styles.termsAndCondsTextContent}>
@@ -359,14 +402,14 @@ const Checkout = () => {
 
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className={styles.modalContentWrapper}>
-        <h1 className={styles.modaltitle}>Billetera de tarjetas de credito</h1>
-        <Tarjetas userEmail={email} uId={uId} />
-        {/* <PaymentezDos userEmail={email} uId={uId} /> */}
-        <PaymentezDos 
-          key={`${email}-${uId}`} 
-          userEmail={email} 
-          uId={uId} 
-        />
+          <h1 className={styles.modaltitle}>Billetera de tarjetas de credito</h1>
+          <Tarjetas userEmail={email} uId={uId} />
+          {/* <PaymentezDos userEmail={email} uId={uId} /> */}
+          <PaymentezDos
+            key={`${email}-${uId}`}
+            userEmail={email}
+            uId={uId}
+          />
         </div>
       </Modal>
     </>

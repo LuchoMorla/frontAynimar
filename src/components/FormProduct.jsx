@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import styles from '@styles/ProductInfo.module.scss';
 import ProductGallery from '@components/ProductGallery';
+import MarkdownDescription from '@components/MarkdownDescription';
 import StarRating from '@components/StarRating';
 import VariantSelector from '@components/VariantSelector';
 
@@ -19,6 +20,8 @@ const ProductInfo = ({ product }) => {
   const formRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState({});
+  const [activeImages, setActiveImages] = useState(null);
+  const [variantStock, setVariantStock] = useState(null);
 
   // Parse images array from JSON text (Phase 2 products from Dropi/Effi).
   // Falls back to the legacy single-image string for old products.
@@ -47,6 +50,18 @@ const ProductInfo = ({ product }) => {
 
   const handleVariantChange = (option, value) => {
     setSelectedVariants((prev) => ({ ...prev, [option]: value }));
+  };
+
+  const handleVariantData = (option, variantObj) => {
+    // If the variant has its own image, move it to the front of the gallery
+    if (variantObj?.image) {
+      const base = productImages.filter((u) => u !== variantObj.image);
+      setActiveImages([variantObj.image, ...base]);
+    } else {
+      setActiveImages(null);
+    }
+    // Track variant-level stock for the stock display
+    setVariantStock(variantObj?.stock ?? null);
   };
 
   const createOrder = async () => {
@@ -137,16 +152,16 @@ const ProductInfo = ({ product }) => {
     return <div>Cargando información del producto...</div>;
   }
 
-  const isOutOfStock = product.stock === 0;
-  // Use the multi-image gallery only for products that have the images field
-  // (Phase 2 sync). Old products with only product.image use the original display.
-  const showGallery = Boolean(product.images) && productImages.length > 0;
+  const displayImages = activeImages ?? productImages;
+  const displayStock  = variantStock ?? product.stock;
+  const isOutOfStock  = displayStock === 0;
+  const showGallery   = displayImages.length > 0 && Boolean(product.images || activeImages);
 
   return (
     <div className={styles['stand_container']}>
       {/* Image area: gallery for multi-image products, legacy single image otherwise */}
       {showGallery ? (
-        <ProductGallery images={productImages} name={product.name} />
+        <ProductGallery images={displayImages} name={product.name} />
       ) : (
         product?.image && (
           <Image
@@ -172,13 +187,14 @@ const ProductInfo = ({ product }) => {
         {/* Extended: star rating inserted after name, doesn't break nth-child counting */}
         <StarRating rating={product.rating ?? 0} count={product.reviewCount ?? null} />
 
-        {/* Stock status */}
+        {/* Stock status — shows variant-level stock when a variant is selected */}
         {isOutOfStock ? (
           <p className={styles.outOfStock}>Producto agotado</p>
-        ) : product.stock !== null ? (
+        ) : displayStock !== null ? (
           <p className={styles.stockBadge}>
             <span className={styles.stockDot} />
-            Stock disponible: <strong>{product.stock}</strong> unidades
+            Stock disponible: <strong>{displayStock}</strong> unidades
+            {variantStock !== null && <span className={styles.variantLabel}> · esta variante</span>}
           </p>
         ) : null}
 
@@ -187,9 +203,15 @@ const ProductInfo = ({ product }) => {
           variants={productVariants}
           selected={selectedVariants}
           onChange={handleVariantChange}
+          onVariantData={handleVariantData}
         />
 
-        <p className={styles.description}>{product.description}</p>
+        {/* Render AI-generated Markdown description or plain text */}
+        {product.description && product.description.trim().startsWith('##') ? (
+          <MarkdownDescription text={product.description} />
+        ) : (
+          <p className={styles.description}>{product.description}</p>
+        )}
 
         <form ref={formRef} onSubmit={submitHandler}>
           <label htmlFor="amount" className={styles.amountLabel}>Cantidad:</label>

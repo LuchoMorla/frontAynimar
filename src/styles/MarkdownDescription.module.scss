@@ -1,0 +1,74 @@
+@import 'vars';
+
+.root {
+  font-family: 'Baloo 2', sans-serif;
+  color: $--black;
+  line-height: 1.65;
+  max-width: 480px;
+}
+
+.h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $--morado-centro;
+  margin: 0 0 8px;
+}
+
+.h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $--black;
+  margin: 16px 0 6px;
+  border-bottom: 2px solid rgba($--morado-centro, 0.15);
+  padding-bottom: 4px;
+}
+
+.ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.li {
+  font-size: 0.92rem;
+  padding-left: 1.4em;
+  position: relative;
+
+  &::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: $--app-green;
+    font-weight: 700;
+  }
+}
+
+.p {
+  font-size: 0.95rem;
+  margin: 0 0 8px;
+}
+
+.faqItem {
+  background: rgba($--very-very-light-pink, 0.6);
+  border-left: 3px solid $--morado-centro;
+  border-radius: 0 8px 8px 0;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.faqQ {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: $--morado-centro;
+  margin: 0 0 4px;
+}
+
+.faqA {
+  font-size: 0.88rem;
+  color: $--black;
+  margin: 0;
+  opacity: 0.85;
+}

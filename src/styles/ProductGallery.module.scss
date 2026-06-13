@@ -14,10 +14,11 @@
   height: 420px;
   border-radius: 12px;
   overflow: hidden;
-  cursor: zoom-in;
+  cursor: crosshair;
   box-shadow: $--cardShadow;
   background: $--very-very-light-pink;
   transition: box-shadow 0.25s ease;
+  user-select: none;
 
   &:hover {
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
@@ -25,20 +26,63 @@
 }
 
 @keyframes galleryFadeIn {
-  from { opacity: 0; transform: scale(1.03); }
-  to   { opacity: 1; transform: scale(1); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .imageScaleWrapper {
   position: absolute;
   inset: 0;
-  animation: galleryFadeIn 0.25s ease;
-  transition: transform 0.4s ease;
+  animation: galleryFadeIn 0.2s ease;
+  /* transform and transform-origin controlled by React state — no CSS hover override */
+}
+
+/* Zoom hint badge */
+.zoomHint {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 20px;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Prev / Next arrows */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+  transition: background 0.15s ease, opacity 0.15s ease;
+  opacity: 0;
+  z-index: 2;
 
   .mainImageWrapper:hover & {
-    transform: scale(1.08);
+    opacity: 1;
+  }
+
+  &:hover {
+    background: #fff;
   }
 }
+
+.arrowLeft  { left: 8px; }
+.arrowRight { right: 8px; }
 
 .thumbnailStrip {
   display: flex;

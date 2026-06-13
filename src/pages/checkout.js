@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '@hooks/useAuth';
 import { addCustomer } from '@services/api/entities/customers';
 import WalletRedeem from '@components/WalletRedeem';
+import CouponInput from '@components/CouponInput';
 import CheckoutTrustBadges from '@components/CheckoutTrustBadges';
 
 const Checkout = () => {
@@ -36,6 +37,9 @@ const Checkout = () => {
 
   // Green Wallet: integer credits the user wants to redeem
   const [creditsToApply, setCreditsToApply] = useState(0);
+
+  // Coupon discount in dollars (0 when no coupon is applied)
+  const [couponDiscount, setCouponDiscount] = useState(0);
 
   // --- Función para obtener el token ---
   const getCookieUser = () => {
@@ -286,8 +290,8 @@ const Checkout = () => {
     }
   };
 
-  const valorTotalSinIva = sumTotal();
-  const valorTotalConIva = valorTotalSinIva * 1.15;
+  const valorTotalSinIva    = sumTotal();
+  const subtotalAfterCoupon = Math.max(0, parseFloat((valorTotalSinIva - couponDiscount).toFixed(2)));
 
   return (
     <>
@@ -320,18 +324,24 @@ const Checkout = () => {
 
             <div className={styles.order}>
               <div className={styles.totalContainer}>
-                <p><span>Total sin IVA</span></p>
+                <p><span>Subtotal</span></p>
                 <p>
-                  ${valorTotalSinIva}
+                  ${valorTotalSinIva.toFixed(2)}
                   <button onClick={() => router.reload()} className={styles.reloadButton}>
                     <Image src={actualizarImg} alt="Actualizar" width={20} height={20} />
                   </button>
                 </p>
               </div>
+              {couponDiscount > 0 && (
+                <div className={styles.totalContainer}>
+                  <p><span>Descuento cupón</span></p>
+                  <p style={{ color: '#0d9488' }}>−${couponDiscount.toFixed(2)}</p>
+                </div>
+              )}
               <div className={styles.totalContainer}>
                 <p><span>Total con IVA</span></p>
                 <p>
-                  ${valorTotalConIva.toFixed(2)}
+                  ${(subtotalAfterCoupon * 1.15).toFixed(2)}
                   <button onClick={() => router.reload()} className={styles.reloadButton}>
                     <Image src={actualizarImg} alt="Actualizar" width={20} height={20} />
                   </button>
@@ -344,9 +354,16 @@ const Checkout = () => {
               )}
             </div>
 
+            {/* ── Coupon input (all users) ── */}
+            <CouponInput
+              cartTotal={valorTotalSinIva}
+              onApply={({ discount }) => setCouponDiscount(discount)}
+              onClear={() => setCouponDiscount(0)}
+            />
+
             {/* ── Green Wallet panel (authenticated users only) ── */}
             <WalletRedeem
-              subtotal={valorTotalSinIva}
+              subtotal={subtotalAfterCoupon}
               isAuthenticated={Boolean(auth.user)}
               onCreditsChange={setCreditsToApply}
             />

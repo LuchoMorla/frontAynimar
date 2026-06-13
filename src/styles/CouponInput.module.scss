@@ -1,0 +1,145 @@
+@import 'vars';
+
+$teal: #0d9488;
+$teal-light: #ccfbf1;
+
+.panel {
+  background: rgba($--very-very-light-pink, 0.35);
+  border: 1.5px solid rgba($--morado-centro, 0.12);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: $--black;
+  margin: 0;
+}
+
+.inputRow {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  font-family: 'Baloo 2', sans-serif;
+  flex: 1;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  color: $--black;
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  &:focus { border-color: $--morado-centro; }
+  &::placeholder { text-transform: none; font-weight: 400; color: #9ca3af; letter-spacing: 0; }
+  &:disabled { opacity: 0.5; }
+}
+
+.applyBtn {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 9px 20px;
+  background: $--morado-centro;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) { background: darken($--morado-centro, 8%); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.error {
+  font-size: 0.82rem;
+  color: #dc2626;
+  margin: 0;
+}
+
+// ── Applied state ─────────────────────────────────────────────────────────────
+
+.appliedPanel {
+  background: rgba($teal, 0.05);
+  border: 1.5px solid rgba($teal, 0.3);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.appliedHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.checkIcon {
+  width: 18px;
+  height: 18px;
+  color: $teal;
+  flex-shrink: 0;
+}
+
+.appliedTitle {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: $teal;
+}
+
+.appliedBody {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.appliedCode {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: $--black;
+  background: $teal-light;
+  padding: 2px 10px;
+  border-radius: 6px;
+}
+
+.appliedDiscount {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: $teal;
+}
+
+.appliedHint {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: darken($teal, 5%);
+}
+
+.clearBtn {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.78rem;
+  color: $teal;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  align-self: flex-start;
+}

@@ -101,6 +101,9 @@ const endPoints = {
   wallet: {
     myBalance: `${API}/api/${VERSION}/wallets/my-wallet`,
   },
+  coupons: {
+    validate: `${API}/api/${VERSION}/coupons/validate`,
+  },
   reviews: {
     getReviews: (productId, { rating = null, withPhotos = false, page = 1, limit = 10 } = {}) => {
       let url = `${API}/api/${VERSION}/reviews?productId=${productId}&page=${page}&limit=${limit}`;

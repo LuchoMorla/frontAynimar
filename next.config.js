@@ -4,7 +4,7 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   images: {
-    domains: ['api.lorem.space', 'placeimg.com', 'i.pinimg.com', 'https://i.pinimg.com/', 'https://ivrea.com.ar/', 'ivrea.com.ar', 'www.ivrea.com.ar', 'vendingpassec.com', 'picsum.photos', 'localhost', 'drive.google.com', 'firebasestorage.googleapis.com', 'images.unsplash.com', 'd39ru7awumhhs2.cloudfront.net'],
+    domains: ['api.lorem.space', 'placeimg.com', 'i.pinimg.com', 'https://i.pinimg.com/', 'https://ivrea.com.ar/', 'ivrea.com.ar', 'www.ivrea.com.ar', 'vendingpassec.com', 'picsum.photos', 'localhost', 'drive.google.com', 'firebasestorage.googleapis.com', 'images.unsplash.com', 'd39ru7awumhhs2.cloudfront.net', 'api.dropi.ec', 'api.dropi.co', 'app.dropi.ec'],
   },
   env: {
     NEXT_PUBLIC_API_PAYMENTEZ_API_CODE: process.env.NEXT_PUBLIC_API_PAYMENTEZ_API_CODE,

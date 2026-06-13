@@ -1,14 +1,18 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import styles from '@styles/ProductGallery.module.scss';
 
 const ProductGallery = ({ images = [], name = '' }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [zoom, setZoom] = useState({ active: false, x: 50, y: 50 });
+  const touchStartX = useRef(null);
 
   const validImages = useMemo(() => images.filter(Boolean), [images]);
 
   if (validImages.length === 0) return null;
+
+  const prev = () => setActiveIndex((i) => (i - 1 + validImages.length) % validImages.length);
+  const next = () => setActiveIndex((i) => (i + 1) % validImages.length);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -21,13 +25,27 @@ const ProductGallery = ({ images = [], name = '' }) => {
 
   const handleMouseLeave = () => setZoom((z) => ({ ...z, active: false }));
 
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 40) return;
+    delta < 0 ? next() : prev();
+  };
+
   return (
     <div className={styles.gallery}>
-      {/* Main image with coordinate zoom */}
+      {/* Main image with coordinate zoom + touch swipe */}
       <div
         className={styles.mainImageWrapper}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         title="Pasa el mouse para hacer zoom"
       >
         <div
@@ -63,7 +81,7 @@ const ProductGallery = ({ images = [], name = '' }) => {
             <button
               type="button"
               className={`${styles.arrow} ${styles.arrowLeft}`}
-              onClick={() => setActiveIndex((i) => (i - 1 + validImages.length) % validImages.length)}
+              onClick={prev}
               aria-label="Imagen anterior"
             >
               ‹
@@ -71,7 +89,7 @@ const ProductGallery = ({ images = [], name = '' }) => {
             <button
               type="button"
               className={`${styles.arrow} ${styles.arrowRight}`}
-              onClick={() => setActiveIndex((i) => (i + 1) % validImages.length)}
+              onClick={next}
               aria-label="Imagen siguiente"
             >
               ›
@@ -80,7 +98,22 @@ const ProductGallery = ({ images = [], name = '' }) => {
         )}
       </div>
 
-      {/* Thumbnails */}
+      {/* Dot indicators — mobile only; thumbnails shown on desktop */}
+      {validImages.length > 1 && (
+        <div className={styles.dots}>
+          {validImages.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              className={`${styles.dot} ${idx === activeIndex ? styles.dotActive : ''}`}
+              onClick={() => setActiveIndex(idx)}
+              aria-label={`Imagen ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Thumbnails — desktop only */}
       {validImages.length > 1 && (
         <div className={styles.thumbnailStrip}>
           {validImages.map((src, idx) => (

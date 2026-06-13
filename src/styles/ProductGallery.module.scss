@@ -116,6 +116,30 @@
   }
 }
 
+/* Dot indicators */
+.dots {
+  display: none;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  &.dotActive {
+    background: $--morado-centro;
+    transform: scale(1.35);
+  }
+}
+
 @media (max-width: 640px) {
   .mainImageWrapper {
     width: 90vw;
@@ -124,7 +148,11 @@
     max-height: 300px;
   }
 
+  .dots {
+    display: flex;
+  }
+
   .thumbnailStrip {
-    max-width: 90vw;
+    display: none;
   }
 }

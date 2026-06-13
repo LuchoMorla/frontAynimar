@@ -150,6 +150,29 @@
 	}
 }
 
+/* ── Dropi HTML description — renders provider HTML tags cleanly ── */
+.dropiDescription {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.95rem;
+  color: $--black;
+  line-height: 1.65;
+  margin: 8px 0 12px;
+
+  p  { margin: 0 0 8px; }
+  ul, ol { padding-left: 1.4em; margin: 4px 0 8px; }
+  li { margin-bottom: 3px; }
+  strong, b { font-weight: 700; }
+  em, i { font-style: italic; }
+  a { color: $--morado-centro; text-decoration: underline; }
+  h1, h2, h3 {
+    font-weight: 700;
+    margin: 8px 0 4px;
+    color: $--black;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+  td, th { padding: 4px 8px; border: 1px solid #e5e7eb; }
+}
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
 	.stand_container {

@@ -14,6 +14,36 @@ import MarkdownDescription from '@components/MarkdownDescription';
 import StarRating from '@components/StarRating';
 import VariantSelector from '@components/VariantSelector';
 
+// Strips dangerous elements while keeping Dropi's formatting HTML intact.
+// Only removes <script>, <iframe>, event handlers, and javascript: links.
+function sanitizeHtml(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+    .replace(/<(object|embed|form)[^>]*>[\s\S]*?<\/\1>/gi, '')
+    .replace(/\s+on\w+="[^"]*"/gi, '')
+    .replace(/\s+on\w+='[^']*'/gi, '')
+    .replace(/javascript\s*:/gi, '');
+}
+
+const HTML_TAG_RE = /<[a-z][\s\S]*?>/i;
+
+function ProductDescription({ text, styles }) {
+  if (!text) return null;
+  const trimmed = text.trim();
+  if (trimmed.startsWith('##')) return <MarkdownDescription text={trimmed} />;
+  if (HTML_TAG_RE.test(trimmed)) {
+    return (
+      <div
+        className={styles.dropiDescription}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(trimmed) }}
+      />
+    );
+  }
+  return <p className={styles.description}>{trimmed}</p>;
+}
+
 const ProductInfo = ({ product }) => {
   const router = useRouter();
   const { state, addToCart } = useContext(AppContext);
@@ -206,12 +236,10 @@ const ProductInfo = ({ product }) => {
           onVariantData={handleVariantData}
         />
 
-        {/* Render AI-generated Markdown description or plain text */}
-        {product.description && product.description.trim().startsWith('##') ? (
-          <MarkdownDescription text={product.description} />
-        ) : (
-          <p className={styles.description}>{product.description}</p>
-        )}
+        {/* Description: Markdown (AI copy) → MarkdownDescription;
+            HTML (Dropi) → sanitized dangerouslySetInnerHTML;
+            plain text → <p> */}
+        {product.description && <ProductDescription text={product.description} styles={styles} />}
 
         <form ref={formRef} onSubmit={submitHandler}>
           <label htmlFor="amount" className={styles.amountLabel}>Cantidad:</label>

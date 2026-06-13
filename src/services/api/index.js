@@ -101,6 +101,15 @@ const endPoints = {
   wallet: {
     myBalance: `${API}/api/${VERSION}/wallets/my-wallet`,
   },
+  reviews: {
+    getReviews: (productId, { rating = null, withPhotos = false, page = 1, limit = 10 } = {}) => {
+      let url = `${API}/api/${VERSION}/reviews?productId=${productId}&page=${page}&limit=${limit}`;
+      if (rating)     url += `&rating=${rating}`;
+      if (withPhotos) url += `&withPhotos=true`;
+      return url;
+    },
+    postReview: `${API}/api/${VERSION}/reviews`,
+  },
   admin: {
     allOrders: `${API}/api/${VERSION}/orders`,
     updateOrder: (id) => `${API}/api/${VERSION}/orders/${id}`,

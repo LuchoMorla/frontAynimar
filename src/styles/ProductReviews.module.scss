@@ -1,0 +1,447 @@
+@import 'vars';
+
+$gold: #f59e0b;
+$gold-light: #fef3c7;
+$green-badge: #16a34a;
+
+.section {
+  font-family: 'Baloo 2', sans-serif;
+  max-width: 640px;
+  margin: 40px 0 0;
+  padding-top: 32px;
+  border-top: 1.5px solid rgba($--morado-centro, 0.1);
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: $--black;
+  margin: 0 0 20px;
+}
+
+// ── Stars ─────────────────────────────────────────────────────────────────────
+.stars {
+  display: inline-flex;
+  gap: 1px;
+}
+.stars_sm { font-size: 0.85rem; }
+.stars_md { font-size: 1rem; }
+.stars_lg { font-size: 1.5rem; }
+
+.starFilled { color: $gold; }
+.starEmpty  { color: #d1d5db; }
+
+// ── Summary block ─────────────────────────────────────────────────────────────
+.summaryBlock {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  background: rgba($--very-very-light-pink, 0.5);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.summaryLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 90px;
+}
+
+.averageScore {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: $--black;
+  line-height: 1;
+}
+
+.reviewCount {
+  font-size: 0.78rem;
+  color: $--gray;
+  margin-top: 2px;
+}
+
+.summaryRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+}
+
+.ratingBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ratingBarLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $--gray;
+  width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ratingBarTrack {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ratingBarFill {
+  height: 100%;
+  background: $gold;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.ratingBarCount {
+  font-size: 0.75rem;
+  color: $--gray;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+// ── Filter chips ──────────────────────────────────────────────────────────────
+.filterRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.filterLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $--gray;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filterChip {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1.5px solid #e5e7eb;
+  background: white;
+  color: $--gray;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover { border-color: $gold; color: darken($gold, 10%); }
+}
+
+.filterChipActive {
+  background: $gold-light;
+  border-color: $gold;
+  color: darken($gold, 10%);
+}
+
+.filterClear {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.78rem;
+  color: $--morado-centro;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px;
+  background: rgba($--very-very-light-pink, 0.4);
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  color: $gold;
+  margin-bottom: 12px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.92); }
+}
+
+.emptyTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: $--black;
+  margin: 0 0 8px;
+}
+
+.emptySubtitle {
+  font-size: 0.88rem;
+  color: $--gray;
+  max-width: 360px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+// ── Review cards ──────────────────────────────────────────────────────────────
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.reviewCard {
+  background: white;
+  border: 1px solid #f0f0f0;
+  border-radius: 14px;
+  padding: 16px;
+  transition: box-shadow 0.15s ease;
+
+  &:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.reviewDate {
+  font-size: 0.75rem;
+  color: $--gray;
+  opacity: 0.7;
+}
+
+.reviewComment {
+  font-size: 0.92rem;
+  color: $--black;
+  line-height: 1.6;
+  margin: 0 0 10px;
+}
+
+.reviewFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.reviewName {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $--black;
+}
+
+.reviewCity {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.78rem;
+  color: $--gray;
+}
+
+.verifiedBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $green-badge;
+}
+
+// ── Pagination ────────────────────────────────────────────────────────────────
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.pageBtn {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.85rem;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1.5px solid $--morado-centro;
+  background: white;
+  color: $--morado-centro;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover:not(:disabled) { background: $--very-very-light-pink; }
+  &:disabled { opacity: 0.35; cursor: default; }
+}
+
+.pageInfo {
+  font-size: 0.82rem;
+  color: $--gray;
+}
+
+// ── Loading spinner ───────────────────────────────────────────────────────────
+.loadingRow {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba($--morado-centro, 0.2);
+  border-top-color: $--morado-centro;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Review form ───────────────────────────────────────────────────────────────
+.formBlock {
+  background: rgba($--very-very-light-pink, 0.35);
+  border: 1.5px solid rgba($--morado-centro, 0.12);
+  border-radius: 18px;
+  padding: 24px;
+  margin-top: 8px;
+}
+
+.formTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: $--black;
+  margin: 0 0 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  @media (max-width: 480px) { grid-template-columns: 1fr; }
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $--gray;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.formInput {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.92rem;
+  padding: 9px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  color: $--black;
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  &:focus { border-color: $--morado-centro; }
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.charCount {
+  font-size: 0.72rem;
+  color: $--gray;
+  text-align: right;
+  opacity: 0.6;
+}
+
+.formError {
+  font-size: 0.85rem;
+  color: #dc2626;
+  margin: 0;
+}
+
+.submitBtn {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 11px 28px;
+  background: $--morado-centro;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  align-self: flex-start;
+
+  &:hover:not(:disabled) {
+    background: darken($--morado-centro, 8%);
+    transform: translateY(-1px);
+  }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.successMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $green-badge;
+  background: rgba($green-badge, 0.08);
+  border: 1.5px solid rgba($green-badge, 0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+
+// ── Interactive star rating ───────────────────────────────────────────────────
+.interactiveStars {
+  display: flex;
+  gap: 4px;
+}
+
+.interactiveStar {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  line-height: 1;
+
+  &:hover { transform: scale(1.15); }
+}

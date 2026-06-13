@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import FormProduct from '@components/FormProduct';
+import ProductReviews from '@components/ProductReviews';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -11,7 +12,6 @@ export default function ProductStand() {
 
   useEffect(() => {
     const { id } = router.query;
-      // hacemos una validacion que devuelva un return vacio en caso de que la ruta no esté disponible, así nos evitamos un error 400
     if (!router.isReady) return;
     async function getProduct() {
       const response = await axios.get(endPoints.products.getProduct(id));
@@ -21,12 +21,14 @@ export default function ProductStand() {
   }, [router?.isReady]);
 
   return (
-  <>
-    <Head>
-      <title>Aynimar | {product.name}</title>
-    </Head>
-    <FormProduct product={product} />
-  </>
-
+    <>
+      <Head>
+        <title>Aynimar | {product.name}</title>
+      </Head>
+      <FormProduct product={product} />
+      {product.id && (
+        <ProductReviews productId={product.id} businessId={product.businessId ?? null} />
+      )}
+    </>
   );
 }

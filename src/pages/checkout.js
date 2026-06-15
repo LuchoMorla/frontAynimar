@@ -1,7 +1,6 @@
 import Head from 'next/head';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AppContext from '@context/AppContext';
-import Image from 'next/image';
 import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import Tarjetas from '@common/paymentez/tarjetas/Tarjetas';

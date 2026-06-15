@@ -7,6 +7,26 @@ const HeroSection = () => (
     maxWidth: '800px',
     margin: '0 auto',
   }}>
+    {/* Trust anchor — lo primero que lee el usuario */}
+    <div style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      background: '#d1fae5',
+      border: '1.5px solid #6ee7b7',
+      borderRadius: '999px',
+      padding: '6px 18px',
+      marginBottom: '20px',
+      fontSize: '0.9rem',
+      fontWeight: '700',
+      color: '#065f46',
+    }}>
+      <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '1rem', height: '1rem', flexShrink: 0 }}>
+        <path d="M11.998 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 14.414-3.707-3.707 1.414-1.414L11 13.586l5.293-5.293 1.414 1.414L10.998 16.414z"/>
+      </svg>
+      Paga al recibir en tu puerta · Sin riesgo de fraude
+    </div>
+
     <h1 style={{
       fontSize: 'clamp(1.35rem, 3.5vw, 2rem)',
       fontWeight: '800',

@@ -120,12 +120,21 @@ const Checkout = () => {
   };
 
   // ── COD order: patch state to pendiente_envio ──
-  const processCodOrder = async (savedOrderId) => {
+  // authToken param: pass explicitly — never rely on axios.defaults which may carry
+  // a freshly-set guest-user token BEFORE the order is associated with that user.
+  const processCodOrder = async (savedOrderId, authToken) => {
+    if (!savedOrderId) {
+      throw new Error('No se encontró el ID de la orden. Por favor recarga la página y vuelve a intentarlo.');
+    }
     toast.info('Procesando tu pedido, por favor espera...');
+    const token = authToken ?? Cookie.get('token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await axios.patch(
       endPoints.orders.updateOrder(savedOrderId),
       { state: 'pendiente_envio' },
-      { headers: { 'Content-Type': 'application/json' } }
+      { headers }
     );
     if (response.status === 200 || response.status === 201) {
       window.localStorage.removeItem('oi');
@@ -137,11 +146,20 @@ const Checkout = () => {
 
   // ── GUEST flow: auto-register → associate cart → COD or card ──
   const handleGuestFlow = async () => {
+    // Guard: the guest order must already exist in localStorage (created by ProductItem when adding to cart).
+    // If it doesn't exist there's nothing to process and processCodOrder would get "Order not found".
+    const guestOrderId = window.localStorage.getItem('oi');
+    if (!guestOrderId) {
+      toast.error('No se encontró tu carrito. Por favor agrega productos nuevamente y vuelve al checkout.');
+      return;
+    }
+
     const [firstName, ...rest] = guestData.fullName.trim().split(' ');
     const lastName = rest.join(' ') || firstName;
 
     try {
-      toast.info('Procesando tu pedido...');
+      toast.info('Creando tu cuenta y procesando el pedido...');
+
       const response = await addCustomer({
         name: firstName,
         lastName,
@@ -157,37 +175,53 @@ const Checkout = () => {
         },
       });
 
-      if (response?.auth) {
-        auth.manualSignIn(response.auth);
-        window.dispatchEvent(new Event('tokenSet'));
+      // manualSignIn is synchronous: sets Cookie AND axios.defaults.headers.Authorization immediately.
+      // We capture authToken BEFORE calling it so we have it for explicit use.
+      // CRITICAL: never call processCodOrder relying on axios defaults when the order
+      // may not be owned by the user yet — pass the token explicitly instead.
+      const authToken = response?.auth?.token;
+      if (!authToken) throw new Error('No se recibió token de autenticación del servidor.');
+
+      auth.manualSignIn(response.auth);
+      window.dispatchEvent(new Event('tokenSet'));
+
+      // Associate the guest order with the new user.
+      // Some backends migrate the order to a new ID — capture the response to detect that.
+      let resolvedOrderId = guestOrderId;
+      try {
+        const { data: assocData } = await axios.patch(
+          endPoints.orders.associateOrder,
+          { orderId: parseInt(guestOrderId, 10) },
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        // Update localStorage if the backend returned a different orderId post-migration
+        const returnedId = assocData?.id ?? assocData?.orderId ?? assocData?.newOrderId;
+        if (returnedId && String(returnedId) !== guestOrderId) {
+          resolvedOrderId = String(returnedId);
+          window.localStorage.setItem('oi', resolvedOrderId);
+        }
+      } catch (assocErr) {
+        // Do NOT swallow this silently. If association failed the order still belongs
+        // to the guest and processCodOrder (now authenticated) would get "Order not found".
+        console.error('[Checkout] associateGuestCart failed:', assocErr);
+        throw new Error(
+          assocErr.response?.data?.message ||
+          'Error al vincular tu carrito con la cuenta. Por favor intenta de nuevo.'
+        );
       }
 
-      // Use token from response directly — don't rely on cookie being set yet
-      const token = response?.auth?.token
-        ?? (typeof response?.auth === 'string' ? response.auth : null)
-        ?? Cookie.get('token');
-
-      const guestOrderId = window.localStorage.getItem('oi');
-      if (token && guestOrderId) {
-        await associateGuestCart(token, guestOrderId);
-      }
-
-      const savedOrderId = window.localStorage.getItem('oi');
-
+      // Order is now owned by the authenticated user — pass authToken explicitly
       if (paymentMethod === 'cash') {
-        await processCodOrder(savedOrderId);
+        await processCodOrder(resolvedOrderId, authToken);
         toast.info(
-          '¡Creamos tu cuenta Aynimar! Revisa tu correo para activar tu contraseña y comenzar a acumular puntos. 🌿',
+          '¡Creamos tu cuenta Aynimar! Revisa tu correo para activar tu contraseña y acumular puntos por reciclar. 🌿',
           { autoClose: 8000 }
         );
       } else {
-        // Card: set email/uid from response and open modal
-        if (response?.auth) {
-          try {
-            const decoded = jwt.decode(token, { complete: true });
-            if (decoded?.payload?.sub) setuId(decoded.payload.sub);
-          } catch { /* noop */ }
-        }
+        try {
+          const decoded = jwt.decode(authToken, { complete: true });
+          if (decoded?.payload?.sub) setuId(decoded.payload.sub);
+        } catch { /* noop */ }
         if (guestData.email) setEmail(guestData.email);
         setOpen(true);
       }
@@ -196,7 +230,7 @@ const Checkout = () => {
         toast.error('El correo ya está registrado. Por favor inicia sesión para continuar.');
         router.push('/login');
       } else {
-        toast.error(err.response?.data?.message || 'Ocurrió un error. Inténtalo de nuevo.');
+        toast.error(err.response?.data?.message || err.message || 'Ocurrió un error. Inténtalo de nuevo.');
       }
     }
   };
@@ -230,7 +264,7 @@ const Checkout = () => {
     }
 
     if (paymentMethod === 'cash') {
-      await processCodOrder(savedOrderId);
+      await processCodOrder(savedOrderId, Cookie.get('token'));
     } else {
       setOpen(true);
     }

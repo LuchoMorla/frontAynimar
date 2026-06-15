@@ -201,6 +201,7 @@ const Header = () => {
 
   return (
     <>
+      <header className={styles.navBar}>
       <nav className={styles.Nav}>
         {state.navMenuIsOpen && <NavMenu />}
         <div className={styles.hamburger} onClick={() => toggleNavMenu()} aria-hidden="true">
@@ -261,6 +262,7 @@ const Header = () => {
         </div>
         {state.menuIsOpen && <Menu />}
       </nav>
+      </header>
       {state.orderIsOpen && <MyOrder />}
       {state.paymentIsOpen && <MyPayment />}
     </>

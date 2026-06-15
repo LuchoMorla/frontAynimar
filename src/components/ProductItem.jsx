@@ -106,9 +106,17 @@ const ProductItem = ({ product }) => {
 
   return (
     <div className={styles.ProductItem}>
-      <Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
-        <Image src={product.image} width={240} height={240} alt={product.name} priority={false} />
-      </Link>
+      <div className={styles['image-wrapper']}>
+        <Link href={`/store/${product.id}`} className={styles['go_product']} passHref>
+          <Image src={product.image} width={240} height={240} alt={product.name} priority={false} />
+        </Link>
+        <span className={styles.badge}>
+          <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ width: '0.7rem', height: '0.7rem', display: 'inline', marginRight: '3px', verticalAlign: 'middle' }}>
+            <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8L12 2z"/>
+          </svg>
+          Importado Nuevo
+        </span>
+      </div>
       <div className={styles['product-info']}>
         <div>
           <p>${product.price.toFixed(2)}</p>

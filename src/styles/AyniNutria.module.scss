@@ -60,6 +60,22 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+.recoveryCta {
+  display: block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: $--purple;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.15s ease;
+
+  &:hover { background: #3600b3; }
+}
+
 .closeBubble {
   position: absolute;
   top: 6px;
@@ -73,6 +89,47 @@
   line-height: 1;
 
   &:hover { color: #374151; }
+}
+
+.avatarPulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(73, 0, 228, 0.4); }
+  50%       { box-shadow: 0 4px 28px rgba(73, 0, 228, 0.75), 0 0 0 6px rgba(73, 0, 228, 0.15); }
+}
+
+.recoveryBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #f5f0ff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 16px;
+
+  p {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $--purple;
+    margin: 0;
+  }
+}
+
+.recoveryBannerCta {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: $--purple;
+  padding: 5px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+
+  &:hover { background: #3600b3; }
 }
 
 .panel {

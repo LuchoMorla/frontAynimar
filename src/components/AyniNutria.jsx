@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import styles from '@styles/AyniNutria.module.scss';
 
 const STORE_TIPS = [
@@ -20,6 +21,9 @@ const RECYCLE_TIPS = [
 
 const CHECKOUT_MESSAGE =
   '¡Hola! Si tienes dudas con tus referencias o el pago contra entrega, yo te ayudo aquí mismo. 🦦';
+
+const ABANDONED_CART_MESSAGE =
+  '¡Hola! Veo que dejaste algunos productos guardados. ¿Quieres retomar tu pedido ahora mismo? 🦦🛒';
 
 const FAQ = [
   {
@@ -53,33 +57,46 @@ const AyniNutria = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showBubble, setShowBubble] = useState(true);
   const [tipIndex, setTipIndex] = useState(0);
+  // Reads localStorage only on client — avoids Next.js hydration mismatch
+  const [hasAbandonedCart, setHasAbandonedCart] = useState(false);
 
   const isCheckout = router.pathname === '/checkout';
   const isRecycling = router.pathname.startsWith('/recycl');
+
+  // Detect abandoned cart client-side (useEffect = safe for SSR)
+  useEffect(() => {
+    const oi = window.localStorage.getItem('oi');
+    setHasAbandonedCart(!!oi && !isCheckout);
+  }, [router.pathname, isCheckout]);
 
   const getTips = useCallback(
     () => (isRecycling ? RECYCLE_TIPS : STORE_TIPS),
     [isRecycling]
   );
 
+  // Rotate tips — skip when checkout or abandoned-cart nudge is active
   useEffect(() => {
-    if (isCheckout) return;
+    if (isCheckout || hasAbandonedCart) return;
     const tips = getTips();
     const id = setInterval(
       () => setTipIndex(i => (i + 1) % tips.length),
       8000
     );
     return () => clearInterval(id);
-  }, [isCheckout, getTips]);
+  }, [isCheckout, hasAbandonedCart, getTips]);
 
-  // Reset bubble when route changes
+  // Reset UI state on route change
   useEffect(() => {
     setShowBubble(true);
     setIsOpen(false);
     setTipIndex(0);
   }, [router.pathname]);
 
-  const message = isCheckout ? CHECKOUT_MESSAGE : getTips()[tipIndex];
+  const getMessage = () => {
+    if (isCheckout) return CHECKOUT_MESSAGE;
+    if (hasAbandonedCart) return ABANDONED_CART_MESSAGE;
+    return getTips()[tipIndex];
+  };
 
   const handleAvatarClick = () => {
     setIsOpen(o => !o);
@@ -98,7 +115,14 @@ const AyniNutria = () => {
           >
             ✕
           </button>
-          <p>{message}</p>
+          <p>{getMessage()}</p>
+
+          {/* CTA de recuperación — solo visible fuera del checkout con carrito pendiente */}
+          {hasAbandonedCart && (
+            <Link href="/checkout" className={styles.recoveryCta}>
+              Completar Compra →
+            </Link>
+          )}
         </div>
       )}
 
@@ -115,6 +139,17 @@ const AyniNutria = () => {
               ✕
             </button>
           </div>
+
+          {/* Banner de carrito pendiente dentro del panel FAQ */}
+          {hasAbandonedCart && (
+            <div className={styles.recoveryBanner}>
+              <p>Tienes un pedido sin finalizar.</p>
+              <Link href="/checkout" className={styles.recoveryBannerCta}>
+                Ir al Checkout →
+              </Link>
+            </div>
+          )}
+
           <div className={styles.faqList}>
             {FAQ.map(({ q, a }) => (
               <details key={q} className={styles.faqItem}>
@@ -128,7 +163,7 @@ const AyniNutria = () => {
 
       <button
         type="button"
-        className={styles.avatar}
+        className={`${styles.avatar} ${hasAbandonedCart ? styles.avatarPulse : ''}`}
         onClick={handleAvatarClick}
         aria-label={isOpen ? 'Cerrar asistente' : 'Abrir asistente AyniNutria'}
         title="AyniNutria — Asistente Aynimar"

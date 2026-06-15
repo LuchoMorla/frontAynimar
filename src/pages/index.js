@@ -2,6 +2,7 @@ import ProductList from '@containers/ProductList';
 import Head from 'next/head';
 import UserSegmentation from '@containers/userSegmentation';
 import WasteList from '@containers/WasteList';
+import HeroSection from '@components/HeroSection';
 import styles from '@styles/Home.module.scss';
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <Head>
         <title>Aynimar | Home</title>
       </Head>
+      <HeroSection />
       <UserSegmentation />
       <h1 className={styles['recicler-title']}>Nuestros Productos</h1>
       <ProductList />

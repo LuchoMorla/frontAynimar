@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import endPoints from '@services/api/index';
 import useGetProducts from '@hooks/useGetProducts';
 import ProductItem from '@components/ProductItem';
-import HeroSection from '@components/HeroSection';
 import Paginacion from '@common/Paginacion';
 import styles from '@styles/ProductList.module.scss';
 
@@ -77,8 +76,6 @@ const ProductList = () => {
 
 	return (
 		<section className={styles["main-container"]}>
-			<HeroSection />
-
 			{/* Panel de filtros mejorado */}
 			<div style={{
 				// background: '#ffffff',

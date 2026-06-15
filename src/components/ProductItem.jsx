@@ -35,6 +35,17 @@ const ProductItem = ({ product }) => {
 
     const productId = product.id;
 
+    const addItemToOrder = async (orderId) => {
+      const packet = { orderId, productId, amount };
+      if (userHaveToken) {
+        const { data } = await axios.post(endPoints.orders.postItem, packet);
+        return data;
+      } else {
+        const { data } = await axios.post(endPoints.orders.postItemToGuest, packet);
+        return data;
+      }
+    };
+
     try {
       let orderId = window.localStorage.getItem('oi') ? parseInt(window.localStorage.getItem('oi')) : null;
 
@@ -49,15 +60,25 @@ const ProductItem = ({ product }) => {
         window.localStorage.setItem('oi', `${orderId}`);
       }
 
-      const packet = { orderId, productId, amount };
-
       let newItemFromApi;
-      if (userHaveToken) {
-        const { data } = await axios.post(endPoints.orders.postItem, packet);
-        newItemFromApi = data;
-      } else {
-        const { data } = await axios.post(endPoints.orders.postItemToGuest, packet);
-        newItemFromApi = data;
+      try {
+        newItemFromApi = await addItemToOrder(orderId);
+      } catch (itemErr) {
+        // Stale order in localStorage — create a fresh one and retry once
+        if (itemErr.response?.status === 404) {
+          window.localStorage.removeItem('oi');
+          if (userHaveToken) {
+            const newOrder = await createOrder();
+            orderId = newOrder.id;
+          } else {
+            const { data } = await axios.post(endPoints.orders.postGuestOrder);
+            orderId = data.id;
+          }
+          window.localStorage.setItem('oi', `${orderId}`);
+          newItemFromApi = await addItemToOrder(orderId);
+        } else {
+          throw itemErr;
+        }
       }
 
       addToCart({

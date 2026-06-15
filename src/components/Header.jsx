@@ -226,6 +226,9 @@ const Header = () => {
               <Link href="/store">Tienda</Link>
             </li>
             <li>
+              <Link href="/como-funciona" style={{ color: '#4900E4', fontWeight: '700' }}>¿Cómo funciona?</Link>
+            </li>
+            <li>
               <Link href="/contact">Contactanos</Link>
             </li>
             <li>

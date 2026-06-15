@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '@components/Header';
 import Footer from '@components/Footer';
+import DeliveryAnnouncement from '@components/DeliveryAnnouncement';
 import styles from '@styles/Layout.module.scss';
 
 const Layout = ({ children }) => {
@@ -9,7 +10,8 @@ const Layout = ({ children }) => {
 			<Header />
 			<main className={styles.content}>
 				{children}
-			</main>		
+			</main>
+			<DeliveryAnnouncement />
 			<Footer className={styles.footer} />
 		</div>
 	);

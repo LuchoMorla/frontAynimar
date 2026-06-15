@@ -20,6 +20,14 @@ import WalletRedeem from '@components/WalletRedeem';
 import CouponInput from '@components/CouponInput';
 import CheckoutTrustBadges from '@components/CheckoutTrustBadges';
 
+const ECUADOR_PROVINCES = [
+  'Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi',
+  'El Oro', 'Esmeraldas', 'Galápagos', 'Guayas', 'Imbabura', 'Loja',
+  'Los Ríos', 'Manabí', 'Morona Santiago', 'Napo', 'Orellana', 'Pastaza',
+  'Pichincha', 'Santa Elena', 'Santo Domingo de los Tsáchilas',
+  'Sucumbíos', 'Tungurahua', 'Zamora Chinchipe',
+];
+
 const ECUADOR_CITIES = [
   'Quito', 'Guayaquil', 'Cuenca', 'Ambato', 'Riobamba',
   'Manta', 'Portoviejo', 'Ibarra', 'Loja', 'Machala',
@@ -52,10 +60,13 @@ const Checkout = () => {
   // Controlled guest form state
   const [guestData, setGuestData] = useState({
     fullName: '',
+    identityNumber: '',
     email: '',
     phone: '',
+    province: '',
     city: '',
     address: '',
+    references: '',
   });
 
   // ── Auth: get email from API once logged in ──
@@ -162,12 +173,13 @@ const Checkout = () => {
       const response = await addCustomer({
         name: firstName,
         lastName,
-        identityNumber: '0000000000',
+        identityNumber: guestData.identityNumber,
         phone: guestData.phone,
         countryOfResidence: 'Ecuador',
-        province: guestData.city,
+        province: guestData.province,
         city: guestData.city,
         streetAddress: guestData.address,
+        geolocation: guestData.references,
         user: {
           email: guestData.email,
           password: generateTempPassword(),
@@ -282,9 +294,18 @@ const Checkout = () => {
     }
 
     if (!auth.user) {
-      const { fullName, email: gEmail, phone, city, address } = guestData;
-      if (!fullName.trim() || !gEmail.trim() || !phone.trim() || !city || !address.trim()) {
-        toast.error('Por favor completa todos los campos de envío.');
+      const { fullName, identityNumber, email: gEmail, phone, province, city, address, references } = guestData;
+      if (
+        !fullName.trim() ||
+        !identityNumber.trim() ||
+        !gEmail.trim() ||
+        !phone.trim() ||
+        !province ||
+        !city ||
+        !address.trim() ||
+        !references.trim()
+      ) {
+        toast.error('Por favor completa todos los campos de envío y facturación.');
         return;
       }
     } else {
@@ -350,12 +371,14 @@ const Checkout = () => {
               </h2>
 
               {!auth.user ? (
-                /* ── Guest: slim inline form ── */
+                /* ── Guest: formulario completo de envío y facturación ── */
                 <div>
                   <div className={styles.formGrid}>
+
+                    {/* 1. Nombres y Apellidos Completos */}
                     <div className={styles.fieldFull}>
                       <label className={styles.label} htmlFor="g-fullname">
-                        Nombre Completo <span className={styles.req}>*</span>
+                        Nombres y Apellidos Completos <span className={styles.req}>*</span>
                       </label>
                       <input
                         id="g-fullname"
@@ -368,21 +391,24 @@ const Checkout = () => {
                       />
                     </div>
 
+                    {/* 2. Cédula / RUC */}
                     <div className={styles.fieldHalf}>
-                      <label className={styles.label} htmlFor="g-email">
-                        Correo Electrónico <span className={styles.req}>*</span>
+                      <label className={styles.label} htmlFor="g-identity">
+                        Cédula de Identidad o RUC <span className={styles.req}>*</span>
                       </label>
                       <input
-                        id="g-email"
-                        type="email"
+                        id="g-identity"
+                        type="text"
                         className={styles.input}
-                        placeholder="tu@correo.com"
-                        value={guestData.email}
-                        onChange={e => setGuestData(d => ({ ...d, email: e.target.value }))}
-                        autoComplete="email"
+                        placeholder="0000000000"
+                        value={guestData.identityNumber}
+                        onChange={e => setGuestData(d => ({ ...d, identityNumber: e.target.value }))}
+                        autoComplete="off"
+                        maxLength={13}
                       />
                     </div>
 
+                    {/* 3. Celular / WhatsApp */}
                     <div className={styles.fieldHalf}>
                       <label className={styles.label} htmlFor="g-phone">
                         Celular / WhatsApp <span className={styles.req}>*</span>
@@ -398,9 +424,42 @@ const Checkout = () => {
                       />
                     </div>
 
+                    {/* 4. Correo Electrónico */}
+                    <div className={styles.fieldFull}>
+                      <label className={styles.label} htmlFor="g-email">
+                        Correo Electrónico <span className={styles.req}>*</span>
+                      </label>
+                      <input
+                        id="g-email"
+                        type="email"
+                        className={styles.input}
+                        placeholder="tu@correo.com"
+                        value={guestData.email}
+                        onChange={e => setGuestData(d => ({ ...d, email: e.target.value }))}
+                        autoComplete="email"
+                      />
+                    </div>
+
+                    {/* 5. Provincia */}
+                    <div className={styles.fieldHalf}>
+                      <label className={styles.label} htmlFor="g-province">
+                        Provincia <span className={styles.req}>*</span>
+                      </label>
+                      <select
+                        id="g-province"
+                        className={styles.input}
+                        value={guestData.province}
+                        onChange={e => setGuestData(d => ({ ...d, province: e.target.value }))}
+                      >
+                        <option value="">Selecciona tu provincia</option>
+                        {ECUADOR_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
+                      </select>
+                    </div>
+
+                    {/* 6. Ciudad / Cantón */}
                     <div className={styles.fieldHalf}>
                       <label className={styles.label} htmlFor="g-city">
-                        Ciudad <span className={styles.req}>*</span>
+                        Ciudad / Cantón <span className={styles.req}>*</span>
                       </label>
                       <select
                         id="g-city"
@@ -413,6 +472,7 @@ const Checkout = () => {
                       </select>
                     </div>
 
+                    {/* 7. Dirección Exacta */}
                     <div className={styles.fieldFull}>
                       <label className={styles.label} htmlFor="g-address">
                         Dirección Exacta <span className={styles.req}>*</span>
@@ -421,12 +481,29 @@ const Checkout = () => {
                         id="g-address"
                         type="text"
                         className={styles.input}
-                        placeholder="Calle, número, sector y referencias..."
+                        placeholder="Calle principal, calle secundaria y número de casa/dpto."
                         value={guestData.address}
                         onChange={e => setGuestData(d => ({ ...d, address: e.target.value }))}
                         autoComplete="street-address"
                       />
                     </div>
+
+                    {/* 8. Referencias de la ubicación */}
+                    <div className={styles.fieldFull}>
+                      <label className={styles.label} htmlFor="g-references">
+                        Referencias de la Ubicación <span className={styles.req}>*</span>
+                      </label>
+                      <input
+                        id="g-references"
+                        type="text"
+                        className={styles.input}
+                        placeholder="Color de casa, frente a qué local, señas adicionales..."
+                        value={guestData.references}
+                        onChange={e => setGuestData(d => ({ ...d, references: e.target.value }))}
+                        autoComplete="off"
+                      />
+                    </div>
+
                   </div>
 
                   <p className={styles.guestHint}>

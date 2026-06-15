@@ -131,12 +131,15 @@ const HowItWorks = () => (
     <section className={styles.ctaSection}>
       <h2 className={styles.ctaTitle}>¿Listo para empezar?</h2>
       <p className={styles.ctaSub}>Compra, recicla y acumula saldo — todo desde Aynimar.</p>
-      <a href="/" className={styles.ctaButton}>
-        <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '1.1rem', height: '1.1rem', flexShrink: 0 }}>
-          <path d="M7 18a2 2 0 100 4 2 2 0 000-4zm10 0a2 2 0 100 4 2 2 0 000-4zM5.14 6H3V4H1v2h2l3.6 7.59L5.25 16c-.16.28-.25.61-.25.94C5 18.1 5.9 19 7 19h14v-2H7.42a.25.25 0 01-.25-.25l.03-.12.97-1.63H19c.75 0 1.41-.41 1.75-1.03L23 9.54l-1.73-1-2.25 3.86L5.14 6z"/>
-        </svg>
-        Ir al Catálogo de Productos
-      </a>
+      <Link href="/" passHref>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a className={styles.ctaButton}>
+          <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '1.1rem', height: '1.1rem', flexShrink: 0 }}>
+            <path d="M7 18a2 2 0 100 4 2 2 0 000-4zm10 0a2 2 0 100 4 2 2 0 000-4zM5.14 6H3V4H1v2h2l3.6 7.59L5.25 16c-.16.28-.25.61-.25.94C5 18.1 5.9 19 7 19h14v-2H7.42a.25.25 0 01-.25-.25l.03-.12.97-1.63H19c.75 0 1.41-.41 1.75-1.03L23 9.54l-1.73-1-2.25 3.86L5.14 6z"/>
+          </svg>
+          Ir al Catálogo de Productos
+        </a>
+      </Link>
     </section>
   </div>
 );

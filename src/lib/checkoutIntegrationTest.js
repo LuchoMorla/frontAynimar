@@ -315,7 +315,7 @@ function checkpoint5_termsGate() {
 /* ─────────────────────────────────────────────────────────
    RUNNER
 ───────────────────────────────────────────────────────── */
-export async function runCheckoutTests({ productId = 1, verbose = false } = {}) {
+export async function runCheckoutTests({ productId = 1 } = {}) {
   console.clear();
   console.log('🧪 Aynimar Checkout Integration Tests');
   console.log('======================================');

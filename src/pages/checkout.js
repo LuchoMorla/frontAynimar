@@ -67,7 +67,33 @@ const Checkout = () => {
     city: '',
     address: '',
     references: '',
+    coordinates: null,
   });
+  const [geoStatus, setGeoStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+
+  // ── Geolocalización opcional ──
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error('Tu dispositivo no soporta geolocalización.');
+      return;
+    }
+    setGeoStatus('loading');
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const lat = coords.latitude.toFixed(6);
+        const lng = coords.longitude.toFixed(6);
+        setGuestData(d => ({ ...d, coordinates: { lat, lng } }));
+        setGeoStatus('success');
+        toast.success(`Ubicación capturada (~${Math.round(coords.accuracy)}m de precisión)`);
+      },
+      (err) => {
+        console.error('Geolocation error:', err);
+        setGeoStatus('error');
+        toast.error('No se pudo obtener la ubicación. Ingresa las referencias manualmente.');
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
 
   // ── Auth: get email from API once logged in ──
   const getUserEmail = async (id) => {
@@ -179,7 +205,9 @@ const Checkout = () => {
         province: guestData.province,
         city: guestData.city,
         streetAddress: guestData.address,
-        geolocation: guestData.references,
+        geolocation: guestData.coordinates
+          ? `${guestData.references} | GPS:${guestData.coordinates.lat},${guestData.coordinates.lng}`
+          : guestData.references,
         user: {
           email: guestData.email,
           password: generateTempPassword(),
@@ -486,6 +514,26 @@ const Checkout = () => {
                         onChange={e => setGuestData(d => ({ ...d, address: e.target.value }))}
                         autoComplete="street-address"
                       />
+                    </div>
+
+                    {/* GPS opcional */}
+                    <div className={styles.fieldFull}>
+                      <button
+                        type="button"
+                        className={styles.geoButton}
+                        onClick={handleGetLocation}
+                        disabled={geoStatus === 'loading'}
+                      >
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15" aria-hidden="true">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        {geoStatus === 'loading' ? 'Obteniendo ubicación...' : 'Usar mi ubicación actual (opcional)'}
+                      </button>
+                      {geoStatus === 'success' && guestData.coordinates && (
+                        <p className={styles.geoSuccess}>
+                          ✓ GPS fijado — {guestData.coordinates.lat}, {guestData.coordinates.lng}
+                        </p>
+                      )}
                     </div>
 
                     {/* 8. Referencias de la ubicación */}

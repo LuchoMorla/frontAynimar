@@ -27,55 +27,41 @@ const ABANDONED_CART_MESSAGE =
 
 const WELCOME_MSG = {
   sender: 'nutria',
-  text: '¡Hola, de una! Soy NutrIA 🦦. ¿En qué te ayudo, ve? Pregúntame sobre envíos, pagos o tus Ayni-Créditos.',
+  text: '¡Hola, de una! Soy NutrIA 🦦. ¿En qué te ayudo, ve? Pregúntame precios, envíos, o dime qué buscas.',
 };
 
 const FAQ = [
-  {
-    q: '¿A qué ciudades entregan?',
-    a: 'Quito, Guayaquil, Cuenca y principales ciudades del Ecuador. Coordinamos la entrega contigo por WhatsApp.',
-  },
-  {
-    q: '¿Cómo funciona el pago contra entrega?',
-    a: 'El repartidor llega a tu dirección y pagas en efectivo o transferencia al recibirlo. Sin riesgo ni adelantos.',
-  },
-  {
-    q: '¿Cuánto tarda el envío?',
-    a: 'Dentro de Quito: 1–3 días hábiles. Otras ciudades: 3–7 días hábiles según la transportista.',
-  },
-  {
-    q: '¿Qué son los Ayni-Créditos?',
-    a: '1 Ayni-Crédito = $1 de descuento. Los acumulas reciclando o comprando y puedes usarlos en cualquier pedido.',
-  },
-  {
-    q: '¿Cómo reciclo con Aynimar?',
-    a: 'Lleva tus residuos a puntos autorizados, registra el peso con el operador y los créditos se acreditan automáticamente.',
-  },
-  {
-    q: '¿Puedo rastrear mi pedido?',
-    a: 'Sí. Recibirás el número de guía por WhatsApp. También puedes consultarlo en "Mis Pedidos" en tu cuenta.',
-  },
+  { q: '¿A qué ciudades entregan?', a: 'Quito, Guayaquil, Cuenca y principales ciudades del Ecuador. Coordinamos la entrega contigo por WhatsApp.' },
+  { q: '¿Cómo funciona el pago contra entrega?', a: 'El repartidor llega a tu dirección y pagas en efectivo o transferencia al recibirlo. Sin riesgo ni adelantos.' },
+  { q: '¿Cuánto tarda el envío?', a: 'Dentro de Quito: 1–3 días hábiles. Otras ciudades: 3–7 días hábiles según la transportista.' },
+  { q: '¿Qué son los Ayni-Créditos?', a: '1 Ayni-Crédito = $1 de descuento. Los acumulas reciclando o comprando y puedes usarlos en cualquier pedido.' },
+  { q: '¿Cómo reciclo con Aynimar?', a: 'Lleva tus residuos a puntos autorizados, registra el peso con el operador y los créditos se acreditan automáticamente.' },
+  { q: '¿Puedo rastrear mi pedido?', a: 'Sí. Recibirás el número de guía por WhatsApp. También puedes consultarlo en "Mis Pedidos" en tu cuenta.' },
 ];
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 const AyniNutria = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [showBubble, setShowBubble] = useState(true);
-  const [tipIndex, setTipIndex] = useState(0);
+  const [isOpen, setIsOpen]               = useState(false);
+  const [showBubble, setShowBubble]       = useState(true);
+  const [tipIndex, setTipIndex]           = useState(0);
   const [hasAbandonedCart, setHasAbandonedCart] = useState(false);
+  const [activeTab, setActiveTab]         = useState('faq');
+  const [messages, setMessages]           = useState([WELCOME_MSG]);
+  const [input, setInput]                 = useState('');
+  const [isLoading, setIsLoading]         = useState(false);
 
-  const [activeTab, setActiveTab] = useState('faq');
-  const [messages, setMessages] = useState([WELCOME_MSG]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const historyRef    = useRef(null);
+  const inputRef      = useRef(null);
+  const messagesRef   = useRef(messages);
+  const prevIsOpenRef = useRef(false);
 
-  const historyRef = useRef(null);
-  const inputRef = useRef(null);
-
-  const isCheckout = router.pathname === '/checkout';
+  const isCheckout  = router.pathname === '/checkout';
   const isRecycling = router.pathname.startsWith('/recycl');
+
+  // Keep messagesRef in sync for the session-close handler
+  useEffect(() => { messagesRef.current = messages; }, [messages]);
 
   useEffect(() => {
     const oi = window.localStorage.getItem('oi');
@@ -90,10 +76,7 @@ const AyniNutria = () => {
   useEffect(() => {
     if (isCheckout || hasAbandonedCart) return;
     const tips = getTips();
-    const id = setInterval(
-      () => setTipIndex((i) => (i + 1) % tips.length),
-      8000
-    );
+    const id = setInterval(() => setTipIndex((i) => (i + 1) % tips.length), 8000);
     return () => clearInterval(id);
   }, [isCheckout, hasAbandonedCart, getTips]);
 
@@ -103,14 +86,29 @@ const AyniNutria = () => {
     setTipIndex(0);
   }, [router.pathname]);
 
-  // Scroll chat to bottom whenever messages update or tab switches to chat
+  // Send emotional-analytics report to Telegram when panel closes
+  useEffect(() => {
+    if (prevIsOpenRef.current && !isOpen && messagesRef.current.length > 2) {
+      const sessionHistory = messagesRef.current.map((m) => ({
+        role:    m.sender === 'user' ? 'user' : 'assistant',
+        content: m.text,
+      }));
+      fetch(`${API_BASE}/api/v1/ai/nutria/session-close`, {
+        method:   'POST',
+        headers:  { 'Content-Type': 'application/json' },
+        body:     JSON.stringify({ history: sessionHistory }),
+        keepalive: true,
+      }).catch(() => {});
+    }
+    prevIsOpenRef.current = isOpen;
+  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (activeTab === 'chat' && historyRef.current) {
       historyRef.current.scrollTop = historyRef.current.scrollHeight;
     }
   }, [messages, activeTab]);
 
-  // Focus input when switching to chat tab
   useEffect(() => {
     if (activeTab === 'chat' && isOpen && inputRef.current) {
       inputRef.current.focus();
@@ -128,45 +126,98 @@ const AyniNutria = () => {
     setShowBubble(false);
   };
 
+  // Execute client-side actions returned by NutrIA tools
+  const handleActions = useCallback(
+    async (actions) => {
+      for (const action of actions) {
+        try {
+          if (action.type === 'redirect') {
+            router.push(action.to);
+          } else if (action.type === 'add_to_cart') {
+            let oi = localStorage.getItem('oi');
+            if (!oi) {
+              const orderRes = await fetch(`${API_BASE}/api/v1/orders/guest-order`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+              });
+              const newOrder = await orderRes.json();
+              oi = String(newOrder.id);
+              localStorage.setItem('oi', oi);
+            }
+            await fetch(`${API_BASE}/api/v1/orders/add-item-guest`, {
+              method:  'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body:    JSON.stringify({
+                orderId:   Number(oi),
+                productId: action.productoId,
+                amount:    action.cantidad,
+              }),
+            });
+          } else if (action.type === 'remove_from_cart') {
+            const oi = localStorage.getItem('oi');
+            if (oi) {
+              const orderRes = await fetch(`${API_BASE}/api/v1/orders/guest-order/${oi}`);
+              if (orderRes.ok) {
+                const order = await orderRes.json();
+                const item  = (order.items ?? []).find((i) => i.id === action.productoId);
+                if (item?.OrderProduct?.id) {
+                  await fetch(`${API_BASE}/api/v1/orders/item-guest/${item.OrderProduct.id}`, {
+                    method: 'DELETE',
+                  });
+                }
+              }
+            }
+          }
+        } catch (actionErr) {
+          console.error('[NutrIA] Action error:', action.type, actionErr.message);
+        }
+      }
+    },
+    [router]
+  );
+
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || isLoading) return;
 
-    const userMsg = { sender: 'user', text };
+    const userMsg    = { sender: 'user', text };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInput('');
     setIsLoading(true);
 
     try {
-      // Send last 6 messages as context (skip the static welcome)
       const history = newMessages
         .slice(1)
         .slice(-6)
         .map((m) => ({
-          role: m.sender === 'user' ? 'user' : 'assistant',
+          role:    m.sender === 'user' ? 'user' : 'assistant',
           content: m.text,
         }));
 
       const res = await fetch(`${API_BASE}/api/v1/ai/nutria/chat`, {
-        method: 'POST',
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, history }),
+        body:    JSON.stringify({ message: text, history }),
       });
 
       if (!res.ok) {
-        // Surface the backend's actual error message for transparency
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.message || `Error ${res.status}`);
       }
 
       const data = await res.json();
+
       setMessages((prev) => [
         ...prev,
         { sender: 'nutria', text: data.reply || 'Ups, no pude responder. ¡Inténtalo de nuevo!' },
       ]);
+
+      // Execute any autonomous actions the agent decided
+      if (Array.isArray(data.actions) && data.actions.length > 0) {
+        await handleActions(data.actions);
+      }
     } catch (err) {
-      // Log to browser console for devtools debugging
       console.error('[NutrIA] Chat error:', err.message);
       setMessages((prev) => [
         ...prev,
@@ -197,7 +248,6 @@ const AyniNutria = () => {
             ✕
           </button>
           <p>{getMessage()}</p>
-
           {hasAbandonedCart && (
             <Link href="/checkout" className={styles.recoveryCta}>
               Completar Compra →
@@ -220,7 +270,6 @@ const AyniNutria = () => {
             </button>
           </div>
 
-          {/* Tab bar */}
           <div className={styles.tabBar} role="tablist">
             <button
               role="tab"
@@ -240,7 +289,6 @@ const AyniNutria = () => {
             </button>
           </div>
 
-          {/* FAQ tab */}
           {activeTab === 'faq' && (
             <>
               {hasAbandonedCart && (
@@ -262,20 +310,15 @@ const AyniNutria = () => {
             </>
           )}
 
-          {/* Chat tab */}
           {activeTab === 'chat' && (
             <div className={styles.chatArea}>
               <div className={styles.chatHistory} ref={historyRef}>
                 {messages.map((msg, i) => (
                   <div
                     key={i}
-                    className={
-                      msg.sender === 'nutria' ? styles.msgNutria : styles.msgUser
-                    }
+                    className={msg.sender === 'nutria' ? styles.msgNutria : styles.msgUser}
                   >
-                    {msg.sender === 'nutria' && (
-                      <span className={styles.msgAvatar}>🦦</span>
-                    )}
+                    {msg.sender === 'nutria' && <span className={styles.msgAvatar}>🦦</span>}
                     <span className={styles.msgBubble}>{msg.text}</span>
                   </div>
                 ))}
@@ -283,9 +326,7 @@ const AyniNutria = () => {
                   <div className={styles.msgNutria}>
                     <span className={styles.msgAvatar}>🦦</span>
                     <span className={`${styles.msgBubble} ${styles.thinking}`}>
-                      <span />
-                      <span />
-                      <span />
+                      <span /><span /><span />
                     </span>
                   </div>
                 )}

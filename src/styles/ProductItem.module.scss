@@ -1,5 +1,6 @@
 @import 'vars';
 
+/* ── Card ── */
 .ProductItem {
 	max-width: 240px;
 	margin: 1rem .5rem;
@@ -7,15 +8,29 @@
 	border-radius: 1rem;
 	padding: .4rem;
 	box-shadow: $--cardShadow;
-	/*border: 1px solid blue;*/
 	transition: all .3s ease-in-out;
+	display: flex;
+	flex-direction: column;
+}
+.ProductItem:hover {
+	scale: 1.04;
+	box-shadow: $--cardShadowHover;
 }
 
+/* ── Image ── */
 .image-wrapper {
 	position: relative;
 	display: block;
 }
+.ProductItem img {
+	max-width: 240px;
+	height: 240px;
+	border-radius: .75rem .75rem 0 0;
+	object-fit: cover;
+	display: block;
+}
 
+/* ── Badge "Importado Nuevo" ── */
 .badge {
 	position: absolute;
 	top: 8px;
@@ -30,89 +45,103 @@
 	white-space: nowrap;
 	box-shadow: 0 1px 4px rgba(0,0,0,0.12);
 }
-.ProductItem:hover {
-	scale: 1.04;
-	box-shadow: $--cardShadowHover;
-}
-.ProductItem img {
-	max-width: 240px;
-	height: 240px;
-	border-radius: 1rem 1rem 0 0;
-	object-fit:cover;
-}
+
+/* ── Info section ── */
 .product-info {
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
+	flex: 1;
+	padding: 8px 4px 4px;
+	gap: 10px;
 }
-/*.product-info figure {
-	margin: 0;
+
+.product-meta {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	flex: 1;
 }
-/*.product-info figure img {
-	width: 35px;
-	height: 35px;
-	object-fit:contain;
-}*/
-.product-info div p:nth-child(1) {
+
+.price {
 	font-weight: 800;
 	font-size: $--lg;
-	margin-top: 0;
-	margin-bottom: 4px;
+	margin: 0;
 	color: $--black;
 }
-.product-info div p:nth-child(2) {
-	font-size: $--md;
-	margin-top: 0;
-	margin-bottom: 0;
-	color: $--black;
+
+.productName {
+	font-size: $--sm;
+	color: #374151;
+	cursor: pointer;
+	margin: 0;
+	line-height: 1.3;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
 }
+.productName:hover {
+	color: $--purple;
+}
+
 .go_product {
 	cursor: pointer;
 }
-.productName {
-	font-size: $--sm;
-	color: $--soft-green;
-	cursor: pointer;
-}
 
-.product-info form .more-clickable-area {
-	margin-left: .5rem;
-	height: auto;
-}
-.product-info form .more-clickable-area img {
-	border-radius: 0;
-	min-width: 2.3rem;
-	height: auto;
-	justify-self:flex-start;
-}
-
-.pay-Button {
-	width        : 100%;
-	background   : $--purple;
-	color        : #fff;
-	cursor       : pointer;
-	padding: 1rem;
-	border-radius: .5rem;
-	font-size: 1rem;
+/* ── CTA button ── */
+.ctaButton {
+	width: 100%;
+	background: $--purple;
+	color: #fff;
 	border: none;
-	transition: all .2s ease-in-out;
-}
-.pay-Button:hover {
-	scale: 1.02	quote($string: "");
-	box-shadow: .1rem .1rem .2rem #00000046;
-}
-
-.Orders {
-	margin: 0 auto;
+	border-radius: .6rem;
+	padding: 9px 10px;
+	font-size: 0.82rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background .2s ease, transform .1s ease, box-shadow .2s ease;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	line-height: 1;
 }
-.Orders p {
-	color: $--black;
+.ctaButton:hover:not(:disabled) {
+	background: #3600b3;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(73, 0, 228, 0.35);
+}
+.ctaButton:active:not(:disabled) {
+	transform: translateY(0);
+	box-shadow: none;
 }
 
+.ctaLoading {
+	opacity: .65;
+	cursor: not-allowed;
+}
+
+.ctaAdded {
+	background: #065f46;
+}
+.ctaAdded:hover {
+	background: #065f46;
+	transform: none;
+	box-shadow: none;
+	cursor: default;
+}
+
+/* ── Responsive ── */
 @media (max-width: 523px) {
 	.ProductItem {
-		max-width: 138px;
+		max-width: 155px;
+	}
+	.ProductItem img {
+		max-width: 155px;
+		height: 155px;
+	}
+	.ctaButton {
+		font-size: 0.72rem;
+		padding: 8px 6px;
 	}
 }

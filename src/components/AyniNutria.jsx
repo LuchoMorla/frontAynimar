@@ -3,6 +3,61 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styles from '@styles/AyniNutria.module.scss';
 
+// ── Local State Manager — persisted in sessionStorage ─────────────────────────
+const STATE_KEY = 'nutria_ctx';
+
+const DEFAULT_CONTEXTO = {
+  perfilCliente:      { nombre: null, telefono: null },
+  historialIntereses: [],
+  estadoCarrito:      {},
+  trackingSoporte:    { ordenId: null, estado: null },
+  vectorEmocional:    { inicial: null, actual: null },
+};
+
+function loadContexto() {
+  if (typeof window === 'undefined') return DEFAULT_CONTEXTO;
+  try {
+    const raw = sessionStorage.getItem(STATE_KEY);
+    return raw ? { ...DEFAULT_CONTEXTO, ...JSON.parse(raw) } : DEFAULT_CONTEXTO;
+  } catch (_) {
+    return DEFAULT_CONTEXTO;
+  }
+}
+
+function saveContexto(ctx) {
+  if (typeof window === 'undefined') return;
+  try { sessionStorage.setItem(STATE_KEY, JSON.stringify(ctx)); } catch (_) { /* ignore */ }
+}
+
+function mergeContexto(prev, update) {
+  if (!update || typeof update !== 'object') return prev;
+  const next = { ...prev };
+
+  if (update.perfilCliente) {
+    next.perfilCliente = { ...prev.perfilCliente, ...update.perfilCliente };
+  }
+  if (Array.isArray(update.historialIntereses)) {
+    const combined = [...new Set([...prev.historialIntereses, ...update.historialIntereses])];
+    next.historialIntereses = combined.slice(-12);
+  }
+  if (update.estadoCarrito && typeof update.estadoCarrito === 'object') {
+    const merged = { ...prev.estadoCarrito };
+    Object.entries(update.estadoCarrito).forEach(([id, qty]) => {
+      if (qty <= 0) delete merged[id];
+      else merged[id] = qty;
+    });
+    next.estadoCarrito = merged;
+  }
+  if (update.trackingSoporte) {
+    next.trackingSoporte = { ...prev.trackingSoporte, ...update.trackingSoporte };
+  }
+  if (update.vectorEmocional) {
+    next.vectorEmocional = { ...prev.vectorEmocional, ...update.vectorEmocional };
+  }
+  return next;
+}
+
+// ── Static content ────────────────────────────────────────────────────────────
 const STORE_TIPS = [
   '¿Sabías que cada compra apoya la economía circular en Ecuador? 🌿',
   'Recicla y acumula Ayni-Créditos para descontar en tu próxima compra. ♻️',
@@ -41,16 +96,18 @@ const FAQ = [
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
+// ── Component ─────────────────────────────────────────────────────────────────
 const AyniNutria = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen]               = useState(false);
-  const [showBubble, setShowBubble]       = useState(true);
-  const [tipIndex, setTipIndex]           = useState(0);
+  const [isOpen, setIsOpen]                     = useState(false);
+  const [showBubble, setShowBubble]             = useState(true);
+  const [tipIndex, setTipIndex]                 = useState(0);
   const [hasAbandonedCart, setHasAbandonedCart] = useState(false);
-  const [activeTab, setActiveTab]         = useState('faq');
-  const [messages, setMessages]           = useState([WELCOME_MSG]);
-  const [input, setInput]                 = useState('');
-  const [isLoading, setIsLoading]         = useState(false);
+  const [activeTab, setActiveTab]               = useState('faq');
+  const [messages, setMessages]                 = useState([WELCOME_MSG]);
+  const [input, setInput]                       = useState('');
+  const [isLoading, setIsLoading]               = useState(false);
+  const [contexto, setContexto]                 = useState(DEFAULT_CONTEXTO);
 
   const historyRef    = useRef(null);
   const inputRef      = useRef(null);
@@ -60,12 +117,23 @@ const AyniNutria = () => {
   const isCheckout  = router.pathname === '/checkout';
   const isRecycling = router.pathname.startsWith('/recycl');
 
-  // Keep messagesRef in sync for the session-close handler
+  // Hydrate state manager from sessionStorage on mount
+  useEffect(() => { setContexto(loadContexto()); }, []);
+
+  // Persist state manager whenever it changes
+  useEffect(() => { saveContexto(contexto); }, [contexto]);
+
   useEffect(() => { messagesRef.current = messages; }, [messages]);
 
   useEffect(() => {
-    const oi = window.localStorage.getItem('oi');
+    const oi = typeof window !== 'undefined' ? localStorage.getItem('oi') : null;
     setHasAbandonedCart(!!oi && !isCheckout);
+    if (oi) {
+      setContexto((prev) => ({
+        ...prev,
+        trackingSoporte: { ...prev.trackingSoporte, ordenId: Number(oi) },
+      }));
+    }
   }, [router.pathname, isCheckout]);
 
   const getTips = useCallback(
@@ -86,17 +154,17 @@ const AyniNutria = () => {
     setTipIndex(0);
   }, [router.pathname]);
 
-  // Send emotional-analytics report to Telegram when panel closes
+  // Emotional analytics report when panel closes (if chat was used)
   useEffect(() => {
     if (prevIsOpenRef.current && !isOpen && messagesRef.current.length > 2) {
       const sessionHistory = messagesRef.current.map((m) => ({
         role:    m.sender === 'user' ? 'user' : 'assistant',
-        content: m.text,
+        content: m.text || '',
       }));
       fetch(`${API_BASE}/api/v1/ai/nutria/session-close`, {
-        method:   'POST',
-        headers:  { 'Content-Type': 'application/json' },
-        body:     JSON.stringify({ history: sessionHistory }),
+        method:    'POST',
+        headers:   { 'Content-Type': 'application/json' },
+        body:      JSON.stringify({ history: sessionHistory }),
         keepalive: true,
       }).catch(() => {});
     }
@@ -116,7 +184,7 @@ const AyniNutria = () => {
   }, [activeTab, isOpen]);
 
   const getMessage = () => {
-    if (isCheckout) return CHECKOUT_MESSAGE;
+    if (isCheckout)      return CHECKOUT_MESSAGE;
     if (hasAbandonedCart) return ABANDONED_CART_MESSAGE;
     return getTips()[tipIndex];
   };
@@ -126,13 +194,14 @@ const AyniNutria = () => {
     setShowBubble(false);
   };
 
-  // Execute client-side actions returned by NutrIA tools
+  // Execute client-side actions returned by the autonomous agent
   const handleActions = useCallback(
     async (actions) => {
       for (const action of actions) {
         try {
           if (action.type === 'redirect') {
             router.push(action.to);
+
           } else if (action.type === 'add_to_cart') {
             let oi = localStorage.getItem('oi');
             if (!oi) {
@@ -153,6 +222,11 @@ const AyniNutria = () => {
                 amount:    action.cantidad,
               }),
             });
+            // Optimistic state update
+            setContexto((prev) => mergeContexto(prev, {
+              estadoCarrito: { [action.productoId]: action.cantidad },
+            }));
+
           } else if (action.type === 'remove_from_cart') {
             const oi = localStorage.getItem('oi');
             if (oi) {
@@ -167,7 +241,12 @@ const AyniNutria = () => {
                 }
               }
             }
+            // Optimistic state update
+            setContexto((prev) => mergeContexto(prev, {
+              estadoCarrito: { [action.productoId]: 0 },
+            }));
           }
+          // show_products is handled inline in sendMessage
         } catch (actionErr) {
           console.error('[NutrIA] Action error:', action.type, actionErr.message);
         }
@@ -180,25 +259,26 @@ const AyniNutria = () => {
     const text = input.trim();
     if (!text || isLoading) return;
 
-    const userMsg    = { sender: 'user', text };
-    const newMessages = [...messages, userMsg];
-    setMessages(newMessages);
+    // Add the user message to the chat immediately
+    setMessages((prev) => [...prev, { sender: 'user', text }]);
     setInput('');
     setIsLoading(true);
 
-    try {
-      const history = newMessages
-        .slice(1)
-        .slice(-6)
-        .map((m) => ({
-          role:    m.sender === 'user' ? 'user' : 'assistant',
-          content: m.text,
-        }));
+    // Set initial emotion on the very first user message
+    if (messages.length === 1) {
+      setContexto((prev) => mergeContexto(prev, {
+        vectorEmocional: { inicial: 'neutral', actual: 'neutral' },
+      }));
+    }
 
+    try {
+      // Send ONLY the current message + structured context (no raw history array).
+      // The backend injects the context narrative into the system prompt, keeping
+      // the model window small and eliminating history duplication.
       const res = await fetch(`${API_BASE}/api/v1/ai/nutria/chat`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ message: text, history }),
+        body:    JSON.stringify({ message: text, contexto }),
       });
 
       if (!res.ok) {
@@ -208,14 +288,28 @@ const AyniNutria = () => {
 
       const data = await res.json();
 
+      // Separate product-card action from navigation/cart actions
+      const productsAction = (data.actions || []).find((a) => a.type === 'show_products');
+      const otherActions   = (data.actions || []).filter((a) => a.type !== 'show_products');
+
+      // Append NutrIA reply with optional product cards
       setMessages((prev) => [
         ...prev,
-        { sender: 'nutria', text: data.reply || 'Ups, no pude responder. ¡Inténtalo de nuevo!' },
+        {
+          sender:   'nutria',
+          text:     data.reply || 'Ups, no pude responder. ¡Inténtalo de nuevo!',
+          products: productsAction?.productos ?? null,
+        },
       ]);
 
-      // Execute any autonomous actions the agent decided
-      if (Array.isArray(data.actions) && data.actions.length > 0) {
-        await handleActions(data.actions);
+      // Merge server-computed state updates (profile extraction, tracking, interests)
+      if (data.estadoActualizado) {
+        setContexto((prev) => mergeContexto(prev, data.estadoActualizado));
+      }
+
+      // Execute navigation / cart mutations
+      if (otherActions.length > 0) {
+        await handleActions(otherActions);
       }
     } catch (err) {
       console.error('[NutrIA] Chat error:', err.message);
@@ -233,6 +327,11 @@ const AyniNutria = () => {
       e.preventDefault();
       sendMessage();
     }
+  };
+
+  // Quick-add from product cards bypasses chat — directly triggers add_to_cart
+  const quickAddProduct = (productoId) => {
+    handleActions([{ type: 'add_to_cart', productoId, cantidad: 1 }]);
   };
 
   return (
@@ -319,15 +418,41 @@ const AyniNutria = () => {
                     className={msg.sender === 'nutria' ? styles.msgNutria : styles.msgUser}
                   >
                     {msg.sender === 'nutria' && <span className={styles.msgAvatar}>🦦</span>}
-                    <span className={styles.msgBubble}>{msg.text}</span>
+                    <div className={styles.msgContent}>
+                      <span className={styles.msgBubble}>{msg.text}</span>
+
+                      {msg.sender === 'nutria' && msg.products && msg.products.length > 0 && (
+                        <div className={styles.productCards}>
+                          {msg.products.map((p) => (
+                            <div key={p.id} className={styles.productCard}>
+                              <div className={styles.productCardInfo}>
+                                <span className={styles.productCardName}>{p.nombre}</span>
+                                <span className={styles.productCardPrice}>${p.precio}</span>
+                              </div>
+                              <button
+                                type="button"
+                                className={styles.productCardAdd}
+                                onClick={() => quickAddProduct(p.id)}
+                                aria-label={`Agregar ${p.nombre} al carrito`}
+                              >
+                                + Agregar
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
+
                 {isLoading && (
                   <div className={styles.msgNutria}>
                     <span className={styles.msgAvatar}>🦦</span>
-                    <span className={`${styles.msgBubble} ${styles.thinking}`}>
-                      <span /><span /><span />
-                    </span>
+                    <div className={styles.msgContent}>
+                      <span className={`${styles.msgBubble} ${styles.thinking}`}>
+                        <span /><span /><span />
+                      </span>
+                    </div>
                   </div>
                 )}
               </div>

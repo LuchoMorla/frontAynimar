@@ -398,6 +398,75 @@ details[open] .faqQ::before {
   }
 }
 
+// ── Message content wrapper (bubble + optional product cards) ─────────────────
+
+.msgContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+// ── Product cards (rendered below NutrIA bubble after buscar_producto) ─────────
+
+.productCards {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.productCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 7px 9px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.productCardInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.productCardName {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.productCardPrice {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: $--purple;
+}
+
+.productCardAdd {
+  flex-shrink: 0;
+  background: $--purple;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.1s ease;
+
+  &:hover  { background: #3600b3; }
+  &:active { transform: scale(0.94); }
+}
+
 @media (max-width: 480px) {
   .panel { width: calc(100vw - 48px); }
   .bubble { max-width: calc(100vw - 100px); }

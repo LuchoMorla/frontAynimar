@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styles from '@styles/AyniNutria.module.scss';
@@ -24,6 +24,11 @@ const CHECKOUT_MESSAGE =
 
 const ABANDONED_CART_MESSAGE =
   '¡Hola! Veo que dejaste algunos productos guardados. ¿Quieres retomar tu pedido ahora mismo? 🦦🛒';
+
+const WELCOME_MSG = {
+  sender: 'nutria',
+  text: '¡Hola, de una! Soy NutrIA 🦦. ¿En qué te ayudo, ve? Pregúntame sobre envíos, pagos o tus Ayni-Créditos.',
+};
 
 const FAQ = [
   {
@@ -52,18 +57,26 @@ const FAQ = [
   },
 ];
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+
 const AyniNutria = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [showBubble, setShowBubble] = useState(true);
   const [tipIndex, setTipIndex] = useState(0);
-  // Reads localStorage only on client — avoids Next.js hydration mismatch
   const [hasAbandonedCart, setHasAbandonedCart] = useState(false);
+
+  const [activeTab, setActiveTab] = useState('faq');
+  const [messages, setMessages] = useState([WELCOME_MSG]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const historyRef = useRef(null);
+  const inputRef = useRef(null);
 
   const isCheckout = router.pathname === '/checkout';
   const isRecycling = router.pathname.startsWith('/recycl');
 
-  // Detect abandoned cart client-side (useEffect = safe for SSR)
   useEffect(() => {
     const oi = window.localStorage.getItem('oi');
     setHasAbandonedCart(!!oi && !isCheckout);
@@ -74,23 +87,35 @@ const AyniNutria = () => {
     [isRecycling]
   );
 
-  // Rotate tips — skip when checkout or abandoned-cart nudge is active
   useEffect(() => {
     if (isCheckout || hasAbandonedCart) return;
     const tips = getTips();
     const id = setInterval(
-      () => setTipIndex(i => (i + 1) % tips.length),
+      () => setTipIndex((i) => (i + 1) % tips.length),
       8000
     );
     return () => clearInterval(id);
   }, [isCheckout, hasAbandonedCart, getTips]);
 
-  // Reset UI state on route change
   useEffect(() => {
     setShowBubble(true);
     setIsOpen(false);
     setTipIndex(0);
   }, [router.pathname]);
+
+  // Scroll chat to bottom whenever messages update or tab switches to chat
+  useEffect(() => {
+    if (activeTab === 'chat' && historyRef.current) {
+      historyRef.current.scrollTop = historyRef.current.scrollHeight;
+    }
+  }, [messages, activeTab]);
+
+  // Focus input when switching to chat tab
+  useEffect(() => {
+    if (activeTab === 'chat' && isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [activeTab, isOpen]);
 
   const getMessage = () => {
     if (isCheckout) return CHECKOUT_MESSAGE;
@@ -99,8 +124,57 @@ const AyniNutria = () => {
   };
 
   const handleAvatarClick = () => {
-    setIsOpen(o => !o);
+    setIsOpen((o) => !o);
     setShowBubble(false);
+  };
+
+  const sendMessage = async () => {
+    const text = input.trim();
+    if (!text || isLoading) return;
+
+    const userMsg = { sender: 'user', text };
+    const newMessages = [...messages, userMsg];
+    setMessages(newMessages);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      // Send last 6 messages as context (skip the static welcome)
+      const history = newMessages
+        .slice(1)
+        .slice(-6)
+        .map((m) => ({
+          role: m.sender === 'user' ? 'user' : 'assistant',
+          content: m.text,
+        }));
+
+      const res = await fetch(`${API_BASE}/api/v1/ai/nutria/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history }),
+      });
+
+      if (!res.ok) throw new Error('network');
+      const data = await res.json();
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'nutria', text: data.reply || 'Ups, no pude responder. ¡Inténtalo de nuevo!' },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'nutria', text: 'Tuve un problemita técnico. Inténtalo en un momentito 🦦.' },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
   };
 
   return (
@@ -117,7 +191,6 @@ const AyniNutria = () => {
           </button>
           <p>{getMessage()}</p>
 
-          {/* CTA de recuperación — solo visible fuera del checkout con carrito pendiente */}
           {hasAbandonedCart && (
             <Link href="/checkout" className={styles.recoveryCta}>
               Completar Compra →
@@ -140,24 +213,102 @@ const AyniNutria = () => {
             </button>
           </div>
 
-          {/* Banner de carrito pendiente dentro del panel FAQ */}
-          {hasAbandonedCart && (
-            <div className={styles.recoveryBanner}>
-              <p>Tienes un pedido sin finalizar.</p>
-              <Link href="/checkout" className={styles.recoveryBannerCta}>
-                Ir al Checkout →
-              </Link>
-            </div>
+          {/* Tab bar */}
+          <div className={styles.tabBar} role="tablist">
+            <button
+              role="tab"
+              aria-selected={activeTab === 'faq'}
+              className={`${styles.tab} ${activeTab === 'faq' ? styles.tabActive : ''}`}
+              onClick={() => setActiveTab('faq')}
+            >
+              Ayuda
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeTab === 'chat'}
+              className={`${styles.tab} ${activeTab === 'chat' ? styles.tabActive : ''}`}
+              onClick={() => setActiveTab('chat')}
+            >
+              Chat con NutrIA 🤖
+            </button>
+          </div>
+
+          {/* FAQ tab */}
+          {activeTab === 'faq' && (
+            <>
+              {hasAbandonedCart && (
+                <div className={styles.recoveryBanner}>
+                  <p>Tienes un pedido sin finalizar.</p>
+                  <Link href="/checkout" className={styles.recoveryBannerCta}>
+                    Ir al Checkout →
+                  </Link>
+                </div>
+              )}
+              <div className={styles.faqList}>
+                {FAQ.map(({ q, a }) => (
+                  <details key={q} className={styles.faqItem}>
+                    <summary className={styles.faqQ}>{q}</summary>
+                    <p className={styles.faqA}>{a}</p>
+                  </details>
+                ))}
+              </div>
+            </>
           )}
 
-          <div className={styles.faqList}>
-            {FAQ.map(({ q, a }) => (
-              <details key={q} className={styles.faqItem}>
-                <summary className={styles.faqQ}>{q}</summary>
-                <p className={styles.faqA}>{a}</p>
-              </details>
-            ))}
-          </div>
+          {/* Chat tab */}
+          {activeTab === 'chat' && (
+            <div className={styles.chatArea}>
+              <div className={styles.chatHistory} ref={historyRef}>
+                {messages.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={
+                      msg.sender === 'nutria' ? styles.msgNutria : styles.msgUser
+                    }
+                  >
+                    {msg.sender === 'nutria' && (
+                      <span className={styles.msgAvatar}>🦦</span>
+                    )}
+                    <span className={styles.msgBubble}>{msg.text}</span>
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className={styles.msgNutria}>
+                    <span className={styles.msgAvatar}>🦦</span>
+                    <span className={`${styles.msgBubble} ${styles.thinking}`}>
+                      <span />
+                      <span />
+                      <span />
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.chatFooter}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className={styles.chatInput}
+                  placeholder="Escribe tu pregunta…"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  disabled={isLoading}
+                  maxLength={500}
+                  aria-label="Mensaje para NutrIA"
+                />
+                <button
+                  type="button"
+                  className={styles.chatSend}
+                  onClick={sendMessage}
+                  disabled={isLoading || !input.trim()}
+                  aria-label="Enviar mensaje"
+                >
+                  ➤
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

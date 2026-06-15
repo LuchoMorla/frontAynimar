@@ -154,16 +154,23 @@ const AyniNutria = () => {
         body: JSON.stringify({ message: text, history }),
       });
 
-      if (!res.ok) throw new Error('network');
+      if (!res.ok) {
+        // Surface the backend's actual error message for transparency
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || `Error ${res.status}`);
+      }
+
       const data = await res.json();
       setMessages((prev) => [
         ...prev,
         { sender: 'nutria', text: data.reply || 'Ups, no pude responder. ¡Inténtalo de nuevo!' },
       ]);
-    } catch {
+    } catch (err) {
+      // Log to browser console for devtools debugging
+      console.error('[NutrIA] Chat error:', err.message);
       setMessages((prev) => [
         ...prev,
-        { sender: 'nutria', text: 'Tuve un problemita técnico. Inténtalo en un momentito 🦦.' },
+        { sender: 'nutria', text: err.message || 'Tuve un problemita técnico. Inténtalo en un momentito 🦦.' },
       ]);
     } finally {
       setIsLoading(false);

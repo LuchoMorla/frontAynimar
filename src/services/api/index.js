@@ -54,6 +54,7 @@ const endPoints = {
     getGuestOrder: (id) => `${API}/api/${VERSION}/orders/guest-order/${id}`, // <-- NUEVA
      deleteItemGuest: (id) => `${API}/api/${VERSION}/orders/item-guest/${id}`, // <-- NUEVA
     editItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
+    editItemGuest: (id) => `${API}/api/${VERSION}/orders/item-guest/${id}`,
     deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
     updateOrder: (id) => `${API}/api/${VERSION}/orders/${id}`,
     checkout: `${API}/api/${VERSION}/orders/checkout`,

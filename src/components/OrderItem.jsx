@@ -1,81 +1,118 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from 'next/image';
 import AppContext from '@context/AppContext';
-import Cookie from 'js-cookie'; // Necesario para verificar si el usuario está logueado
-import { toast } from 'react-toastify'; // Para dar feedback al usuario
-import close from '@icons/icon_close.png';
+import Cookie from 'js-cookie';
+import { toast } from 'react-toastify';
 import endPoints from '@services/api/index';
 import axios from 'axios';
 import styles from '@styles/OrderItem.module.scss';
 
 const OrderItem = ({ product }) => {
-  const { removeFromCart } = useContext(AppContext);
+  const { removeFromCart, updateCartItem } = useContext(AppContext);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  // Usamos optional chaining para acceder de forma segura a las propiedades.
-  // Esto previene errores si `product` o `OrderProduct` no existen.
-  const amount = product?.OrderProduct?.amount;
+  const amount = product?.OrderProduct?.amount ?? 1;
+  const itemId = product?.OrderProduct?.id;
+  const unitPrice = product?.price ?? 0;
+  const lineTotal = (unitPrice * amount).toFixed(2);
 
-  // La función handleRemove ahora es asíncrona y contiene toda la lógica.
   const handleRemove = async () => {
-    // 1. Obtenemos el ID del item en la tabla 'orders_products'
-    const itemToDeleteId = product?.OrderProduct?.id;
-
-    // Verificación de seguridad: si no hay ID, no podemos continuar.
-    if (!itemToDeleteId) {
-      toast.error('No se pudo encontrar el ID del producto en el carrito.');
-      console.error('Error: product.OrderProduct.id no está disponible en:', product);
-      return;
-    }
-
-    // 2. Verificamos si el usuario está autenticado en este momento.
-    const isAuthenticated = !!Cookie.get('token');
-
-    // 3. Determinamos qué endpoint de la API usar.
-    const endpointUrl = isAuthenticated
-      ? endPoints.orders.deleteItem(itemToDeleteId)
-      : endPoints.orders.deleteItemGuest(itemToDeleteId);
-    
-    console.log(`Intentando eliminar el ítem #${itemToDeleteId} usando la URL: ${endpointUrl}`);
-
+    if (!itemId || isRemoving) return;
+    setIsRemoving(true);
     try {
-      // 4. Realizamos la llamada a la API para eliminar el ítem de la base de datos.
-      await axios.delete(endpointUrl);
-
-      // 5. Si la llamada a la API fue exitosa, actualizamos el estado del frontend.
+      const isAuthenticated = !!Cookie.get('token');
+      const url = isAuthenticated
+        ? endPoints.orders.deleteItem(itemId)
+        : endPoints.orders.deleteItemGuest(itemId);
+      await axios.delete(url);
       removeFromCart(product);
       toast.success('Producto eliminado del carrito.');
-      
-      console.log(`Ítem #${itemToDeleteId} eliminado con éxito.`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'No se pudo eliminar el producto.');
+    } finally {
+      setIsRemoving(false);
+    }
+  };
 
-    } catch (error) {
-      // 6. Si algo sale mal, capturamos el error y notificamos al usuario.
-      console.error('Error al eliminar el ítem del carrito:', error);
-      const errorMessage = error.response?.data?.message || 'No se pudo eliminar el producto del carrito.';
-      toast.error(errorMessage);
+  const handleQtyChange = async (delta) => {
+    const newAmount = amount + delta;
+    if (newAmount < 1) {
+      await handleRemove();
+      return;
+    }
+    if (!itemId || isUpdating) return;
+    setIsUpdating(true);
+    try {
+      const isAuthenticated = !!Cookie.get('token');
+      const url = isAuthenticated
+        ? endPoints.orders.editItem(itemId)
+        : endPoints.orders.editItemGuest(itemId);
+      await axios.patch(url, { amount: newAmount });
+      updateCartItem(product.id, newAmount);
+    } catch (err) {
+      toast.error('No se pudo actualizar la cantidad.');
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   return (
     <div className={styles.OrderItem}>
-      <figure>
-        <Image src={product?.image} width={40} height={40} alt={product?.name} />
-      </figure>
-      <p>{product?.name}</p>
-      {/* Añadimos toFixed(2) para un formato de precio consistente */}
-      {amount ? (
-        <p>${product?.price?.toFixed(2)} x {amount}</p>
-      ) : (
-        <p>${product?.price?.toFixed(2)}</p>
-      )}
-      <Image
-        className={`${styles['more-clickable-area']} ${styles.pointer}`} // Corregido para aplicar ambas clases
-        src={close}
-        alt="close"
-        width={18}
-        height={18}
-        onClick={handleRemove} // El onClick ahora llama directamente a la función asíncrona
-        aria-hidden="true"
-      />
+      <div className={styles.imageWrap}>
+        <Image
+          src={product?.image}
+          width={64}
+          height={64}
+          alt={product?.name}
+          className={styles.productImage}
+        />
+      </div>
+
+      <div className={styles.info}>
+        <p className={styles.name}>{product?.name}</p>
+        <p className={styles.unitPrice}>${unitPrice.toFixed(2)} / unidad</p>
+
+        <div className={styles.qtyRow}>
+          <div className={styles.qtyControl}>
+            <button
+              className={styles.qtyBtn}
+              onClick={() => handleQtyChange(-1)}
+              disabled={isUpdating || isRemoving}
+              aria-label="Reducir cantidad"
+            >
+              −
+            </button>
+            <span className={styles.qtyDisplay}>
+              {isUpdating ? '···' : amount}
+            </span>
+            <button
+              className={styles.qtyBtn}
+              onClick={() => handleQtyChange(+1)}
+              disabled={isUpdating || isRemoving}
+              aria-label="Aumentar cantidad"
+            >
+              +
+            </button>
+          </div>
+          <span className={styles.lineTotal}>${lineTotal}</span>
+        </div>
+      </div>
+
+      <button
+        className={styles.removeBtn}
+        onClick={handleRemove}
+        disabled={isRemoving}
+        aria-label="Eliminar del carrito"
+      >
+        {isRemoving ? (
+          <span className={styles.spinner} />
+        ) : (
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        )}
+      </button>
     </div>
   );
 };

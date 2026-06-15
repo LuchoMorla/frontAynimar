@@ -112,6 +112,17 @@ const useInitialState = () => {
     }));
   };
 
+  const updateCartItem = (productId, newAmount) => {
+    setState(prevState => ({
+      ...prevState,
+      cart: prevState.cart.map((item) =>
+        item.id === productId
+          ? { ...item, OrderProduct: { ...item.OrderProduct, amount: newAmount } }
+          : item
+      ),
+    }));
+  };
+
   // FUNCIÓN MEJORADA - Ahora es asíncrona para compatibilidad
   const clearCart = async () => {
     console.log('se uso clearCart');
@@ -138,7 +149,8 @@ const useInitialState = () => {
     toggleNavMenu,
     showPassword,
     setOrderData,
-    clearCart
+    clearCart,
+    updateCartItem
   };
 };
 

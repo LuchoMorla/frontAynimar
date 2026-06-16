@@ -485,7 +485,8 @@ details[open] .faqQ::before {
 .productCardAdd {
   display: block;
   width: 100%;
-  background: $--purple;
+  appearance: none;          // strip browser UA button styles
+  background-color: #4900e4; // explicit hex — immune to $--purple cascade issues
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -496,17 +497,17 @@ details[open] .faqQ::before {
   text-align: center;
   white-space: nowrap;
   margin-top: 2px;
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition: background-color 0.15s ease, transform 0.1s ease;
 
-  &:hover:not(:disabled)  { background: #3600b3; }
+  &:hover:not(:disabled)  { background-color: #3600b3; }
   &:active:not(:disabled) { transform: scale(0.97); }
   &:disabled              { cursor: not-allowed; opacity: 0.8; }
 }
 
 .productCardAdded {
-  background: #16a34a;
+  background-color: #16a34a;
 
-  &:hover:not(:disabled) { background: #15803d; }
+  &:hover:not(:disabled) { background-color: #15803d; }
 }
 
 // .productCardName kept for backward compat (unused)

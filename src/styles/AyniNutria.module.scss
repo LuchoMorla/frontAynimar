@@ -444,6 +444,19 @@ details[open] .faqQ::before {
   text-overflow: ellipsis;
 }
 
+.productCardLink {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  display: block;
+
+  &:hover { color: $--purple; text-decoration: underline; }
+}
+
 .productCardPrice {
   font-size: 0.72rem;
   font-weight: 700;
@@ -461,10 +474,20 @@ details[open] .faqQ::before {
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  min-width: 70px;
+  text-align: center;
   transition: background 0.15s ease, transform 0.1s ease;
 
-  &:hover  { background: #3600b3; }
-  &:active { transform: scale(0.94); }
+  &:hover:not(:disabled)  { background: #3600b3; }
+  &:active:not(:disabled) { transform: scale(0.94); }
+
+  &:disabled { cursor: not-allowed; }
+}
+
+.productCardAdded {
+  background: #16a34a;
+
+  &:hover:not(:disabled) { background: #15803d; }
 }
 
 @media (max-width: 480px) {

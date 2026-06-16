@@ -108,8 +108,10 @@ const AyniNutria = () => {
   const [input, setInput]                       = useState('');
   const [isLoading, setIsLoading]               = useState(false);
   const [contexto, setContexto]                 = useState(DEFAULT_CONTEXTO);
+  const [cardStates, setCardStates]             = useState({});
 
   const historyRef    = useRef(null);
+  const loadingRef    = useRef(new Set());
   const inputRef      = useRef(null);
   const messagesRef   = useRef(messages);
   const prevIsOpenRef = useRef(false);
@@ -338,10 +340,23 @@ const AyniNutria = () => {
     }
   };
 
-  // Quick-add from product cards bypasses chat — directly triggers add_to_cart
-  const quickAddProduct = (productoId) => {
-    handleActions([{ type: 'add_to_cart', productoId, cantidad: 1 }]);
-  };
+  // Quick-add from product cards — async with per-card loading/success feedback
+  const quickAddProduct = useCallback(async (productoId) => {
+    if (loadingRef.current.has(productoId)) return;
+    loadingRef.current.add(productoId);
+    setCardStates((prev) => ({ ...prev, [productoId]: 'loading' }));
+    try {
+      await handleActions([{ type: 'add_to_cart', productoId, cantidad: 1 }]);
+      setCardStates((prev) => ({ ...prev, [productoId]: 'added' }));
+      setTimeout(() => {
+        setCardStates((prev) => ({ ...prev, [productoId]: 'idle' }));
+        loadingRef.current.delete(productoId);
+      }, 2500);
+    } catch (_) {
+      setCardStates((prev) => ({ ...prev, [productoId]: 'idle' }));
+      loadingRef.current.delete(productoId);
+    }
+  }, [handleActions]);
 
   return (
     <div className={styles.wrapper}>
@@ -435,16 +450,22 @@ const AyniNutria = () => {
                           {msg.products.map((p) => (
                             <div key={p.id} className={styles.productCard}>
                               <div className={styles.productCardInfo}>
-                                <span className={styles.productCardName}>{p.nombre}</span>
+                                <Link
+                                  href={`/store/${p.id}`}
+                                  className={styles.productCardLink}
+                                >
+                                  {p.nombre}
+                                </Link>
                                 <span className={styles.productCardPrice}>${p.precio}</span>
                               </div>
                               <button
                                 type="button"
-                                className={styles.productCardAdd}
+                                className={`${styles.productCardAdd}${cardStates[p.id] === 'added' ? ` ${styles.productCardAdded}` : ''}`}
                                 onClick={() => quickAddProduct(p.id)}
+                                disabled={cardStates[p.id] === 'loading' || cardStates[p.id] === 'added'}
                                 aria-label={`Agregar ${p.nombre} al carrito`}
                               >
-                                + Agregar
+                                {cardStates[p.id] === 'loading' ? '…' : cardStates[p.id] === 'added' ? '✓' : '+ Agregar'}
                               </button>
                             </div>
                           ))}

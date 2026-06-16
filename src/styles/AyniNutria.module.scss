@@ -483,11 +483,11 @@ details[open] .faqQ::before {
 }
 
 .productCardAdd {
-  display: block;
+  display: block !important;
   width: 100%;
-  appearance: none;          // strip browser UA button styles
-  background-color: #4900e4; // explicit hex — immune to $--purple cascade issues
-  color: #fff;
+  appearance: none;                    // strip browser UA button styles
+  background-color: #4900e4 !important; // force purple — survives any cascade override
+  color: #fff !important;
   border: none;
   border-radius: 7px;
   padding: 6px 10px;

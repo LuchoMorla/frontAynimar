@@ -272,13 +272,22 @@ const AyniNutria = () => {
     }
 
     try {
-      // Send ONLY the current message + structured context (no raw history array).
-      // The backend injects the context narrative into the system prompt, keeping
-      // the model window small and eliminating history duplication.
+      // Build history from the CURRENT messages state (captured before we called
+      // setMessages to append the new user turn). This means the current message
+      // is NOT included in history — the backend appends it separately, so there
+      // is zero duplication in the Groq conversation array.
+      const history = messages
+        .slice(1)    // skip the static hardcoded welcome message
+        .slice(-10)  // keep last 10 turns for conversational continuity
+        .map((m) => ({
+          role:    m.sender === 'user' ? 'user' : 'assistant',
+          content: m.text || '',
+        }));
+
       const res = await fetch(`${API_BASE}/api/v1/ai/nutria/chat`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ message: text, contexto }),
+        body:    JSON.stringify({ message: text, history, contexto }),
       });
 
       if (!res.ok) {

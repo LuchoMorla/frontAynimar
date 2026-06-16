@@ -449,6 +449,22 @@ const AyniNutria = () => {
                         <div className={styles.productCards}>
                           {msg.products.map((p) => (
                             <div key={p.id} className={styles.productCard}>
+                              {p.imagen ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                  src={p.imagen}
+                                  alt={p.nombre}
+                                  className={styles.productCardImage}
+                                  onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                                />
+                              ) : null}
+                              <div
+                                className={styles.productCardImageFallback}
+                                style={{ display: p.imagen ? 'none' : 'flex' }}
+                                aria-hidden="true"
+                              >
+                                🛍️
+                              </div>
                               <div className={styles.productCardInfo}>
                                 <Link
                                   href={`/store/${p.id}`}
@@ -457,16 +473,16 @@ const AyniNutria = () => {
                                   {p.nombre}
                                 </Link>
                                 <span className={styles.productCardPrice}>${p.precio}</span>
+                                <button
+                                  type="button"
+                                  className={`${styles.productCardAdd}${cardStates[p.id] === 'added' ? ` ${styles.productCardAdded}` : ''}`}
+                                  onClick={() => quickAddProduct(p.id)}
+                                  disabled={cardStates[p.id] === 'loading' || cardStates[p.id] === 'added'}
+                                  aria-label={`Agregar ${p.nombre} al carrito`}
+                                >
+                                  {cardStates[p.id] === 'loading' ? '…' : cardStates[p.id] === 'added' ? '✓' : '+ Agregar'}
+                                </button>
                               </div>
-                              <button
-                                type="button"
-                                className={`${styles.productCardAdd}${cardStates[p.id] === 'added' ? ` ${styles.productCardAdded}` : ''}`}
-                                onClick={() => quickAddProduct(p.id)}
-                                disabled={cardStates[p.id] === 'loading' || cardStates[p.id] === 'added'}
-                                aria-label={`Agregar ${p.nombre} al carrito`}
-                              >
-                                {cardStates[p.id] === 'loading' ? '…' : cardStates[p.id] === 'added' ? '✓' : '+ Agregar'}
-                              </button>
                             </div>
                           ))}
                         </div>

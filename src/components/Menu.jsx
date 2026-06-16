@@ -1,7 +1,10 @@
 import React, { useContext } from 'react';
 import Link from 'next/link';
+import axios from 'axios';
+import Cookie from 'js-cookie';
 import { useAuth } from '@hooks/useAuth';
 import AppContext from '@context/AppContext';
+import endPoints from '@services/api';
 import styles from '@styles/Menu.module.scss';
 
 const Menu = () => {
@@ -10,13 +13,24 @@ const Menu = () => {
 
   const close = () => toggleMenu();
 
-  const handleDeleteAccount = () => {
-    const confirmed = window.confirm(
+  const handleDeleteAccount = async () => {
+    const confirmed1 = window.confirm(
       '¿Estás seguro de que deseas eliminar tu cuenta?\n\nEsta acción es permanente y no se puede deshacer. Todos tus datos, órdenes e historial de reciclaje serán eliminados.'
     );
-    if (!confirmed) return;
-    // TODO: call DELETE /api/v1/users/:id once the backend endpoint exists
-    alert('Solicitud recibida. Nuestro equipo procesará la eliminación en 48 horas.');
+    if (!confirmed1) return;
+
+    const confirmed2 = window.confirm(
+      'CONFIRMACIÓN FINAL\n\n¿Realmente deseas eliminar tu cuenta de Aynimar de forma permanente? No habrá ninguna manera de recuperarla.'
+    );
+    if (!confirmed2) return;
+
+    try {
+      await axios.delete(endPoints.users.deleteUser(auth.user?.sub), {
+        headers: { Authorization: `Bearer ${Cookie.get('token')}` },
+      });
+    } catch (err) {
+      console.error('[Menu] Error al eliminar cuenta:', err?.response?.data ?? err.message);
+    }
     auth.logout();
   };
 

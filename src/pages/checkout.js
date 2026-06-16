@@ -63,8 +63,10 @@ const Checkout = () => {
     identityNumber: '',
     email: '',
     phone: '',
+    country: 'Ecuador',
     province: '',
     city: '',
+    customCity: '',
     address: '',
     references: '',
     coordinates: null,
@@ -192,6 +194,7 @@ const Checkout = () => {
 
     const [firstName, ...rest] = guestData.fullName.trim().split(' ');
     const lastName = rest.join(' ') || firstName;
+    const resolvedCity = guestData.city === 'Otra ciudad' ? guestData.customCity.trim() : guestData.city;
 
     try {
       toast.info('Creando tu cuenta y procesando el pedido...');
@@ -201,9 +204,9 @@ const Checkout = () => {
         lastName,
         identityNumber: guestData.identityNumber,
         phone: guestData.phone,
-        countryOfResidence: 'Ecuador',
+        countryOfResidence: guestData.country || 'Ecuador',
         province: guestData.province,
-        city: guestData.city,
+        city: resolvedCity,
         streetAddress: guestData.address,
         geolocation: guestData.coordinates
           ? `${guestData.references} | GPS:${guestData.coordinates.lat},${guestData.coordinates.lng}`
@@ -322,14 +325,15 @@ const Checkout = () => {
     }
 
     if (!auth.user) {
-      const { fullName, identityNumber, email: gEmail, phone, province, city, address, references } = guestData;
+      const { fullName, identityNumber, email: gEmail, phone, province, city, customCity, address, references } = guestData;
+      const resolvedCity = city === 'Otra ciudad' ? customCity.trim() : city;
       if (
         !fullName.trim() ||
         !identityNumber.trim() ||
         !gEmail.trim() ||
         !phone.trim() ||
         !province ||
-        !city ||
+        !resolvedCity ||
         !address.trim() ||
         !references.trim()
       ) {
@@ -493,11 +497,22 @@ const Checkout = () => {
                         id="g-city"
                         className={styles.input}
                         value={guestData.city}
-                        onChange={e => setGuestData(d => ({ ...d, city: e.target.value }))}
+                        onChange={e => setGuestData(d => ({ ...d, city: e.target.value, customCity: '' }))}
                       >
                         <option value="">Selecciona tu ciudad</option>
                         {ECUADOR_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
+                      {guestData.city === 'Otra ciudad' && (
+                        <input
+                          type="text"
+                          className={styles.input}
+                          style={{ marginTop: '6px' }}
+                          placeholder="Escribe tu ciudad"
+                          value={guestData.customCity}
+                          onChange={e => setGuestData(d => ({ ...d, customCity: e.target.value }))}
+                          autoComplete="address-level2"
+                        />
+                      )}
                     </div>
 
                     {/* 7. Dirección Exacta */}

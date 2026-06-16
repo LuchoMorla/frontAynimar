@@ -1,4 +1,4 @@
-import React, { useState  } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import endPoints from '@services/api';
 import { useRouter } from "next/router";
@@ -6,47 +6,38 @@ import { createCustomerByRecycler } from '@services/api/entities/customers';
 import Client from '@components/Client';
 import { toast } from 'react-toastify';
 
-// const clientProfile = () => {
 const clientProfile = ({ onProfileStatusChange }) => {
+  const [client, setClient] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  const [client, setClient] = useState('vacio');
-  const router = useRouter(); 
-
-   // La mantenemos igual, pero ahora la llamaremos directamente cuando sea necesario
   const clientData = async () => {
     try {
       const { data: fetch } = await axios.get(endPoints.profile.clientData);
       setClient(fetch);
     } catch (error) {
       if (error.response?.status === 401) {
-        toast.warning('Probablemente necesites iniciar sesion de nuevo');
-      } else if (error.response) {
-        console.log('Algo salio mal: ' + error.response.status);
+        toast.warning('Probablemente necesites iniciar sesión de nuevo');
+      } else if (error.response?.status === 404) {
+        // Customer profile doesn't exist yet — create it
+        try {
+          await createCustomerByRecycler();
+          router.push('/mi_cuenta/cliente');
+        } catch (createError) {
+          toast.error('No se pudo crear tu perfil. Por favor recarga la página.');
+        }
       }
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (client == 'vacio') {
+  useEffect(() => {
     clientData();
-  }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if(client == null) {
-    const ejecutar = async () => {
-      await createCustomerByRecycler()
-    }
-    ejecutar()
-      .then(() => {
-        router.push('/mi_cuenta/cliente');
-      })
-      .catch((error) => {
-        if (error.response) {
-          toast.error('cbci => Algo salio mal: ' + error.response.status + ' presiona aceptar mientras lo arreglamos, si no sé soluciona despues de refrescar la pagina recuerda que puedes contactarnos ;).');
-          router.reload(window.location.pathname);
-        }
-      });
-  }
+  if (loading) return <p style={{ color: '#6b7280', fontSize: '14px' }}>Cargando datos de envío…</p>;
 
-  // return <Client client={client} />;
   return <Client client={client} onCompletenessChange={onProfileStatusChange} onUpdateSuccess={clientData} />;
 };
 export default clientProfile;

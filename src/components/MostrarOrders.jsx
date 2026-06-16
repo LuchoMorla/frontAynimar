@@ -41,7 +41,7 @@ const MostrarOrders = ({ order }) => {
       <Modal open={open} onClose={() => setOpen(false)}>
         <h3>Orden {order.id}</h3>
         {transformedItems.map((product) => (
-          <OrderItem product={product} key={`orderItem-${product.id}`} />
+          <OrderItem product={product} key={`orderItem-${product.id}`} readOnly />
         ))}
         <p>Total: ${order.total}</p>
       </Modal>

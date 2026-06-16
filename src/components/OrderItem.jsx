@@ -7,7 +7,7 @@ import endPoints from '@services/api/index';
 import axios from 'axios';
 import styles from '@styles/OrderItem.module.scss';
 
-const OrderItem = ({ product }) => {
+const OrderItem = ({ product, readOnly = false }) => {
   const { removeFromCart, updateCartItem } = useContext(AppContext);
   const [isRemoving, setIsRemoving] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -74,45 +74,51 @@ const OrderItem = ({ product }) => {
         <p className={styles.unitPrice}>${unitPrice.toFixed(2)} / unidad</p>
 
         <div className={styles.qtyRow}>
-          <div className={styles.qtyControl}>
-            <button
-              className={styles.qtyBtn}
-              onClick={() => handleQtyChange(-1)}
-              disabled={isUpdating || isRemoving}
-              aria-label="Reducir cantidad"
-            >
-              −
-            </button>
-            <span className={styles.qtyDisplay}>
-              {isUpdating ? '···' : amount}
-            </span>
-            <button
-              className={styles.qtyBtn}
-              onClick={() => handleQtyChange(+1)}
-              disabled={isUpdating || isRemoving}
-              aria-label="Aumentar cantidad"
-            >
-              +
-            </button>
-          </div>
+          {readOnly ? (
+            <span className={styles.qtyDisplay}>Cantidad: {amount}</span>
+          ) : (
+            <div className={styles.qtyControl}>
+              <button
+                className={styles.qtyBtn}
+                onClick={() => handleQtyChange(-1)}
+                disabled={isUpdating || isRemoving}
+                aria-label="Reducir cantidad"
+              >
+                −
+              </button>
+              <span className={styles.qtyDisplay}>
+                {isUpdating ? '···' : amount}
+              </span>
+              <button
+                className={styles.qtyBtn}
+                onClick={() => handleQtyChange(+1)}
+                disabled={isUpdating || isRemoving}
+                aria-label="Aumentar cantidad"
+              >
+                +
+              </button>
+            </div>
+          )}
           <span className={styles.lineTotal}>${lineTotal}</span>
         </div>
       </div>
 
-      <button
-        className={styles.removeBtn}
-        onClick={handleRemove}
-        disabled={isRemoving}
-        aria-label="Eliminar del carrito"
-      >
-        {isRemoving ? (
-          <span className={styles.spinner} />
-        ) : (
-          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        )}
-      </button>
+      {!readOnly && (
+        <button
+          className={styles.removeBtn}
+          onClick={handleRemove}
+          disabled={isRemoving}
+          aria-label="Eliminar del carrito"
+        >
+          {isRemoving ? (
+            <span className={styles.spinner} />
+          ) : (
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          )}
+        </button>
+      )}
     </div>
   );
 };

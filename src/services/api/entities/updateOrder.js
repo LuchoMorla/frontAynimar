@@ -13,7 +13,7 @@ const updateOrder = async (id, body) => {
         const response = await axios.patch(endPoints.orders.updateOrder(id), body, config);
         return response.data;
     } catch (err) {
-        console.log(err);
+        console.error('[updateOrder]', err.message);
     }
 
 };

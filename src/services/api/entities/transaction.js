@@ -13,7 +13,7 @@ const sendTransaction = async (body) => {
         const response = await axios.post(endPoints.transaction.debits, body, config);
         return response;
     } catch (err) {
-        console.log(err);
+        console.error('[sendTransaction]', err.message);
     }
 
 };

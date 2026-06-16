@@ -42,45 +42,30 @@ const Header = () => {
     const checkAuthStatus = () => {
       const authStatus = checkAuthentication();
       if (authStatus !== isAuthenticated) {
-        console.log('Estado de autenticación cambió:', authStatus);
         setIsAuthenticated(authStatus);
-        // Resetear cartLoaded cuando cambia el estado de auth
         setCartLoaded(false);
       }
     };
 
-    // Verificar inmediatamente
     checkAuthStatus();
 
-    // Verificar cada 200ms por si la cookie se establece después del redirect
     const authInterval = setInterval(checkAuthStatus, 200);
 
-    // También escuchar eventos de storage por si la cookie se establece en otra pestaña
-    const handleStorageChange = () => {
-      checkAuthStatus();
-    };
-    
+    const handleStorageChange = () => { checkAuthStatus(); };
     window.addEventListener('storage', handleStorageChange);
-    
-    // Event listener personalizado para cuando se establece el token
+
     const handleTokenSet = () => {
-      console.log('🔔 Evento tokenSet recibido en Header');
       setTimeout(() => {
         const newAuthStatus = checkAuthentication();
-        console.log('🔍 Verificando auth después de tokenSet:', newAuthStatus);
         if (newAuthStatus !== isAuthenticated) {
           setIsAuthenticated(newAuthStatus);
           setCartLoaded(false);
         }
       }, 50);
     };
-    
     window.addEventListener('tokenSet', handleTokenSet);
 
-    // Limpiar después de 10 segundos
-    const timeout = setTimeout(() => {
-      clearInterval(authInterval);
-    }, 10000);
+    const timeout = setTimeout(() => { clearInterval(authInterval); }, 10000);
 
     return () => {
       clearInterval(authInterval);
@@ -91,113 +76,58 @@ const Header = () => {
   }, [isAuthenticated]);
 
   // Effect principal para cargar datos del carrito
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    console.log('useEffect carrito ejecutándose:', { 
-      cartLoaded, 
-      cartLength: state.cart.length, 
-      isAuthenticated 
-    });
-
-    // Si ya se cargó el carrito y tiene items, no hacer nada
-    if (cartLoaded && state.cart.length > 0) {
-      console.log('Carrito ya cargado con items, saltando...');
-      return;
-    }
+    if (cartLoaded && state.cart.length > 0) return;
 
     const guestOrderId = window.localStorage.getItem('oi');
-    console.log('guestOrderId desde localStorage:', guestOrderId);
 
     const fetchCartData = async () => {
       let orderData = null;
 
       try {
         if (isAuthenticated) {
-          // --- FLUJO PARA USUARIO LOGUEADO ---
-          console.log('🔐 Usuario autenticado. Buscando orden de "carrito"...');
           try {
-            const response = await axios.get(endPoints.orders.getOrderByState, { 
+            const response = await axios.get(endPoints.orders.getOrderByState, {
               params: { state: 'carrito' },
-              headers: {
-                'Authorization': `Bearer ${Cookie.get('token')}`
-              }
+              headers: { 'Authorization': `Bearer ${Cookie.get('token')}` },
             });
             orderData = response.data;
-            console.log('✅ Carrito encontrado para usuario autenticado:', orderData);
-          } catch (error) {
-            console.log('ℹ️ El usuario autenticado no tiene una orden de tipo "carrito" activa.');
-            console.log('Error details:', error.response?.status, error.response?.data);
-          }
+          } catch (_) { /* no active cart — expected */ }
 
-        } else if (guestOrderId && !isAuthenticated) {
-          // --- FLUJO PARA INVITADO ---
-          console.log(`👤 Usuario invitado. Buscando orden de carrito #${guestOrderId}...`);
+        } else if (guestOrderId) {
           try {
             const response = await axios.get(endPoints.orders.getGuestOrder(guestOrderId));
             orderData = response.data;
-            console.log('✅ Carrito encontrado para invitado:', orderData);
-          } catch (error) {
-            console.log('❌ Error cargando carrito de invitado:', error.response?.status);
-          }
+          } catch (_) { /* guest cart not found — expected */ }
         }
 
-        // Si se encontró una orden, procesarla
-        if (orderData && orderData.items && orderData.items.length > 0) {
-          console.log('📦 Procesando orden encontrada, items:', orderData.items.length);
-          
-          // Llenar el carrito en el Contexto Principal
+        if (orderData?.items?.length > 0) {
           getCart(orderData.items);
-          
-          // Actualizar el otro contexto si es necesario
-          if (orderState && orderState.setOrder) {
-            orderState.setOrder(orderData);
-          }
-
-          // Asegurar que el ID de la orden esté en localStorage
+          if (orderState?.setOrder) orderState.setOrder(orderData);
           if (!window.localStorage.getItem('oi')) {
             window.localStorage.setItem('oi', `${orderData.id}`);
           }
-        } else {
-          console.log('🛒 No se encontró carrito o está vacío');
         }
 
-        // Marcar como cargado independientemente del resultado
         setCartLoaded(true);
 
       } catch (error) {
-        console.error('❌ Error al intentar cargar los datos del carrito:', error);
-        
-        // Limpiar orden de invitado inválida
-        if (guestOrderId && !isAuthenticated && error.response && 
+        console.error('[Header] Error cargando carrito:', error.message);
+        if (guestOrderId && !isAuthenticated && error.response &&
             (error.response.status === 404 || error.response.status === 403)) {
-          console.log(`🧹 La orden de invitado #${guestOrderId} no es válida. Limpiando localStorage.`);
           window.localStorage.removeItem('oi');
         }
-        
         setCartLoaded(true);
       }
     };
 
-    // Ejecutar la carga si:
-    // 1. El usuario está autenticado, O
-    // 2. Es invitado pero tiene un guestOrderId, O
-    // 3. No está autenticado y no tiene guestOrderId (para marcar como cargado)
-    console.log('🎯 Condiciones para cargar:', {
-      isAuthenticated,
-      hasGuestOrder: !!guestOrderId,
-      shouldLoad: isAuthenticated || guestOrderId || (!isAuthenticated && !guestOrderId)
-    });
+    fetchCartData();
 
-    if (isAuthenticated || guestOrderId || (!isAuthenticated && !guestOrderId)) {
-      fetchCartData();
-    }
-
-  }, [isAuthenticated, cartLoaded, state.cart.length, getCart, orderState]);
-
-  // Effect adicional para resetear cartLoaded cuando el usuario cambia de estado de autenticación
-  useEffect(() => {
-    console.log('🔄 Reseteando cartLoaded por cambio de autenticación');
-    setCartLoaded(false);
-  }, [isAuthenticated]);
+  // getCart and orderState are excluded: their references change every render
+  // (recreated in useInitialState/context) but their semantics are stable.
+  // isAuthenticated and cartLoaded are the only real triggers for a re-fetch.
+  }, [isAuthenticated, cartLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

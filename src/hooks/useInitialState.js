@@ -31,7 +31,6 @@ const useInitialState = () => {
   };
 
   const addToCart = (payload) => {
-    console.log('addToCart', payload);
     setState(prevState => ({
       ...prevState,
       cart: prevState.cart.some((item) => item.id === payload.id) 
@@ -125,7 +124,6 @@ const useInitialState = () => {
 
   // FUNCIÓN MEJORADA - Ahora es asíncrona para compatibilidad
   const clearCart = async () => {
-    console.log('se uso clearCart');
     setState(prevState => ({
       ...prevState,
       cart: []

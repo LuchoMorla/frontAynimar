@@ -49,9 +49,6 @@ const ProductList = () => {
 			url += `&show_shop=true`;
 		}
 		
-		// Debug temporal
-		console.log('URL final:', url);
-		
 		return url;
 	};
 

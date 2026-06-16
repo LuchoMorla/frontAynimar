@@ -1,6 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import axios from 'axios';
+import Cookie from 'js-cookie';
+import { toast } from 'react-toastify';
+import AppContext from '@context/AppContext';
+import endPoints from '@services/api';
 import styles from '@styles/AyniNutria.module.scss';
 
 // ── Local State Manager — persisted in sessionStorage ─────────────────────────
@@ -108,6 +113,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 // ── Component ─────────────────────────────────────────────────────────────────
 const AyniNutria = () => {
   const router = useRouter();
+  const { state, addToCart } = useContext(AppContext);
   const [isOpen, setIsOpen]                     = useState(false);
   const [showBubble, setShowBubble]             = useState(true);
   const [tipIndex, setTipIndex]                 = useState(0);
@@ -349,23 +355,96 @@ const AyniNutria = () => {
     }
   };
 
-  // Quick-add from product cards — async with per-card loading/success feedback
-  const quickAddProduct = useCallback(async (productoId) => {
+  // Quick-add from product cards — mirrors ProductItem.submitHandler exactly,
+  // updating the global AppContext cart so the header count reflects the addition.
+  const quickAddProduct = useCallback(async (productoId, productoData) => {
     if (loadingRef.current.has(productoId)) return;
+
+    if (state.cart.some((item) => item.id === productoId)) {
+      toast.info('Este producto ya está en tu carrito.');
+      return;
+    }
+
     loadingRef.current.add(productoId);
     setCardStates((prev) => ({ ...prev, [productoId]: 'loading' }));
+
+    const userHaveToken = Cookie.get('token');
+
+    const makeGuestOrder = async () => {
+      const { data } = await axios.post(endPoints.orders.postGuestOrder);
+      return data.id;
+    };
+    const makeAuthOrder = async () => {
+      const { data } = await axios.post(endPoints.orders.postOrder);
+      return data.id;
+    };
+
     try {
-      await handleActions([{ type: 'add_to_cart', productoId, cantidad: 1 }]);
+      let orderId = window.localStorage.getItem('oi')
+        ? parseInt(window.localStorage.getItem('oi'), 10)
+        : null;
+
+      if (!orderId) {
+        orderId = userHaveToken ? await makeAuthOrder() : await makeGuestOrder();
+        window.localStorage.setItem('oi', `${orderId}`);
+      }
+
+      const packet = { orderId, productId: productoId, amount: 1 };
+      const addFn  = () => userHaveToken
+        ? axios.post(endPoints.orders.postItem, packet)
+        : axios.post(endPoints.orders.postItemToGuest, packet);
+
+      let newItem;
+      try {
+        const { data } = await addFn();
+        newItem = data;
+      } catch (itemErr) {
+        if (itemErr.response?.status === 404) {
+          window.localStorage.removeItem('oi');
+          orderId = userHaveToken ? await makeAuthOrder() : await makeGuestOrder();
+          window.localStorage.setItem('oi', `${orderId}`);
+          const { data } = await (userHaveToken
+            ? axios.post(endPoints.orders.postItem,        { ...packet, orderId })
+            : axios.post(endPoints.orders.postItemToGuest, { ...packet, orderId }));
+          newItem = data;
+        } else {
+          throw itemErr;
+        }
+      }
+
+      // Update global AppContext cart (same as ProductItem)
+      addToCart({
+        id:    productoId,
+        name:  productoData.nombre,
+        price: productoData.precio,
+        image: productoData.imagen,
+        OrderProduct: {
+          id:        newItem.id,
+          amount:    newItem.amount,
+          orderId:   newItem.orderId,
+          productId: newItem.productId,
+        },
+      });
+
+      // Update NutrIA state manager
+      setContexto((prev) => mergeContexto(prev, {
+        estadoCarrito: { [productoId]: 1 },
+      }));
+
+      toast.success('¡Agregado al carrito! 🛍️');
       setCardStates((prev) => ({ ...prev, [productoId]: 'added' }));
       setTimeout(() => {
         setCardStates((prev) => ({ ...prev, [productoId]: 'idle' }));
         loadingRef.current.delete(productoId);
       }, 2500);
-    } catch (_) {
+
+    } catch (err) {
+      console.error('[NutrIA] quickAddProduct error:', err.message);
+      toast.error(err.response?.data?.message || 'Error al agregar el producto.');
       setCardStates((prev) => ({ ...prev, [productoId]: 'idle' }));
       loadingRef.current.delete(productoId);
     }
-  }, [handleActions]);
+  }, [state, addToCart]);
 
   return (
     <div className={styles.wrapper}>
@@ -482,15 +561,23 @@ const AyniNutria = () => {
                                   {p.nombre}
                                 </Link>
                                 <span className={styles.productCardPrice}>${p.precio}</span>
-                                <button
-                                  type="button"
-                                  className={`${styles.productCardAdd}${cardStates[p.id] === 'added' ? ` ${styles.productCardAdded}` : ''}`}
-                                  onClick={() => quickAddProduct(p.id)}
-                                  disabled={cardStates[p.id] === 'loading' || cardStates[p.id] === 'added'}
-                                  aria-label={`Agregar ${p.nombre} al carrito`}
-                                >
-                                  {cardStates[p.id] === 'loading' ? '…' : cardStates[p.id] === 'added' ? '✓' : '+ Agregar'}
-                                </button>
+                                {(() => {
+                                  const inCart   = state.cart.some((item) => item.id === p.id);
+                                  const cState   = cardStates[p.id];
+                                  const isAdded  = inCart || cState === 'added';
+                                  const isBusy   = cState === 'loading';
+                                  return (
+                                    <button
+                                      type="button"
+                                      className={`${styles.productCardAdd}${isAdded ? ` ${styles.productCardAdded}` : ''}`}
+                                      onClick={() => quickAddProduct(p.id, p)}
+                                      disabled={isBusy || isAdded}
+                                      aria-label={isAdded ? 'Ya en tu carrito' : `Agregar ${p.nombre} al carrito`}
+                                    >
+                                      {isBusy ? 'Agregando…' : isAdded ? '✓ Agregado' : '+ Agregar'}
+                                    </button>
+                                  );
+                                })()}
                               </div>
                             </div>
                           ))}

@@ -418,14 +418,13 @@ details[open] .faqQ::before {
 
 .productCard {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   gap: 10px;
   background: #fff;
   border: 1px solid #e9ecef;
   border-radius: 12px;
   padding: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-  overflow: hidden;
   transition: box-shadow 0.15s ease;
 
   &:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.11); }
@@ -459,8 +458,7 @@ details[open] .faqQ::before {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  justify-content: center;
+  gap: 4px;
 }
 
 .productCardLink {
@@ -485,24 +483,24 @@ details[open] .faqQ::before {
 }
 
 .productCardAdd {
-  align-self: flex-start;
+  display: block;
+  width: 100%;
   background: $--purple;
   color: #fff;
   border: none;
   border-radius: 7px;
-  padding: 5px 10px;
+  padding: 6px 10px;
   font-size: 0.68rem;
   font-weight: 700;
   cursor: pointer;
-  white-space: nowrap;
-  min-width: 72px;
   text-align: center;
-  margin-top: 5px;
+  white-space: nowrap;
+  margin-top: 2px;
   transition: background 0.15s ease, transform 0.1s ease;
 
   &:hover:not(:disabled)  { background: #3600b3; }
-  &:active:not(:disabled) { transform: scale(0.94); }
-  &:disabled              { cursor: not-allowed; opacity: 0.85; }
+  &:active:not(:disabled) { transform: scale(0.97); }
+  &:disabled              { cursor: not-allowed; opacity: 0.8; }
 }
 
 .productCardAdded {

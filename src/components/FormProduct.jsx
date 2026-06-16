@@ -52,6 +52,7 @@ const ProductInfo = ({ product }) => {
   const [selectedVariants, setSelectedVariants] = useState({});
   const [activeImages, setActiveImages] = useState(null);
   const [variantStock, setVariantStock] = useState(null);
+  const [selectedDropiId, setSelectedDropiId] = useState(null);
 
   // Parse images array from JSON text (Phase 2 products from Dropi/Effi).
   // Falls back to the legacy single-image string for old products.
@@ -77,6 +78,15 @@ const ProductInfo = ({ product }) => {
     } catch (_) { /* invalid JSON — return fallback */ }
     return [];
   }, [product?.variants]);
+
+  // Parse dropiItems for bundle/variant mode
+  const dropiItems = useMemo(() => {
+    if (!Array.isArray(product?.dropiItems)) return [];
+    return product.dropiItems;
+  }, [product?.dropiItems]);
+
+  const isBundle      = product?.isBundle === true;
+  const hasDropiVariants = !isBundle && dropiItems.length > 1;
 
   const handleVariantChange = (option, value) => {
     setSelectedVariants((prev) => ({ ...prev, [option]: value }));
@@ -124,6 +134,13 @@ const ProductInfo = ({ product }) => {
       return;
     }
 
+    // Require variant selection for variant products
+    if (hasDropiVariants && !selectedDropiId) {
+      toast.warning('Por favor, selecciona una variante antes de agregar al carrito.');
+      setIsLoading(false);
+      return;
+    }
+
     const productId = product.id;
 
     try {
@@ -143,6 +160,7 @@ const ProductInfo = ({ product }) => {
       }
 
       const packet = { orderId, productId, amount };
+      if (selectedDropiId) packet.selectedDropiId = selectedDropiId;
 
       let newItemFromApi;
       if (userHaveToken) {
@@ -240,6 +258,65 @@ const ProductInfo = ({ product }) => {
             HTML (Dropi) → sanitized dangerouslySetInnerHTML;
             plain text → <p> */}
         {product.description && <ProductDescription text={product.description} styles={styles} />}
+
+        {/* ── Dropi Variant Selector ──────────────────────────────────────── */}
+        {hasDropiVariants && (
+          <div style={{ marginBottom: '1rem' }}>
+            <p style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', color: '#374151' }}>
+              Selecciona una variante:
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {dropiItems.map((v) => (
+                <button
+                  key={v.id}
+                  type="button"
+                  onClick={() => setSelectedDropiId(v.id)}
+                  style={{
+                    padding: '0.4rem 1rem',
+                    borderRadius: '20px',
+                    border: '2px solid',
+                    borderColor: selectedDropiId === v.id ? '#7c3aed' : '#d1d5db',
+                    background: selectedDropiId === v.id ? '#ede9fe' : '#fff',
+                    color: selectedDropiId === v.id ? '#5b21b6' : '#374151',
+                    fontWeight: selectedDropiId === v.id ? 700 : 400,
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s',
+                  }}
+                >
+                  {v.value || v.id}
+                </button>
+              ))}
+            </div>
+            {!selectedDropiId && (
+              <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.35rem' }}>
+                Debes seleccionar una variante para continuar.
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* ── Bundle Pack Summary ─────────────────────────────────────────── */}
+        {isBundle && dropiItems.length > 0 && (
+          <div style={{
+            marginBottom: '1rem',
+            padding: '0.75rem 1rem',
+            background: '#fffbeb',
+            border: '1px solid #fcd34d',
+            borderRadius: '8px',
+          }}>
+            <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#92400e', marginBottom: '0.4rem' }}>
+              Pack incluye:
+            </p>
+            <ul style={{ margin: 0, paddingLeft: '1.2rem' }}>
+              {dropiItems.map((v, i) => (
+                <li key={i} style={{ fontSize: '0.8rem', color: '#78350f' }}>
+                  {v.qty && v.qty > 1 ? `${v.qty}× ` : ''}{v.value || `Componente ${i + 1}`}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <form ref={formRef} onSubmit={submitHandler}>
           <label htmlFor="amount" className={styles.amountLabel}>Cantidad:</label>

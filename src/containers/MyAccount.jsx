@@ -37,28 +37,15 @@ const MyAccount = () => {
         <Link href="/mi_cuenta/cliente">Perfil de compras</Link>
       </div>
 
-      {/* ── Danger zone ─────────────────────────────────────────────────── */}
-      <div style={{
-        marginTop: '2.5rem',
-        padding: '1.25rem',
-        border: '1px solid #fca5a5',
-        borderRadius: '10px',
-        maxWidth: '480px',
-        background: '#fff5f5',
-      }}>
-        <h2 style={{ color: '#dc2626', fontWeight: 700, fontSize: '1rem', marginBottom: '0.5rem' }}>
-          Zona de peligro
-        </h2>
+      <div className={styles['danger-zone']}>
+        <h2 className={styles['danger-title']}>Zona de peligro</h2>
 
         {deleteStep === 0 && (
           <>
-            <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem', lineHeight: 1.5 }}>
+            <p className={styles['danger-text']}>
               Eliminar tu cuenta es una acción permanente e irreversible. Se borrarán todos tus datos, órdenes e historial de reciclaje.
             </p>
-            <button
-              onClick={handleDeleteRequest}
-              style={{ background: '#dc2626', color: 'white', padding: '0.5rem 1.25rem', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600 }}
-            >
+            <button className={styles['btn-delete-idle']} onClick={handleDeleteRequest}>
               Eliminar mi cuenta
             </button>
           </>
@@ -66,27 +53,27 @@ const MyAccount = () => {
 
         {(deleteStep === 1 || deleteStep === 2) && (
           <>
-            <p style={{ fontSize: '0.875rem', color: '#dc2626', fontWeight: 600, marginBottom: '0.4rem' }}>
+            <p className={styles['danger-text-alert']}>
               ¿Confirmas que deseas eliminar permanentemente tu cuenta?
             </p>
-            <p style={{ fontSize: '0.8rem', color: '#6b7280', marginBottom: '1rem', lineHeight: 1.5 }}>
+            <p className={styles['danger-text-sub']}>
               Esta acción no se puede deshacer. Perderás todos tus datos, órdenes e historial de reciclaje asociados a esta cuenta.
             </p>
             {deleteError && (
-              <p style={{ fontSize: '0.8rem', color: '#dc2626', marginBottom: '0.75rem' }}>{deleteError}</p>
+              <p className={styles['danger-error']}>{deleteError}</p>
             )}
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div className={styles['danger-actions']}>
               <button
+                className={styles['btn-cancel']}
                 onClick={handleCancelDelete}
                 disabled={deleteStep === 2}
-                style={{ background: '#f3f4f6', color: '#374151', padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid #d1d5db', cursor: 'pointer', fontSize: '0.875rem', opacity: deleteStep === 2 ? 0.5 : 1 }}
               >
                 Cancelar
               </button>
               <button
+                className={styles['btn-delete']}
                 onClick={handleConfirmDelete}
                 disabled={deleteStep === 2}
-                style={{ background: '#dc2626', color: 'white', padding: '0.5rem 1rem', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600, opacity: deleteStep === 2 ? 0.6 : 1 }}
               >
                 {deleteStep === 2 ? 'Eliminando…' : 'Sí, eliminar mi cuenta'}
               </button>

@@ -314,17 +314,17 @@ const AyniNutria = () => {
 
       const data = await res.json();
 
-      // Separate product-card action from navigation/cart actions
-      const productsAction = (data.actions || []).find((a) => a.type === 'show_products');
-      const otherActions   = (data.actions || []).filter((a) => a.type !== 'show_products');
+      // Backend hoists products to top-level — no action-traversal needed
+      const products     = Array.isArray(data.products) && data.products.length > 0 ? data.products : null;
+      const otherActions = data.actions || [];
 
       // Append NutrIA reply with optional product cards
       setMessages((prev) => [
         ...prev,
         {
           sender:   'nutria',
-          text:     data.reply || 'Ups, no pude responder. ¡Inténtalo de nuevo!',
-          products: productsAction?.productos ?? null,
+          text:     data.message || 'Ups, no pude responder. ¡Inténtalo de nuevo!',
+          products,
         },
       ]);
 

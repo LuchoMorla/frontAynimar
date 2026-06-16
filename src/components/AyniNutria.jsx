@@ -12,6 +12,7 @@ const DEFAULT_CONTEXTO = {
   estadoCarrito:      {},
   trackingSoporte:    { ordenId: null, estado: null },
   vectorEmocional:    { inicial: null, actual: null },
+  ultimosProductos:   [],
 };
 
 function loadContexto() {
@@ -53,6 +54,14 @@ function mergeContexto(prev, update) {
   }
   if (update.vectorEmocional) {
     next.vectorEmocional = { ...prev.vectorEmocional, ...update.vectorEmocional };
+  }
+  if (Array.isArray(update.ultimosProductos) && update.ultimosProductos.length > 0) {
+    const existing = prev.ultimosProductos || [];
+    const merged   = [
+      ...update.ultimosProductos,
+      ...existing.filter((p) => !update.ultimosProductos.some((u) => u.id === p.id)),
+    ];
+    next.ultimosProductos = merged.slice(0, 3);
   }
   return next;
 }

@@ -4,7 +4,7 @@ import { updateCustomer } from '@services/api/entities/customers';
 import styles from '@styles/MyAccount.module.scss';
 import { toast } from 'react-toastify';
 
-const Client = ({ client, isGuest = false, onSubmit, onCompletenessChange, onUpdateSuccess }) => {
+const Client = ({ client, isGuest = false, onSubmit, onCompletenessChange, onUpdateSuccess, readOnly = false, onEdit }) => {
   const formRef = useRef(null);
 
   useEffect(() => {
@@ -112,6 +112,28 @@ const Client = ({ client, isGuest = false, onSubmit, onCompletenessChange, onUpd
   };
 
   const finalSubmitHandler = onSubmit || updateHandler;
+
+  if (readOnly) {
+    return (
+      <div style={{ padding: '14px 16px', background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+          <div style={{ fontSize: '14px', color: '#374151', lineHeight: '1.75' }}>
+            <p style={{ fontWeight: '600', color: '#15803d', marginBottom: '4px' }}>✅ Datos de envío confirmados</p>
+            <p><strong>{client?.name} {client?.lastName}</strong> · CI: {client?.identityNumber}</p>
+            <p>📞 {client?.phone}{client?.phoneTwo ? ` / ${client.phoneTwo}` : ''}</p>
+            <p>📍 {client?.streetAddress}{client?.city ? `, ${client.city}` : ''}{client?.province ? `, ${client.province}` : ''}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onEdit}
+            style={{ whiteSpace: 'nowrap', fontSize: '13px', color: '#16a34a', background: 'none', border: '1px solid #16a34a', borderRadius: '6px', padding: '5px 14px', cursor: 'pointer', flexShrink: 0 }}
+          >
+            ✏️ Editar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.MyAccount}>

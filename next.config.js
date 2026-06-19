@@ -3,6 +3,19 @@
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+  // Proxy Dropi's WooCommerce OAuth handshake to the Express backend.
+  // Dropi hits https://www.aynimar.com/store/wc-auth/v1/authorize — this rewrites
+  // that path to the Railway backend which completes the OAuth mock.
+  async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    if (!backendUrl) return [];
+    return [
+      {
+        source:      '/store/wc-auth/:path*',
+        destination: `${backendUrl}/store/wc-auth/:path*`,
+      },
+    ];
+  },
   images: {
     domains: ['api.lorem.space', 'placeimg.com', 'i.pinimg.com', 'https://i.pinimg.com/', 'https://ivrea.com.ar/', 'ivrea.com.ar', 'www.ivrea.com.ar', 'vendingpassec.com', 'picsum.photos', 'localhost', 'drive.google.com', 'firebasestorage.googleapis.com', 'images.unsplash.com', 'd39ru7awumhhs2.cloudfront.net', 'api.dropi.ec', 'api.dropi.co', 'app.dropi.ec'],
   },

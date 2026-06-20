@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Menu from '@components/Menu';
 import NavMenu from '@components/NavMenu';
@@ -19,6 +20,7 @@ import styles from '@styles/Header.module.scss';
 import TestContext from '@context/TestContext';
 
 const Header = () => {
+  const router = useRouter();
   const [token, setToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cartLoaded, setCartLoaded] = useState(false);
@@ -170,10 +172,12 @@ const Header = () => {
 
         <div className={styles['navbar-right']}>
           <ul>
-            <li className={styles['navbar-selling-cart']} onClick={() => togglePayment()} aria-hidden="true">
-              <Image className={`${styles['more-clickable-area']} ${styles.pointer}`} src={sellingCart} alt="selling to recycler cart" />
-              {state.metacircle.length > 0 ? <div>{state.metacircle.length}</div> : null}
-            </li>
+            {router.pathname.startsWith('/recycling') && (
+              <li className={styles['navbar-selling-cart']} onClick={() => togglePayment()} aria-hidden="true">
+                <Image className={`${styles['more-clickable-area']} ${styles.pointer}`} src={sellingCart} alt="carrito de reciclaje" />
+                {state.metacircle.length > 0 ? <div>{state.metacircle.length}</div> : null}
+              </li>
+            )}
             
             {isAuthenticated ? (
               <li className={`${styles['more-clickeable-area']} ${styles['navbar-email']} ${styles.pointer}`} onClick={() => toggleMenu()} aria-hidden="true">

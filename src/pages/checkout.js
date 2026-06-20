@@ -4,7 +4,6 @@ import AppContext from '@context/AppContext';
 import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
 import Tarjetas from '@common/paymentez/tarjetas/Tarjetas';
-import CustomerProfile from '@containers/CustomerProfile';
 import { useRouter } from 'next/router';
 import Modal from '@common/Modal';
 import Cookie from 'js-cookie';
@@ -15,7 +14,7 @@ import PaymentezDos from '@common/PaymentezDos';
 import styles from '@styles/Checkout.module.scss';
 import { toast } from 'react-toastify';
 import { useAuth } from '@hooks/useAuth';
-import { addCustomer } from '@services/api/entities/customers';
+import { addCustomer, updateCustomer } from '@services/api/entities/customers';
 import WalletRedeem from '@components/WalletRedeem';
 import CouponInput from '@components/CouponInput';
 import CheckoutTrustBadges from '@components/CheckoutTrustBadges';
@@ -44,12 +43,12 @@ const Checkout = () => {
   const { state, clearCart } = useContext(AppContext);
   const auth = useAuth();
 
-  const [isProfileComplete, setIsProfileComplete] = useState(false);
   const [email, setEmail] = useState('mail@vacio.com');
   const [open, setOpen] = useState(false);
   const [uId, setuId] = useState(0);
+  const [customerId, setCustomerId] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(false);
 
-  // COD is the default payment method
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -57,9 +56,10 @@ const Checkout = () => {
   const [creditsToApply, setCreditsToApply] = useState(0);
   const [couponDiscount, setCouponDiscount] = useState(0);
 
-  // Controlled guest form state
-  const [guestData, setGuestData] = useState({
-    fullName: '',
+  // Formulario único controlado — válido para guest y usuario logueado
+  const [shippingData, setShippingData] = useState({
+    firstName: '',
+    lastName: '',
     identityNumber: '',
     email: '',
     phone: '',
@@ -71,7 +71,9 @@ const Checkout = () => {
     references: '',
     coordinates: null,
   });
-  const [geoStatus, setGeoStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [geoStatus, setGeoStatus] = useState('idle');
+
+  const set = (field) => (e) => setShippingData(d => ({ ...d, [field]: e.target.value }));
 
   // ── Geolocalización opcional ──
   const handleGetLocation = () => {
@@ -84,7 +86,7 @@ const Checkout = () => {
       ({ coords }) => {
         const lat = coords.latitude.toFixed(6);
         const lng = coords.longitude.toFixed(6);
-        setGuestData(d => ({ ...d, coordinates: { lat, lng } }));
+        setShippingData(d => ({ ...d, coordinates: { lat, lng } }));
         setGeoStatus('success');
         toast.success(`Ubicación capturada (~${Math.round(coords.accuracy)}m de precisión)`);
       },
@@ -97,7 +99,7 @@ const Checkout = () => {
     );
   };
 
-  // ── Auth: get email from API once logged in ──
+  // ── Auth: obtener email y pre-llenar formulario desde perfil ──
   const getUserEmail = async (id) => {
     try {
       const { data } = await axios.get(endPoints.users.getUser(id));
@@ -122,9 +124,37 @@ const Checkout = () => {
     } catch {
       if (auth.user?.email) setEmail(auth.user.email);
     }
-  }, [auth.user]);
 
-  // ── Totals ──
+    // Pre-llenar formulario con datos del perfil guardado
+    setProfileLoading(true);
+    axios.get(endPoints.profile.clientData)
+      .then(({ data }) => {
+        setCustomerId(data.id ?? null);
+        if (data.email) setEmail(data.email);
+
+        const storedCity = data.city || '';
+        const knownCities = ECUADOR_CITIES.filter(c => c !== 'Otra ciudad');
+        const cityInList = knownCities.includes(storedCity);
+
+        setShippingData(prev => ({
+          ...prev,
+          firstName: data.name || '',
+          lastName: data.lastName || '',
+          identityNumber: data.identityNumber || '',
+          phone: data.phone || '',
+          country: data.countryOfResidence || 'Ecuador',
+          province: data.province || '',
+          city: cityInList ? storedCity : (storedCity ? 'Otra ciudad' : ''),
+          customCity: cityInList ? '' : storedCity,
+          address: data.streetAddress || '',
+          references: data.geolocation || '',
+        }));
+      })
+      .catch(() => { /* perfil vacío — el usuario llena los campos */ })
+      .finally(() => setProfileLoading(false));
+  }, [auth.user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Totales ──
   const sumTotal = () => {
     try {
       return parseFloat(
@@ -144,7 +174,7 @@ const Checkout = () => {
   );
   const totalConIva = parseFloat((subtotalAfterCoupon * 1.15).toFixed(2));
 
-  // ── Associate guest cart to a newly-logged user ──
+  // ── Asociar carrito guest a usuario recién logueado ──
   const associateGuestCart = async (token, guestOrderId) => {
     if (!token || !guestOrderId) return false;
     try {
@@ -157,9 +187,7 @@ const Checkout = () => {
     } catch { return false; }
   };
 
-  // ── COD order: patch state to pendiente_envio ──
-  // authToken param: pass explicitly — never rely on axios.defaults which may carry
-  // a freshly-set guest-user token BEFORE the order is associated with that user.
+  // ── Confirmar pedido COD ──
   const processCodOrder = async (savedOrderId, authToken) => {
     if (!savedOrderId) {
       throw new Error('No se encontró el ID de la orden. Por favor recarga la página y vuelve a intentarlo.');
@@ -182,53 +210,43 @@ const Checkout = () => {
     }
   };
 
-  // ── GUEST flow: auto-register → associate cart → COD or card ──
+  // ── Flujo GUEST: auto-registro → asociar carrito → pagar ──
   const handleGuestFlow = async () => {
-    // Guard: the guest order must already exist in localStorage (created by ProductItem when adding to cart).
-    // If it doesn't exist there's nothing to process and processCodOrder would get "Order not found".
     const guestOrderId = window.localStorage.getItem('oi');
     if (!guestOrderId) {
       toast.error('No se encontró tu carrito. Por favor agrega productos nuevamente y vuelve al checkout.');
       return;
     }
 
-    const [firstName, ...rest] = guestData.fullName.trim().split(' ');
-    const lastName = rest.join(' ') || firstName;
-    const resolvedCity = guestData.city === 'Otra ciudad' ? guestData.customCity.trim() : guestData.city;
+    const resolvedCity = shippingData.city === 'Otra ciudad' ? shippingData.customCity.trim() : shippingData.city;
 
     try {
       toast.info('Creando tu cuenta y procesando el pedido...');
 
       const response = await addCustomer({
-        name: firstName,
-        lastName,
-        identityNumber: guestData.identityNumber,
-        phone: guestData.phone,
-        countryOfResidence: guestData.country || 'Ecuador',
-        province: guestData.province,
+        name: shippingData.firstName,
+        lastName: shippingData.lastName,
+        identityNumber: shippingData.identityNumber,
+        phone: shippingData.phone,
+        countryOfResidence: shippingData.country || 'Ecuador',
+        province: shippingData.province,
         city: resolvedCity,
-        streetAddress: guestData.address,
-        geolocation: guestData.coordinates
-          ? `${guestData.references} | GPS:${guestData.coordinates.lat},${guestData.coordinates.lng}`
-          : guestData.references,
+        streetAddress: shippingData.address,
+        geolocation: shippingData.coordinates
+          ? `${shippingData.references} | GPS:${shippingData.coordinates.lat},${shippingData.coordinates.lng}`
+          : shippingData.references,
         user: {
-          email: guestData.email,
+          email: shippingData.email,
           password: generateTempPassword(),
         },
       });
 
-      // manualSignIn is synchronous: sets Cookie AND axios.defaults.headers.Authorization immediately.
-      // We capture authToken BEFORE calling it so we have it for explicit use.
-      // CRITICAL: never call processCodOrder relying on axios defaults when the order
-      // may not be owned by the user yet — pass the token explicitly instead.
       const authToken = response?.auth?.token;
       if (!authToken) throw new Error('No se recibió token de autenticación del servidor.');
 
       auth.manualSignIn(response.auth);
       window.dispatchEvent(new Event('tokenSet'));
 
-      // Associate the guest order with the new user.
-      // Some backends migrate the order to a new ID — capture the response to detect that.
       let resolvedOrderId = guestOrderId;
       try {
         const { data: assocData } = await axios.patch(
@@ -236,15 +254,12 @@ const Checkout = () => {
           { orderId: parseInt(guestOrderId, 10) },
           { headers: { Authorization: `Bearer ${authToken}` } }
         );
-        // Update localStorage if the backend returned a different orderId post-migration
         const returnedId = assocData?.id ?? assocData?.orderId ?? assocData?.newOrderId;
         if (returnedId && String(returnedId) !== guestOrderId) {
           resolvedOrderId = String(returnedId);
           window.localStorage.setItem('oi', resolvedOrderId);
         }
       } catch (assocErr) {
-        // Do NOT swallow this silently. If association failed the order still belongs
-        // to the guest and processCodOrder (now authenticated) would get "Order not found".
         console.error('[Checkout] associateGuestCart failed:', assocErr);
         throw new Error(
           assocErr.response?.data?.message ||
@@ -252,7 +267,6 @@ const Checkout = () => {
         );
       }
 
-      // Order is now owned by the authenticated user — pass authToken explicitly
       if (paymentMethod === 'cash') {
         await processCodOrder(resolvedOrderId, authToken);
         toast.info(
@@ -264,7 +278,7 @@ const Checkout = () => {
           const decoded = jwt.decode(authToken, { complete: true });
           if (decoded?.payload?.sub) setuId(decoded.payload.sub);
         } catch { /* noop */ }
-        if (guestData.email) setEmail(guestData.email);
+        if (shippingData.email) setEmail(shippingData.email);
         setOpen(true);
       }
     } catch (err) {
@@ -277,11 +291,31 @@ const Checkout = () => {
     }
   };
 
-  // ── AUTHENTICATED flow: credits → COD or card ──
+  // ── Flujo AUTENTICADO: guardar perfil → créditos → pagar ──
   const handleAuthFlow = async () => {
     const savedOrderId = window.localStorage.getItem('oi');
+    const resolvedCity = shippingData.city === 'Otra ciudad' ? shippingData.customCity.trim() : shippingData.city;
 
-    // Apply Ayni-Créditos if requested
+    // Persistir datos de envío actualizados (best-effort — no bloquea el pago)
+    try {
+      await updateCustomer(customerId, {
+        name: shippingData.firstName,
+        lastName: shippingData.lastName,
+        identityNumber: shippingData.identityNumber,
+        phone: shippingData.phone,
+        countryOfResidence: shippingData.country || 'Ecuador',
+        province: shippingData.province,
+        city: resolvedCity,
+        streetAddress: shippingData.address,
+        geolocation: shippingData.coordinates
+          ? `${shippingData.references} | GPS:${shippingData.coordinates.lat},${shippingData.coordinates.lng}`
+          : shippingData.references,
+      });
+    } catch {
+      // Continúa aunque falle el guardado — el pedido se procesa igual
+    }
+
+    // Aplicar Ayni-Créditos si el usuario eligió usarlos
     if (creditsToApply > 0 && savedOrderId) {
       try {
         toast.info('Aplicando Ayni-Créditos...');
@@ -312,7 +346,7 @@ const Checkout = () => {
     }
   };
 
-  // ── Unified submit handler ──
+  // ── Submit unificado ──
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!termsAccepted) {
@@ -324,31 +358,26 @@ const Checkout = () => {
       return;
     }
 
-    if (!auth.user) {
-      const { fullName, identityNumber, email: gEmail, phone, province, city, customCity, address, references } = guestData;
-      const resolvedCity = city === 'Otra ciudad' ? customCity.trim() : city;
-      if (
-        !fullName.trim() ||
-        !identityNumber.trim() ||
-        !gEmail.trim() ||
-        !phone.trim() ||
-        !province ||
-        !resolvedCity ||
-        !address.trim() ||
-        !references.trim()
-      ) {
-        toast.error('Por favor completa todos los campos de envío y facturación.');
-        return;
-      }
-    } else {
-      if (!isProfileComplete) {
-        toast.error('Completa y guarda tus datos de envío antes de continuar.');
-        return;
-      }
-      if (!email || email === 'mail@vacio.com') {
-        toast.error('Error al obtener tus datos. Por favor recarga la página.');
-        return;
-      }
+    const { firstName, lastName, identityNumber, email: sEmail, phone, province, city, customCity, address, references } = shippingData;
+    const resolvedCity = city === 'Otra ciudad' ? customCity.trim() : city;
+
+    if (
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !identityNumber.trim() ||
+      !phone.trim() ||
+      !province ||
+      !resolvedCity ||
+      !address.trim() ||
+      !references.trim()
+    ) {
+      toast.error('Por favor completa todos los campos de envío y facturación.');
+      return;
+    }
+
+    if (!auth.user && !sEmail.trim()) {
+      toast.error('Por favor ingresa tu correo electrónico.');
+      return;
     }
 
     setIsSubmitting(true);
@@ -390,10 +419,9 @@ const Checkout = () => {
 
         <div className={styles.grid}>
 
-          {/* ════════ LEFT COLUMN ════════ */}
+          {/* ════════ COLUMNA IZQUIERDA ════════ */}
           <section className={styles.leftCol}>
 
-            {/* Shipping data */}
             <div className={styles.sectionCard}>
               <h2 className={styles.sectionTitle}>
                 <svg viewBox="0 0 24 24" fill="currentColor" className={styles.sectionIcon} aria-hidden="true">
@@ -402,131 +430,179 @@ const Checkout = () => {
                 Datos de Envío
               </h2>
 
-              {!auth.user ? (
-                /* ── Guest: formulario completo de envío y facturación ── */
-                <div>
+              {profileLoading ? (
+                <div className={styles.skeletonGroup}>
+                  <div className={styles.skeletonRow}>
+                    <div className={styles.skeletonField}>
+                      <div className={styles.skeletonLabel} />
+                      <div className={styles.skeletonInput} />
+                    </div>
+                    <div className={styles.skeletonField}>
+                      <div className={styles.skeletonLabel} />
+                      <div className={styles.skeletonInput} />
+                    </div>
+                  </div>
+                  <div className={styles.skeletonRow}>
+                    <div className={styles.skeletonField}>
+                      <div className={styles.skeletonLabel} />
+                      <div className={styles.skeletonInput} />
+                    </div>
+                    <div className={styles.skeletonField}>
+                      <div className={styles.skeletonLabel} />
+                      <div className={styles.skeletonInput} />
+                    </div>
+                  </div>
+                  <div className={styles.skeletonField}>
+                    <div className={styles.skeletonLabel} />
+                    <div className={styles.skeletonInput} />
+                  </div>
+                  <div className={styles.skeletonField}>
+                    <div className={styles.skeletonLabel} />
+                    <div className={styles.skeletonInput} />
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.formWrapper}>
                   <div className={styles.formGrid}>
 
-                    {/* 1. Nombres y Apellidos Completos */}
-                    <div className={styles.fieldFull}>
-                      <label className={styles.label} htmlFor="g-fullname">
-                        Nombres y Apellidos Completos <span className={styles.req}>*</span>
+                    {/* Nombre */}
+                    <div className={styles.fieldHalf}>
+                      <label className={styles.label} htmlFor="s-firstname">
+                        Nombre/s <span className={styles.req}>*</span>
                       </label>
                       <input
-                        id="g-fullname"
+                        id="s-firstname"
                         type="text"
                         className={styles.input}
-                        placeholder="Ej: María García López"
-                        value={guestData.fullName}
-                        onChange={e => setGuestData(d => ({ ...d, fullName: e.target.value }))}
-                        autoComplete="name"
+                        placeholder="Ej: María"
+                        value={shippingData.firstName}
+                        onChange={set('firstName')}
+                        autoComplete="given-name"
                       />
                     </div>
 
-                    {/* 2. Cédula / RUC */}
+                    {/* Apellido */}
                     <div className={styles.fieldHalf}>
-                      <label className={styles.label} htmlFor="g-identity">
-                        Cédula de Identidad o RUC <span className={styles.req}>*</span>
+                      <label className={styles.label} htmlFor="s-lastname">
+                        Apellido/s <span className={styles.req}>*</span>
                       </label>
                       <input
-                        id="g-identity"
+                        id="s-lastname"
+                        type="text"
+                        className={styles.input}
+                        placeholder="Ej: García López"
+                        value={shippingData.lastName}
+                        onChange={set('lastName')}
+                        autoComplete="family-name"
+                      />
+                    </div>
+
+                    {/* Cédula */}
+                    <div className={styles.fieldHalf}>
+                      <label className={styles.label} htmlFor="s-identity">
+                        Cédula / RUC <span className={styles.req}>*</span>
+                      </label>
+                      <input
+                        id="s-identity"
                         type="text"
                         className={styles.input}
                         placeholder="0000000000"
-                        value={guestData.identityNumber}
-                        onChange={e => setGuestData(d => ({ ...d, identityNumber: e.target.value }))}
+                        value={shippingData.identityNumber}
+                        onChange={set('identityNumber')}
                         autoComplete="off"
                         maxLength={13}
                       />
                     </div>
 
-                    {/* 3. Celular / WhatsApp */}
+                    {/* Teléfono */}
                     <div className={styles.fieldHalf}>
-                      <label className={styles.label} htmlFor="g-phone">
+                      <label className={styles.label} htmlFor="s-phone">
                         Celular / WhatsApp <span className={styles.req}>*</span>
                       </label>
                       <input
-                        id="g-phone"
+                        id="s-phone"
                         type="tel"
                         className={styles.input}
                         placeholder="0991234567"
-                        value={guestData.phone}
-                        onChange={e => setGuestData(d => ({ ...d, phone: e.target.value }))}
+                        value={shippingData.phone}
+                        onChange={set('phone')}
                         autoComplete="tel"
                       />
                     </div>
 
-                    {/* 4. Correo Electrónico */}
-                    <div className={styles.fieldFull}>
-                      <label className={styles.label} htmlFor="g-email">
-                        Correo Electrónico <span className={styles.req}>*</span>
-                      </label>
-                      <input
-                        id="g-email"
-                        type="email"
-                        className={styles.input}
-                        placeholder="tu@correo.com"
-                        value={guestData.email}
-                        onChange={e => setGuestData(d => ({ ...d, email: e.target.value }))}
-                        autoComplete="email"
-                      />
-                    </div>
+                    {/* Correo — solo para invitados */}
+                    {!auth.user && (
+                      <div className={styles.fieldFull}>
+                        <label className={styles.label} htmlFor="s-email">
+                          Correo Electrónico <span className={styles.req}>*</span>
+                        </label>
+                        <input
+                          id="s-email"
+                          type="email"
+                          className={styles.input}
+                          placeholder="tu@correo.com"
+                          value={shippingData.email}
+                          onChange={set('email')}
+                          autoComplete="email"
+                        />
+                      </div>
+                    )}
 
-                    {/* 5. Provincia */}
+                    {/* Provincia */}
                     <div className={styles.fieldHalf}>
-                      <label className={styles.label} htmlFor="g-province">
+                      <label className={styles.label} htmlFor="s-province">
                         Provincia <span className={styles.req}>*</span>
                       </label>
                       <select
-                        id="g-province"
+                        id="s-province"
                         className={styles.input}
-                        value={guestData.province}
-                        onChange={e => setGuestData(d => ({ ...d, province: e.target.value }))}
+                        value={shippingData.province}
+                        onChange={set('province')}
                       >
                         <option value="">Selecciona tu provincia</option>
                         {ECUADOR_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
                       </select>
                     </div>
 
-                    {/* 6. Ciudad / Cantón */}
+                    {/* Ciudad */}
                     <div className={styles.fieldHalf}>
-                      <label className={styles.label} htmlFor="g-city">
+                      <label className={styles.label} htmlFor="s-city">
                         Ciudad / Cantón <span className={styles.req}>*</span>
                       </label>
                       <select
-                        id="g-city"
+                        id="s-city"
                         className={styles.input}
-                        value={guestData.city}
-                        onChange={e => setGuestData(d => ({ ...d, city: e.target.value, customCity: '' }))}
+                        value={shippingData.city}
+                        onChange={e => setShippingData(d => ({ ...d, city: e.target.value, customCity: '' }))}
                       >
                         <option value="">Selecciona tu ciudad</option>
                         {ECUADOR_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
-                      {guestData.city === 'Otra ciudad' && (
+                      {shippingData.city === 'Otra ciudad' && (
                         <input
                           type="text"
                           className={styles.input}
                           style={{ marginTop: '6px' }}
                           placeholder="Escribe tu ciudad"
-                          value={guestData.customCity}
-                          onChange={e => setGuestData(d => ({ ...d, customCity: e.target.value }))}
+                          value={shippingData.customCity}
+                          onChange={set('customCity')}
                           autoComplete="address-level2"
                         />
                       )}
                     </div>
 
-                    {/* 7. Dirección Exacta */}
+                    {/* Dirección */}
                     <div className={styles.fieldFull}>
-                      <label className={styles.label} htmlFor="g-address">
+                      <label className={styles.label} htmlFor="s-address">
                         Dirección Exacta <span className={styles.req}>*</span>
                       </label>
                       <input
-                        id="g-address"
+                        id="s-address"
                         type="text"
                         className={styles.input}
                         placeholder="Calle principal, calle secundaria y número de casa/dpto."
-                        value={guestData.address}
-                        onChange={e => setGuestData(d => ({ ...d, address: e.target.value }))}
+                        value={shippingData.address}
+                        onChange={set('address')}
                         autoComplete="street-address"
                       />
                     </div>
@@ -544,45 +620,44 @@ const Checkout = () => {
                         </svg>
                         {geoStatus === 'loading' ? 'Obteniendo ubicación...' : 'Usar mi ubicación actual (opcional)'}
                       </button>
-                      {geoStatus === 'success' && guestData.coordinates && (
+                      {geoStatus === 'success' && shippingData.coordinates && (
                         <p className={styles.geoSuccess}>
-                          ✓ GPS fijado — {guestData.coordinates.lat}, {guestData.coordinates.lng}
+                          ✓ GPS fijado — {shippingData.coordinates.lat}, {shippingData.coordinates.lng}
                         </p>
                       )}
                     </div>
 
-                    {/* 8. Referencias de la ubicación */}
+                    {/* Referencias */}
                     <div className={styles.fieldFull}>
-                      <label className={styles.label} htmlFor="g-references">
+                      <label className={styles.label} htmlFor="s-references">
                         Referencias de la Ubicación <span className={styles.req}>*</span>
                       </label>
                       <input
-                        id="g-references"
+                        id="s-references"
                         type="text"
                         className={styles.input}
                         placeholder="Color de casa, frente a qué local, señas adicionales..."
-                        value={guestData.references}
-                        onChange={e => setGuestData(d => ({ ...d, references: e.target.value }))}
+                        value={shippingData.references}
+                        onChange={set('references')}
                         autoComplete="off"
                       />
                     </div>
 
                   </div>
 
-                  <p className={styles.guestHint}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15" style={{ flexShrink: 0 }} aria-hidden="true">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
-                    Al confirmar crearemos tu cuenta Aynimar automáticamente. Recibirás tu contraseña de activación por correo para que puedas acumular Ayni-Créditos con cada reciclaje.
-                  </p>
+                  {!auth.user && (
+                    <p className={styles.guestHint}>
+                      <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15" style={{ flexShrink: 0 }} aria-hidden="true">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                      </svg>
+                      Al confirmar crearemos tu cuenta Aynimar automáticamente. Recibirás tu contraseña de activación por correo para que puedas acumular Ayni-Créditos con cada reciclaje.
+                    </p>
+                  )}
                 </div>
-              ) : (
-                /* ── Authenticated: profile component ── */
-                <CustomerProfile onProfileStatusChange={setIsProfileComplete} />
               )}
             </div>
 
-            {/* Coupon */}
+            {/* Cupón */}
             <div className={styles.sectionCard}>
               <CouponInput
                 cartTotal={valorTotalSinIva}
@@ -591,7 +666,7 @@ const Checkout = () => {
               />
             </div>
 
-            {/* Wallet (auth only) */}
+            {/* Wallet (solo autenticados) */}
             {auth.user && (
               <div className={styles.sectionCard}>
                 <WalletRedeem
@@ -603,10 +678,10 @@ const Checkout = () => {
             )}
           </section>
 
-          {/* ════════ RIGHT COLUMN ════════ */}
+          {/* ════════ COLUMNA DERECHA ════════ */}
           <aside className={styles.rightCol}>
 
-            {/* Order summary */}
+            {/* Resumen del pedido */}
             <div className={styles.sectionCard}>
               <h2 className={styles.sectionTitle}>
                 <svg viewBox="0 0 24 24" fill="currentColor" className={styles.sectionIcon} aria-hidden="true">
@@ -651,7 +726,7 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* Payment method selector */}
+            {/* Método de pago */}
             <div className={styles.sectionCard}>
               <h2 className={styles.sectionTitle}>
                 <svg viewBox="0 0 24 24" fill="currentColor" className={styles.sectionIcon} aria-hidden="true">
@@ -661,8 +736,6 @@ const Checkout = () => {
               </h2>
 
               <div className={styles.paymentCards} role="radiogroup" aria-label="Selecciona método de pago">
-
-                {/* COD — default */}
                 <label className={`${styles.paymentCard} ${paymentMethod === 'cash' ? styles.paymentCardActive : ''}`}>
                   <input
                     type="radio"
@@ -689,7 +762,6 @@ const Checkout = () => {
                   )}
                 </label>
 
-                {/* Card */}
                 <label className={`${styles.paymentCard} ${paymentMethod === 'card' ? styles.paymentCardActive : ''}`}>
                   <input
                     type="radio"
@@ -716,7 +788,7 @@ const Checkout = () => {
             {/* Trust badges */}
             <CheckoutTrustBadges />
 
-            {/* Terms + CTA — this is the main form submission */}
+            {/* Términos + CTA */}
             <form onSubmit={handleSubmit} className={styles.ctaSection}>
               <label className={styles.termsRow}>
                 <input
@@ -738,37 +810,31 @@ const Checkout = () => {
                 </span>
               </label>
 
-              {auth.user && !isProfileComplete ? (
-                <div className={styles.profileWarning}>
-                  <p>⚠️ Completa y guarda tus datos de envío para habilitar el pago.</p>
-                </div>
-              ) : (
-                <button
-                  type="submit"
-                  className={styles.ctaButton}
-                  disabled={isSubmitting || !termsAccepted || state.cart.length === 0}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className={styles.spinner} aria-hidden="true" />
-                      Procesando pago seguro...
-                    </>
-                  ) : (
-                    <>
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
-                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-                      </svg>
-                      Confirmar Compra
-                    </>
-                  )}
-                </button>
-              )}
+              <button
+                type="submit"
+                className={styles.ctaButton}
+                disabled={isSubmitting || !termsAccepted || state.cart.length === 0}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className={styles.spinner} aria-hidden="true" />
+                    Procesando pago seguro...
+                  </>
+                ) : (
+                  <>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+                      <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                    Confirmar Compra
+                  </>
+                )}
+              </button>
             </form>
           </aside>
         </div>
       </div>
 
-      {/* Card payment modal */}
+      {/* Modal pago con tarjeta */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className={styles.modalContentWrapper}>
           <h1 className={styles.modaltitle}>Pago con Tarjeta</h1>

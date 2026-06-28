@@ -288,6 +288,12 @@
   50%       { box-shadow: 0 0 0 6px rgba(73,0,228,0); }
 }
 
+.missionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .missionTitle {
   margin: 0;
   font-size: 0.82rem;
@@ -297,10 +303,28 @@
 }
 
 .missionReward {
-  margin: 3px 0 0;
+  margin: 0;
   font-size: 0.72rem;
   font-weight: 700;
   color: var(--accent);
+}
+
+.missionCountdown {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #ff8f00;
+  font-variant-numeric: tabular-nums;
+
+  strong { letter-spacing: 0.03em; }
+}
+
+.missionExpired { opacity: 0.5; }
+
+.missionExpiredLabel {
+  margin: 0;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.4);
+  font-style: italic;
 }
 
 /* ── Cofre de recompensa ── */

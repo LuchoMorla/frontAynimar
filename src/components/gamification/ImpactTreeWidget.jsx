@@ -98,16 +98,26 @@ function ProgressBar({ pct, nextLabel }) {
   );
 }
 
-/* ── Misión activa ───────────────────────────────────────── */
+/* ── Misión activa con countdown ─────────────────────────── */
 
 function ActiveMission({ mission }) {
   if (!mission) return null;
+  const hasCountdown = mission.countdown && !mission.isExpired;
+
   return (
-    <div className={styles.mission}>
+    <div className={`${styles.mission} ${mission.isExpired ? styles.missionExpired : ''}`}>
       <span className={styles.missionDot} aria-hidden />
-      <div>
+      <div className={styles.missionBody}>
         <p className={styles.missionTitle}>{mission.title}</p>
-        <p className={styles.missionReward}>Siembras +{mission.rewardCredits} créditos</p>
+        <p className={styles.missionReward}>+{mission.rewardCredits} créditos</p>
+        {hasCountdown && (
+          <p className={styles.missionCountdown} aria-live="polite">
+            ⏱ <strong>{mission.countdown}</strong>
+          </p>
+        )}
+        {mission.isExpired && (
+          <p className={styles.missionExpiredLabel}>Reto vencido</p>
+        )}
       </div>
     </div>
   );

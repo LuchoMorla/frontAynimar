@@ -7,6 +7,7 @@ import useInitialState from '@hooks/useInitialState';
 import Layout from '@containers/Layout';
 import { ToastContainer } from 'react-toastify';
 import TestContext from '@context/TestContext';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -49,6 +50,7 @@ function MyApp({ Component, pageProps }) {
             </Layout>
             <RewardChestModal />
             <ToastContainer />
+            <SpeedInsights />
           </WalletProvider>
         </TestContext.Provider>
       </AppContext.Provider>

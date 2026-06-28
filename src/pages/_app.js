@@ -41,6 +41,22 @@ function MyApp({ Component, pageProps }) {
     };
   }, [router.events]);
 
+  // Sentry loads asynchronously — never blocks LCP or first paint.
+  useEffect(() => {
+    const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+    if (!dsn) return;
+    import('@sentry/browser').then(({ init, browserTracingIntegration }) => {
+      init({
+        dsn,
+        environment: process.env.NODE_ENV || 'production',
+        tracesSampleRate: 0.2,
+        integrations: [browserTracingIntegration()],
+        // Focus capture: checkout flow + product navigation
+        tracePropagationTargets: [/aynimar\.com/, /\/checkout/, /\/store\//],
+      });
+    });
+  }, []);
+
   return (
     <ProviderAuth>
       <AppContext.Provider value={initialState}>

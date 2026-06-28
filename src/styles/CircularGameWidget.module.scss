@@ -1,0 +1,277 @@
+@import 'vars';
+
+/* ══════════════════════════════════════
+   CircularGameWidget — Impacto del Usuario
+   Estilo TEMU: visual, dinámico, orientado a conversión
+══════════════════════════════════════ */
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 16px;
+  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(73, 0, 228, 0.3);
+  box-shadow: 0 8px 32px rgba(73, 0, 228, 0.12);
+  width: 100%;
+  max-width: 320px;
+  position: relative;
+  overflow: hidden;
+
+  /* shimmer decorativo de fondo */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(162, 206, 146, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.compact {
+  padding: 12px;
+  gap: 8px;
+  max-width: 200px;
+}
+
+/* ── Anillo SVG ── */
+
+.ringWrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.compact .ringWrap {
+  width: 80px;
+  height: 80px;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 8;
+}
+
+.fill {
+  fill: none;
+  stroke: url(#gamificationGradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Fallback color si SVG gradient no carga */
+  stroke: $--app-green;
+}
+
+/* Gradient inline via filter trick — usamos color sólido + glow */
+.fill {
+  stroke: $--app-green;
+  filter: drop-shadow(0 0 4px rgba(162, 206, 146, 0.6));
+}
+
+.ringCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.creditAmount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.compact .creditAmount {
+  font-size: 1rem;
+}
+
+.creditLabel {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Próxima recompensa ── */
+
+.rewardHint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 14px;
+  width: 100%;
+}
+
+.rewardIcon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.rewardText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rewardName {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: $--app-green;
+}
+
+.rewardLeft {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.55);
+
+  strong {
+    color: #ffffff;
+  }
+}
+
+/* ── Métricas de impacto ── */
+
+.impactRow {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.impactChip {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(162, 206, 146, 0.08);
+  border: 1px solid rgba(162, 206, 146, 0.2);
+  border-radius: 12px;
+  padding: 10px 8px;
+}
+
+.impactEmoji {
+  font-size: 1.2rem;
+}
+
+.impactValue {
+  font-size: 1rem;
+  font-weight: 800;
+  color: $--app-green;
+}
+
+.impactUnit {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+}
+
+/* ── Misión activa ── */
+
+.missionBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(90deg, rgba(73, 0, 228, 0.25), rgba(73, 0, 228, 0.1));
+  border: 1px solid rgba(73, 0, 228, 0.4);
+  border-radius: 12px;
+  padding: 10px 14px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pulso de "nuevo" */
+.missionPulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $--purple;
+  flex-shrink: 0;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(73, 0, 228, 0.5); }
+  50%       { transform: scale(1.2); box-shadow: 0 0 0 6px rgba(73, 0, 228, 0); }
+}
+
+.missionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.missionTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.missionReward {
+  font-size: 0.72rem;
+  color: $--app-green;
+  font-weight: 700;
+}
+
+/* ── Cofre desbloqueado ── */
+
+.chestBanner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: linear-gradient(90deg, #ff6b35, #f7c59f);
+  border: none;
+  border-radius: 14px;
+  padding: 12px 16px;
+  cursor: pointer;
+  text-align: left;
+  animation: slideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  strong {
+    display: block;
+    font-size: 0.88rem;
+    color: #1a1a1a;
+    font-weight: 800;
+  }
+
+  span {
+    font-size: 0.72rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  &:hover {
+    filter: brightness(1.05);
+    transform: scale(1.01);
+    transition: all 0.15s ease;
+  }
+}
+
+.chestShake {
+  font-size: 1.8rem;
+  animation: shake 0.5s infinite alternate;
+}
+
+@keyframes shake {
+  from { transform: rotate(-8deg) scale(1.05); }
+  to   { transform: rotate(8deg) scale(1.1); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}

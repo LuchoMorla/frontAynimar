@@ -211,12 +211,49 @@
 
 @media (max-width: 540px) {
   .trustBar {
-    display: none; /* en móvil muy pequeño se oculta para no apelotonar la nav */
+    display: none;
   }
   .Nav {
     justify-content: space-between;
   }
+  .footerBottom {
+    padding: 24px 16px 16px;
+  }
   .footerInner {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
+  /* Aumentar legibilidad y área de toque en móvil */
+  .footerLinks {
+    gap: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 0;
+  }
+  .footerBottomLink {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.88);
+    padding: 10px 4px;
+    display: block;
+    min-height: 44px;           /* tap target mínimo recomendado */
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    &:last-child {
+      border-bottom: none;
+    }
+    &:hover {
+      color: $--app-green;
+    }
+  }
+  .footerLegal p {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+}
+
+/* Prevenir scroll horizontal en pantallas muy angostas */
+.footerBottom {
+  overflow-x: hidden;
 }

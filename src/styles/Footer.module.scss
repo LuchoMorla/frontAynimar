@@ -198,18 +198,35 @@
   display: flex;
   flex-direction: column;
   gap: 11px;
+
+  /*
+   * Selector compuesto (.footerLinks .footerBottomLink) → especificidad 0,2,0.
+   * Gana sobre cualquier regla global "a { color: X }" (0,0,1) o
+   * ".container a { color: X }" (0,1,1) sin necesitar !important ni hashes.
+   */
+  .footerBottomLink,
+  .footerBottomLink:visited,
+  a,
+  a:visited {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .footerBottomLink:hover,
+  a:hover {
+    color: $--app-green;
+  }
 }
 
-/* Hard override: color sólido en todos los estados */
 .footerBottomLink {
   display: block;
   font-size: 0.83rem;
-  color: #cccccc;
+  color: #ffffff;
   text-decoration: none;
   transition: color 0.15s ease;
   line-height: 1.4;
 
-  &:visited { color: #cccccc; }
+  &:visited { color: #ffffff; }
   &:hover   { color: $--app-green; }
   &:active  { color: $--app-green; }
 }
@@ -290,7 +307,16 @@
     gap: 28px;
     padding: 28px 16px 20px;
   }
-  .footerLinks { gap: 0; }
+  .footerLinks {
+    gap: 0;
+
+    .footerBottomLink,
+    .footerBottomLink:visited,
+    a,
+    a:visited {
+      color: #ffffff;
+    }
+  }
   .footerBottomLink {
     font-size: 0.9rem;
     color: #ffffff;

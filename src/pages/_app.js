@@ -1,20 +1,29 @@
 import { ProviderAuth } from '@hooks/useAuth';
 import Script from 'next/script';
+import dynamic from 'next/dynamic';
 import AppContext from '@context/AppContext';
 import { WalletProvider } from '@context/WalletContext';
-import RewardChestModal from '@components/gamification/RewardChestModal';
 import useInitialState from '@hooks/useInitialState';
 import Layout from '@containers/Layout';
-import { ToastContainer } from 'react-toastify';
 import TestContext from '@context/TestContext';
+import * as gtag from '@gtag';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import * as gtag from '@gtag';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+
+// Non-critical UI — loaded only after hydration, not part of the initial JS chunk.
+const RewardChestModal = dynamic(
+  () => import('@components/gamification/RewardChestModal'),
+  { ssr: false }
+);
+const ToastContainer = dynamic(
+  () => import('react-toastify').then((m) => ({ default: m.ToastContainer })),
+  { ssr: false }
+);
 
 function MyApp({ Component, pageProps }) {
   const initialState = useInitialState();

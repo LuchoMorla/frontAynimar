@@ -1,24 +1,9 @@
 import Head from 'next/head';
 import FormProduct from '@components/FormProduct';
 import ProductReviews from '@components/ProductReviews';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import endPoints from '@services/api';
 
-export default function ProductStand() {
-  const [product, setProduct] = useState({});
-  const router = useRouter();
-
-  useEffect(() => {
-    const { id } = router.query;
-    if (!router.isReady) return;
-    async function getProduct() {
-      const response = await axios.get(endPoints.products.getProduct(id));
-      setProduct(response.data);
-    }
-    getProduct();
-  }, [router?.isReady]);
+export default function ProductStand({ product }) {
+  if (!product) return null;
 
   return (
     <>
@@ -31,4 +16,24 @@ export default function ProductStand() {
       )}
     </>
   );
+}
+
+export async function getStaticPaths() {
+  return { paths: [], fallback: 'blocking' };
+}
+
+export async function getStaticProps({ params }) {
+  const { id } = params;
+  const API     = process.env.NEXT_PUBLIC_API_URL;
+  const VERSION = process.env.NEXT_PUBLIC_API_API_VERSION || 'v1';
+
+  try {
+    const res = await fetch(`${API}/api/${VERSION}/products/${id}`);
+    if (!res.ok) return { notFound: true };
+    const product = await res.json();
+    if (!product?.id) return { notFound: true };
+    return { props: { product }, revalidate: 60 };
+  } catch {
+    return { notFound: true };
+  }
 }

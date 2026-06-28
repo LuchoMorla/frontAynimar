@@ -297,8 +297,8 @@ const ProductList = () => {
 
 			{/* Lista de productos - SIN CAMBIOS */}
 			<div className={styles.ProductList}>
-				{products.map((product) => (
-					<ProductItem product={product} key={product.id} />
+				{products.map((product, index) => (
+					<ProductItem product={product} key={product.id} priority={index < 4} />
 				))}
 			</div>
 

@@ -21,10 +21,14 @@
 .image-wrapper {
 	position: relative;
 	display: block;
+	/* Reserve 1:1 space before the image downloads — eliminates CLS */
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+	border-radius: .75rem .75rem 0 0;
 }
 .ProductItem img {
-	max-width: 240px;
-	height: 240px;
+	width: 100%;
+	height: 100%;
 	border-radius: .75rem .75rem 0 0;
 	object-fit: cover;
 	display: block;
@@ -136,10 +140,7 @@
 	.ProductItem {
 		max-width: 155px;
 	}
-	.ProductItem img {
-		max-width: 155px;
-		height: 155px;
-	}
+	/* img sizing driven by aspect-ratio — no pixel override needed */
 	.ctaButton {
 		font-size: 0.72rem;
 		padding: 8px 6px;

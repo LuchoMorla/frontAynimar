@@ -68,16 +68,16 @@ export default function RewardChestModal() {
         </p>
 
         <div className={styles.discountBadge}>
-          <span className={styles.discountNum}>{discount}%</span>
-          <span className={styles.discountLabel}>de descuento en tu próxima compra</span>
+          <span className={styles.discountNum}>+{discount}</span>
+          <span className={styles.discountLabel}>Aynicréditos acreditados</span>
         </div>
 
         <p className={styles.fine}>
-          El cupón se aplica automáticamente en tu siguiente checkout. Válido 7 días.
+          Ya están disponibles en tu wallet. Úsalos en tu próximo checkout.
         </p>
 
         <button className={styles.cta} onClick={dismissChest}>
-          ¡Entendido, a seguir sembrando!
+          ¡Seguir comprando!
         </button>
       </div>
     </div>

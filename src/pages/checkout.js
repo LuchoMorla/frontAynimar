@@ -413,6 +413,10 @@ const Checkout = () => {
     <>
       <Head>
         <title>Finaliza tu compra | Aynimar</title>
+        {/* PrimeReact CSS — only loaded on this page, not global */}
+        <link rel="stylesheet" href="https://unpkg.com/primereact@9.2.2/resources/themes/lara-light-indigo/theme.css" />
+        <link rel="stylesheet" href="https://unpkg.com/primereact@9.2.2/resources/primereact.min.css" />
+        <link rel="stylesheet" href="https://unpkg.com/primeicons@6.0.1/primeicons.css" />
       </Head>
 
       <div className={styles.page}>

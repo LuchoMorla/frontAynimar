@@ -11,9 +11,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
-import 'primereact/resources/themes/lara-light-indigo/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
+// ponytail: PrimeReact CSS moved to checkout.js via <Head> — saves ~300KB on every non-payment page
 
 // Non-critical UI — loaded only after hydration, not part of the initial JS chunk.
 const RewardChestModal = dynamic(
@@ -49,7 +47,7 @@ function MyApp({ Component, pageProps }) {
       init({
         dsn,
         environment: process.env.NODE_ENV || 'production',
-        tracesSampleRate: 0.2,
+        tracesSampleRate: 0.1,
         integrations: [browserTracingIntegration()],
         // Focus capture: checkout flow + product navigation
         tracePropagationTargets: [/aynimar\.com/, /\/checkout/, /\/store\//],

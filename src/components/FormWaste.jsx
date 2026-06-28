@@ -1,134 +1,83 @@
-import React, { useContext, useRef } from 'react';
-import AppContext from '@context/AppContext';
-import axios from 'axios';
-import endPoints from '@services/api';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import addToCartButton from '@icons/bt_add_to_cart.svg';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import addToCartButton from '@icons/bt_add_to_cart.svg';
 import styles from '@styles/ProductInfo.module.scss';
+import { useRecycleSubmit } from '@hooks/useRecycleSubmit';
 
-const WasteInfo = ({ product }) => {
-  const { addToMetacircle /* PaymentId,*/ } = useContext(AppContext);
+/**
+ * FormWaste — presentation-only component for selling a recyclable item.
+ *
+ * All business logic (auth guard, payment session management, API calls,
+ * error classification and Sentry reporting) lives in useRecycleSubmit.
+ * This component only handles rendering, input capture and user feedback.
+ */
+const FormWaste = ({ product }) => {
+  const router  = useRouter();
   const formRef = useRef(null);
-  const router = useRouter();
+  const { isLoading, error, success, submit, reset } = useRecycleSubmit(product);
 
-  const handleClick = (item) => {
-    addToMetacircle(item);
-  };
-
-  const handleRedirect = () => {
-    toast.success('hemos registrado tú pedido, nos comunicaremos con tigo para pasar a recolectar el producto, te redigiremos a una nueva pagina para confirmar tús datos de contacto');
-    router.push('/mi_cuenta/recycler');
-  };
-
-  const createPayment = async () => {
-    const post = await axios.post(endPoints.payments.postPayment);
-    return post.data;
-  };
-
-  const submitHandler = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    /* alert (1); */
-    const addToPacket = async (paymentId) => {
-      const config = {
-        headers: {
-          accept: '*/*',
-          'Content-Type': 'application/json',
-        },
-      };
-      const formData = new FormData(formRef.current);
-      const packet = {
-        paymentId: paymentId,
-        wasteId: product.id,
-        amount: parseInt(formData.get('amount')),
-      };
-
-      const addProductToThePacked = await axios.post(endPoints.payments.postCommodity, packet, config);
-      /* 			if (addProductToThePacked.status = 401) {
-				alert ('necesitas iniciar sesion');
-				router.push('/login');
-			} */
-      return addProductToThePacked;
-    };
-
-    const savedPaymentId = window.localStorage.getItem('pi');
-
-    if (savedPaymentId == null) {
-      const getPayment = await createPayment();
-      const bornedPaymentId = getPayment.id;
-      window.localStorage.setItem('pi', `${bornedPaymentId}`);
-
-      addToPacket(bornedPaymentId)
-        .then(() => {
-          toast.success('Producto agregado');
-          handleClick(product);
-          handleRedirect();
-        })
-        .catch((error) => {
-          if (error.response?.status === 401) {
-            toast.error('Algo salio mal :(');
-          } else if (error.response) {
-            /*             window.alert ('Algo salio mal: ' + error.response.status);
-            console.log('Algo salio mal: ' + error.response.status); */
-            toast.error('Algo salio mal: ' + error.response.status);
-            if (error.response.status == 409) {
-              toast.error('Ya tienes una cuenta registrada, Error:( ' + error.response.status + ' )'); /* 
-              window.alert ('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado'); */
-              let opcion = confirm('parece que olvidaste tu contraseña, quieres cambiar tu contraseña?');
-              if (opcion == true) {
-                router.push('/forgotPassword');
-              } else {
-                router.push('/login');
-              }
-            }
-          }
-        });
-    } else {
-      const numberPaymentId = parseInt(savedPaymentId);
-      //no sé que queria yo hacer en PaymentId(numero del payment id) creo que guardarlo en localStorage y me arrepenti
-      /* 			PaymentId(numberPaymentId); */
-      addToPacket(numberPaymentId)
-        .then(() => {
-          handleClick(product);
-          handleRedirect();
-        })
-        .catch((error) => {
-          if (error.response?.status === 401) {
-            toast.error('algo salio mal');
-          } else if (error.response) {
-            toast.error('Algo salio mal: ' + error.response.status);
-            console.log('Algo salio mal: ' + error.response.status);
-            if (error.response.status == 409) {
-              toast.error('es probable que ya estes registrado te invitamos a crear una nueva contraseña en caso de que la hayas olvidado');
-              router.push('/forgotPassword');
-            }
-          }
-        });
-    }
+    const formData = new FormData(formRef.current);
+    await submit(formData.get('amount'));
   };
+
+  useEffect(() => {
+    if (!success) return;
+    toast.success(
+      'Pedido registrado. Nos comunicaremos para recolectar el producto. ' +
+      'Te redirigiremos para confirmar tus datos de contacto.'
+    );
+    router.push('/mi_cuenta/recycler');
+  }, [success, router]);
+
+  useEffect(() => {
+    if (!error) return;
+    toast.error(error.message);
+    reset();
+  }, [error, reset]);
 
   return (
-    <>
-      <div className={styles['stand_container']}>
-        {product?.image && <Image src={product?.image} width={300} height={300} alt={product?.name} className={styles.image} />}
-        <div className={styles.ProductInfo}>
-          <form ref={formRef} onSubmit={submitHandler}>
-            {/* <p>${product?.price / 100}</p> */}
-            <p>${product?.price}</p>
-            <p>{product?.name}</p>
-            <p>{product?.description}</p>
-            <label htmlFor="amount">cantidad: </label>
-            <input type="number" required id="amount" name="amount" min={1} />
-            <button type="submit" className={styles['add-to-cart-button']}>
-              <Image src={addToCartButton} width={24} height={24} alt="add to cart" />
-              Vender producto
-            </button>
-          </form>
-        </div>
+    <div className={styles['stand_container']}>
+      {product?.image && (
+        <Image
+          src={product.image}
+          width={300}
+          height={300}
+          alt={product?.name}
+          className={styles.image}
+        />
+      )}
+
+      <div className={styles.ProductInfo}>
+        <form ref={formRef} onSubmit={handleSubmit}>
+          <p>${product?.price}</p>
+          <p>{product?.name}</p>
+          <p>{product?.description}</p>
+
+          <label htmlFor="amount">cantidad: </label>
+          <input
+            type="number"
+            required
+            id="amount"
+            name="amount"
+            min={1}
+          />
+
+          <button
+            type="submit"
+            className={styles['add-to-cart-button']}
+            disabled={isLoading}
+          >
+            <Image src={addToCartButton} width={24} height={24} alt="add to cart" />
+            {isLoading ? 'Enviando…' : 'Vender producto'}
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
-export default WasteInfo;
+
+export default FormWaste;

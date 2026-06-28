@@ -100,9 +100,9 @@ const WELCOME_MSG = {
 };
 
 const FAQ = [
-  { q: '¿A qué ciudades entregan?', a: 'Quito, Guayaquil, Cuenca y principales ciudades del Ecuador. Coordinamos la entrega contigo por WhatsApp.' },
-  { q: '¿Cómo funciona el pago contra entrega?', a: 'El repartidor llega a tu dirección y pagas en efectivo o transferencia al recibirlo. Sin riesgo ni adelantos.' },
-  { q: '¿Cuánto tarda el envío?', a: 'Dentro de Quito: 1–3 días hábiles. Otras ciudades: 3–7 días hábiles según la transportista.' },
+  { q: '¿A qué ciudades entregan?', a: 'Entregamos en todo el Ecuador. Ingresa tu provincia y ciudad en el checkout y coordinamos la entrega contigo por WhatsApp.' },
+  { q: '¿Cómo funciona el pago contra entrega?', a: 'El repartidor llega a tu dirección en cualquier ciudad del país y pagas en efectivo o transferencia al recibirlo. Sin riesgo ni adelantos.' },
+  { q: '¿Cuánto tarda el envío?', a: 'Ciudades principales (Quito, Guayaquil, Cuenca): 1–3 días hábiles. Resto del Ecuador: 3–7 días hábiles según la transportista.' },
   { q: '¿Qué son los Ayni-Créditos?', a: '1 Ayni-Crédito = $1 de descuento. Los acumulas reciclando o comprando y puedes usarlos en cualquier pedido.' },
   { q: '¿Cómo reciclo con Aynimar?', a: 'Lleva tus residuos a puntos autorizados, registra el peso con el operador y los créditos se acreditan automáticamente.' },
   { q: '¿Puedo rastrear mi pedido?', a: 'Sí. Recibirás el número de guía por WhatsApp. También puedes consultarlo en "Mis Pedidos" en tu cuenta.' },

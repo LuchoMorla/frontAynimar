@@ -100,7 +100,9 @@ const endPoints = {
     vendingProspectContact: `${API}/api/${VERSION}/mail/vendingProspectContact`,
   },
   wallet: {
-    myBalance: `${API}/api/${VERSION}/wallets/my-wallet`,
+    myBalance:      `${API}/api/${VERSION}/wallets/my-wallet`,
+    myTransactions: (page = 1, limit = 20) =>
+      `${API}/api/${VERSION}/commissions/my-transactions?page=${page}&limit=${limit}`,
   },
   coupons: {
     validate: `${API}/api/${VERSION}/coupons/validate`,

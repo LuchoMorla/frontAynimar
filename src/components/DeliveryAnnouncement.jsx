@@ -12,7 +12,7 @@ const DeliveryAnnouncement = () => (
     letterSpacing: '0.01em',
   }}>
     📦 <strong>¡Compra con total confianza!</strong>{' '}
-    Pago Contra Entrega en Quito. Pagas al recibir tu producto en efectivo o transferencia.{' '}
+    Pago Contra Entrega a nivel nacional. Pagas al recibir tu producto en efectivo o transferencia.{' '}
     🚀
   </div>
 );

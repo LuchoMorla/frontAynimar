@@ -13,7 +13,7 @@ const STEPS = [
     tag: 'Compra Inteligente',
     title: 'Elige lo que necesitas',
     description:
-      'Explora nuestro catálogo de productos 100% nuevos, importados y de dropshipping. Desde tecnología hasta fitness, con Pago Contra Entrega en Quito.',
+      'Explora nuestro catálogo de productos 100% nuevos, importados y de dropshipping. Desde tecnología hasta fitness, con Pago Contra Entrega en todo Ecuador.',
     accentColor: '#4900E4',
     bgColor: '#f0ebfd',
     borderColor: '#c4b5f4',

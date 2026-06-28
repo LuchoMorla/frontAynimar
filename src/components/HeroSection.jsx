@@ -46,7 +46,7 @@ const HeroSection = () => (
       maxWidth: '620px',
     }}>
       Compra productos 100% nuevos e importados para tu día a día y financia tus compras
-      reciclando lo que ya no usas en Quito. Apoyamos la economía circular.
+      reciclando lo que ya no usas, en cualquier rincón del Ecuador. Apoyamos la economía circular.
     </p>
 
     <div style={{

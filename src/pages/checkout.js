@@ -18,6 +18,8 @@ import { addCustomer, updateCustomer } from '@services/api/entities/customers';
 import WalletRedeem from '@components/WalletRedeem';
 import CouponInput from '@components/CouponInput';
 import CheckoutTrustBadges from '@components/CheckoutTrustBadges';
+import CartRewardNudge from '@components/gamification/CartRewardNudge';
+import { useWallet } from '@context/WalletContext';
 
 const ECUADOR_PROVINCES = [
   'Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi',
@@ -42,6 +44,12 @@ const Checkout = () => {
   const router = useRouter();
   const { state, clearCart } = useContext(AppContext);
   const auth = useAuth();
+  const { completeChallenge, challenges } = useWallet();
+
+  // Reto de compra activo que el usuario aún no completó
+  const activePurchaseChallenge = challenges.find(
+    (c) => c.type === 'order' && !c.completed && !c.isExpired
+  );
 
   const [email, setEmail] = useState('mail@vacio.com');
   const [open, setOpen] = useState(false);
@@ -205,6 +213,10 @@ const Checkout = () => {
     if (response.status === 200 || response.status === 201) {
       window.localStorage.removeItem('oi');
       await clearCart();
+      // Intenta completar el reto de compra activo (fire-and-forget)
+      if (activePurchaseChallenge) {
+        completeChallenge(activePurchaseChallenge.slug, valorTotalSinIva).catch(() => {});
+      }
       toast.success('¡Pedido confirmado! Te contactaremos para coordinar la entrega. 🚀');
       router.push('/mi_cuenta/orders');
     }
@@ -328,6 +340,9 @@ const Checkout = () => {
         if (data.amountToPay === 0) {
           window.localStorage.removeItem('oi');
           await clearCart();
+          if (activePurchaseChallenge) {
+            completeChallenge(activePurchaseChallenge.slug, valorTotalSinIva).catch(() => {});
+          }
           toast.success(`¡Pedido pagado con ${data.creditsApplied} Ayni-Créditos! 🌿`);
           router.push('/mi_cuenta/orders');
           return;
@@ -703,6 +718,9 @@ const Checkout = () => {
                   <p className={styles.emptyCart}>No hay productos en el carrito.</p>
                 )}
               </div>
+
+              {/* Barra de proximidad al reto de compra activo */}
+              <CartRewardNudge cartTotal={subtotalAfterCoupon} />
 
               <div className={styles.totalRows}>
                 <div className={styles.totalRow}>

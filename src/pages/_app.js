@@ -1,6 +1,8 @@
 import { ProviderAuth } from '@hooks/useAuth';
 import Script from 'next/script';
 import AppContext from '@context/AppContext';
+import { WalletProvider } from '@context/WalletContext';
+import RewardChestModal from '@components/gamification/RewardChestModal';
 import useInitialState from '@hooks/useInitialState';
 import Layout from '@containers/Layout';
 import { ToastContainer } from 'react-toastify';
@@ -40,11 +42,14 @@ function MyApp({ Component, pageProps }) {
           setTransactionID: setTransactionID
         }
         }>
-          <Script async src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" charset="UTF-8" />
-          <Layout >
-            <Component {...pageProps} />
-          </Layout >
-          {<ToastContainer />}
+          <WalletProvider>
+            <Script async src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" charset="UTF-8" />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+            <RewardChestModal />
+            <ToastContainer />
+          </WalletProvider>
         </TestContext.Provider>
       </AppContext.Provider>
     </ProviderAuth>

@@ -54,7 +54,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Trust badges — reemplaza el texto blanco */}
         <div className={styles.trustBar}>
           {TRUST_ITEMS.map(({ icon, label, sub }) => (
             <div key={label} className={styles.trustPill}>
@@ -97,31 +96,104 @@ const Footer = () => {
         </div>
       </nav>
 
-      {/* Footer legal */}
+      {/* Footer — overhaul definitivo */}
       <footer className={styles.footerBottom}>
         <div className={styles.footerInner}>
+
+          {/* Col 1: Marca + Redes sociales */}
           <div className={styles.footerBrand}>
             <span className={styles.footerLogo}>Aynimar</span>
             <p className={styles.footerMission}>
               Economía circular inteligente en Ecuador.<br />
               Importamos productos nuevos y premiamos el reciclaje.
             </p>
+            <div className={styles.footerSocial}>
+              <a
+                href="https://www.facebook.com/profile.php?id=100092454502181"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                aria-label="Aynimar en Facebook"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" width={18} height={18} aria-hidden="true">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+                Facebook
+              </a>
+            </div>
           </div>
 
-          <div className={styles.footerLinks}>
-            <Link href="/terminosYCondiciones" className={styles.footerBottomLink}>Términos y condiciones</Link>
-            <Link href="/contact" className={styles.footerBottomLink}>Contacto</Link>
-            <Link href="/aboutUs" className={styles.footerBottomLink}>Sobre nosotros</Link>
-            <a href="https://circular-merchant.aynimar.com/" className={styles.footerBottomLink}>
-              Registra tu negocio
-            </a>
+          {/* Col 2: Navegación */}
+          <div>
+            <h3 className={styles.footerColTitle}>Navegación</h3>
+            <ul className={styles.footerLinks}>
+              <li>
+                <Link href="/terminosYCondiciones" className={styles.footerBottomLink}>
+                  Términos y condiciones
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className={styles.footerBottomLink}>
+                  Contacto
+                </Link>
+              </li>
+              <li>
+                <Link href="/aboutUs" className={styles.footerBottomLink}>
+                  Sobre nosotros
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://circular-merchant.aynimar.com/"
+                  className={styles.footerBottomLink}
+                >
+                  Registra tu negocio
+                </a>
+              </li>
+              <li>
+                <Link href="/recycling" className={styles.footerBottomLink}>
+                  Reciclaje
+                </Link>
+              </li>
+            </ul>
           </div>
 
-          <div className={styles.footerLegal}>
-            <p>Empresa legalmente constituida en Ecuador</p>
-            <p><strong>RUC:</strong> 1793227194001</p>
-            <p>© {new Date().getFullYear()} Aynimar. Todos los derechos reservados.</p>
+          {/* Col 3: Compra segura */}
+          <div>
+            <h3 className={styles.footerColTitle}>Compra segura</h3>
+            <ul className={styles.footerCerts}>
+              <li className={styles.certItem}>
+                <svg viewBox="0 0 24 24" fill="currentColor" width={18} height={18} aria-hidden="true" className={styles.certIcon}>
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+                <span>Pago 100% seguro (SSL)</span>
+              </li>
+              <li className={styles.certItem}>
+                <svg viewBox="0 0 24 24" fill="currentColor" width={18} height={18} aria-hidden="true" className={styles.certIcon}>
+                  <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                </svg>
+                <span>Paymentez · Tarjetas</span>
+              </li>
+              <li className={styles.certItem}>
+                <svg viewBox="0 0 24 24" fill="currentColor" width={18} height={18} aria-hidden="true" className={styles.certIcon}>
+                  <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-.5 1.5L21 12h-4V9.5h2.5zM6 18.5c-.83 0-1.5-.67-1.5-1.5S5.17 15.5 6 15.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                </svg>
+                <span>Servientrega · Tramaco</span>
+              </li>
+              <li className={styles.certItem}>
+                <svg viewBox="0 0 24 24" fill="currentColor" width={18} height={18} aria-hidden="true" className={styles.certIcon}>
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 14l-3-3 1.41-1.41L11 12.17l4.59-4.58L17 9l-6 6z"/>
+                </svg>
+                <span>Garantía de satisfacción</span>
+              </li>
+            </ul>
           </div>
+        </div>
+
+        {/* Barra legal inferior */}
+        <div className={styles.footerLegalBar}>
+          <p>Empresa legalmente constituida en Ecuador · <strong>RUC:</strong> 1793227194001</p>
+          <p>© {new Date().getFullYear()} Aynimar. Todos los derechos reservados.</p>
         </div>
       </footer>
     </>

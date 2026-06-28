@@ -4,9 +4,7 @@
  * Modal de celebración que aparece cuando triggerChest() se activa.
  * Muestra el descuento ganado (entre 5–15 %) con animación de apertura.
  *
- * Uso: montar una vez en _app.js o en el layout raíz:
- *   <RewardChestModal />
- *
+ * Uso: montar una vez en _app.js:  <RewardChestModal />
  * Se autogestiona con WalletContext — no requiere props.
  */
 import { useEffect, useRef } from 'react';
@@ -17,15 +15,6 @@ export default function RewardChestModal() {
   const { pendingChest, chestDiscount, dismissChest } = useWallet();
   const overlayRef = useRef(null);
 
-  // Cerrar con Escape
-  useEffect(() => {
-    if (!pendingChest) return;
-    const handler = (e) => { if (e.key === 'Escape') dismissChest(); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [pendingChest, dismissChest]);
-
-  // Bloquear scroll del body mientras está abierto
   useEffect(() => {
     document.body.style.overflow = pendingChest ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -36,21 +25,27 @@ export default function RewardChestModal() {
   const discount = chestDiscount ?? 10;
 
   return (
+    /* role="presentation" en el overlay permite onClick sin violar a11y */
+    /* el Escape lo maneja WalletContext via useEffect global             */
     <div
       className={styles.overlay}
       ref={overlayRef}
       onClick={(e) => { if (e.target === overlayRef.current) dismissChest(); }}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="chest-title"
+      onKeyDown={(e) => { if (e.key === 'Escape') dismissChest(); }}
+      role="presentation"
     >
-      <div className={styles.modal}>
+      <div
+        className={styles.modal}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="chest-title"
+      >
         {/* Partículas de celebración */}
         {[...Array(12)].map((_, i) => (
           <span
             key={i}
             className={styles.confetti}
-            aria-hidden
+            aria-hidden="true"
             style={{
               '--x':     `${Math.random() * 100}%`,
               '--delay': `${i * 0.08}s`,
@@ -60,12 +55,11 @@ export default function RewardChestModal() {
         ))}
 
         {/* Cofre */}
-        <div className={styles.chestWrap} aria-hidden>
+        <div className={styles.chestWrap} aria-hidden="true">
           <span className={styles.chest}>🎁</span>
           <span className={styles.sparkleRing} />
         </div>
 
-        {/* Contenido */}
         <h2 id="chest-title" className={styles.title}>
           ¡Cofre desbloqueado!
         </h2>

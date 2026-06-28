@@ -191,6 +191,8 @@ const Checkout = () => {
         { orderId: parseInt(guestOrderId, 10) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      // La orden ya es del usuario — el oi guest ya no es válido.
+      window.localStorage.removeItem('oi');
       return true;
     } catch { return false; }
   };

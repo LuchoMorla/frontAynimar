@@ -101,7 +101,15 @@ const Header = () => {
           try {
             const response = await axios.get(endPoints.orders.getGuestOrder(guestOrderId));
             orderData = response.data;
-          } catch (_) { /* guest cart not found — expected */ }
+          } catch (guestErr) {
+            // 403 = orden ya asociada a un cliente; 404 = orden inexistente.
+            // En ambos casos el oi en localStorage es inválido — lo limpiamos
+            // aquí para que no vuelva a disparar este fetch en cada render.
+            const status = guestErr?.response?.status;
+            if (status === 403 || status === 404) {
+              window.localStorage.removeItem('oi');
+            }
+          }
         }
 
         if (orderData?.items?.length > 0) {

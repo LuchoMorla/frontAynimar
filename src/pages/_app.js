@@ -12,9 +12,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect, Component } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
-import 'primereact/resources/themes/lara-light-indigo/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
+// PrimeReact CSS moved to checkout.js — only loads on /checkout, not on every page
 
 class ErrorBoundary extends Component {
   constructor(props) {

@@ -1,4 +1,7 @@
 import Head from 'next/head';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 import React, { useContext, useEffect, useState } from 'react';
 import AppContext from '@context/AppContext';
 import Link from 'next/link';

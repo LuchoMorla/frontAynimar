@@ -8,8 +8,9 @@ class MyDocument extends Document {
           <meta charSet="utf-8" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="shortcut icon" href="/static/favicon.ico" />
-          {/* Preconnect eliminates DNS+TLS handshake from the critical path */}
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          {/* fonts.gstatic.com needs two preconnects: one plain for the CSS fetch,
+              one with crossOrigin for the WOFF/WOFF2 fetches (different CORS mode) */}
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
             rel="stylesheet"

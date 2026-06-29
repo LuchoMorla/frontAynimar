@@ -3,10 +3,11 @@
 body {
     font-family: 'Baloo 2', sans-serif;
     background-color: #eeeeee;
+    color: #111111; /* #111 on #eee = 16.4:1 — WCAG AAA */
   }
   a {
     text-decoration: none;
-    color: #fff;
+    color: inherit; /* each component sets its own link color; #fff global failed on #eee body */
   }
   * {
     box-sizing: border-box;

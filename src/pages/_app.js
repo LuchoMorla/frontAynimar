@@ -1,10 +1,11 @@
 import { ProviderAuth } from '@hooks/useAuth';
 import Script from 'next/script';
-import dynamic from 'next/dynamic';
 import AppContext from '@context/AppContext';
 import { WalletProvider } from '@context/WalletContext';
+import RewardChestModal from '@components/gamification/RewardChestModal';
 import useInitialState from '@hooks/useInitialState';
 import Layout from '@containers/Layout';
+import { ToastContainer } from 'react-toastify';
 import TestContext from '@context/TestContext';
 import * as gtag from '@gtag';
 import { useRouter } from 'next/router';
@@ -15,26 +16,17 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
-// Non-critical UI — loaded only after hydration, not part of the initial JS chunk.
-const RewardChestModal = dynamic(
-  () => import('@components/gamification/RewardChestModal'),
-  { ssr: false }
-);
-const ToastContainer = dynamic(
-  () => import('react-toastify').then((m) => ({ default: m.ToastContainer })),
-  { ssr: false }
-);
-
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, componentStack: null };
   }
   static getDerivedStateFromError(error) {
     return { hasError: true, error };
   }
   componentDidCatch(error, info) {
     console.error('[ErrorBoundary] caught:', error, info.componentStack);
+    this.setState({ componentStack: info.componentStack });
   }
   render() {
     if (this.state.hasError) {
@@ -45,6 +37,11 @@ class ErrorBoundary extends Component {
           <pre style={{ textAlign: 'left', fontSize: 12, color: '#888', maxWidth: 600, margin: '16px auto', whiteSpace: 'pre-wrap' }}>
             {this.state.error?.message}
           </pre>
+          {this.state.componentStack && (
+            <pre style={{ textAlign: 'left', fontSize: 11, color: '#bbb', maxWidth: 600, margin: '8px auto', whiteSpace: 'pre-wrap', borderTop: '1px solid #eee', paddingTop: 8 }}>
+              {this.state.componentStack}
+            </pre>
+          )}
           <button onClick={() => window.location.reload()}
             style={{ padding: '8px 24px', background: '#82427b', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 16 }}>
             Recargar

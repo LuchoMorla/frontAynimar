@@ -9,6 +9,17 @@ import { useRouter } from 'next/router';
 import styles from '@styles/ProductItem.module.scss';
 import { toast } from 'react-toastify';
 
+const unsplashWebp = (url) => {
+  if (!url?.includes('images.unsplash.com')) return url;
+  try {
+    const u = new URL(url);
+    u.searchParams.set('fm', 'webp');
+    u.searchParams.set('w', '640');
+    u.searchParams.set('q', '80');
+    return u.toString();
+  } catch { return url; }
+};
+
 const ProductItem = ({ product, priority = false }) => {
   const router = useRouter();
   const { state, addToCart } = useContext(AppContext);
@@ -116,7 +127,7 @@ const ProductItem = ({ product, priority = false }) => {
     <div className={styles.ProductItem}>
       <div className={styles['image-wrapper']}>
         <Link href={`/store/${product.id}`} className={styles.go_product} passHref>
-          <Image src={product.image} width={240} height={240} alt={product.name} priority={priority}
+          <Image src={unsplashWebp(product.image)} width={240} height={240} alt={product.name} priority={priority}
             sizes="(max-width: 600px) calc(50vw - 18px), 320px" />
         </Link>
         <span className={styles.badge}>

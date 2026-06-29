@@ -5,7 +5,24 @@ import WasteList from '@containers/WasteList';
 import HeroSection from '@components/HeroSection';
 import styles from '@styles/Home.module.scss';
 
-export default function Home() {
+export async function getStaticProps() {
+  const API = process.env.NEXT_PUBLIC_API_URL;
+  const VERSION = process.env.NEXT_PUBLIC_API_VERSION || 'v1';
+  try {
+    const res = await fetch(
+      `${API}/api/${VERSION}/products?limit=15&offset=0&price_min=0&price_max=10000000&show_shop=true`
+    );
+    const data = await res.json();
+    return {
+      props: { initialProducts: Array.isArray(data) ? data : [] },
+      revalidate: 120,
+    };
+  } catch {
+    return { props: { initialProducts: [] }, revalidate: 30 };
+  }
+}
+
+export default function Home({ initialProducts = [] }) {
   return (
     <>
       <Head>
@@ -20,9 +37,9 @@ export default function Home() {
       <HeroSection />
       <UserSegmentation />
       <h2 className={styles['recicler-title']}>Nuestros Productos</h2>
-      <ProductList />
+      <ProductList initialProducts={initialProducts} />
       <h2 className={styles['recicler-title']}>Vende tus Reciclables</h2>
-       <WasteList />
+      <WasteList />
     </>
   );
 }

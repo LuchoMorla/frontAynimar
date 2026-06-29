@@ -6,7 +6,7 @@ import ProductItem from '@components/ProductItem';
 import Paginacion from '@common/Paginacion';
 import styles from '@styles/ProductList.module.scss';
 
-const ProductList = () => {
+const ProductList = ({ initialProducts = [] }) => {
 	const router = useRouter();
 	const PRODUCT_LIMIT = 15;
 	const [offsetProducts, setOffsetProducts] = useState(0);
@@ -62,10 +62,10 @@ const ProductList = () => {
 		return url;
 	};
 
-	// Mantiene la lógica original pero con filtros
+	// initialProducts seeds the first render from SSR; hook takes over on any change
 	const products = useGetProducts(
 		buildProductsUrl(PRODUCT_LIMIT, offsetProducts),
-		offsetProducts
+		initialProducts
 	);
 
 	const totalProducts = useGetProducts(

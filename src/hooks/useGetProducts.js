@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useGetProducts = (endPoint) => {
-  const [data, setData] = useState([]);
+const useGetProducts = (endPoint, initialData = []) => {
+  const [data, setData] = useState(initialData);
 
   async function fetchData() {
     const response = await axios.get(endPoint);

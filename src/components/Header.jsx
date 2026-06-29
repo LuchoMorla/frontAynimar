@@ -27,10 +27,13 @@ const Header = () => {
   const orderState = useContext(TestContext);
   const auth = useAuth();
   
-  if (!token) {
-    auth.getAuth();
-    setToken('haveToken');
-  }
+  // ponytail: moved out of render body — setState during render causes cascade re-renders
+  useEffect(() => {
+    if (!token) {
+      auth.getAuth();
+      setToken('haveToken');
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
 

@@ -61,13 +61,23 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useEffect(() => {
     const handleRouteChange = (url) => {
-      gtag.pageview(url);
+      // Guard: window.gtag may not be loaded yet (GA script is async)
+      if (typeof window.gtag === 'function') gtag.pageview(url);
     };
     router.events.on('routeChangeComplete', handleRouteChange);
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [router.events]);
+
+  // When a new service worker takes over (skipWaiting:true), reload immediately
+  // so stale JS chunks from the old SW are never mixed with new ones.
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+    const reload = () => window.location.reload();
+    navigator.serviceWorker.addEventListener('controllerchange', reload);
+    return () => navigator.serviceWorker.removeEventListener('controllerchange', reload);
+  }, []);
 
   // Sentry loads asynchronously — never blocks LCP or first paint.
   useEffect(() => {

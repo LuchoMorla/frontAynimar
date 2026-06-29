@@ -8,7 +8,7 @@ import styles from '@styles/ProductList.module.scss';
 
 const ProductList = () => {
 	const router = useRouter();
-	const PRODUCT_LIMIT = 16;
+	const PRODUCT_LIMIT = 15;
 	const [offsetProducts, setOffsetProducts] = useState(0);
 
 	// Estados para los filtros - NUEVO

@@ -106,15 +106,13 @@ function MyApp({ Component, pageProps }) {
           }>
             <WalletProvider>
               {/* GTM — afterInteractive: non-blocking, fires after hydration */}
-              {process.env.NEXT_PUBLIC_GTM_ID && (
-                <Script
-                  id="gtm-init"
-                  strategy="afterInteractive"
-                  dangerouslySetInnerHTML={{ __html:
-                    `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${process.env.NEXT_PUBLIC_GTM_ID}');`
-                  }}
-                />
-              )}
+              <Script
+                id="gtm-init"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{ __html:
+                  `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M93VNFW6');`
+                }}
+              />
               {/* Paymentez — afterInteractive: only needed on checkout, not on first paint */}
               <Script strategy="afterInteractive" src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" />
               <Layout>

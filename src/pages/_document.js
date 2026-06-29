@@ -19,6 +19,12 @@ class MyDocument extends Document {
                               {/* GA scripts moved to _app.js via <Script strategy="afterInteractive"> */}
         </Head>
         <body>
+          {/* GTM noscript fallback — required by GTM spec for non-JS environments */}
+          {process.env.NEXT_PUBLIC_GTM_ID && (
+            <noscript dangerouslySetInnerHTML={{ __html:
+              `<iframe src="https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`
+            }} />
+          )}
           <Main />
           <NextScript />
           <div id="rootModal"></div>

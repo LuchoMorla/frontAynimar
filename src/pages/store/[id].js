@@ -40,6 +40,10 @@ export default function ProductStand({ product }) {
         {image && <meta property="og:image" content={image} />}
         <meta property="og:url" content={canonical} />
         <meta property="og:type" content="product" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${product.name} | Aynimar`} />
+        <meta name="twitter:description" content={`Compra ${product.name} con pago contra entrega en Ecuador. $${product.price}`} />
+        {image && <meta name="twitter:image" content={image} />}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

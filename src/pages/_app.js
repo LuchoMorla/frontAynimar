@@ -105,14 +105,15 @@ function MyApp({ Component, pageProps }) {
           }
           }>
             <WalletProvider>
-              {/* GA — lazyOnload: fires after page is fully idle, zero impact on hydration */}
-              {gtag.GA_TRACKING_ID && (
-                <>
-                  <Script strategy="lazyOnload" src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`} />
-                  <Script strategy="lazyOnload" id="ga-init" dangerouslySetInnerHTML={{ __html:
-                    `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gtag.GA_TRACKING_ID}');`
-                  }} />
-                </>
+              {/* GTM — afterInteractive: non-blocking, fires after hydration */}
+              {process.env.NEXT_PUBLIC_GTM_ID && (
+                <Script
+                  id="gtm-init"
+                  strategy="afterInteractive"
+                  dangerouslySetInnerHTML={{ __html:
+                    `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${process.env.NEXT_PUBLIC_GTM_ID}');`
+                  }}
+                />
               )}
               {/* Paymentez — afterInteractive: only needed on checkout, not on first paint */}
               <Script strategy="afterInteractive" src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" />

@@ -3,6 +3,10 @@
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+  experimental: {
+    // ponytail: drops IE11 polyfills (transform-classes, Array.flat, etc.) — ~21 KiB savings
+    legacyBrowsers: false,
+  },
   // Proxy Dropi's WooCommerce OAuth handshake to the Express backend.
   // Dropi hits https://www.aynimar.com/store/wc-auth/v1/authorize — this rewrites
   // that path to the Railway backend which completes the OAuth mock.

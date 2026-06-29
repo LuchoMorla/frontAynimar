@@ -9,6 +9,7 @@
 	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
+	align-items: stretch;
 	margin-bottom: 1rem;
 	/* Reserve space so products loading async don't cause CLS */
 	min-height: 480px;

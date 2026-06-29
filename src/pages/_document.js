@@ -10,6 +10,13 @@ class MyDocument extends Document {
           <meta charSet="utf-8" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="shortcut icon" href="/static/favicon.ico" />
+          {/* Preconnect eliminates DNS+TLS handshake from the critical path */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap"
+          />
                               {/* Google Adsense */}
                     {/* <script data-ad-client="<Your value here>" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
                     {/* Global Site Tag (gtag.js) - Google Analytics */}

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap');
+/* Font loaded via <link> preconnect in _document.js — removes render-blocking @import */
 
 body {
     font-family: 'Baloo 2', sans-serif;

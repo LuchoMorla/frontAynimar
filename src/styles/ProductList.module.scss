@@ -10,6 +10,8 @@
 	display: flex;
 	flex-wrap: wrap;
 	margin-bottom: 1rem;
+	/* Reserve space so products loading async don't cause CLS */
+	min-height: 480px;
 }
 
 @media (max-width: 781px) {

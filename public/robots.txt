@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /store/
+Allow: /store/*
+Allow: /recycling/
+Allow: /recycling/*
+
+Disallow: /checkout
+Disallow: /cart
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /mi_cuenta/
+Disallow: /autoLogin
+
+Sitemap: https://www.aynimar.com/sitemap.xml

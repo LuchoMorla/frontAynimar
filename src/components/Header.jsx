@@ -27,6 +27,13 @@ const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const searchTimerRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
   const orderState = useContext(TestContext);
   const auth = useAuth();
   
@@ -237,8 +244,8 @@ const Header = () => {
               {searchOpen && (
                 <form className={styles['search-popover']} onSubmit={handleSearchSubmit}>
                   <input
+                    ref={searchInputRef}
                     type="text"
-                    autoFocus
                     placeholder="Buscar productos..."
                     value={searchQuery}
                     onChange={handleSearchChange}

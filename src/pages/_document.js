@@ -13,11 +13,11 @@ class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://cdn.paymentez.com" crossOrigin="anonymous" />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap"
           />
-                              {/* GA scripts moved to _app.js via <Script strategy="afterInteractive"> */}
         </Head>
         <body>
           {/* GTM noscript fallback — required by GTM spec for non-JS environments */}
@@ -27,9 +27,6 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
           <div id="rootModal"></div>
-{/*                                   <div id="widgets"></div>
-                        <script src='https://www.hazvaca.com/project/widgets_code/s/red/3408'
-                                type='text/javascript'></cript> */}
         </body>
       </Html>
     );

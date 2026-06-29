@@ -1,8 +1,9 @@
 import { ProviderAuth } from '@hooks/useAuth';
 import Script from 'next/script';
+import dynamic from 'next/dynamic';
 import AppContext from '@context/AppContext';
 import { WalletProvider } from '@context/WalletContext';
-import RewardChestModal from '@components/gamification/RewardChestModal';
+const RewardChestModal = dynamic(() => import('@components/gamification/RewardChestModal'), { ssr: false });
 import useInitialState from '@hooks/useInitialState';
 import Layout from '@containers/Layout';
 import { ToastContainer } from 'react-toastify';

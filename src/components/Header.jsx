@@ -53,7 +53,7 @@ const Header = () => {
     clearTimeout(searchTimerRef.current);
     if (val.trim()) {
       searchTimerRef.current = setTimeout(() => {
-        router.push(`/store?search=${encodeURIComponent(val.trim())}`);
+        router.replace(`/store?search=${encodeURIComponent(val.trim())}`);
       }, 300);
     }
   };

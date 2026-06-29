@@ -19,9 +19,8 @@ const MyPayment = () => {
 		<aside className={styles.MyOrder}>
 			<div className={styles['MyOrder-container']}>
 				<div className={styles['title-container']}>
-					<Image className={(styles['more-clickable-area'],
-					styles.pointer)} src={arrow} alt="arrow" width={15} height={15}
-					onClick={() => togglePayment ()} />
+					<Image className={`${styles['more-clickable-area']} ${styles.pointer}`} src={arrow} alt="arrow" width={15} height={15}
+					onClick={() => togglePayment()} />
 					<p className={styles.title}>My order</p>
 				</div>
 				<div className={styles['my-order-content']}>

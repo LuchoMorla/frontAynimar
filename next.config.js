@@ -29,7 +29,9 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   disable: false,
   register: true,
-  sw: 'service-worker.js'
+  sw: 'service-worker.js',
+  // ponytail: forces new SW to take over immediately after deploy — prevents stale-cache blank screens
+  skipWaiting: true,
 });
 
 module.exports = withPWA(nextConfig);

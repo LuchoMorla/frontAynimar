@@ -8,10 +8,12 @@ import Layout from '@containers/Layout';
 import TestContext from '@context/TestContext';
 import * as gtag from '@gtag';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Component } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
-// ponytail: PrimeReact CSS moved to checkout.js via <Head> — saves ~300KB on every non-payment page
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 // Non-critical UI — loaded only after hydration, not part of the initial JS chunk.
 const RewardChestModal = dynamic(
@@ -22,6 +24,37 @@ const ToastContainer = dynamic(
   () => import('react-toastify').then((m) => ({ default: m.ToastContainer })),
   { ssr: false }
 );
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, info) {
+    console.error('[ErrorBoundary] caught:', error, info.componentStack);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: 40, textAlign: 'center', fontFamily: 'sans-serif' }}>
+          <h2>Algo salió mal</h2>
+          <p>Recarga la página o intenta de nuevo en unos segundos.</p>
+          <pre style={{ textAlign: 'left', fontSize: 12, color: '#888', maxWidth: 600, margin: '16px auto', whiteSpace: 'pre-wrap' }}>
+            {this.state.error?.message}
+          </pre>
+          <button onClick={() => window.location.reload()}
+            style={{ padding: '8px 24px', background: '#82427b', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 16 }}>
+            Recargar
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function MyApp({ Component, pageProps }) {
   const initialState = useInitialState();
@@ -56,26 +89,28 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <ProviderAuth>
-      <AppContext.Provider value={initialState}>
-        <TestContext.Provider value={{
-          order: order,
-          setOrder: setOrder,
-          transactionID: transactionID,
-          setTransactionID: setTransactionID
-        }
-        }>
-          <WalletProvider>
-            <Script async src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" charset="UTF-8" />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-            <RewardChestModal />
-            <ToastContainer />
-          </WalletProvider>
-        </TestContext.Provider>
-      </AppContext.Provider>
-    </ProviderAuth>
+    <ErrorBoundary>
+      <ProviderAuth>
+        <AppContext.Provider value={initialState}>
+          <TestContext.Provider value={{
+            order: order,
+            setOrder: setOrder,
+            transactionID: transactionID,
+            setTransactionID: setTransactionID
+          }
+          }>
+            <WalletProvider>
+              <Script async src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" charset="UTF-8" />
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+              <RewardChestModal />
+              <ToastContainer />
+            </WalletProvider>
+          </TestContext.Provider>
+        </AppContext.Provider>
+      </ProviderAuth>
+    </ErrorBoundary>
   );
 }
 

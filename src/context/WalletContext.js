@@ -1,6 +1,6 @@
 import React, {
   createContext, useContext, useState,
-  useEffect, useCallback, useRef,
+  useEffect, useCallback,
 } from 'react';
 
 const WalletContext = createContext(null);
@@ -49,9 +49,8 @@ export function WalletProvider({ children }) {
   const [chestDiscount, setChestDiscount] = useState(null); // % descuento ganado
   const [loading, setLoading]             = useState(false);
 
-  // Countdown ticks — se recalcula cada segundo si hay challenge con deadline
-  const [nowMs, setNowMs] = useState(() => Date.now());
-  const tickRef = useRef(null);
+  // null on SSR — set to real time only after client mount to avoid hydration mismatch
+  const [nowMs, setNowMs] = useState(null);
 
   const { stageIndex, current, next, progress } = resolveForestStage(xp);
 
@@ -90,13 +89,14 @@ export function WalletProvider({ children }) {
     } catch (_) {}
   }, []);
 
-  // ── Tick para countdown ───────────────────────────────────
-  useEffect(() => {
-    const hasDeadline = challenges.some((c) => !c.completed && c.deadline);
-    if (!hasDeadline) { clearInterval(tickRef.current); return; }
+  // One-time mount: set real client time (SSR left it null)
+  useEffect(() => { setNowMs(Date.now()); }, []);
 
-    tickRef.current = setInterval(() => setNowMs(Date.now()), 1000);
-    return () => clearInterval(tickRef.current);
+  // Tick only when challenges with active deadlines exist
+  useEffect(() => {
+    if (!challenges.some((c) => !c.completed && c.deadline)) return;
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(id);
   }, [challenges]);
 
   useEffect(() => {
@@ -156,7 +156,7 @@ export function WalletProvider({ children }) {
 
     const remaining = Math.max(0, target.threshold - cartTotal);
     const pct       = Math.min(100, (cartTotal / target.threshold) * 100);
-    const deadlineMs = target.deadline
+    const deadlineMs = (target.deadline && nowMs !== null)
       ? new Date(target.deadline).getTime() - nowMs
       : null;
 
@@ -172,7 +172,7 @@ export function WalletProvider({ children }) {
 
   // ── Challenges enriquecidos con countdown ─────────────────
   const challengesWithCountdown = challenges.map((c) => {
-    if (!c.deadline) return { ...c, countdown: null, deadlineMsLeft: null, isExpired: false };
+    if (!c.deadline || nowMs === null) return { ...c, countdown: null, deadlineMsLeft: null, isExpired: false };
     const msLeft = new Date(c.deadline).getTime() - nowMs;
     return {
       ...c,

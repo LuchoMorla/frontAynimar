@@ -107,7 +107,17 @@ function MyApp({ Component, pageProps }) {
           }
           }>
             <WalletProvider>
-              <Script async src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" charset="UTF-8" />
+              {/* GA — lazyOnload: fires after page is fully idle, zero impact on hydration */}
+              {gtag.GA_TRACKING_ID && (
+                <>
+                  <Script strategy="lazyOnload" src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`} />
+                  <Script strategy="lazyOnload" id="ga-init" dangerouslySetInnerHTML={{ __html:
+                    `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gtag.GA_TRACKING_ID}');`
+                  }} />
+                </>
+              )}
+              {/* Paymentez — afterInteractive: only needed on checkout, not on first paint */}
+              <Script strategy="afterInteractive" src="https://cdn.paymentez.com/ccapi/sdk/payment_sdk_stable.min.js" />
               <Layout>
                 <Component {...pageProps} />
               </Layout>

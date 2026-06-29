@@ -1,6 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-/* import Script from 'next/script'; */
-import { GA_TRACKING_ID } from '@gtag';
 
 class MyDocument extends Document {
   render() {
@@ -17,25 +15,7 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap"
           />
-                              {/* Google Adsense */}
-                    {/* <script data-ad-client="<Your value here>" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
-                    {/* Global Site Tag (gtag.js) - Google Analytics */}
-                    <script
-                        async
-                        src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-                    />
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_TRACKING_ID}', {
-              page_path: window.location.pathname,
-            });
-          `,
-                        }}
-                    />
+                              {/* GA scripts moved to _app.js via <Script strategy="afterInteractive"> */}
         </Head>
         <body>
           <Main />

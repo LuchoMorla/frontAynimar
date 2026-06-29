@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import endPoints from '@services/api/index';
 import useGetProducts from '@hooks/useGetProducts';
 import ProductItem from '@components/ProductItem';
@@ -6,9 +7,10 @@ import Paginacion from '@common/Paginacion';
 import styles from '@styles/ProductList.module.scss';
 
 const ProductList = () => {
+	const router = useRouter();
 	const PRODUCT_LIMIT = 16;
 	const [offsetProducts, setOffsetProducts] = useState(0);
-	
+
 	// Estados para los filtros - NUEVO
 	const [nameFilter, setNameFilter] = useState('');
 	const [priceMin, setPriceMin] = useState('');
@@ -19,6 +21,14 @@ const ProductList = () => {
 	const [appliedNameFilter, setAppliedNameFilter] = useState('');
 	const [appliedPriceMin, setAppliedPriceMin] = useState('');
 	const [appliedPriceMax, setAppliedPriceMax] = useState('');
+
+	// Sync nameFilter from URL ?search= param (set by header search)
+	useEffect(() => {
+		if (router.query.search !== undefined) {
+			setNameFilter(router.query.search || '');
+			setOffsetProducts(0);
+		}
+	}, [router.query.search]);
 
 	// Debounce para los filtros - NUEVO
 	useEffect(() => {
@@ -144,14 +154,14 @@ const ProductList = () => {
 					<button
 						onClick={() => setShowPriceFilters(!showPriceFilters)}
 						style={{
-							background: 'transparent',
-							color: '#1a73e8',
+							background: '#f3f4f6',
+							color: '#1f2937',
 							border: 'none',
-							padding: '8px 16px',
-							borderRadius: '20px',
+							padding: '10px 20px',
+							borderRadius: '8px',
 							cursor: 'pointer',
 							fontSize: '14px',
-							fontWeight: '500',
+							fontWeight: '600',
 							transition: 'all 0.2s ease-in-out',
 							display: 'inline-flex',
 							alignItems: 'center',

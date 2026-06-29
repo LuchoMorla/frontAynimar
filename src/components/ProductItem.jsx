@@ -117,7 +117,7 @@ const ProductItem = ({ product, priority = false }) => {
       <div className={styles['image-wrapper']}>
         <Link href={`/store/${product.id}`} className={styles.go_product} passHref>
           <Image src={product.image} width={240} height={240} alt={product.name} priority={priority}
-            sizes="(max-width: 523px) 155px, 240px" />
+            sizes="(max-width: 600px) calc(50vw - 18px), 320px" />
         </Link>
         <span className={styles.badge}>
           <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ width: '0.7rem', height: '0.7rem', display: 'inline', marginRight: '3px', verticalAlign: 'middle' }}>

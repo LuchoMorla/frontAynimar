@@ -121,6 +121,48 @@
   align-items: center;
 }
 
+.search-btn {
+  position: relative;
+}
+.search-btn button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $--morado-centro;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: color .2s ease;
+}
+.search-btn button:hover {
+  color: #6b3566;
+}
+.search-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: .4rem .4rem 1rem rgba(0, 0, 0, 0.12);
+  padding: 12px;
+  z-index: 200;
+  min-width: 280px;
+}
+.search-popover input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #dfe1e5;
+  border-radius: 24px;
+  font-size: 16px;
+  outline: none;
+  font-family: arial, sans-serif;
+  box-sizing: border-box;
+}
+.search-popover input:focus {
+  border-color: $--morado-centro;
+  box-shadow: 0 0 0 2px rgba(130, 66, 123, 0.15);
+}
+
 .navbar-selling-cart {
   cursor: pointer;
 }

@@ -12,6 +12,7 @@ class MyDocument extends Document {
               one with crossOrigin for the WOFF/WOFF2 fetches (different CORS mode) */}
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap"

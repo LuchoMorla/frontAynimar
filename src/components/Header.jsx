@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -24,6 +24,9 @@ const Header = () => {
   const [token, setToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cartLoaded, setCartLoaded] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchTimerRef = useRef(null);
   const orderState = useContext(TestContext);
   const auth = useAuth();
   
@@ -36,6 +39,31 @@ const Header = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { state, getCart, toggleOrder, toggleMenu, togglePayment, toggleNavMenu } = useContext(AppContext);
+
+  const handleSearchChange = (e) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+    clearTimeout(searchTimerRef.current);
+    if (val.trim()) {
+      searchTimerRef.current = setTimeout(() => {
+        router.push(`/store?search=${encodeURIComponent(val.trim())}`);
+      }, 300);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    clearTimeout(searchTimerRef.current);
+    if (searchQuery.trim()) {
+      router.push(`/store?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+    setSearchOpen(false);
+    setSearchQuery('');
+  };
+
+  const handleSearchKey = (e) => {
+    if (e.key === 'Escape') { setSearchOpen(false); setSearchQuery(''); }
+  };
 
   // Función para verificar autenticación
   const checkAuthentication = () => {
@@ -199,6 +227,27 @@ const Header = () => {
                 <Link href="/login">Iniciar sesión</Link>
               </li>
             )}
+            <li className={styles['search-btn']}>
+              <button onClick={() => setSearchOpen(v => !v)} aria-label="Buscar productos">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </button>
+              {searchOpen && (
+                <form className={styles['search-popover']} onSubmit={handleSearchSubmit}>
+                  <input
+                    type="text"
+                    autoFocus
+                    placeholder="Buscar productos..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    onKeyDown={handleSearchKey}
+                    onBlur={() => setTimeout(() => setSearchOpen(false), 200)}
+                  />
+                </form>
+              )}
+            </li>
             <li className={styles['navbar-shopping-cart']} onClick={() => toggleOrder()} aria-hidden="true">
               <Image className={`${styles['more-clickable-area']} ${styles.pointer}`} src={shoppingCart} alt="shopping cart" />
               {state.cart.length > 0 ? <div>{state.cart.length}</div> : null}

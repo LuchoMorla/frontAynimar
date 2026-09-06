@@ -15,7 +15,6 @@ import { toast } from 'react-toastify';
 import { useAuth } from '@hooks/useAuth';
 import { addCustomer, updateCustomer } from '@services/api/entities/customers';
 import WalletRedeem from '@components/WalletRedeem';
-import CouponInput from '@components/CouponInput';
 import CheckoutTrustBadges from '@components/CheckoutTrustBadges';
 import CartRewardNudge from '@components/gamification/CartRewardNudge';
 import { useWallet } from '@context/WalletContext';
@@ -58,7 +57,6 @@ const Checkout = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const [creditsToApply, setCreditsToApply] = useState(0);
-  const [couponDiscount, setCouponDiscount] = useState(0);
 
   // Formulario único controlado — válido para guest y usuario logueado
   const [shippingData, setShippingData] = useState({
@@ -155,11 +153,9 @@ const Checkout = () => {
   };
 
   const valorTotalSinIva = sumTotal();
-  const subtotalAfterCoupon = Math.max(
-    0,
-    parseFloat((valorTotalSinIva - couponDiscount).toFixed(2))
-  );
-  const totalConIva = parseFloat((subtotalAfterCoupon * 1.15).toFixed(2));
+  // MVP (Fase B): el cupón está oculto — se validaba pero NO se aplicaba a la
+  // orden en el backend. Vuelve en Fase C, aplicado server-side.
+  const totalConIva = parseFloat((valorTotalSinIva * 1.15).toFixed(2));
 
   // ── Asociar carrito guest a usuario recién logueado ──
   const associateGuestCart = async (token, guestOrderId) => {
@@ -644,20 +640,14 @@ const Checkout = () => {
               )}
             </div>
 
-            {/* Cupón */}
-            <div className={styles.sectionCard}>
-              <CouponInput
-                cartTotal={valorTotalSinIva}
-                onApply={({ discount }) => setCouponDiscount(discount)}
-                onClear={() => setCouponDiscount(0)}
-              />
-            </div>
+            {/* Cupón oculto en el MVP (Fase B) — vuelve en Fase C aplicado server-side.
+                Componente en @components/CouponInput. */}
 
             {/* Wallet (solo autenticados) */}
             {auth.user && (
               <div className={styles.sectionCard}>
                 <WalletRedeem
-                  subtotal={subtotalAfterCoupon}
+                  subtotal={valorTotalSinIva}
                   isAuthenticated={Boolean(auth.user)}
                   onCreditsChange={setCreditsToApply}
                 />
@@ -692,19 +682,13 @@ const Checkout = () => {
               </div>
 
               {/* Barra de proximidad al reto de compra activo */}
-              <CartRewardNudge cartTotal={subtotalAfterCoupon} />
+              <CartRewardNudge cartTotal={valorTotalSinIva} />
 
               <div className={styles.totalRows}>
                 <div className={styles.totalRow}>
                   <span>Subtotal</span>
                   <span>${valorTotalSinIva.toFixed(2)}</span>
                 </div>
-                {couponDiscount > 0 && (
-                  <div className={styles.totalRow}>
-                    <span>Descuento cupón</span>
-                    <span className={styles.discountValue}>−${couponDiscount.toFixed(2)}</span>
-                  </div>
-                )}
                 <div className={styles.totalRow}>
                   <span>Envío</span>
                   <span className={styles.freeShipping}>A coordinar</span>

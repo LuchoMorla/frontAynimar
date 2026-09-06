@@ -59,6 +59,9 @@ const endPoints = {
     updateOrder: (id) => `${API}/api/${VERSION}/orders/${id}`,
     checkout: `${API}/api/${VERSION}/orders/checkout`,
     confirmCod: (id) => `${API}/api/${VERSION}/orders/${id}/confirm-cod`,
+    deunaPaymentInfo: (id) => `${API}/api/${VERSION}/orders/${id}/payment/deuna`,
+    getPaymentProofs: (id) => `${API}/api/${VERSION}/orders/${id}/payment-proof`,
+    uploadPaymentProof: (id) => `${API}/api/${VERSION}/orders/${id}/payment-proof`,
   },
   transaction: {
     debits: `${API}/api/${VERSION}/debits/`,

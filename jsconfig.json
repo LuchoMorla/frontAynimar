@@ -13,6 +13,7 @@
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
       "@services/*": ["services/*"],
+      "@firebase/*": ["firebase/*"],
       "@assets/*": ["assets/*"],
       "@layout/*": ["layout/*"],
       "@entities/*": ["services/api/entities/*"],

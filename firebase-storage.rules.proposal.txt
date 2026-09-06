@@ -1,0 +1,120 @@
+PROPUESTA de Firebase Storage Security Rules — comprobantes de pago DeUna
+==========================================================================
+
+ESTADO: NO APLICADO. Este archivo NO se desplegó a Firebase — es una
+propuesta para que el equipo la revise y la aplique manualmente (Firebase
+Console → Storage → Rules, o `firebase deploy --only storage` si el proyecto
+tiene Firebase CLI configurado).
+
+POR QUÉ EXISTE ESTE ARCHIVO
+----------------------------
+No existe ningún archivo `storage.rules`/`firebase.json` en frontAynimar ni en
+frontDashboardAynimar — las Security Rules reales viven ÚNICAMENTE en la
+consola de Firebase, a la que este entorno no tiene acceso (sin Firebase CLI
+instalado, sin `.firebaserc`, sin credenciales). NO se puede confirmar el
+contenido exacto de las reglas actualmente desplegadas.
+
+HALLAZGO CRÍTICO — ningún frontend usa Firebase Authentication
+-----------------------------------------------------------------
+Confirmado por búsqueda exhaustiva en ambos repos (frontAynimar,
+frontDashboardAynimar): ningún archivo importa `firebase/auth`, llama a
+`getAuth()` de Firebase, ni hace `signInWithEmailAndPassword`. Toda la
+autenticación de Aynimar es un JWT propio contra el backend (Cookie `token`,
+header `Authorization: Bearer <token>`), completamente ajeno a Firebase.
+
+Consecuencia directa: `request.auth` en cualquier Storage Rule SIEMPRE es
+`null` para las peticiones de esta app — es IMPOSIBLE escribir una regla de
+Firebase Storage que verifique "¿este usuario es el dueño de esta orden?",
+porque Firebase no tiene ninguna noción de quién es el usuario autenticado de
+Aynimar. Cualquier regla que dependa de `request.auth.uid` no tendría efecto.
+
+Dado que la función de subida de imágenes de producto del dashboard YA
+funciona hoy en producción sin usar Firebase Auth, es razonable inferir
+(no confirmar) que las Rules actuales permiten escritura sin autenticación de
+Firebase — probablemente basadas solo en la ruta/tipo/tamaño del archivo, o
+completamente abiertas. Esto no es nuevo ni fue introducido por el flujo de
+comprobantes DeUna — ya era así para las imágenes de producto.
+
+QUÉ SÍ Y QUÉ NO PUEDE GARANTIZAR UNA REGLA SIN FIREBASE AUTH
+-----------------------------------------------------------------
+NO puede garantizar:
+  - Que solo el dueño real de la orden suba a `payment-proofs/<orderId>/`.
+    (Firebase no sabe quién es "el dueño" — ese concepto vive solo en la BD
+    de Aynimar.)
+
+SÍ puede garantizar (y esta propuesta lo hace):
+  - Tipo de archivo (solo imágenes JPEG/PNG/WebP).
+  - Tamaño máximo (8 MB, igual que el backend).
+  - Que un objeto YA EXISTENTE en payment-proofs/ no pueda sobrescribirse
+    (protege contra "reemplazar el comprobante después de subido").
+  - Que nadie pueda borrar (`delete`) un comprobante vía el SDK cliente.
+  - Que la lectura genérica (listar/enumerar) esté bloqueada — el acceso real
+    para ver un comprobante ocurre vía la URL de descarga con token
+    (`getDownloadURL()`), que Firebase sirve como capability-URL INDEPENDIENTE
+    de la regla `allow read` general (así es como ya funciona hoy para las
+    imágenes de producto).
+
+LA AUTORIDAD REAL DE "¿A QUÉ ORDEN PERTENECE ESTE COMPROBANTE?" SIGUE SIENDO
+EL BACKEND DE AYNIMAR, NO FIREBASE
+-----------------------------------------------------------------
+Aunque las Storage Rules no puedan verificar dueño de orden, el backend SÍ
+lo hace, de forma independiente:
+  1. Services/paymentProofService.js → _assertOwnerOrStaff(): solo el
+     `customer.userId` real de la orden (o admin/business_owner) puede
+     registrar un comprobante para esa orden — verificado contra el JWT.
+  2. Services/paymentProofImageValidation.js → assertTrustedProofUrl(fileUrl,
+     orderId): el segmento de carpeta en la URL DEBE coincidir exactamente
+     con el orderId que se está registrando — un cliente no puede reutilizar
+     la URL de un comprobante ya subido para OTRA orden (agregado en esta
+     auditoría).
+Aunque alguien lograra escribir un archivo directamente en Firebase Storage
+(sin pasar por el frontend), seguiría sin poder registrar ese archivo como
+comprobante de una orden ajena sin tener credenciales JWT válidas de esa
+orden — ese control no depende de las Storage Rules.
+
+PROPUESTA DE REGLAS (agregar/fusionar con las reglas reales existentes)
+-----------------------------------------------------------------
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Comprobantes de pago DeUna — Paso 11.
+    match /images/payment-proofs/{orderId}/{fileName} {
+      // Lectura genérica bloqueada — la vía real de acceso es la URL de
+      // descarga con token (getDownloadURL), que Firebase sirve
+      // independientemente de esta regla.
+      allow read: if false;
+
+      // Escritura: solo CREACIÓN de un objeto nuevo (resource == null),
+      // nunca sobrescritura de uno existente en la misma ruta — y solo si
+      // es una imagen JPEG/PNG/WebP de máximo 8 MB. No puede verificar
+      // dueño de orden (sin Firebase Auth) — ver nota arriba; esa
+      // verificación la hace el backend de Aynimar al registrar la URL.
+      allow write: if resource == null
+                   && request.resource.size <= 8 * 1024 * 1024
+                   && request.resource.contentType.matches('image/(jpeg|png|webp)');
+
+      // Nadie borra comprobantes vía el SDK cliente.
+      allow delete: if false;
+    }
+
+    // ── Reglas preexistentes (imágenes de producto, categorías, etc.) ──
+    // NO incluidas aquí porque no se pudo leer su contenido real — deben
+    // conservarse tal cual están hoy en la consola de Firebase. Esta regla
+    // de payment-proofs/ es MÁS ESPECÍFICA que un `match /{allPaths=**}`
+    // genérico, así que Firebase la aplica en vez de la regla general para
+    // esta ruta puntual — no hace falta tocar las reglas existentes de otras
+    // carpetas para que esta protección tome efecto.
+  }
+}
+
+CÓMO APLICARLA
+-----------------------------------------------------------------
+1. Abrir Firebase Console → proyecto de Aynimar → Storage → pestaña "Rules".
+2. Copiar el bloque `match /images/payment-proofs/{orderId}/{fileName} { ... }`
+   de arriba DENTRO de las reglas ya existentes (no reemplazar todo el
+   archivo — solo agregar este bloque, ya que no tenemos el contenido real
+   de las reglas actuales para fusionarlo automáticamente).
+3. Publicar. Verificar con una subida de prueba real, luego con un intento
+   de reemplazo (subir dos veces al mismo path) para confirmar que la
+   segunda escritura es rechazada.

@@ -152,10 +152,13 @@ const Checkout = () => {
     } catch { return 0; }
   };
 
-  const valorTotalSinIva = sumTotal();
+  // product.price = PVP final, IVA incluido — este subtotal YA incluye IVA.
+  // El backend es la única fuente de verdad del total: este valor es solo una
+  // estimación de despliegue (mismo cálculo que hará el backend en checkout()/
+  // confirm-cod), nunca se envía como el monto a cobrar.
   // MVP (Fase B): el cupón está oculto — se validaba pero NO se aplicaba a la
   // orden en el backend. Vuelve en Fase C, aplicado server-side.
-  const totalConIva = parseFloat((valorTotalSinIva * 1.15).toFixed(2));
+  const cartSubtotal = sumTotal();
 
   // ── Asociar carrito guest a usuario recién logueado ──
   const associateGuestCart = async (token, guestOrderId) => {
@@ -194,11 +197,50 @@ const Checkout = () => {
       await clearCart();
       // Intenta completar el reto de compra activo (fire-and-forget)
       if (activePurchaseChallenge) {
-        completeChallenge(activePurchaseChallenge.slug, valorTotalSinIva).catch(() => {});
+        completeChallenge(activePurchaseChallenge.slug, cartSubtotal).catch(() => {});
       }
       toast.success('¡Pedido confirmado! Te contactaremos para coordinar la entrega. 🚀');
       router.push('/mi_cuenta/orders');
     }
+  };
+
+  // ── Iniciar pago DeUna (QR + comprobante) ──
+  // A diferencia de COD, DeUna NO despacha de inmediato: primero se llama a
+  // checkout() (fija el total autoritativo vía orderTotals y transiciona la
+  // orden a 'comprada' — precondición que exige el backend para poder subir
+  // un comprobante), y luego se redirige a la página donde el cliente ve el
+  // QR y sube su comprobante. El despacho solo ocurre después de que un
+  // admin apruebe el comprobante (backend: PaymentProofService.approveProof).
+  const processDeunaOrder = async (savedOrderId, authToken) => {
+    if (!savedOrderId) {
+      throw new Error('No se encontró el ID de la orden. Por favor recarga la página y vuelve a intentarlo.');
+    }
+    toast.info('Procesando tu pedido, por favor espera...');
+    const token = authToken ?? Cookie.get('token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const { data } = await axios.post(
+      endPoints.orders.checkout,
+      { orderId: parseInt(savedOrderId, 10), creditsToApply },
+      headers ? { headers } : undefined
+    );
+
+    // Cubierto 100% por Ayni-Créditos — no hay nada que pagar por DeUna.
+    if (data.amountToPay === 0) {
+      window.localStorage.removeItem('oi');
+      await clearCart();
+      if (activePurchaseChallenge) {
+        completeChallenge(activePurchaseChallenge.slug, cartSubtotal).catch(() => {});
+      }
+      toast.success(`¡Pedido pagado con ${data.creditsApplied} Ayni-Créditos! 🌿`);
+      router.push('/mi_cuenta/orders');
+      return;
+    }
+
+    window.localStorage.removeItem('oi');
+    await clearCart();
+    router.push(`/pago-deuna/${savedOrderId}`);
   };
 
   // ── Flujo GUEST: auto-registro → asociar carrito → pagar ──
@@ -258,8 +300,11 @@ const Checkout = () => {
         );
       }
 
-      // MVP: único método de pago externo operativo = Contra Entrega.
-      await processCodOrder(resolvedOrderId, authToken);
+      if (paymentMethod === 'deuna') {
+        await processDeunaOrder(resolvedOrderId, authToken);
+      } else {
+        await processCodOrder(resolvedOrderId, authToken);
+      }
       toast.info(
         '¡Creamos tu cuenta Aynimar! Revisa tu correo para activar tu contraseña y acumular puntos por reciclar. 🌿',
         { autoClose: 8000 }
@@ -298,6 +343,13 @@ const Checkout = () => {
       // Continúa aunque falle el guardado — el pedido se procesa igual
     }
 
+    // DeUna: siempre pasa por checkout() (aplica créditos si corresponde y
+    // fija el total autoritativo), luego a la página de QR + comprobante.
+    if (paymentMethod === 'deuna') {
+      await processDeunaOrder(savedOrderId, Cookie.get('token'));
+      return;
+    }
+
     // Aplicar Ayni-Créditos si el usuario eligió usarlos
     if (creditsToApply > 0 && savedOrderId) {
       try {
@@ -312,7 +364,7 @@ const Checkout = () => {
           window.localStorage.removeItem('oi');
           await clearCart();
           if (activePurchaseChallenge) {
-            completeChallenge(activePurchaseChallenge.slug, valorTotalSinIva).catch(() => {});
+            completeChallenge(activePurchaseChallenge.slug, cartSubtotal).catch(() => {});
           }
           toast.success(`¡Pedido pagado con ${data.creditsApplied} Ayni-Créditos! 🌿`);
           router.push('/mi_cuenta/orders');
@@ -647,7 +699,7 @@ const Checkout = () => {
             {auth.user && (
               <div className={styles.sectionCard}>
                 <WalletRedeem
-                  subtotal={valorTotalSinIva}
+                  subtotal={cartSubtotal}
                   isAuthenticated={Boolean(auth.user)}
                   onCreditsChange={setCreditsToApply}
                 />
@@ -682,20 +734,20 @@ const Checkout = () => {
               </div>
 
               {/* Barra de proximidad al reto de compra activo */}
-              <CartRewardNudge cartTotal={valorTotalSinIva} />
+              <CartRewardNudge cartTotal={cartSubtotal} />
 
               <div className={styles.totalRows}>
                 <div className={styles.totalRow}>
-                  <span>Subtotal</span>
-                  <span>${valorTotalSinIva.toFixed(2)}</span>
+                  <span>Subtotal (IVA incluido)</span>
+                  <span>${cartSubtotal.toFixed(2)}</span>
                 </div>
                 <div className={styles.totalRow}>
                   <span>Envío</span>
                   <span className={styles.freeShipping}>A coordinar</span>
                 </div>
                 <div className={`${styles.totalRow} ${styles.grandTotal}`}>
-                  <span>Total con IVA (15%)</span>
-                  <span>${totalConIva.toFixed(2)}</span>
+                  <span>Total</span>
+                  <span>${cartSubtotal.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -734,6 +786,33 @@ const Checkout = () => {
                   {paymentMethod === 'cash' && (
                     <p className={styles.codHint}>
                       ✅ Sin riesgo. El repartidor llega a tu dirección y tú pagas al momento de recibirlo.
+                    </p>
+                  )}
+                </label>
+
+                <label className={`${styles.paymentCard} ${paymentMethod === 'deuna' ? styles.paymentCardActive : ''}`}>
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="deuna"
+                    checked={paymentMethod === 'deuna'}
+                    onChange={() => setPaymentMethod('deuna')}
+                    className={styles.srOnly}
+                  />
+                  <div className={styles.paymentCardInner}>
+                    <div className={styles.paymentCardLeft}>
+                      <span className={styles.paymentEmoji} aria-hidden="true">📱</span>
+                      <div>
+                        <p className={styles.paymentCardTitle}>DeUna (QR)</p>
+                        <p className={styles.paymentCardDesc}>Escanea el QR, paga y sube tu comprobante.</p>
+                      </div>
+                    </div>
+                    <div className={`${styles.radioIndicator} ${paymentMethod === 'deuna' ? styles.radioIndicatorActive : ''}`} aria-hidden="true" />
+                  </div>
+                  {paymentMethod === 'deuna' && (
+                    <p className={styles.codHint}>
+                      📲 Después de confirmar verás el QR de DeUna. Paga y sube tu comprobante — un administrador
+                      verificará el pago antes de despachar tu pedido.
                     </p>
                   )}
                 </label>

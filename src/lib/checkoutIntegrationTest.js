@@ -329,6 +329,187 @@ function checkpoint5_termsGate() {
 }
 
 /* ─────────────────────────────────────────────────────────
+   Helper: crea una orden confirmable (guest → registro → asociación)
+───────────────────────────────────────────────────────── */
+async function _setupConfirmableOrder(productId = 1) {
+  window.localStorage.removeItem('oi');
+  const orderRes = await fetch(`${API}/api/${VERSION}/orders/guest-order`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+  });
+  const { id: orderId } = await orderRes.json();
+  await fetch(`${API}/api/${VERSION}/orders/add-item-guest`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ orderId, productId, amount: 1 }),
+  });
+  const email = `test_${Date.now()}_${Math.random().toString(36).slice(2, 7)}@aynimar-test.com`;
+  const regRes = await fetch(`${API}/api/${VERSION}/customers`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Test', lastName: 'Concurrencia', identityNumber: '0000000000',
+      phone: '0991234567', countryOfResidence: 'Ecuador', province: 'Pichincha',
+      city: 'Quito', streetAddress: 'Calle Falsa 123',
+      user: { email, password: 'TestPass123!' },
+    }),
+  });
+  const { auth } = await regRes.json();
+  const authToken = auth?.token;
+  await fetch(`${API}/api/${VERSION}/orders/associate-order`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
+    body: JSON.stringify({ orderId: parseInt(orderId, 10) }),
+  });
+  return { orderId, authToken, email };
+}
+
+/* ─────────────────────────────────────────────────────────
+   CHECKPOINT 6: confirm-cod concurrente — sin doble despacho (B3)
+
+   ⚠️  Despacha a Dropi de verdad — correr con DROPI_MOCK=true.
+───────────────────────────────────────────────────────── */
+async function checkpoint6_codConcurrency(productId = 1) {
+  console.group('CHECKPOINT 6 — confirm-cod concurrente (idempotencia B3)');
+  try {
+    const { orderId, authToken } = await _setupConfirmableOrder(productId);
+    const url = `${API}/api/${VERSION}/orders/${orderId}/confirm-cod`;
+    const opts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
+      body: JSON.stringify({}),
+    };
+
+    // Dos peticiones EXACTAMENTE en paralelo.
+    const [a, b] = await Promise.all([fetch(url, opts), fetch(url, opts)]);
+    const statuses = [a.status, b.status].sort();
+
+    assert('Exactamente 1 respuesta 200', statuses.filter((s) => s === 200).length === 1,
+      `statuses: ${JSON.stringify(statuses)}`);
+    assert('La otra respuesta es 409 (conflicto, no 2º despacho)',
+      statuses.filter((s) => s === 409).length === 1,
+      `statuses: ${JSON.stringify(statuses)}`);
+
+    // Verifica el estado final de la orden: 1 sola confirmación.
+    const check = await fetch(`${API}/api/${VERSION}/orders/${orderId}`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    const ord = await check.json();
+    assert('Orden en pendiente_envio', ord?.state === 'pendiente_envio', `state: ${ord?.state}`);
+    assert('payment_status = pending', ord?.paymentStatus === 'pending', `paymentStatus: ${ord?.paymentStatus}`);
+    assert('fulfillment_status no es null (se despachó una vez)', !!ord?.fulfillmentStatus,
+      `fulfillmentStatus: ${ord?.fulfillmentStatus}`);
+    console.log(`ℹ️  dropiOrderId: ${ord?.dropiOrderId} — verifica en el panel Dropi/MOCK que hay UNA sola orden AYNIMAR-${orderId}`);
+
+    window.localStorage.removeItem('oi');
+    console.groupEnd();
+  } catch (err) {
+    console.error('CHECKPOINT 6 ERROR:', err);
+    assert('No exception thrown', false, err.message);
+    console.groupEnd();
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   CHECKPOINT 7: confirm-cod sobre orden ajena → 403 (Fase A/A2)
+───────────────────────────────────────────────────────── */
+async function checkpoint7_codOwnership(productId = 1) {
+  console.group('CHECKPOINT 7 — confirm-cod sobre orden ajena');
+  try {
+    const victim = await _setupConfirmableOrder(productId);
+
+    // Segundo usuario, sin relación con la orden.
+    const attackerEmail = `attacker_${Date.now()}@aynimar-test.com`;
+    const regRes = await fetch(`${API}/api/${VERSION}/customers`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Mal', lastName: 'Actor', identityNumber: '0000000000',
+        phone: '0990000000', countryOfResidence: 'Ecuador', province: 'Guayas',
+        city: 'Guayaquil', streetAddress: 'X', user: { email: attackerEmail, password: 'TestPass123!' },
+      }),
+    });
+    const { auth } = await regRes.json();
+
+    const res = await fetch(`${API}/api/${VERSION}/orders/${victim.orderId}/confirm-cod`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${auth?.token}` },
+      body: JSON.stringify({}),
+    });
+    assert('confirm-cod de orden ajena → 403', res.status === 403, `status: ${res.status}`);
+
+    // La orden de la víctima sigue confirmable por su dueño.
+    const ok = await fetch(`${API}/api/${VERSION}/orders/${victim.orderId}/confirm-cod`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${victim.authToken}` },
+      body: JSON.stringify({}),
+    });
+    assert('el dueño sí puede confirmar su orden → 200', ok.status === 200, `status: ${ok.status}`);
+
+    window.localStorage.removeItem('oi');
+    console.groupEnd();
+  } catch (err) {
+    console.error('CHECKPOINT 7 ERROR:', err);
+    assert('No exception thrown', false, err.message);
+    console.groupEnd();
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   CHECKPOINT 8 (manual): stock insuficiente → 409
+
+   Requiere un producto con stock conocido y bajo. Pasos:
+   1. En el dashboard, fija stock = 1 en un producto de prueba (anota su id).
+   2. checkpoint8_codInsufficientStock(idProducto)  → agrega 5 unidades.
+   3. Debe responder 409 y NO cambiar el estado de la orden ni despachar.
+───────────────────────────────────────────────────────── */
+async function checkpoint8_codInsufficientStock(productId, amount = 5) {
+  console.group('CHECKPOINT 8 — stock insuficiente');
+  try {
+    window.localStorage.removeItem('oi');
+    const orderRes = await fetch(`${API}/api/${VERSION}/orders/guest-order`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+    });
+    const { id: orderId } = await orderRes.json();
+    await fetch(`${API}/api/${VERSION}/orders/add-item-guest`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId, productId, amount }),
+    });
+    const email = `stock_${Date.now()}@aynimar-test.com`;
+    const regRes = await fetch(`${API}/api/${VERSION}/customers`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Stock', lastName: 'Test', identityNumber: '0000000000', phone: '0991234567',
+        countryOfResidence: 'Ecuador', province: 'Pichincha', city: 'Quito',
+        streetAddress: 'X', user: { email, password: 'TestPass123!' },
+      }),
+    });
+    const { auth } = await regRes.json();
+    await fetch(`${API}/api/${VERSION}/orders/associate-order`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${auth?.token}` },
+      body: JSON.stringify({ orderId: parseInt(orderId, 10) }),
+    });
+
+    const res = await fetch(`${API}/api/${VERSION}/orders/${orderId}/confirm-cod`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${auth?.token}` },
+      body: JSON.stringify({}),
+    });
+    assert('confirm-cod con stock insuficiente → 409', res.status === 409, `status: ${res.status}`);
+
+    const check = await fetch(`${API}/api/${VERSION}/orders/${orderId}`, {
+      headers: { Authorization: `Bearer ${auth?.token}` },
+    });
+    const ord = await check.json();
+    assert('la orden sigue en carrito (rollback total)', ord?.state === 'carrito', `state: ${ord?.state}`);
+
+    window.localStorage.removeItem('oi');
+    console.groupEnd();
+  } catch (err) {
+    console.error('CHECKPOINT 8 ERROR:', err);
+    assert('No exception thrown', false, err.message);
+    console.groupEnd();
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
    RUNNER
 ───────────────────────────────────────────────────────── */
 export async function runCheckoutTests({ productId = 1 } = {}) {
@@ -358,6 +539,11 @@ export async function runCheckoutTests({ productId = 1 } = {}) {
     checkpoint5_termsGate();
   }
 
+  // CP6 + CP7: idempotencia y autorización de confirm-cod (Fase B / B3)
+  await checkpoint6_codConcurrency(productId);
+  await checkpoint7_codOwnership(productId);
+  console.log('\n[CP8 (stock insuficiente) es manual — checkpoint8_codInsufficientStock(idProductoConStockBajo)]');
+
   // Summary
   console.log('\n══════════════════════════════════════');
   const passed = results.filter(r => r.status === 'PASS').length;
@@ -383,4 +569,7 @@ export {
   checkpoint3_guestRegistrationAndAssociation,
   checkpoint4_codConfirmation,
   checkpoint5_termsGate,
+  checkpoint6_codConcurrency,
+  checkpoint7_codOwnership,
+  checkpoint8_codInsufficientStock,
 };

@@ -1,13 +1,24 @@
 /**
- * Checkout Guest-First Integration Test Plan
- * Run manually in browser console OR adapt for Jest/Playwright.
+ * Checkout Guest-First Integration Test Plan (Fase B)
  *
- * Covers the full funnel from "add to cart" → drawer → checkout → COD confirm,
- * with assertion points that catch the "Order not found" race condition.
+ * Cubre el funnel completo add-to-cart → registro → asociación → confirm-cod,
+ * + idempotencia (CP6), autorización (CP7) y stock insuficiente (CP8).
  *
- * Usage (browser console):
- *   const { runCheckoutTests } = await import('/src/lib/checkoutIntegrationTest.js');
- *   await runCheckoutTests({ baseUrl: 'http://localhost:3001', verbose: true });
+ * ⚠️  `await import('/src/lib/...')` SÓLO funciona con `next dev` (que sirve los
+ * fuentes). En un build de producción (staging) NO existe esa ruta.
+ *
+ * CÓMO EJECUTAR CONTRA STAGING (recomendado):
+ *   1. En local, en frontAynimar/.env.local:
+ *        NEXT_PUBLIC_API_URL=https://<backend-staging>.up.railway.app
+ *        NEXT_PUBLIC_API_VERSION=v1
+ *   2. `npm run dev` → abrir http://localhost:3000/checkout
+ *   3. En la consola del navegador:
+ *        const t = await import('/src/lib/checkoutIntegrationTest.js');
+ *        await t.runCheckoutTests({ productId: <ID_PRODUCTO_DROPI_STOCK_ALTO> });
+ *        await t.checkpoint8_codInsufficientStock(<ID_PRODUCTO_STOCK_1>);
+ *   El backend de staging (y su BD) es lo que se está probando.
+ *
+ * REQUISITO: el backend de staging debe tener DROPI_MOCK=true.
  */
 
 const API = process.env.NEXT_PUBLIC_API_URL;
@@ -353,6 +364,9 @@ async function _setupConfirmableOrder(productId = 1) {
   });
   const { auth } = await regRes.json();
   const authToken = auth?.token;
+  if (!authToken) {
+    throw new Error(`_setupConfirmableOrder: registro falló (${regRes.status}) — no hay token`);
+  }
   await fetch(`${API}/api/${VERSION}/orders/associate-order`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
@@ -394,9 +408,23 @@ async function checkpoint6_codConcurrency(productId = 1) {
     const ord = await check.json();
     assert('Orden en pendiente_envio', ord?.state === 'pendiente_envio', `state: ${ord?.state}`);
     assert('payment_status = pending', ord?.paymentStatus === 'pending', `paymentStatus: ${ord?.paymentStatus}`);
-    assert('fulfillment_status no es null (se despachó una vez)', !!ord?.fulfillmentStatus,
-      `fulfillmentStatus: ${ord?.fulfillmentStatus}`);
-    console.log(`ℹ️  dropiOrderId: ${ord?.dropiOrderId} — verifica en el panel Dropi/MOCK que hay UNA sola orden AYNIMAR-${orderId}`);
+    // Un SEGUNDO despacho habría vuelto a incrementar fulfillmentRetryCount
+    // (claim atómico) → si es exactamente 1, sólo se despachó una vez.
+    assert('fulfillmentRetryCount === 1 (un solo despacho)',
+      ord?.fulfillmentRetryCount === 1,
+      `fulfillmentRetryCount: ${ord?.fulfillmentRetryCount}`);
+
+    if (ord?.fulfillmentStatus === 'MANUAL_LOGISTICS') {
+      console.warn('⚠️  El producto NO es Dropi (sin dropi_product_id) → no hay MOCK-DRP. ' +
+        'Para verificar la no-duplicación del despacho, re-ejecuta CP6 con un productId que tenga dropi_product_id.');
+    } else {
+      assert('dropiOrderId es un único MOCK-DRP-* (DROPI_MOCK=true)',
+        typeof ord?.dropiOrderId === 'string' && ord.dropiOrderId.startsWith('MOCK-DRP-'),
+        `dropiOrderId: ${ord?.dropiOrderId}`);
+      assert('fulfillmentStatus = DISPATCHED', ord?.fulfillmentStatus === 'DISPATCHED',
+        `fulfillmentStatus: ${ord?.fulfillmentStatus}`);
+      console.log(`ℹ️  dropiOrderId: ${ord?.dropiOrderId} — además verifica en los logs del backend UNA sola línea "[Dispatch] Dropi order created for Aynimar #${orderId}"`);
+    }
 
     window.localStorage.removeItem('oi');
     console.groupEnd();

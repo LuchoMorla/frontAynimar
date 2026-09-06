@@ -188,25 +188,21 @@ async function checkpoint3_guestRegistrationAndAssociation({ orderId, testEmail 
 
     assert('Resolved orderId is valid (not null)', !!resolvedOrderId);
 
-    // Step C: The critical check — can we PATCH the order as the authenticated user?
-    const patchRes = await fetch(`${API}/api/${VERSION}/orders/${resolvedOrderId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
-      },
-      // Use a test-safe state that doesn't finalize the order — check if the endpoint accepts
-      // Alternatively query the order first
-      body: JSON.stringify({ state: 'carrito' }), // Keep in carrito to not corrupt test data
+    // Step C: The critical check — can we READ the order as the authenticated user?
+    // (Fase A: los clientes ya no pueden PATCH /orders/:id — la lectura sirve
+    // igual para detectar "Order not found" tras la asociación, sin efectos.)
+    const readRes = await fetch(`${API}/api/${VERSION}/orders/${resolvedOrderId}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${authToken}` },
     });
 
     assert(
-      'PATCH /orders/:id as authenticated user responds 2xx (order ownership confirmed)',
-      patchRes.status >= 200 && patchRes.status < 300,
-      `status: ${patchRes.status} — if 404 here, the association didn't transfer ownership`
+      'GET /orders/:id as authenticated user responds 2xx (order ownership confirmed)',
+      readRes.status >= 200 && readRes.status < 300,
+      `status: ${readRes.status} — if 404 here, the association didn't transfer ownership`
     );
 
-    if (patchRes.status === 404) {
+    if (readRes.status === 404) {
       console.error('🔴 ROOT CAUSE CONFIRMED: Order not found after association.');
       console.error('   The associateOrder endpoint did not transfer ownership correctly.');
       console.error('   Check backend: does PATCH /orders/associate-order actually reassign the order?');
@@ -225,14 +221,17 @@ async function checkpoint3_guestRegistrationAndAssociation({ orderId, testEmail 
 }
 
 /* ─────────────────────────────────────────────────────────
-   CHECKPOINT 4: COD order confirmation (state = pendiente_envio)
+   CHECKPOINT 4: COD order confirmation
 
-   Verifies that PATCH /orders/:id with authToken succeeds
-   AFTER the association is confirmed.
-   This should NOT produce "Order not found".
+   Fase A: POST /orders/:id/confirm-cod (reemplaza el viejo
+   PATCH /orders/:id {state:'pendiente_envio'}). El backend valida
+   propiedad + carrito + stock, persiste totales y despacha.
+   ⚠️  Despacha a Dropi de verdad — correr sólo con DROPI_MOCK=true
+   o contra datos de prueba.
+   No debe producir "Order not found".
 ───────────────────────────────────────────────────────── */
 async function checkpoint4_codConfirmation({ resolvedOrderId, authToken }) {
-  console.group('CHECKPOINT 4 — COD Order Confirmation');
+  console.group('CHECKPOINT 4 — COD Order Confirmation (confirm-cod)');
 
   if (!resolvedOrderId || !authToken) {
     assert('Precondition: resolvedOrderId and authToken from CP3', false, 'skipping');
@@ -241,28 +240,45 @@ async function checkpoint4_codConfirmation({ resolvedOrderId, authToken }) {
   }
 
   try {
-    const codRes = await fetch(`${API}/api/${VERSION}/orders/${resolvedOrderId}`, {
-      method: 'PATCH',
+    const codRes = await fetch(`${API}/api/${VERSION}/orders/${resolvedOrderId}/confirm-cod`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`,
       },
-      body: JSON.stringify({ state: 'pendiente_envio' }),
+      body: JSON.stringify({}),
     });
 
-    assert('PATCH /orders/:id (COD) responds 200 or 201',
-      codRes.status === 200 || codRes.status === 201,
+    assert('POST /orders/:id/confirm-cod responds 200',
+      codRes.status === 200,
       `status: ${codRes.status}`);
 
     if (codRes.status === 404) {
       console.error('🔴 "Order not found" reproduced at CP4.');
-      console.error('   This means processCoddOrder gets 404 even after association.');
+      console.error('   This means processCodOrder gets 404 even after association.');
     }
 
     const codData = await codRes.json();
     assert('Response confirms state = pendiente_envio',
       codData?.state === 'pendiente_envio',
       `state: ${codData?.state}`);
+    assert('Response marks payment_method = cod',
+      codData?.paymentMethod === 'cod',
+      `paymentMethod: ${codData?.paymentMethod}`);
+    assert('Response marks payment_status = pending (COD cobra al entregar)',
+      codData?.paymentStatus === 'pending',
+      `paymentStatus: ${codData?.paymentStatus}`);
+    assertDefined('Response contains persisted total', codData?.total);
+
+    // Idempotencia: un segundo confirm-cod debe fallar (409), no re-despachar.
+    const dupRes = await fetch(`${API}/api/${VERSION}/orders/${resolvedOrderId}/confirm-cod`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+      body: JSON.stringify({}),
+    });
+    assert('Segundo confirm-cod es rechazado (no re-despacha)',
+      dupRes.status === 409,
+      `status: ${dupRes.status} — esperado 409 conflict`);
 
     // Cleanup: remove from localStorage (mirrors what processCodOrder does)
     window.localStorage.removeItem('oi');

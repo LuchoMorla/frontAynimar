@@ -58,6 +58,7 @@ const endPoints = {
     deleteItem: (id) => `${API}/api/${VERSION}/orders/add-item/${id}`,
     updateOrder: (id) => `${API}/api/${VERSION}/orders/${id}`,
     checkout: `${API}/api/${VERSION}/orders/checkout`,
+    confirmCod: (id) => `${API}/api/${VERSION}/orders/${id}/confirm-cod`,
   },
   transaction: {
     debits: `${API}/api/${VERSION}/debits/`,

@@ -6,14 +6,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import AppContext from '@context/AppContext';
 import Link from 'next/link';
 import CheckOrderItem from '@components/CheckoutOrderItem';
-import Tarjetas from '@common/paymentez/tarjetas/Tarjetas';
 import { useRouter } from 'next/router';
-import Modal from '@common/Modal';
 import Cookie from 'js-cookie';
-import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import endPoints from '@services/api';
-import PaymentezDos from '@common/PaymentezDos';
 import styles from '@styles/Checkout.module.scss';
 import { toast } from 'react-toastify';
 import { useAuth } from '@hooks/useAuth';
@@ -54,9 +50,6 @@ const Checkout = () => {
     (c) => c.type === 'order' && !c.completed && !c.isExpired
   );
 
-  const [email, setEmail] = useState('mail@vacio.com');
-  const [open, setOpen] = useState(false);
-  const [uId, setuId] = useState(0);
   const [customerId, setCustomerId] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
 
@@ -110,38 +103,21 @@ const Checkout = () => {
     );
   };
 
-  // ── Auth: obtener email y pre-llenar formulario desde perfil ──
-  const getUserEmail = async (id) => {
-    try {
-      const { data } = await axios.get(endPoints.users.getUser(id));
-      setEmail(data.email);
-    } catch {
-      if (auth.user?.email) setEmail(auth.user.email);
-    }
-  };
-
+  // ── Auth: asociar carrito guest + pre-llenar formulario desde perfil ──
   useEffect(() => {
     if (!auth.user) return;
     const token = Cookie.get('token');
     if (!token) return;
     try {
-      const decoded = jwt.decode(token, { complete: true });
-      const userId = decoded.payload.sub;
-      setuId(userId);
-      getUserEmail(userId);
-      if (auth.user.email) setEmail(auth.user.email);
       const guestOrderId = window.localStorage.getItem('oi');
       if (guestOrderId) associateGuestCart(token, guestOrderId);
-    } catch {
-      if (auth.user?.email) setEmail(auth.user.email);
-    }
+    } catch { /* noop */ }
 
     // Pre-llenar formulario con datos del perfil guardado
     setProfileLoading(true);
     axios.get(endPoints.profile.clientData)
       .then(({ data }) => {
         setCustomerId(data.id ?? null);
-        if (data.email) setEmail(data.email);
 
         const storedCity = data.city || '';
         const knownCities = ECUADOR_CITIES.filter(c => c !== 'Otra ciudad');
@@ -210,9 +186,11 @@ const Checkout = () => {
     const headers = { 'Content-Type': 'application/json' };
     if (token) headers['Authorization'] = `Bearer ${token}`;
 
-    const response = await axios.patch(
-      endPoints.orders.updateOrder(savedOrderId),
-      { state: 'pendiente_envio' },
+    // Fase A (A2): endpoint dedicado. El backend valida propiedad del carrito,
+    // stock y totales antes de confirmar el pedido Contra Entrega.
+    const response = await axios.post(
+      endPoints.orders.confirmCod(savedOrderId),
+      {},
       { headers }
     );
     if (response.status === 200 || response.status === 201) {
@@ -284,20 +262,12 @@ const Checkout = () => {
         );
       }
 
-      if (paymentMethod === 'cash') {
-        await processCodOrder(resolvedOrderId, authToken);
-        toast.info(
-          '¡Creamos tu cuenta Aynimar! Revisa tu correo para activar tu contraseña y acumular puntos por reciclar. 🌿',
-          { autoClose: 8000 }
-        );
-      } else {
-        try {
-          const decoded = jwt.decode(authToken, { complete: true });
-          if (decoded?.payload?.sub) setuId(decoded.payload.sub);
-        } catch { /* noop */ }
-        if (shippingData.email) setEmail(shippingData.email);
-        setOpen(true);
-      }
+      // MVP: único método de pago externo operativo = Contra Entrega.
+      await processCodOrder(resolvedOrderId, authToken);
+      toast.info(
+        '¡Creamos tu cuenta Aynimar! Revisa tu correo para activar tu contraseña y acumular puntos por reciclar. 🌿',
+        { autoClose: 8000 }
+      );
     } catch (err) {
       if (err.response?.status === 409) {
         toast.error('El correo ya está registrado. Por favor inicia sesión para continuar.');
@@ -359,11 +329,8 @@ const Checkout = () => {
       }
     }
 
-    if (paymentMethod === 'cash') {
-      await processCodOrder(savedOrderId, Cookie.get('token'));
-    } else {
-      setOpen(true);
-    }
+    // MVP: si aún queda saldo por pagar tras créditos, se cobra Contra Entrega.
+    await processCodOrder(savedOrderId, Cookie.get('token'));
   };
 
   // ── Submit unificado ──
@@ -749,13 +716,15 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* Método de pago */}
+            {/* Método de pago — MVP: sólo métodos realmente operativos.
+                Transferencia/Depósito y Deuna (con comprobante) entran en Fase C.
+                La tarjeta queda oculta hasta tener cobro server-side verificado. */}
             <div className={styles.sectionCard}>
               <h2 className={styles.sectionTitle}>
                 <svg viewBox="0 0 24 24" fill="currentColor" className={styles.sectionIcon} aria-hidden="true">
                   <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
                 </svg>
-                Método de Pago
+                Elige cómo quieres pagar
               </h2>
 
               <div className={styles.paymentCards} role="radiogroup" aria-label="Selecciona método de pago">
@@ -784,28 +753,13 @@ const Checkout = () => {
                     </p>
                   )}
                 </label>
-
-                <label className={`${styles.paymentCard} ${paymentMethod === 'card' ? styles.paymentCardActive : ''}`}>
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="card"
-                    checked={paymentMethod === 'card'}
-                    onChange={() => setPaymentMethod('card')}
-                    className={styles.srOnly}
-                  />
-                  <div className={styles.paymentCardInner}>
-                    <div className={styles.paymentCardLeft}>
-                      <span className={styles.paymentEmoji} aria-hidden="true">💳</span>
-                      <div>
-                        <p className={styles.paymentCardTitle}>Tarjeta de Crédito / Débito</p>
-                        <p className={styles.paymentCardDesc}>Visa · Mastercard — pasarela encriptada.</p>
-                      </div>
-                    </div>
-                    <div className={`${styles.radioIndicator} ${paymentMethod === 'card' ? styles.radioIndicatorActive : ''}`} aria-hidden="true" />
-                  </div>
-                </label>
               </div>
+
+              {auth.user && creditsToApply > 0 && (
+                <p className={styles.codHint}>
+                  🌿 Aplicarás {creditsToApply} Ayni-Crédito(s). Si cubren el total, tu pedido queda pagado al confirmar.
+                </p>
+              )}
             </div>
 
             {/* Trust badges */}
@@ -856,15 +810,6 @@ const Checkout = () => {
           </aside>
         </div>
       </div>
-
-      {/* Modal pago con tarjeta */}
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <div className={styles.modalContentWrapper}>
-          <h1 className={styles.modaltitle}>Pago con Tarjeta</h1>
-          <Tarjetas userEmail={email} uId={uId} />
-          <PaymentezDos key={`${email}-${uId}`} userEmail={email} uId={uId} />
-        </div>
-      </Modal>
     </>
   );
 };

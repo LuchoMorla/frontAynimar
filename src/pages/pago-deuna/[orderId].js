@@ -69,7 +69,15 @@ const PagoDeuna = () => {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile || !orderId) return;
+    // orderId viene de router.query → es `undefined` hasta que el router está
+    // listo, y podría no ser numérico. Nunca subir a payment-proofs/<orderId>
+    // salvo con un id de orden válido (evita objetos huérfanos en carpetas
+    // como payment-proofs/undefined/).
+    const numericOrderId = Number(orderId);
+    if (!selectedFile || !Number.isInteger(numericOrderId) || numericOrderId <= 0) {
+      setError('No se pudo identificar el pedido. Recarga la página e intenta de nuevo.');
+      return;
+    }
     setUploading(true);
     setError(null);
     try {
@@ -77,7 +85,7 @@ const PagoDeuna = () => {
       // 1. Sube el archivo REAL a Firebase Storage (mismo mecanismo que ya usa
       //    el dashboard para imágenes de producto) — carpeta dedicada a
       //    comprobantes de pago, requerida por la validación del backend.
-      const fileUrl = await uploadFile(`payment-proofs/${orderId}`, selectedFile);
+      const fileUrl = await uploadFile(`payment-proofs/${numericOrderId}`, selectedFile);
       // 2. Registra la referencia en Aynimar. El backend vuelve a verificar
       //    (HEAD real) que el archivo exista y sea una imagen válida antes de
       //    aceptarlo — nunca confía únicamente en lo que el frontend afirma.
